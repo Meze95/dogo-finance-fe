@@ -1,0 +1,13 @@
+:host {
+  display: block;
+  background-color: #ffffff;
+}
+
+/* Custom transitions and scrollbar logic can go here if needed */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
