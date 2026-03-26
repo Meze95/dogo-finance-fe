@@ -24,73 +24,96 @@
           <!-- Dropdown Bridge Container -->
           <div class="absolute top-full left-1/2 -translate-x-1/2 pt-3 hidden group-hover:block z-[100]">
             <!-- Dropdown (2-column grid) -->
-            <div
-              class="w-[580px] bg-white shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-[32px] grid grid-cols-2 gap-x-8 gap-y-6 p-10 border border-gray-50">
-              <!-- Piggybank -->
-              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
-                <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center shrink-0">
-                  <i class="ri-shield-line text-blue-600 text-2xl"></i>
+              <div
+                class="w-[580px] bg-white shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-[32px] grid grid-cols-2 gap-x-8 gap-y-6 p-10 border border-gray-50">
+                <!-- Piggybank -->
+                <a routerLink="/save/piggybank" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
+                  <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center shrink-0">
+                    <i class="ri-shield-line text-blue-600 text-2xl"></i>
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="text-[17px] font-black text-[#0d1b2a]">Piggybank</span>
+                    <span class="text-[13px] font-bold text-gray-400 font-sans">Automated Savings</span>
+                  </div>
+                </a>
+                <!-- Safelock -->
+                <a routerLink="/save/safelock" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
+                  <div class="w-12 h-12 bg-cyan-50 rounded-2xl flex items-center justify-center shrink-0">
+                    <i class="ri-lock-2-line text-cyan-600 text-2xl"></i>
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="text-[17px] font-black text-[#0d1b2a]">Safelock</span>
+                    <span class="text-[13px] font-bold text-gray-400 font-sans">Fixed Savings</span>
+                  </div>
+                </a>
+                <!-- Target Savings -->
+                <a routerLink="/save/targets" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
+                  <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center shrink-0">
+                    <i class="ri-target-line text-green-600 text-2xl"></i>
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="text-[17px] font-black text-[#0d1b2a]">Target Savings</span>
+                    <span class="text-[13px] font-bold text-gray-400 font-sans">Goal-oriented Savings</span>
+                  </div>
+                </a>
+                <!-- Flex Naira -->
+                <a routerLink="/save/flex-naira" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
+                  <div class="w-12 h-12 bg-pink-50 rounded-2xl flex items-center justify-center shrink-0">
+                    <i class="ri-wallet-3-line text-pink-600 text-2xl"></i>
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="text-[17px] font-black text-[#0d1b2a]">Flex Naira</span>
+                    <span class="text-[13px] font-bold text-gray-400 font-sans">Flexible Savings</span>
+                  </div>
+                </a>
+                <!-- Flex Dollar -->
+                <a routerLink="/save/flex-dollar" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
+                  <div class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center shrink-0">
+                    <i class="ri-money-dollar-circle-line text-gray-600 text-2xl"></i>
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="text-[17px] font-black text-[#0d1b2a]">Flex Dollar</span>
+                    <span class="text-[13px] font-bold text-gray-400 font-sans">Dollar Savings</span>
+                  </div>
+                </a>
+                <!-- House Money -->
+                <a routerLink="/save/house-money" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
+                  <div class="w-12 h-12 bg-orange-50 rounded-2xl flex items-center justify-center shrink-0">
+                    <i class="ri-home-4-line text-orange-600 text-2xl"></i>
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="text-[17px] font-black text-[#0d1b2a]">House Money</span>
+                    <span class="text-[13px] font-bold text-gray-400 font-sans">Semi Strict Wallet</span>
+                  </div>
+                </a>
+              </div>
+          </div>
+        </div>
+
+        <!-- Invest -->
+        <div class="group relative">
+          <button
+            class="flex items-center space-x-1 py-1 text-gray-700 font-bold hover:text-blue-600 transition-colors">
+            <span>Invest</span>
+            <i class="ri-arrow-down-s-line"></i>
+          </button>
+
+          <!-- Dropdown Bridge Container -->
+          <div class="absolute top-full left-1/2 -translate-x-1/2 pt-3 hidden group-hover:block z-[100]">
+            <div class="w-[300px] bg-white shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-[32px] p-6 border border-gray-50">
+              <a routerLink="/invest" class="flex items-center space-x-4 p-4 hover:bg-purple-50 rounded-2xl group/item transition-all hover:translate-x-1">
+                <div class="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center shrink-0">
+                  <i class="ri-funds-box-line text-purple-600 text-xl"></i>
                 </div>
                 <div class="flex flex-col">
-                  <span class="text-[17px] font-black text-[#0d1b2a]">Piggybank</span>
-                  <span class="text-[13px] font-bold text-gray-400 font-sans">Automated Savings</span>
-                </div>
-              </a>
-              <!-- Safelock -->
-              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
-                <div class="w-12 h-12 bg-cyan-50 rounded-2xl flex items-center justify-center shrink-0">
-                  <i class="ri-lock-2-line text-cyan-600 text-2xl"></i>
-                </div>
-                <div class="flex flex-col">
-                  <span class="text-[17px] font-black text-[#0d1b2a]">Safelock</span>
-                  <span class="text-[13px] font-bold text-gray-400 font-sans">Fixed Savings</span>
-                </div>
-              </a>
-              <!-- Target Savings -->
-              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
-                <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center shrink-0">
-                  <i class="ri-target-line text-green-600 text-2xl"></i>
-                </div>
-                <div class="flex flex-col">
-                  <span class="text-[17px] font-black text-[#0d1b2a]">Target Savings</span>
-                  <span class="text-[13px] font-bold text-gray-400 font-sans">Goal-oriented Savings</span>
-                </div>
-              </a>
-              <!-- Flex Naira -->
-              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
-                <div class="w-12 h-12 bg-pink-50 rounded-2xl flex items-center justify-center shrink-0">
-                  <i class="ri-wallet-3-line text-pink-600 text-2xl"></i>
-                </div>
-                <div class="flex flex-col">
-                  <span class="text-[17px] font-black text-[#0d1b2a]">Flex Naira</span>
-                  <span class="text-[13px] font-bold text-gray-400 font-sans">Flexible Savings</span>
-                </div>
-              </a>
-              <!-- Flex Dollar -->
-              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
-                <div class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center shrink-0">
-                  <i class="ri-money-dollar-circle-line text-gray-600 text-2xl"></i>
-                </div>
-                <div class="flex flex-col">
-                  <span class="text-[17px] font-black text-[#0d1b2a]">Flex Dollar</span>
-                  <span class="text-[13px] font-bold text-gray-400 font-sans">Dollar Savings</span>
-                </div>
-              </a>
-              <!-- House Money -->
-              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
-                <div class="w-12 h-12 bg-orange-50 rounded-2xl flex items-center justify-center shrink-0">
-                  <i class="ri-home-4-line text-orange-600 text-2xl"></i>
-                </div>
-                <div class="flex flex-col">
-                  <span class="text-[17px] font-black text-[#0d1b2a]">House Money</span>
-                  <span class="text-[13px] font-bold text-gray-400 font-sans">Semi Strict Wallet</span>
+                  <span class="text-[16px] font-black text-[#0d1b2a]">Investify</span>
+                  <span class="text-[11px] font-bold text-gray-400">Vetted Investments</span>
                 </div>
               </a>
             </div>
           </div>
         </div>
 
-        <a routerLink="/invest" routerLinkActive="text-blue-600" class="text-gray-700 font-bold hover:text-blue-600 transition-colors">Invest</a>
         <a routerLink="/stories" routerLinkActive="text-blue-600" class="text-gray-700 font-bold hover:text-blue-600 transition-colors">Stories</a>
         <a routerLink="/faq" routerLinkActive="text-blue-600" class="text-gray-700 font-bold hover:text-blue-600 transition-colors">FAQs</a>
 
@@ -147,7 +170,16 @@
                   <span class="text-[13px] font-bold text-gray-400 font-sans">Savings calculator</span>
                 </div>
               </a>
-              <!-- Newsletter -->
+              <!-- FAQ in Resources -->
+              <a routerLink="/faq" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
+                <div class="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center shrink-0">
+                  <i class="ri-questionnaire-line text-amber-600 text-2xl"></i>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[17px] font-black text-[#0d1b2a]">FAQs</span>
+                  <span class="text-[13px] font-bold text-gray-400 font-sans">Get help instantly</span>
+                </div>
+              </a>
               <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
                 <div class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center shrink-0">
                   <i class="ri-mail-line text-gray-600 text-2xl"></i>
@@ -200,12 +232,27 @@
              <a routerLink="/save/safelock" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Safelock</a>
              <a routerLink="/save/targets" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Targets</a>
              <a routerLink="/save/flex-naira" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Flex Naira</a>
+             <a routerLink="/save/flex-dollar" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Flex Dollar</a>
+             <a routerLink="/save/house-money" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">House Money</a>
            </div>
         </div>
-        <a routerLink="/invest" (click)="toggleMenu()" class="block py-2 text-lg font-medium text-gray-800 border-b border-gray-50">Invest</a>
+        <div class="border-b border-gray-50 pb-4">
+           <p class="text-xs font-black uppercase tracking-widest text-gray-400 mb-2">Investment Plans</p>
+           <div>
+             <a routerLink="/invest" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Investify</a>
+           </div>
+        </div>
         <a routerLink="/stories" (click)="toggleMenu()" class="block py-2 text-lg font-medium text-gray-800 border-b border-gray-50">Stories</a>
         <a routerLink="/faq" (click)="toggleMenu()" class="block py-2 text-lg font-medium text-gray-800 border-b border-gray-50">FAQs</a>
-        <a href="#" class="block py-2 text-lg font-medium text-gray-800 border-b border-gray-50">Resources</a>
+        <div class="border-b border-gray-50 pb-4">
+           <p class="text-xs font-black uppercase tracking-widest text-gray-400 mt-4 mb-2">More Resources</p>
+           <div class="grid grid-cols-2 gap-2">
+             <a href="#" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Blog</a>
+             <a routerLink="/faq" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Help Center</a>
+             <a href="#" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Calculator</a>
+             <a href="#" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Newsletter</a>
+           </div>
+        </div>
         <div class="pt-4 flex flex-col space-y-4">
           <button class="w-full px-6 py-3 bg-[#0d1b2a] text-white font-bold rounded-lg">
             Create free account
