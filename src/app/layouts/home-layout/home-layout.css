@@ -1,0 +1,67 @@
+/* Custom styles for Home Layout */
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+header {
+  transition: all 0.3s ease;
+}
+
+header.sticky {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Nav Link Hover Effects */
+nav a, nav button {
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+/* Dropdown Animation */
+.group:hover .group-hover\:block {
+  animation: fadeIn 0.1s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Footer link transition */
+footer a {
+  transition: all 0.2s ease;
+}
+
+/* No Scrollbar Utility */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* NDPR Audit Badge Styling Update */
+.bg-white.p-2.rounded {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+/* Responsive adjustments update */
+@media (max-width: 1024px) {
+    header nav {
+        display: none;
+    }
+}

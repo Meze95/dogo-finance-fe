@@ -1,0 +1,358 @@
+<div class="min-h-screen flex flex-col font-sans">
+  <!-- Navigation Header -->
+  <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 py-4 px-6 md:px-12">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <!-- Logo -->
+      <div class="flex items-center space-x-3 shrink-0">
+        <div class="w-11 h-11 bg-[#0d1b2a] rounded-xl flex items-center justify-center shadow-lg shadow-gray-200">
+          <i class="ri-shield-user-fill text-white text-2xl"></i>
+        </div>
+        <span class="text-[26px] font-black text-[#0d1b2a] tracking-tight">Dogo<span
+            class="text-blue-600">Finance</span></span>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden lg:flex items-center space-x-10">
+        <!-- Save -->
+        <div class="group relative">
+          <button
+            class="flex items-center space-x-1 py-1 text-gray-700 font-bold hover:text-blue-600 transition-colors">
+            <span>Save</span>
+            <i class="ri-arrow-down-s-line"></i>
+          </button>
+
+          <!-- Dropdown Bridge Container -->
+          <div class="absolute top-full left-1/2 -translate-x-1/2 pt-3 hidden group-hover:block z-[100]">
+            <!-- Dropdown (2-column grid) -->
+            <div
+              class="w-[580px] bg-white shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-[32px] grid grid-cols-2 gap-x-8 gap-y-6 p-10 border border-gray-50">
+              <!-- Piggybank -->
+              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
+                <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center shrink-0">
+                  <i class="ri-shield-line text-blue-600 text-2xl"></i>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[17px] font-black text-[#0d1b2a]">Piggybank</span>
+                  <span class="text-[13px] font-bold text-gray-400 font-sans">Automated Savings</span>
+                </div>
+              </a>
+              <!-- Safelock -->
+              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
+                <div class="w-12 h-12 bg-cyan-50 rounded-2xl flex items-center justify-center shrink-0">
+                  <i class="ri-lock-2-line text-cyan-600 text-2xl"></i>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[17px] font-black text-[#0d1b2a]">Safelock</span>
+                  <span class="text-[13px] font-bold text-gray-400 font-sans">Fixed Savings</span>
+                </div>
+              </a>
+              <!-- Target Savings -->
+              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
+                <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center shrink-0">
+                  <i class="ri-target-line text-green-600 text-2xl"></i>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[17px] font-black text-[#0d1b2a]">Target Savings</span>
+                  <span class="text-[13px] font-bold text-gray-400 font-sans">Goal-oriented Savings</span>
+                </div>
+              </a>
+              <!-- Flex Naira -->
+              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
+                <div class="w-12 h-12 bg-pink-50 rounded-2xl flex items-center justify-center shrink-0">
+                  <i class="ri-wallet-3-line text-pink-600 text-2xl"></i>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[17px] font-black text-[#0d1b2a]">Flex Naira</span>
+                  <span class="text-[13px] font-bold text-gray-400 font-sans">Flexible Savings</span>
+                </div>
+              </a>
+              <!-- Flex Dollar -->
+              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
+                <div class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center shrink-0">
+                  <i class="ri-money-dollar-circle-line text-gray-600 text-2xl"></i>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[17px] font-black text-[#0d1b2a]">Flex Dollar</span>
+                  <span class="text-[13px] font-bold text-gray-400 font-sans">Dollar Savings</span>
+                </div>
+              </a>
+              <!-- House Money -->
+              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
+                <div class="w-12 h-12 bg-orange-50 rounded-2xl flex items-center justify-center shrink-0">
+                  <i class="ri-home-4-line text-orange-600 text-2xl"></i>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[17px] font-black text-[#0d1b2a]">House Money</span>
+                  <span class="text-[13px] font-bold text-gray-400 font-sans">Semi Strict Wallet</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <a href="#" class="text-gray-700 font-bold hover:text-blue-600 transition-colors">Invest</a>
+        <a href="#" class="text-gray-700 font-bold hover:text-blue-600 transition-colors">Stories</a>
+        <a href="#" class="text-gray-700 font-bold hover:text-blue-600 transition-colors">FAQs</a>
+
+        <!-- Resources -->
+        <div class="group relative">
+          <button
+            class="flex items-center space-x-1 py-1 text-gray-700 font-bold hover:text-blue-600 transition-colors">
+            <span>Resources</span>
+            <i class="ri-arrow-down-s-line"></i>
+          </button>
+
+          <!-- Dropdown Bridge Container -->
+          <div class="absolute top-full left-1/2 -translate-x-1/2 pt-3 hidden group-hover:block z-[100]">
+            <!-- Dropdown (2-column grid for Resources) -->
+            <div
+              class="w-[520px] bg-white shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-[32px] grid grid-cols-2 gap-x-8 gap-y-6 p-10 border border-gray-50">
+              <!-- Blog -->
+              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
+                <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center shrink-0">
+                  <i class="ri-article-line text-blue-600 text-2xl"></i>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[17px] font-black text-[#0d1b2a]">Blog</span>
+                  <span class="text-[13px] font-bold text-gray-400 font-sans">Latest news & updates</span>
+                </div>
+              </a>
+              <!-- Reports -->
+              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
+                <div class="w-12 h-12 bg-pink-50 rounded-2xl flex items-center justify-center shrink-0">
+                  <i class="ri-file-chart-line text-pink-600 text-2xl"></i>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[17px] font-black text-[#0d1b2a]">Reports</span>
+                  <span class="text-[13px] font-bold text-gray-400 font-sans">Financial reports</span>
+                </div>
+              </a>
+              <!-- Comics -->
+              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
+                <div class="w-12 h-12 bg-teal-50 rounded-2xl flex items-center justify-center shrink-0">
+                  <i class="ri-palette-line text-teal-600 text-2xl"></i>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[17px] font-black text-[#0d1b2a]">Comics</span>
+                  <span class="text-[13px] font-bold text-gray-400 font-sans">Money stories</span>
+                </div>
+              </a>
+              <!-- Calculator -->
+              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
+                <div class="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center shrink-0">
+                  <i class="ri-calculator-line text-emerald-600 text-2xl"></i>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[17px] font-black text-[#0d1b2a]">Calculator</span>
+                  <span class="text-[13px] font-bold text-gray-400 font-sans">Savings calculator</span>
+                </div>
+              </a>
+              <!-- Newsletter -->
+              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
+                <div class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center shrink-0">
+                  <i class="ri-mail-line text-gray-600 text-2xl"></i>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[17px] font-black text-[#0d1b2a]">Newsletter</span>
+                  <span class="text-[13px] font-bold text-gray-400 font-sans">Stay in the loop</span>
+                </div>
+              </a>
+              <!-- Ebook -->
+              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
+                <div class="w-12 h-12 bg-sky-50 rounded-2xl flex items-center justify-center shrink-0">
+                  <i class="ri-article-line text-sky-600 text-2xl"></i>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[17px] font-black text-[#0d1b2a]">Ebook</span>
+                  <span class="text-[13px] font-bold text-gray-400 font-sans">Free guides</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Desktop Buttons -->
+      <div class="hidden lg:flex items-center space-x-4">
+        <button
+          class="px-8 py-3 bg-[#0d1b2a] text-white font-black rounded-xl hover:bg-gray-800 transition-all shadow-lg shadow-gray-200">
+          Create free account
+        </button>
+        <button
+          class="px-8 py-2.5 bg-white text-[#0d1b2a] font-black border-2 border-[#0d1b2a] rounded-xl hover:bg-gray-50 transition-all">
+          Sign in
+        </button>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button class="lg:hidden text-2xl text-[#0d1b2a]" (click)="toggleMenu()">
+        <i [class]="isMenuOpen ? 'ri-close-line' : 'ri-menu-3-line'"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Navigation Menu -->
+    <div class="lg:hidden" *ngIf="isMenuOpen">
+      <div class="mt-4 pb-6 space-y-4">
+        <a href="#" class="block py-2 text-lg font-medium text-gray-800 border-b border-gray-50">Save</a>
+        <a href="#" class="block py-2 text-lg font-medium text-gray-800 border-b border-gray-50">Invest</a>
+        <a href="#" class="block py-2 text-lg font-medium text-gray-800 border-b border-gray-50">Stories</a>
+        <a href="#" class="block py-2 text-lg font-medium text-gray-800 border-b border-gray-50">FAQs</a>
+        <a href="#" class="block py-2 text-lg font-medium text-gray-800 border-b border-gray-50">Resources</a>
+        <div class="pt-4 flex flex-col space-y-4">
+          <button class="w-full px-6 py-3 bg-[#0d1b2a] text-white font-bold rounded-lg">
+            Create free account
+          </button>
+          <button class="w-full px-6 py-3 bg-white text-[#0d1b2a] font-bold border-2 border-[#0d1b2a] rounded-lg">
+            Sign in
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-grow">
+    <router-outlet></router-outlet>
+    
+  </main>
+
+  <!-- Footer Section -->
+  <footer class="bg-[#051121] text-white pt-24 pb-12 relative overflow-hidden">
+    <!-- Decorative Background Shapes -->
+    <div class="absolute inset-0 pointer-events-none opacity-20">
+      <!-- Left Shape (Flower/Flower shape) -->
+      <div class="absolute left-[-100px] top-1/2 -translate-y-1/2 text-pink-500 hidden lg:block">
+        <svg width="400" height="400" viewBox="0 0 200 200" fill="currentColor">
+          <path d="M100 0c30 0 50 20 50 50s-20 50-50 50-50-20-50-50 20-50 50-50zm0 100c30 0 50 20 50 50s-20 50-50 50-50-20-50-50 20-50 50-50zm50-50c0 30-20 50-50 50s-50-20-50-50 20-50 50-50 50 20 50 50zm-100 0c0 30-20 50-50 50s-50-20-50-50 20-50 50-50 50 20 50 50z" />
+        </svg>
+      </div>
+      <!-- Right Shape (Half Circles) -->
+      <div class="absolute right-[-50px] top-1/2 -translate-y-1/2 text-blue-400 hidden lg:flex space-x-[-100px]">
+        <div class="w-64 h-64 bg-current rounded-l-full opacity-40"></div>
+        <div class="w-64 h-64 bg-current rounded-l-full opacity-70"></div>
+        <div class="w-64 h-64 bg-current rounded-l-full opacity-100"></div>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+      <!-- Download Section (Modern Redesign) -->
+      <div class="flex flex-col items-center justify-center text-center mb-24">
+        <!-- App Icon Container -->
+        <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center shadow-2xl mb-8">
+          <i class="ri-shield-user-fill text-white text-3xl"></i>
+        </div>
+        
+        <h2 class="text-4xl md:text-6xl font-black mb-10 tracking-tight max-w-2xl leading-[1.1]">
+          Download <span class="text-blue-500">DogoFinance</span> today.
+        </h2>
+
+        <div class="flex flex-wrap justify-center gap-6">
+          <a href="#" class="group flex items-center space-x-3 bg-blue-600 px-10 py-4 rounded-2xl hover:bg-blue-700 transition-all hover:scale-105 shadow-xl shadow-blue-500/20">
+            <i class="ri-apple-fill text-3xl"></i>
+            <div class="text-left">
+              <p class="text-[10px] uppercase font-bold text-blue-100 leading-tight">Get it on</p>
+              <p class="text-lg font-black leading-tight">iPhone</p>
+            </div>
+          </a>
+          <a href="#" class="group flex items-center space-x-3 bg-transparent border-2 border-gray-700 px-10 py-4 rounded-2xl hover:bg-gray-800 transition-all hover:scale-105">
+            <i class="ri-google-play-fill text-3xl"></i>
+            <div class="text-left">
+              <p class="text-[10px] uppercase font-bold text-gray-400 leading-tight">Get it on</p>
+              <p class="text-lg font-black leading-tight">Android</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Links Grid -->
+      <div class="border-t border-gray-700/50 border-dotted pt-10 grid grid-cols-2 lg:grid-cols-6 gap-y-12 gap-x-0 pb-12">
+        <!-- Brand & Badge (Full width on mobile to show side-by-side) -->
+        <div class="col-span-2 lg:col-span-1 lg:border-r border-gray-700/50 border-dotted px-6 lg:pl-0 flex items-start justify-between lg:flex-col lg:justify-start">
+          <div class="flex flex-col items-start text-left">
+            <div class="flex items-center space-x-2 mb-4">
+              <div class="w-8 h-8 bg-[#0d1b2a] border border-gray-700 rounded flex items-center justify-center">
+                <i class="ri-shield-user-line text-white text-lg"></i>
+              </div>
+              <span class="text-xl font-bold">DogoFinance</span>
+            </div>
+            <p class="text-sm font-medium text-gray-300 leading-relaxed max-w-[150px]">
+              The better way to save and invest.
+            </p>
+          </div>
+          <div class="bg-white p-2 rounded inline-block mt-0 lg:mt-8">
+            <img src="https://via.placeholder.com/100x45?text=NDPR+Audit" alt="NDPR Audit" class="h-10 grayscale hover:grayscale-0 transition-all">
+          </div>
+        </div>
+
+        <!-- Products -->
+        <div class="lg:border-r border-gray-700/50 border-dotted px-6 text-left">
+          <h3 class="font-bold text-[15px] mb-6 text-gray-100 uppercase tracking-wider">Products</h3>
+          <ul class="space-y-4 text-[14px] font-medium text-gray-400">
+            <li><a href="#" class="hover:text-blue-400 transition-colors">Flex Naira</a></li>
+            <li><a href="#" class="hover:text-blue-400 transition-colors">Flex Dollar</a></li>
+            <li><a href="#" class="hover:text-blue-400 transition-colors">HouseMoney</a></li>
+            <li><a href="#" class="hover:text-blue-400 transition-colors">Investify</a></li>
+            <li><a href="#" class="hover:text-blue-400 transition-colors">PiggyBank</a></li>
+            <li><a href="#" class="hover:text-blue-400 transition-colors">SafeLock</a></li>
+            <li><a href="#" class="hover:text-blue-400 transition-colors">Target Savings</a></li>
+          </ul>
+        </div>
+
+        <!-- Resources -->
+        <div class="lg:border-r border-gray-700/50 border-dotted px-6 text-left">
+          <h3 class="font-bold text-[15px] mb-6 text-gray-100 uppercase tracking-wider">Resources</h3>
+          <ul class="space-y-4 text-[14px] font-medium text-gray-400">
+            <li><a href="#" class="hover:text-blue-400 transition-colors">Blog</a></li>
+            <li><a href="#" class="hover:text-blue-400 transition-colors">Grownups</a></li>
+            <li><a href="#" class="hover:text-blue-400 transition-colors">Newsletter</a></li>
+            <li><a href="#" class="hover:text-blue-400 transition-colors">Savings Report</a></li>
+          </ul>
+        </div>
+
+        <!-- Company -->
+        <div class="lg:border-r border-gray-700/50 border-dotted px-6 text-left">
+          <h3 class="font-bold text-[15px] mb-6 text-gray-100 uppercase tracking-wider">Company</h3>
+          <ul class="space-y-4 text-[14px] font-medium text-gray-400">
+            <li><a href="#" class="hover:text-blue-400 transition-colors">About</a></li>
+            <li><a href="#" class="hover:text-blue-400 transition-colors">Careers</a></li>
+            <li><a href="#" class="hover:text-blue-400 transition-colors">FAQs</a></li>
+            <li><a href="#" class="hover:text-blue-400 transition-colors">Blog</a></li>
+            <li><a href="#" class="hover:text-blue-400 transition-colors">Resources</a></li>
+          </ul>
+        </div>
+
+        <!-- Legal -->
+        <div class="lg:border-r border-gray-700/50 border-dotted px-6 text-left">
+          <h3 class="font-bold text-[15px] mb-6 text-gray-100 uppercase tracking-wider">Legal</h3>
+          <ul class="space-y-4 text-[14px] font-medium text-gray-400">
+            <li><a href="#" class="hover:text-blue-400 transition-colors">Privacy</a></li>
+            <li><a href="#" class="hover:text-blue-400 transition-colors">Security</a></li>
+            <li><a href="#" class="hover:text-blue-400 transition-colors">Terms</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact/Social -->
+        <div class="col-span-2 lg:col-span-1 px-6 flex flex-col items-center lg:items-start text-center lg:text-left mt-8 lg:mt-0">
+          <div class="flex space-x-4 mb-8 justify-center lg:justify-start">
+            <a href="#" class="text-white hover:text-blue-400 transition-colors"><i class="ri-facebook-fill text-xl"></i></a>
+            <a href="#" class="text-white hover:text-pink-400 transition-colors"><i class="ri-instagram-line text-xl"></i></a>
+            <a href="#" class="text-white hover:text-blue-300 transition-colors"><i class="ri-twitter-x-line text-xl"></i></a>
+            <a href="#" class="text-white hover:text-red-400 transition-colors"><i class="ri-tiktok-fill text-xl"></i></a>
+            <a href="#" class="text-white hover:text-red-600 transition-colors"><i class="ri-youtube-fill text-xl"></i></a>
+          </div>
+
+          <p class="text-[14px] font-medium text-gray-300 leading-relaxed mb-4">
+            Tesmot house, Abdulrahman Okene close, Victoria Island, Lagos, Nigeria.
+          </p>
+          <a href="mailto:contact@dogofinance.com" class="block text-[14px] font-medium text-gray-300 hover:text-white mb-2">contact@dogofinance.com</a>
+          <a href="tel:+234700933933933" class="block text-[14px] font-bold text-gray-300 hover:text-white">+234 700 933 933 933</a>
+        </div>
+      </div>
+
+      <!-- Copyright -->
+      <div class="border-t border-gray-800 mt-10 pt-8 text-center text-gray-500 text-sm">
+        <p>&copy; 2026 DogoFinance. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</div>
