@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 interface FAQItem {
@@ -83,26 +83,62 @@ const FAQ_DATA: FAQCategory[] = [
   styleUrl: './faq.component.css'
 })
 export class FAQComponent {
-  // Using Signals for state management (Simulating CMS data)
-  categories = signal<FAQCategory[]>(FAQ_DATA);
+  // Original state from CMS
+  private _categories = signal<FAQCategory[]>(FAQ_DATA);
+  
+  // Search query signal
+  searchQuery = signal<string>('');
 
-  toggleCategory(index: number) {
-    this.categories.update(cats => {
-      const newCats = [...cats];
-      newCats[index] = { ...newCats[index], isOpen: !newCats[index].isOpen };
-      return newCats;
+  // Computed signal for filtered results
+  filteredCategories = computed(() => {
+    const query = this.searchQuery().toLowerCase().trim();
+    if (!query) return this._categories();
+
+    return this._categories().map(cat => {
+      // Filter questions in this category that match the query
+      const matchingQuestions = cat.questions.filter(q => 
+        q.q.toLowerCase().includes(query) || 
+        q.a.toLowerCase().includes(query)
+      );
+
+      // If category title matches or has matching questions, return it
+      if (cat.title.toLowerCase().includes(query) || matchingQuestions.length > 0) {
+        return {
+          ...cat,
+          isOpen: query !== '' ? true : cat.isOpen, // Auto-expand if searching
+          questions: matchingQuestions.length > 0 ? matchingQuestions : cat.questions
+        };
+      }
+      return null;
+    }).filter((cat): cat is FAQCategory => cat !== null);
+  });
+
+  updateSearch(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.searchQuery.set(input.value);
+  }
+
+  toggleCategory(title: string) {
+    this._categories.update(cats => {
+      return cats.map(cat => 
+        cat.title === title ? { ...cat, isOpen: !cat.isOpen } : cat
+      );
     });
   }
 
-  toggleQuestion(catIndex: number, qIndex: number) {
-    this.categories.update(cats => {
-      const newCats = [...cats];
-      const category = { ...newCats[catIndex] };
-      const questions = [...category.questions];
-      questions[qIndex] = { ...questions[qIndex], isOpen: !questions[qIndex].isOpen };
-      category.questions = questions;
-      newCats[catIndex] = category;
-      return newCats;
+  toggleQuestion(catTitle: string, questionText: string) {
+    this._categories.update(cats => {
+      return cats.map(cat => {
+        if (cat.title === catTitle) {
+          return {
+            ...cat,
+            questions: cat.questions.map(q => 
+              q.q === questionText ? { ...q, isOpen: !q.isOpen } : q
+            )
+          };
+        }
+        return cat;
+      });
     });
   }
 }
