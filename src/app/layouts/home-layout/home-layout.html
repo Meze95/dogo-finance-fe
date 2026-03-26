@@ -1,265 +1,211 @@
 <div class="min-h-screen flex flex-col font-sans">
-  <!-- Navigation Header -->
-  <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 py-4 px-6 md:px-12">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
+
+  <!-- ======= NAVIGATION HEADER ======= -->
+  <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-[#1B4332]/8">
+    <div class="max-w-7xl mx-auto px-6 md:px-12 py-4 flex items-center justify-between">
+
       <!-- Logo -->
-      <div class="flex items-center space-x-3 shrink-0">
-        <div class="w-11 h-11 bg-[#0d1b2a] rounded-xl flex items-center justify-center shadow-lg shadow-gray-200">
-          <i class="ri-shield-user-fill text-white text-2xl"></i>
+      <a routerLink="/" class="flex items-center space-x-3 shrink-0">
+        <!-- SVG Logo (Islamic D emblem) -->
+        <svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="23" cy="23" r="23" fill="#1B4332"/>
+          <!-- Outer ring -->
+          <circle cx="23" cy="23" r="20" fill="none" stroke="#C9A84C" stroke-width="1.5" opacity="0.6"/>
+          <!-- D letter shape in gold -->
+          <path d="M14 12h7c5.5 0 10 4.5 10 11s-4.5 11-10 11h-7V12z" fill="none" stroke="#C9A84C" stroke-width="1.8"/>
+          <path d="M18 17h3c3 0 5.5 2.5 5.5 6s-2.5 6-5.5 6h-3V17z" fill="#C9A84C" opacity="0.85"/>
+          <!-- Geometric dots on gold fill for Islamic mosaic hint -->
+          <circle cx="21" cy="21" r="1" fill="#1B4332" opacity="0.7"/>
+          <circle cx="24" cy="24" r="0.8" fill="#1B4332" opacity="0.5"/>
+          <circle cx="21" cy="25" r="0.6" fill="#1B4332" opacity="0.4"/>
+        </svg>
+        <div class="flex flex-col leading-tight">
+          <span class="text-[22px] font-black text-[#1B4332] tracking-tight">Dogo</span>
+          <span class="text-[11px] font-bold text-[#C9A84C] tracking-[0.15em] uppercase leading-none">Finance</span>
         </div>
-        <span class="text-[26px] font-black text-[#0d1b2a] tracking-tight">Dogo<span
-            class="text-blue-600">Finance</span></span>
-      </div>
+      </a>
 
       <!-- Desktop Navigation -->
-      <nav class="hidden lg:flex items-center space-x-10">
-        <!-- Save -->
+      <nav class="hidden lg:flex items-center space-x-8">
+
+        <!-- Products Dropdown -->
         <div class="group relative">
-          <button
-            class="flex items-center space-x-1 py-1 text-gray-700 font-bold hover:text-blue-600 transition-colors">
-            <span>Save</span>
-            <i class="ri-arrow-down-s-line"></i>
+          <button class="flex items-center space-x-1 py-1 text-[#1B4332] font-bold hover:text-[#C9A84C] transition-colors text-[15px]">
+            <span>Products</span>
+            <i class="ri-arrow-down-s-line text-base transition-transform group-hover:rotate-180 duration-300"></i>
           </button>
+          <div class="absolute top-full left-1/2 -translate-x-1/2 pt-4 hidden group-hover:block z-[100]">
+            <div class="w-[580px] bg-white shadow-[0_20px_50px_rgba(27,67,50,0.15)] rounded-[28px] grid grid-cols-2 gap-6 p-8 border border-[#1B4332]/8">
 
-          <!-- Dropdown Bridge Container -->
-          <div class="absolute top-full left-1/2 -translate-x-1/2 pt-3 hidden group-hover:block z-[100]">
-            <!-- Dropdown (2-column grid) -->
-              <div
-                class="w-[580px] bg-white shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-[32px] grid grid-cols-2 gap-x-8 gap-y-6 p-10 border border-gray-50">
-                <!-- Piggybank -->
-                <a routerLink="/save/piggybank" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
-                  <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center shrink-0">
-                    <i class="ri-shield-line text-blue-600 text-2xl"></i>
-                  </div>
-                  <div class="flex flex-col">
-                    <span class="text-[17px] font-black text-[#0d1b2a]">Piggybank</span>
-                    <span class="text-[13px] font-bold text-gray-400 font-sans">Automated Savings</span>
-                  </div>
-                </a>
-                <!-- Safelock -->
-                <a routerLink="/save/safelock" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
-                  <div class="w-12 h-12 bg-cyan-50 rounded-2xl flex items-center justify-center shrink-0">
-                    <i class="ri-lock-2-line text-cyan-600 text-2xl"></i>
-                  </div>
-                  <div class="flex flex-col">
-                    <span class="text-[17px] font-black text-[#0d1b2a]">Safelock</span>
-                    <span class="text-[13px] font-bold text-gray-400 font-sans">Fixed Savings</span>
-                  </div>
-                </a>
-                <!-- Target Savings -->
-                <a routerLink="/save/targets" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
-                  <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center shrink-0">
-                    <i class="ri-target-line text-green-600 text-2xl"></i>
-                  </div>
-                  <div class="flex flex-col">
-                    <span class="text-[17px] font-black text-[#0d1b2a]">Target Savings</span>
-                    <span class="text-[13px] font-bold text-gray-400 font-sans">Goal-oriented Savings</span>
-                  </div>
-                </a>
-                <!-- Flex Naira -->
-                <a routerLink="/save/flex-naira" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
-                  <div class="w-12 h-12 bg-pink-50 rounded-2xl flex items-center justify-center shrink-0">
-                    <i class="ri-wallet-3-line text-pink-600 text-2xl"></i>
-                  </div>
-                  <div class="flex flex-col">
-                    <span class="text-[17px] font-black text-[#0d1b2a]">Flex Naira</span>
-                    <span class="text-[13px] font-bold text-gray-400 font-sans">Flexible Savings</span>
-                  </div>
-                </a>
-                <!-- Flex Dollar -->
-                <a routerLink="/save/flex-dollar" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
-                  <div class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center shrink-0">
-                    <i class="ri-money-dollar-circle-line text-gray-600 text-2xl"></i>
-                  </div>
-                  <div class="flex flex-col">
-                    <span class="text-[17px] font-black text-[#0d1b2a]">Flex Dollar</span>
-                    <span class="text-[13px] font-bold text-gray-400 font-sans">Dollar Savings</span>
-                  </div>
-                </a>
-                <!-- House Money -->
-                <a routerLink="/save/house-money" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
-                  <div class="w-12 h-12 bg-orange-50 rounded-2xl flex items-center justify-center shrink-0">
-                    <i class="ri-home-4-line text-orange-600 text-2xl"></i>
-                  </div>
-                  <div class="flex flex-col">
-                    <span class="text-[17px] font-black text-[#0d1b2a]">House Money</span>
-                    <span class="text-[13px] font-bold text-gray-400 font-sans">Semi Strict Wallet</span>
-                  </div>
-                </a>
-              </div>
-          </div>
-        </div>
-
-        <!-- Invest -->
-        <div class="group relative">
-          <button
-            class="flex items-center space-x-1 py-1 text-gray-700 font-bold hover:text-blue-600 transition-colors">
-            <span>Invest</span>
-            <i class="ri-arrow-down-s-line"></i>
-          </button>
-
-          <!-- Dropdown Bridge Container -->
-          <div class="absolute top-full left-1/2 -translate-x-1/2 pt-3 hidden group-hover:block z-[100]">
-            <div class="w-[300px] bg-white shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-[32px] p-6 border border-gray-50">
-              <a routerLink="/invest" class="flex items-center space-x-4 p-4 hover:bg-purple-50 rounded-2xl group/item transition-all hover:translate-x-1">
-                <div class="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center shrink-0">
-                  <i class="ri-funds-box-line text-purple-600 text-xl"></i>
+              <a routerLink="/products/mudarabah" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-[#e8f5ee] transition-all group/item">
+                <div class="w-11 h-11 bg-[#e8f5ee] rounded-xl flex items-center justify-center shrink-0 group-hover/item:bg-[#1B4332] transition-colors">
+                  <i class="ri-seedling-line text-[#1B4332] text-xl group-hover/item:text-[#C9A84C] transition-colors"></i>
                 </div>
-                <div class="flex flex-col">
-                  <span class="text-[16px] font-black text-[#0d1b2a]">Investify</span>
-                  <span class="text-[11px] font-bold text-gray-400">Vetted Investments</span>
+                <div>
+                  <p class="font-black text-[#0d1a0f] text-[15px]">Mudarabah</p>
+                  <p class="text-[11px] text-[#6B7280] font-medium">Profit-sharing · Up to 18% p.a.</p>
                 </div>
               </a>
+
+              <a routerLink="/products/sukuk" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-[#fffbeb] transition-all group/item">
+                <div class="w-11 h-11 bg-[#fffbeb] rounded-xl flex items-center justify-center shrink-0 group-hover/item:bg-[#1B4332] transition-colors">
+                  <i class="ri-bank-line text-[#C9A84C] text-xl group-hover/item:text-[#C9A84C] transition-colors"></i>
+                </div>
+                <div>
+                  <p class="font-black text-[#0d1a0f] text-[15px]">Sukuk</p>
+                  <p class="text-[11px] text-[#6B7280] font-medium">Islamic bonds · From 12% p.a.</p>
+                </div>
+              </a>
+
+              <a routerLink="/products/halal-equity" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-[#e8f5ee] transition-all group/item">
+                <div class="w-11 h-11 bg-[#e8f5ee] rounded-xl flex items-center justify-center shrink-0 group-hover/item:bg-[#1B4332] transition-colors">
+                  <i class="ri-line-chart-line text-[#1B4332] text-xl group-hover/item:text-[#C9A84C] transition-colors"></i>
+                </div>
+                <div>
+                  <p class="font-black text-[#0d1a0f] text-[15px]">Halal Equity</p>
+                  <p class="text-[11px] text-[#6B7280] font-medium">Shariah-screened stocks & ETFs</p>
+                </div>
+              </a>
+
+              <a routerLink="/products/wakala" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-[#fffbeb] transition-all group/item">
+                <div class="w-11 h-11 bg-[#fffbeb] rounded-xl flex items-center justify-center shrink-0 group-hover/item:bg-[#1B4332] transition-colors">
+                  <i class="ri-shield-star-line text-[#C9A84C] text-xl group-hover/item:text-[#C9A84C] transition-colors"></i>
+                </div>
+                <div>
+                  <p class="font-black text-[#0d1a0f] text-[15px]">Wakala</p>
+                  <p class="text-[11px] text-[#6B7280] font-medium">Agency deposits · 13% p.a.</p>
+                </div>
+              </a>
+
+              <a routerLink="/products/musharakah" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-[#e8f5ee] transition-all group/item">
+                <div class="w-11 h-11 bg-[#e8f5ee] rounded-xl flex items-center justify-center shrink-0 group-hover/item:bg-[#1B4332] transition-colors">
+                  <i class="ri-team-line text-[#1B4332] text-xl group-hover/item:text-[#C9A84C] transition-colors"></i>
+                </div>
+                <div>
+                  <p class="font-black text-[#0d1a0f] text-[15px]">Musharakah</p>
+                  <p class="text-[11px] text-[#6B7280] font-medium">Joint venture funds</p>
+                </div>
+              </a>
+
+              <a routerLink="/products/ijarah" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-[#fffbeb] transition-all group/item">
+                <div class="w-11 h-11 bg-[#fffbeb] rounded-xl flex items-center justify-center shrink-0 group-hover/item:bg-[#1B4332] transition-colors">
+                  <i class="ri-building-2-line text-[#C9A84C] text-xl group-hover/item:text-[#C9A84C] transition-colors"></i>
+                </div>
+                <div>
+                  <p class="font-black text-[#0d1a0f] text-[15px]">Ijarah</p>
+                  <p class="text-[11px] text-[#6B7280] font-medium">Asset-leasing instruments</p>
+                </div>
+              </a>
+
             </div>
           </div>
         </div>
 
-        <a routerLink="/stories" routerLinkActive="text-blue-600" class="text-gray-700 font-bold hover:text-blue-600 transition-colors">Stories</a>
-        <a routerLink="/faq" routerLinkActive="text-blue-600" class="text-gray-700 font-bold hover:text-blue-600 transition-colors">FAQs</a>
+        <a routerLink="/zakat" routerLinkActive="text-[#C9A84C]" class="text-[#1B4332] font-bold hover:text-[#C9A84C] transition-colors text-[15px]">Zakat</a>
+        <a routerLink="/goals" routerLinkActive="text-[#C9A84C]" class="text-[#1B4332] font-bold hover:text-[#C9A84C] transition-colors text-[15px]">Goals</a>
+        <a routerLink="/shariah" routerLinkActive="text-[#C9A84C]" class="text-[#1B4332] font-bold hover:text-[#C9A84C] transition-colors text-[15px]">Shariah</a>
 
-        <!-- Resources -->
+        <!-- Resources Dropdown -->
         <div class="group relative">
-          <button
-            class="flex items-center space-x-1 py-1 text-gray-700 font-bold hover:text-blue-600 transition-colors">
+          <button class="flex items-center space-x-1 py-1 text-[#1B4332] font-bold hover:text-[#C9A84C] transition-colors text-[15px]">
             <span>Resources</span>
-            <i class="ri-arrow-down-s-line"></i>
+            <i class="ri-arrow-down-s-line text-base transition-transform group-hover:rotate-180 duration-300"></i>
           </button>
-
-          <!-- Dropdown Bridge Container -->
-          <div class="absolute top-full left-1/2 -translate-x-1/2 pt-3 hidden group-hover:block z-[100]">
-            <!-- Dropdown (2-column grid for Resources) -->
-            <div
-              class="w-[520px] bg-white shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-[32px] grid grid-cols-2 gap-x-8 gap-y-6 p-10 border border-gray-50">
-              <!-- Blog -->
-              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
-                <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center shrink-0">
-                  <i class="ri-article-line text-blue-600 text-2xl"></i>
+          <div class="absolute top-full left-1/2 -translate-x-1/2 pt-4 hidden group-hover:block z-[100]">
+            <div class="w-[420px] bg-white shadow-[0_20px_50px_rgba(27,67,50,0.15)] rounded-[28px] grid grid-cols-2 gap-4 p-8 border border-[#1B4332]/8">
+              <a routerLink="/blog" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-[#e8f5ee] transition-all">
+                <div class="w-10 h-10 bg-[#e8f5ee] rounded-xl flex items-center justify-center shrink-0">
+                  <i class="ri-article-line text-[#1B4332] text-lg"></i>
                 </div>
-                <div class="flex flex-col">
-                  <span class="text-[17px] font-black text-[#0d1b2a]">Blog</span>
-                  <span class="text-[13px] font-bold text-gray-400 font-sans">Latest news & updates</span>
+                <div>
+                  <p class="font-black text-[#0d1a0f] text-[14px]">Blog</p>
+                  <p class="text-[11px] text-[#6B7280] font-medium">Halal finance insights</p>
                 </div>
               </a>
-              <!-- Reports -->
-              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
-                <div class="w-12 h-12 bg-pink-50 rounded-2xl flex items-center justify-center shrink-0">
-                  <i class="ri-file-chart-line text-pink-600 text-2xl"></i>
+              <a routerLink="/savings-calculator" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-[#e8f5ee] transition-all">
+                <div class="w-10 h-10 bg-[#e8f5ee] rounded-xl flex items-center justify-center shrink-0">
+                  <i class="ri-calculator-line text-[#1B4332] text-lg"></i>
                 </div>
-                <div class="flex flex-col">
-                  <span class="text-[17px] font-black text-[#0d1b2a]">Reports</span>
-                  <span class="text-[13px] font-bold text-gray-400 font-sans">Financial reports</span>
-                </div>
-              </a>
-              <!-- Comics -->
-              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
-                <div class="w-12 h-12 bg-teal-50 rounded-2xl flex items-center justify-center shrink-0">
-                  <i class="ri-palette-line text-teal-600 text-2xl"></i>
-                </div>
-                <div class="flex flex-col">
-                  <span class="text-[17px] font-black text-[#0d1b2a]">Comics</span>
-                  <span class="text-[13px] font-bold text-gray-400 font-sans">Money stories</span>
+                <div>
+                  <p class="font-black text-[#0d1a0f] text-[14px]">Calculator</p>
+                  <p class="text-[11px] text-[#6B7280] font-medium">Profit estimator</p>
                 </div>
               </a>
-              <!-- Calculator -->
-              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
-                <div class="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center shrink-0">
-                  <i class="ri-calculator-line text-emerald-600 text-2xl"></i>
+              <a routerLink="/reports" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-[#fffbeb] transition-all">
+                <div class="w-10 h-10 bg-[#fffbeb] rounded-xl flex items-center justify-center shrink-0">
+                  <i class="ri-file-chart-line text-[#C9A84C] text-lg"></i>
                 </div>
-                <div class="flex flex-col">
-                  <span class="text-[17px] font-black text-[#0d1b2a]">Calculator</span>
-                  <span class="text-[13px] font-bold text-gray-400 font-sans">Savings calculator</span>
-                </div>
-              </a>
-              <!-- FAQ in Resources -->
-              <a routerLink="/faq" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
-                <div class="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center shrink-0">
-                  <i class="ri-questionnaire-line text-amber-600 text-2xl"></i>
-                </div>
-                <div class="flex flex-col">
-                  <span class="text-[17px] font-black text-[#0d1b2a]">FAQs</span>
-                  <span class="text-[13px] font-bold text-gray-400 font-sans">Get help instantly</span>
+                <div>
+                  <p class="font-black text-[#0d1a0f] text-[14px]">Reports</p>
+                  <p class="text-[11px] text-[#6B7280] font-medium">Transparency reports</p>
                 </div>
               </a>
-              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
-                <div class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center shrink-0">
-                  <i class="ri-mail-line text-gray-600 text-2xl"></i>
+              <a routerLink="/faq" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-[#fffbeb] transition-all">
+                <div class="w-10 h-10 bg-[#fffbeb] rounded-xl flex items-center justify-center shrink-0">
+                  <i class="ri-questionnaire-line text-[#C9A84C] text-lg"></i>
                 </div>
-                <div class="flex flex-col">
-                  <span class="text-[17px] font-black text-[#0d1b2a]">Newsletter</span>
-                  <span class="text-[13px] font-bold text-gray-400 font-sans">Stay in the loop</span>
-                </div>
-              </a>
-              <!-- Ebook -->
-              <a href="#" class="flex items-center space-x-4 group/item transition-all hover:translate-x-1">
-                <div class="w-12 h-12 bg-sky-50 rounded-2xl flex items-center justify-center shrink-0">
-                  <i class="ri-article-line text-sky-600 text-2xl"></i>
-                </div>
-                <div class="flex flex-col">
-                  <span class="text-[17px] font-black text-[#0d1b2a]">Ebook</span>
-                  <span class="text-[13px] font-bold text-gray-400 font-sans">Free guides</span>
+                <div>
+                  <p class="font-black text-[#0d1a0f] text-[14px]">Help Centre</p>
+                  <p class="text-[11px] text-[#6B7280] font-medium">FAQs & support</p>
                 </div>
               </a>
             </div>
           </div>
         </div>
+
       </nav>
 
-      <!-- Desktop Buttons -->
-      <div class="hidden lg:flex items-center space-x-4">
-        <button
-          class="px-8 py-3 bg-[#0d1b2a] text-white font-black rounded-xl hover:bg-gray-800 transition-all shadow-lg shadow-gray-200">
-          Create free account
-        </button>
-        <button
-          class="px-8 py-2.5 bg-white text-[#0d1b2a] font-black border-2 border-[#0d1b2a] rounded-xl hover:bg-gray-50 transition-all">
+      <!-- Desktop CTA Buttons -->
+      <div class="hidden lg:flex items-center space-x-3">
+        <button routerLink="/login" class="px-6 py-2.5 font-black text-[#1B4332] border-2 border-[#1B4332]/20 rounded-xl hover:border-[#1B4332] transition-all text-[14px]">
           Sign in
+        </button>
+        <button routerLink="/register" class="px-7 py-3 bg-[#1B4332] text-[#C9A84C] font-black rounded-xl hover:bg-[#2D6A4F] transition-all shadow-lg shadow-[#1B4332]/20 text-[14px]">
+          Create Free Account
         </button>
       </div>
 
       <!-- Mobile Menu Button -->
-      <button class="lg:hidden text-2xl text-[#0d1b2a]" (click)="toggleMenu()">
+      <button class="lg:hidden text-2xl text-[#1B4332]" (click)="toggleMenu()">
         <i [class]="isMenuOpen ? 'ri-close-line' : 'ri-menu-3-line'"></i>
       </button>
     </div>
 
     <!-- Mobile Navigation Menu -->
     <div class="lg:hidden" *ngIf="isMenuOpen">
-      <div class="mt-4 pb-6 space-y-4">
-        <div class="border-b border-gray-50 pb-4">
-           <p class="text-xs font-black uppercase tracking-widest text-gray-400 mb-2">Save Plans</p>
-           <div class="grid grid-cols-2 gap-2">
-             <a routerLink="/save/piggybank" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Piggybank</a>
-             <a routerLink="/save/safelock" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Safelock</a>
-             <a routerLink="/save/targets" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Targets</a>
-             <a routerLink="/save/flex-naira" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Flex Naira</a>
-             <a routerLink="/save/flex-dollar" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Flex Dollar</a>
-             <a routerLink="/save/house-money" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">House Money</a>
-           </div>
+      <div class="px-6 py-6 border-t border-[#1B4332]/8 space-y-2 bg-white">
+
+        <div class="pb-4 mb-2 border-b border-gray-50">
+          <p class="text-[10px] font-black uppercase tracking-widest text-[#C9A84C] mb-3">Investment Products</p>
+          <div class="grid grid-cols-2 gap-2">
+            <a routerLink="/products/mudarabah" (click)="toggleMenu()" class="block py-2 text-[13px] font-black text-[#1B4332]">Mudarabah</a>
+            <a routerLink="/products/sukuk" (click)="toggleMenu()" class="block py-2 text-[13px] font-black text-[#1B4332]">Sukuk</a>
+            <a routerLink="/products/halal-equity" (click)="toggleMenu()" class="block py-2 text-[13px] font-black text-[#1B4332]">Halal Equity</a>
+            <a routerLink="/products/wakala" (click)="toggleMenu()" class="block py-2 text-[13px] font-black text-[#1B4332]">Wakala</a>
+            <a routerLink="/products/musharakah" (click)="toggleMenu()" class="block py-2 text-[13px] font-black text-[#1B4332]">Musharakah</a>
+            <a routerLink="/products/ijarah" (click)="toggleMenu()" class="block py-2 text-[13px] font-black text-[#1B4332]">Ijarah</a>
+          </div>
         </div>
-        <div class="border-b border-gray-50 pb-4">
-           <p class="text-xs font-black uppercase tracking-widest text-gray-400 mb-2">Investment Plans</p>
-           <div>
-             <a routerLink="/invest" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Investify</a>
-           </div>
-        </div>
-        <a routerLink="/stories" (click)="toggleMenu()" class="block py-2 text-lg font-medium text-gray-800 border-b border-gray-50">Stories</a>
-        <a routerLink="/faq" (click)="toggleMenu()" class="block py-2 text-lg font-medium text-gray-800 border-b border-gray-50">FAQs</a>
-        <div class="border-b border-gray-50 pb-4">
-           <p class="text-xs font-black uppercase tracking-widest text-gray-400 mt-4 mb-2">More Resources</p>
-           <div class="grid grid-cols-2 gap-2">
-             <a href="#" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Blog</a>
-             <a routerLink="/faq" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Help Center</a>
-             <a href="#" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Calculator</a>
-             <a href="#" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Newsletter</a>
-           </div>
-        </div>
-        <div class="pt-4 flex flex-col space-y-4">
-          <button class="w-full px-6 py-3 bg-[#0d1b2a] text-white font-bold rounded-lg">
-            Create free account
-          </button>
-          <button class="w-full px-6 py-3 bg-white text-[#0d1b2a] font-bold border-2 border-[#0d1b2a] rounded-lg">
-            Sign in
-          </button>
+
+        <a routerLink="/zakat" (click)="toggleMenu()" class="flex justify-between items-center py-3 border-b border-gray-50 font-bold text-[#1B4332]">
+          Zakat Calculator <i class="ri-arrow-right-line text-[#C9A84C]"></i>
+        </a>
+        <a routerLink="/goals" (click)="toggleMenu()" class="flex justify-between items-center py-3 border-b border-gray-50 font-bold text-[#1B4332]">
+          Savings Goals <i class="ri-arrow-right-line text-[#C9A84C]"></i>
+        </a>
+        <a routerLink="/shariah" (click)="toggleMenu()" class="flex justify-between items-center py-3 border-b border-gray-50 font-bold text-[#1B4332]">
+          Shariah Compliance <i class="ri-arrow-right-line text-[#C9A84C]"></i>
+        </a>
+        <a routerLink="/about" (click)="toggleMenu()" class="flex justify-between items-center py-3 border-b border-gray-50 font-bold text-[#1B4332]">
+          About Us <i class="ri-arrow-right-line text-[#C9A84C]"></i>
+        </a>
+        <a routerLink="/faq" (click)="toggleMenu()" class="flex justify-between items-center py-3 border-b border-gray-50 font-bold text-[#1B4332]">
+          Help Centre <i class="ri-arrow-right-line text-[#C9A84C]"></i>
+        </a>
+
+        <div class="pt-6 flex flex-col space-y-3">
+          <button routerLink="/login" (click)="toggleMenu()" class="w-full py-4 border-2 border-[#1B4332] text-[#1B4332] font-black rounded-xl">Sign In</button>
+          <button routerLink="/register" (click)="toggleMenu()" class="w-full py-4 bg-[#1B4332] text-[#C9A84C] font-black rounded-xl shadow-lg">Create Free Account</button>
         </div>
       </div>
     </div>
@@ -268,146 +214,147 @@
   <!-- Main Content -->
   <main class="flex-grow">
     <router-outlet></router-outlet>
-    
   </main>
 
-  <!-- Footer Section -->
-  <footer class="bg-[#051121] text-white pt-24 pb-12 relative overflow-hidden">
-    <!-- Decorative Background Shapes -->
-    <div class="absolute inset-0 pointer-events-none opacity-20">
-      <!-- Left Shape (Flower/Flower shape) -->
-      <div class="absolute left-[-100px] top-1/2 -translate-y-1/2 text-pink-500 hidden lg:block">
-        <svg width="400" height="400" viewBox="0 0 200 200" fill="currentColor">
-          <path d="M100 0c30 0 50 20 50 50s-20 50-50 50-50-20-50-50 20-50 50-50zm0 100c30 0 50 20 50 50s-20 50-50 50-50-20-50-50 20-50 50-50zm50-50c0 30-20 50-50 50s-50-20-50-50 20-50 50-50 50 20 50 50zm-100 0c0 30-20 50-50 50s-50-20-50-50 20-50 50-50 50 20 50 50z" />
-        </svg>
-      </div>
-      <!-- Right Shape (Half Circles) -->
-      <div class="absolute right-[-50px] top-1/2 -translate-y-1/2 text-blue-400 hidden lg:flex space-x-[-100px]">
-        <div class="w-64 h-64 bg-current rounded-l-full opacity-40"></div>
-        <div class="w-64 h-64 bg-current rounded-l-full opacity-70"></div>
-        <div class="w-64 h-64 bg-current rounded-l-full opacity-100"></div>
+  <!-- ======= FOOTER ======= -->
+  <footer class="bg-[#0d1a0f] text-white relative overflow-hidden">
+    <!-- Islamic Pattern Overlay -->
+    <div class="absolute inset-0 dogo-pattern opacity-[0.03] pointer-events-none"></div>
+
+    <!-- CTA Strip -->
+    <div class="relative z-10 border-b border-white/5">
+      <div class="max-w-7xl mx-auto px-6 md:px-12 py-20 text-center">
+        <div class="halal-badge mx-auto mb-8">
+          <i class="ri-verified-badge-fill"></i>
+          CBN Licensed · SEC Registered · SSB Certified
+        </div>
+        <h2 class="text-4xl md:text-6xl font-black mb-6 max-w-3xl mx-auto leading-tight tracking-tight">
+          Start your Halal wealth journey today.
+        </h2>
+        <p class="text-white/60 text-xl font-medium mb-10 max-w-xl mx-auto">
+          Join thousands of Nigerians building real wealth — the Shariah-compliant way.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <button class="flex items-center space-x-3 bg-[#C9A84C] text-[#0d1a0f] px-10 py-4 rounded-2xl font-black hover:bg-[#f0d98b] transition-all shadow-xl shadow-[#C9A84C]/20">
+            <i class="ri-apple-fill text-2xl"></i>
+            <div class="text-left">
+              <p class="text-[9px] uppercase font-bold leading-none opacity-70">Download on the</p>
+              <p class="text-[16px] font-black leading-tight">App Store</p>
+            </div>
+          </button>
+          <button class="flex items-center space-x-3 bg-white/5 border border-white/10 px-10 py-4 rounded-2xl font-black hover:bg-white/10 transition-all">
+            <i class="ri-google-play-fill text-2xl text-[#C9A84C]"></i>
+            <div class="text-left">
+              <p class="text-[9px] uppercase font-bold leading-none opacity-60">Get it on</p>
+              <p class="text-[16px] font-black leading-tight">Google Play</p>
+            </div>
+          </button>
+        </div>
       </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-      <!-- Download Section (Modern Redesign) -->
-      <div class="flex flex-col items-center justify-center text-center mb-24">
-        <!-- App Icon Container -->
-        <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center shadow-2xl mb-8">
-          <i class="ri-shield-user-fill text-white text-3xl"></i>
-        </div>
-        
-        <h2 class="text-4xl md:text-6xl font-black mb-10 tracking-tight max-w-2xl leading-[1.1]">
-          Download <span class="text-blue-500">DogoFinance</span> today.
-        </h2>
+    <!-- Links Grid -->
+    <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12 py-16">
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-y-12 gap-x-8">
 
-        <div class="flex flex-wrap justify-center gap-6">
-          <a href="#" class="group flex items-center space-x-3 bg-blue-600 px-10 py-4 rounded-2xl hover:bg-blue-700 transition-all hover:scale-105 shadow-xl shadow-blue-500/20">
-            <i class="ri-apple-fill text-3xl"></i>
-            <div class="text-left">
-              <p class="text-[10px] uppercase font-bold text-blue-100 leading-tight">Get it on</p>
-              <p class="text-lg font-black leading-tight">iPhone</p>
+        <!-- Brand -->
+        <div class="col-span-2 md:col-span-1">
+          <div class="flex items-center space-x-2 mb-6">
+            <svg width="36" height="36" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="23" cy="23" r="23" fill="#1B4332"/>
+              <circle cx="23" cy="23" r="20" fill="none" stroke="#C9A84C" stroke-width="1.5" opacity="0.6"/>
+              <path d="M14 12h7c5.5 0 10 4.5 10 11s-4.5 11-10 11h-7V12z" fill="none" stroke="#C9A84C" stroke-width="1.8"/>
+              <path d="M18 17h3c3 0 5.5 2.5 5.5 6s-2.5 6-5.5 6h-3V17z" fill="#C9A84C" opacity="0.85"/>
+            </svg>
+            <div class="leading-tight">
+              <p class="font-black text-white text-lg">Dogo</p>
+              <p class="text-[10px] font-bold text-[#C9A84C] tracking-widest uppercase leading-none">Finance</p>
             </div>
-          </a>
-          <a href="#" class="group flex items-center space-x-3 bg-transparent border-2 border-gray-700 px-10 py-4 rounded-2xl hover:bg-gray-800 transition-all hover:scale-105">
-            <i class="ri-google-play-fill text-3xl"></i>
-            <div class="text-left">
-              <p class="text-[10px] uppercase font-bold text-gray-400 leading-tight">Get it on</p>
-              <p class="text-lg font-black leading-tight">Android</p>
-            </div>
-          </a>
-        </div>
-      </div>
-
-      <!-- Links Grid -->
-      <div class="border-t border-gray-700/50 border-dotted pt-10 grid grid-cols-2 lg:grid-cols-6 gap-y-12 gap-x-0 pb-12">
-        <!-- Brand & Badge (Full width on mobile to show side-by-side) -->
-        <div class="col-span-2 lg:col-span-1 lg:border-r border-gray-700/50 border-dotted px-6 lg:pl-0 flex items-start justify-between lg:flex-col lg:justify-start">
-          <div class="flex flex-col items-start text-left">
-            <div class="flex items-center space-x-2 mb-4">
-              <div class="w-8 h-8 bg-[#0d1b2a] border border-gray-700 rounded flex items-center justify-center">
-                <i class="ri-shield-user-line text-white text-lg"></i>
-              </div>
-              <span class="text-xl font-bold">DogoFinance</span>
-            </div>
-            <p class="text-sm font-medium text-gray-300 leading-relaxed max-w-[150px]">
-              The better way to save and invest.
-            </p>
           </div>
-          <div class="bg-white p-2 rounded inline-block mt-0 lg:mt-8">
-            <img src="https://via.placeholder.com/100x45?text=NDPR+Audit" alt="NDPR Audit" class="h-10 grayscale hover:grayscale-0 transition-all">
+          <p class="text-white/50 text-[13px] font-medium leading-relaxed">
+            Nigeria's first Shariah-compliant digital investment bank. 100% Riba-free.
+          </p>
+          <div class="flex space-x-3 mt-6">
+            <a href="#" class="w-9 h-9 bg-white/5 rounded-xl flex items-center justify-center hover:bg-[#C9A84C] hover:text-[#0d1a0f] transition-all"><i class="ri-twitter-x-line text-sm"></i></a>
+            <a href="#" class="w-9 h-9 bg-white/5 rounded-xl flex items-center justify-center hover:bg-[#C9A84C] hover:text-[#0d1a0f] transition-all"><i class="ri-instagram-line text-sm"></i></a>
+            <a href="#" class="w-9 h-9 bg-white/5 rounded-xl flex items-center justify-center hover:bg-[#C9A84C] hover:text-[#0d1a0f] transition-all"><i class="ri-linkedin-fill text-sm"></i></a>
           </div>
         </div>
 
         <!-- Products -->
-        <div class="lg:border-r border-gray-700/50 border-dotted px-6 text-left">
-          <h3 class="font-bold text-[15px] mb-6 text-gray-100 uppercase tracking-wider">Products</h3>
-          <ul class="space-y-4 text-[14px] font-medium text-gray-400">
-            <li><a href="#" class="hover:text-blue-400 transition-colors">Flex Naira</a></li>
-            <li><a href="#" class="hover:text-blue-400 transition-colors">Flex Dollar</a></li>
-            <li><a href="#" class="hover:text-blue-400 transition-colors">HouseMoney</a></li>
-            <li><a href="#" class="hover:text-blue-400 transition-colors">Investify</a></li>
-            <li><a href="#" class="hover:text-blue-400 transition-colors">PiggyBank</a></li>
-            <li><a href="#" class="hover:text-blue-400 transition-colors">SafeLock</a></li>
-            <li><a href="#" class="hover:text-blue-400 transition-colors">Target Savings</a></li>
+        <div>
+          <h4 class="font-black text-[13px] uppercase tracking-widest text-[#C9A84C] mb-5">Products</h4>
+          <ul class="space-y-3 text-[13px] font-medium text-white/50">
+            <li><a routerLink="/products/mudarabah" class="hover:text-[#C9A84C] transition-colors">Mudarabah</a></li>
+            <li><a routerLink="/products/sukuk" class="hover:text-[#C9A84C] transition-colors">Sukuk</a></li>
+            <li><a routerLink="/products/halal-equity" class="hover:text-[#C9A84C] transition-colors">Halal Equity</a></li>
+            <li><a routerLink="/products/wakala" class="hover:text-[#C9A84C] transition-colors">Wakala</a></li>
+            <li><a routerLink="/products/musharakah" class="hover:text-[#C9A84C] transition-colors">Musharakah</a></li>
+            <li><a routerLink="/products/ijarah" class="hover:text-[#C9A84C] transition-colors">Ijarah</a></li>
           </ul>
         </div>
 
-        <!-- Resources -->
-        <div class="lg:border-r border-gray-700/50 border-dotted px-6 text-left">
-          <h3 class="font-bold text-[15px] mb-6 text-gray-100 uppercase tracking-wider">Resources</h3>
-          <ul class="space-y-4 text-[14px] font-medium text-gray-400">
-            <li><a href="#" class="hover:text-blue-400 transition-colors">Blog</a></li>
-            <li><a href="#" class="hover:text-blue-400 transition-colors">Grownups</a></li>
-            <li><a href="#" class="hover:text-blue-400 transition-colors">Newsletter</a></li>
-            <li><a href="#" class="hover:text-blue-400 transition-colors">Savings Report</a></li>
+        <!-- Tools -->
+        <div>
+          <h4 class="font-black text-[13px] uppercase tracking-widest text-[#C9A84C] mb-5">Tools</h4>
+          <ul class="space-y-3 text-[13px] font-medium text-white/50">
+            <li><a routerLink="/zakat" class="hover:text-[#C9A84C] transition-colors">Zakat Calculator</a></li>
+            <li><a routerLink="/goals" class="hover:text-[#C9A84C] transition-colors">Savings Goals</a></li>
+            <li><a routerLink="/savings-calculator" class="hover:text-[#C9A84C] transition-colors">Profit Calculator</a></li>
           </ul>
         </div>
 
         <!-- Company -->
-        <div class="lg:border-r border-gray-700/50 border-dotted px-6 text-left">
-          <h3 class="font-bold text-[15px] mb-6 text-gray-100 uppercase tracking-wider">Company</h3>
-          <ul class="space-y-4 text-[14px] font-medium text-gray-400">
-            <li><a href="#" class="hover:text-blue-400 transition-colors">About</a></li>
-            <li><a href="#" class="hover:text-blue-400 transition-colors">Careers</a></li>
-            <li><a href="#" class="hover:text-blue-400 transition-colors">FAQs</a></li>
-            <li><a href="#" class="hover:text-blue-400 transition-colors">Blog</a></li>
-            <li><a href="#" class="hover:text-blue-400 transition-colors">Resources</a></li>
+        <div>
+          <h4 class="font-black text-[13px] uppercase tracking-widest text-[#C9A84C] mb-5">Company</h4>
+          <ul class="space-y-3 text-[13px] font-medium text-white/50">
+            <li><a routerLink="/about" class="hover:text-[#C9A84C] transition-colors">About Us</a></li>
+            <li><a routerLink="/shariah" class="hover:text-[#C9A84C] transition-colors">Shariah Compliance</a></li>
+            <li><a routerLink="/regulatory" class="hover:text-[#C9A84C] transition-colors">Regulatory</a></li>
+            <li><a routerLink="/blog" class="hover:text-[#C9A84C] transition-colors">Blog</a></li>
+            <li><a routerLink="/reports" class="hover:text-[#C9A84C] transition-colors">Reports</a></li>
           </ul>
         </div>
 
-        <!-- Legal -->
-        <div class="lg:border-r border-gray-700/50 border-dotted px-6 text-left">
-          <h3 class="font-bold text-[15px] mb-6 text-gray-100 uppercase tracking-wider">Legal</h3>
-          <ul class="space-y-4 text-[14px] font-medium text-gray-400">
-            <li><a href="#" class="hover:text-blue-400 transition-colors">Privacy</a></li>
-            <li><a href="#" class="hover:text-blue-400 transition-colors">Security</a></li>
-            <li><a href="#" class="hover:text-blue-400 transition-colors">Terms</a></li>
+        <!-- Support -->
+        <div>
+          <h4 class="font-black text-[13px] uppercase tracking-widest text-[#C9A84C] mb-5">Support</h4>
+          <ul class="space-y-3 text-[13px] font-medium text-white/50">
+            <li><a routerLink="/faq" class="hover:text-[#C9A84C] transition-colors">Help Centre</a></li>
+            <li><a routerLink="/contact" class="hover:text-[#C9A84C] transition-colors">Contact Us</a></li>
+            <li><a routerLink="/security" class="hover:text-[#C9A84C] transition-colors">Security</a></li>
+            <li><a href="#" class="hover:text-[#C9A84C] transition-colors">Privacy Policy</a></li>
+            <li><a href="#" class="hover:text-[#C9A84C] transition-colors">Terms of Service</a></li>
           </ul>
         </div>
 
-        <!-- Contact/Social -->
-        <div class="col-span-2 lg:col-span-1 px-6 flex flex-col items-center lg:items-start text-center lg:text-left mt-8 lg:mt-0">
-          <div class="flex space-x-4 mb-8 justify-center lg:justify-start">
-            <a href="#" class="text-white hover:text-blue-400 transition-colors"><i class="ri-facebook-fill text-xl"></i></a>
-            <a href="#" class="text-white hover:text-pink-400 transition-colors"><i class="ri-instagram-line text-xl"></i></a>
-            <a href="#" class="text-white hover:text-blue-300 transition-colors"><i class="ri-twitter-x-line text-xl"></i></a>
-            <a href="#" class="text-white hover:text-red-400 transition-colors"><i class="ri-tiktok-fill text-xl"></i></a>
-            <a href="#" class="text-white hover:text-red-600 transition-colors"><i class="ri-youtube-fill text-xl"></i></a>
-          </div>
+      </div>
 
-          <p class="text-[14px] font-medium text-gray-300 leading-relaxed mb-4">
-            Tesmot house, Abdulrahman Okene close, Victoria Island, Lagos, Nigeria.
-          </p>
-          <a href="mailto:contact@dogofinance.com" class="block text-[14px] font-medium text-gray-300 hover:text-white mb-2">contact@dogofinance.com</a>
-          <a href="tel:+234700933933933" class="block text-[14px] font-bold text-gray-300 hover:text-white">+234 700 933 933 933</a>
+      <!-- Regulatory footer bar -->
+      <div class="border-t border-white/5 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="text-white/30 text-[12px] font-medium text-center md:text-left">
+          <p>© 2026 Dogo Finance Ltd. All rights reserved.</p>
+          <p class="mt-1">RC No. [DUMMY-0000001] · CBN NIFI No. [DUMMY] · SEC Registration No. [DUMMY]</p>
+        </div>
+        <div class="flex flex-wrap gap-3 justify-center">
+          <span class="flex items-center gap-1.5 text-[11px] font-bold bg-white/5 px-3 py-1.5 rounded-full text-white/50">
+            <i class="ri-verified-badge-line text-[#C9A84C]"></i> CBN Licensed
+          </span>
+          <span class="flex items-center gap-1.5 text-[11px] font-bold bg-white/5 px-3 py-1.5 rounded-full text-white/50">
+            <i class="ri-government-line text-[#C9A84C]"></i> SEC Registered
+          </span>
+          <span class="flex items-center gap-1.5 text-[11px] font-bold bg-white/5 px-3 py-1.5 rounded-full text-white/50">
+            <i class="ri-shield-check-line text-[#C9A84C]"></i> NDPR Compliant
+          </span>
         </div>
       </div>
 
-      <!-- Copyright -->
-      <div class="border-t border-gray-800 mt-10 pt-8 text-center text-gray-500 text-sm">
-        <p>&copy; 2026 DogoFinance. All rights reserved.</p>
-      </div>
+      <p class="text-white/20 text-[11px] font-medium text-center mt-8 max-w-3xl mx-auto leading-relaxed">
+        Dogo Finance investments are Shariah-compliant and approved by our Shariah Supervisory Board. 
+        As with all investments, capital is at risk. Past performance is not indicative of future results. 
+        Regulated by the Central Bank of Nigeria (CBN) and the Securities and Exchange Commission (SEC) Nigeria.
+      </p>
     </div>
   </footer>
+
 </div>

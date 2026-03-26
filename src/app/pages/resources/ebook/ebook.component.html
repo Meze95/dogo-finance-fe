@@ -1,0 +1,48 @@
+<section class="pt-32 pb-24 bg-[#f8f7f2] relative overflow-hidden dogo-pattern">
+  <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10 text-center">
+    <div class="halal-badge mb-8 mx-auto">
+      <i class="ri-book-2-line"></i>
+      <span>Free Learning Resources</span>
+    </div>
+    <h1 class="text-5xl md:text-[80px] font-black leading-[0.95] mb-8 tracking-tighter text-[#0d1a0f]">
+      Learn to <br><span class="text-[#1B4332]">master Halal money.</span>
+    </h1>
+    <p class="text-xl text-[#0d1a0f]/60 max-w-2xl mx-auto leading-relaxed font-medium mb-24">
+      Explore our collection of free eBooks designed to help you on your Shariah-compliant financial journey. Download and read at your own pace.
+    </p>
+
+    <!-- Ebooks Grid -->
+    <div class="grid md:grid-cols-3 gap-16 text-left">
+      @for(book of ebooks(); track book.id) {
+        <div class="group flex flex-col items-center">
+          <div class="w-full h-[450px] relative rounded-[40px] shadow-[0_30px_60px_-15px_rgba(27,67,50,0.15)] overflow-hidden mb-10 transition-all group-hover:scale-105 group-hover:-translate-y-4">
+             <img [src]="book.image" [alt]="book.title" class="w-full h-full object-cover">
+             <div class="absolute inset-0 bg-gradient-to-t from-[#0d1a0f]/90 to-transparent flex flex-col justify-end p-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button class="bg-[#C9A84C] text-[#0d1a0f] py-5 rounded-2xl font-black shadow-2xl flex items-center justify-center hover:bg-[#f0d98b] transition-all">
+                  Download Free <i class="ri-download-cloud-2-line ml-3 text-xl"></i>
+                </button>
+             </div>
+          </div>
+          <div class="px-6 text-center">
+             <span class="text-xs font-black uppercase tracking-widest text-[#C9A84C] mb-4 block">{{ book.category }}</span>
+             <h3 class="text-2xl font-black text-[#0d1a0f] mb-4 leading-tight">{{ book.title }}</h3>
+             <p class="text-[#6B7280] font-medium leading-relaxed">{{ book.description }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA with Stats -->
+<section class="py-24 bg-white">
+  <div class="max-w-4xl mx-auto px-6 md:px-12 text-center bg-[#1B4332] rounded-[80px] p-20 text-white relative overflow-hidden">
+     <div class="absolute inset-0 dogo-pattern opacity-10 pointer-events-none"></div>
+     <div class="relative z-10">
+        <h2 class="text-4xl md:text-5xl font-black mb-10 tracking-tighter leading-[1.1]">Join over 50,000 others <br> building <span class="text-[#C9A84C]">Halal wealth.</span></h2>
+        <button class="bg-[#C9A84C] px-12 py-5 rounded-2xl font-black text-[#0d1a0f] hover:bg-[#f0d98b] transition-all shadow-xl shadow-[#C9A84C]/20 hover:-translate-y-1">Create an Account Today</button>
+     </div>
+     
+     <div class="absolute -top-20 -left-20 w-64 h-64 rounded-full blur-[80px] opacity-20" style="background: radial-gradient(circle, #C9A84C, transparent)"></div>
+  </div>
+</section>

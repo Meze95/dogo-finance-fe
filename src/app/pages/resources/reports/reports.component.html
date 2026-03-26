@@ -1,0 +1,66 @@
+<section class="pt-32 pb-24 bg-[#f8f7f2] relative overflow-hidden dogo-pattern">
+  <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+    <div class="text-center mb-24 animate-fade-in">
+      <div class="halal-badge mb-8 mx-auto">
+        <i class="ri-file-chart-line"></i>
+        <span>Financial Performance & Transparency</span>
+      </div>
+      <h1 class="text-5xl md:text-[80px] font-black leading-[0.95] mb-8 tracking-tighter text-[#0d1a0f]">
+        Our Shariah <br><span class="text-[#1B4332]">Performance Reports.</span>
+      </h1>
+      <p class="text-xl text-[#0d1a0f]/60 max-w-2xl mx-auto leading-relaxed font-medium">
+        We believe in full transparency. Explore our financial journey, audited SSB reports, and how we're building the future of African Halal wealth.
+      </p>
+    </div>
+
+    <!-- Reports Grid -->
+    <div class="grid md:grid-cols-3 gap-12">
+      @for(report of reports(); track report.year) {
+        <div class="group bg-white rounded-[50px] overflow-hidden shadow-[0_20px_40px_-10px_rgba(27,67,50,0.1)] border border-[#1B4332]/5 transition-all hover:-translate-y-3">
+          <div class="h-56 relative overflow-hidden">
+             <img [src]="report.image" [alt]="report.title" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+             <div class="absolute inset-0 bg-gradient-to-t from-[#0d1a0f]/90 via-[#0d1a0f]/20 to-transparent flex flex-col justify-end p-10">
+                <span class="text-4xl font-black text-white mb-2">{{ report.year }}</span>
+                <span class="text-[#C9A84C] font-bold uppercase tracking-widest text-xs">Annual Performance</span>
+             </div>
+          </div>
+          <div class="p-10">
+             <h3 class="text-2xl font-black text-[#0d1a0f] mb-6 leading-tight group-hover:text-[#1B4332] transition-colors">{{ report.title }}</h3>
+             <p class="text-[#6B7280] font-medium leading-relaxed mb-10">
+               {{ report.summary }}
+             </p>
+             <button class="w-full bg-[#1B4332] text-[#C9A84C] py-5 rounded-2xl font-black transition-all hover:bg-[#2D6A4F] shadow-xl flex items-center justify-center">
+                Download PDF <i class="ri-download-2-line ml-3 text-xl"></i>
+             </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Stats Booster 2 -->
+<section class="py-24 bg-[#0d1a0f] relative overflow-hidden text-white border-t border-white/5">
+   <div class="absolute inset-0 dogo-pattern opacity-[0.05] pointer-events-none"></div>
+
+   <div class="max-w-7xl mx-auto px-6 md:px-12 grid lg:grid-cols-4 gap-12 text-center relative z-10">
+      <div class="p-8 rounded-[40px] bg-white/5 border border-white/5">
+         <p class="text-4xl font-black text-[#C9A84C] mb-2">100%</p>
+         <p class="text-xs font-bold text-white/50 uppercase tracking-widest">Shariah Compliant</p>
+      </div>
+      <div class="p-8 rounded-[40px] bg-white/5 border border-white/5">
+         <p class="text-4xl font-black text-[#C9A84C] mb-2">₦5B+</p>
+         <p class="text-xs font-bold text-white/50 uppercase tracking-widest">Halal AUM</p>
+      </div>
+      <div class="p-8 rounded-[40px] bg-white/5 border border-white/5">
+         <p class="text-4xl font-black text-[#C9A84C] mb-2">0%</p>
+         <p class="text-xs font-bold text-white/50 uppercase tracking-widest">Interest (Riba)</p>
+      </div>
+      <div class="p-8 rounded-[40px] bg-white/5 border border-white/5">
+         <p class="text-4xl font-black text-[#C9A84C] mb-2">6+</p>
+         <p class="text-xs font-bold text-white/50 uppercase tracking-widest">SSB Validations</p>
+      </div>
+   </div>
+   
+   <div class="absolute -top-40 right-0 w-80 h-80 rounded-full blur-[100px] opacity-10" style="background: radial-gradient(circle, #C9A84C, transparent)"></div>
+</section>

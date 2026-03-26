@@ -1,3 +1,157 @@
-/* You can add global styles to this file, and also import other style files */
-
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
 @import 'tailwindcss';
+
+/* DOGO Finance — Global Design System */
+/* Brand: Forest Green + Gold/Amber, Islamic geometric aesthetic */
+
+/* ============================================
+   CSS CUSTOM PROPERTIES (Brand Tokens)
+   ============================================ */
+:root {
+  /* Brand Colours */
+  --dogo-green:        #1B4332;
+  --dogo-green-light:  #2D6A4F;
+  --dogo-green-mid:    #40916C;
+  --dogo-green-muted:  #e8f5ee;
+  --dogo-gold:         #C9A84C;
+  --dogo-gold-light:   #f0d98b;
+  --dogo-gold-dark:    #9a7a2b;
+  --dogo-cream:        #f8f7f2;
+  --dogo-dark:         #0d1a0f;
+  --dogo-text:         #1a2e1f;
+  --dogo-muted:        #6B7280;
+
+  /* Geometric pattern opacity */
+  --pattern-opacity:   0.04;
+}
+
+/* ============================================
+   BASE RESET & TYPOGRAPHY
+   ============================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--dogo-text);
+  background-color: #ffffff;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================
+   ISLAMIC GEOMETRIC BACKGROUND PATTERN
+   Used via .dogo-pattern class
+   ============================================ */
+.dogo-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231B4332' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* ============================================
+   REUSABLE UTILITY CLASSES
+   ============================================ */
+
+/* Brand gradient backgrounds */
+.bg-dogo-green  { background-color: var(--dogo-green); }
+.bg-dogo-cream  { background-color: var(--dogo-cream); }
+.text-dogo-gold { color: var(--dogo-gold); }
+.text-dogo-green { color: var(--dogo-green); }
+
+/* Premium section padding */
+.section-pad {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+
+/* Large shadow */
+.shadow-premium {
+  box-shadow: 0 40px 80px -20px rgba(27, 67, 50, 0.18);
+}
+
+/* Halal badge */
+.halal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, var(--dogo-green), var(--dogo-green-light));
+  color: var(--dogo-gold);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+}
+
+/* Gold accent line */
+.gold-line::before {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--dogo-gold), var(--dogo-gold-light));
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+}
+
+/* Product card hover */
+.product-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 40px 80px -20px rgba(27, 67, 50, 0.18);
+}
+
+/* Smooth fade-in animation */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.anim-fade-up {
+  animation: fadeUp 0.8s ease-out forwards;
+}
+
+/* Float animation */
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-16px); }
+}
+.anim-float {
+  animation: floatY 6s ease-in-out infinite;
+}
+
+/* Spin slow */
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.anim-spin-slow {
+  animation: spinSlow 20s linear infinite;
+}
+
+/* Stagger delays */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+
+/* Line-clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+  overflow: hidden;
+}
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  line-clamp: 3;
+  overflow: hidden;
+}

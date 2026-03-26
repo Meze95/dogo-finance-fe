@@ -1,0 +1,21 @@
+:host {
+  display: block;
+}
+
+/* Hero animated entrance */
+section:first-of-type h1,
+section:first-of-type p,
+section:first-of-type .halal-badge {
+  animation: fadeUp 0.9s ease-out forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Stagger delays on hero elements */
+section:first-of-type .halal-badge      { animation-delay: 0s;    }
+section:first-of-type h1                { animation-delay: 0.1s;  }
+section:first-of-type p                 { animation-delay: 0.25s; }
+section:first-of-type .flex.flex-wrap   { animation-delay: 0.35s; }

@@ -1,0 +1,106 @@
+@if(post(); as p) {
+  <article class="bg-white min-h-screen">
+    <!-- Article Header -->
+    <header class="pt-40 pb-20 bg-[#f8f7f2] dogo-pattern relative overflow-hidden">
+      <!-- Decor -->
+      <div class="absolute top-0 right-0 w-[400px] h-[400px] rounded-full blur-[100px] opacity-10" style="background: radial-gradient(circle, #C9A84C, transparent)"></div>
+
+      <div class="max-w-4xl mx-auto px-6 md:px-12 text-center relative z-10">
+        <a routerLink="/blog" class="inline-flex items-center space-x-2 text-[#C9A84C] font-black mb-8 hover:translate-x-[-10px] transition-transform">
+          <i class="ri-arrow-left-line"></i>
+          <span>Back to Blog</span>
+        </a>
+        <div class="flex items-center justify-center space-x-4 mb-6">
+           <span class="bg-[#1B4332] text-[#C9A84C] px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-xl">{{ p.category }}</span>
+           <span class="text-[#6B7280] font-bold ml-4">•</span>
+           <span class="text-[#6B7280] font-bold text-sm">{{ p.readTime }}</span>
+        </div>
+        <h1 class="text-4xl md:text-6xl font-black text-[#0d1a0f] mb-10 leading-[1.1] tracking-tighter">
+          {{ p.title }}
+        </h1>
+        <div class="flex items-center justify-center space-x-4">
+           <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center overflow-hidden border-2 border-[#1B4332]/10 shadow-xl">
+             <i class="ri-user-smile-fill text-3xl text-[#1B4332]/40"></i>
+           </div>
+           <div class="text-left">
+              <p class="font-black text-[#0d1a0f] leading-tight">{{ p.author }}</p>
+              <p class="text-[12px] font-bold text-[#6B7280] uppercase tracking-widest mt-0.5">{{ p.date }}</p>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Area -->
+    <div class="max-w-4xl mx-auto px-6 md:px-12 py-24">
+       <!-- Hero Image Overlay -->
+       <div class="relative w-full h-[500px] mb-24 rounded-[60px] overflow-hidden shadow-[0_40px_80px_-20px_rgba(27,67,50,0.2)] bg-[#e8f5ee]">
+          <img [src]="p.image" [alt]="p.title" class="w-full h-full object-cover">
+          <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-[60px]"></div>
+       </div>
+
+       <!-- Article Text (Dynamic Content) -->
+       <div class="blog-content" [innerHTML]="p.content"></div>
+
+       <!-- Share/Footer -->
+       <div class="mt-24 pt-16 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-12 text-center md:text-left">
+          <div>
+             <h4 class="text-2xl font-black text-[#0d1a0f] mb-4">Loved this article?</h4>
+             <p class="text-[#6B7280] font-medium">Share it with your network and help them build Halal wealth.</p>
+          </div>
+          <div class="flex items-center space-x-4">
+             <button class="w-14 h-14 bg-[#f8f7f2] rounded-2xl flex items-center justify-center text-2xl hover:bg-[#1B4332] hover:text-[#C9A84C] transition-all text-[#1B4332]">
+                <i class="ri-facebook-fill"></i>
+             </button>
+             <button class="w-14 h-14 bg-[#f8f7f2] rounded-2xl flex items-center justify-center text-2xl hover:bg-[#1B4332] hover:text-[#C9A84C] transition-all text-[#1B4332]">
+                <i class="ri-twitter-x-line"></i>
+             </button>
+             <button class="w-14 h-14 bg-[#f8f7f2] rounded-2xl flex items-center justify-center text-2xl hover:bg-[#1B4332] hover:text-[#C9A84C] transition-all text-[#1B4332]">
+                <i class="ri-linkedin-fill"></i>
+             </button>
+             <button class="w-14 h-14 bg-[#f8f7f2] rounded-2xl flex items-center justify-center text-2xl hover:bg-[#1B4332] hover:text-[#C9A84C] transition-all text-[#1B4332]">
+                <i class="ri-link-m"></i>
+             </button>
+          </div>
+       </div>
+    </div>
+  </article>
+
+  @if(relatedPosts().length > 0) {
+    <!-- Related Posts -->
+    <section class="py-24 bg-[#0d1a0f] text-white overflow-hidden relative">
+       <div class="absolute inset-0 dogo-pattern opacity-[0.06] pointer-events-none"></div>
+       <div class="absolute -top-40 right-0 w-[500px] h-[500px] rounded-full blur-[150px] opacity-10" style="background: radial-gradient(circle, #C9A84C, transparent)"></div>
+
+       <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+          <h2 class="text-3xl font-black text-white mb-12 flex items-center">
+             <i class="ri-bookmark-fill mr-4 text-[#C9A84C]"></i> Related to {{ p.category }}
+          </h2>
+          <div class="grid md:grid-cols-3 gap-10">
+             @for(rel of relatedPosts(); track rel.id) {
+                <a [routerLink]="['/blog', rel.id]" class="group bg-white/5 rounded-[40px] overflow-hidden border border-white/10 transition-all hover:bg-white/10 hover:-translate-y-2">
+                   <div class="h-48 overflow-hidden relative">
+                      <img [src]="rel.image" [alt]="rel.title" class="w-full h-full object-cover">
+                      <div class="absolute inset-0 bg-black/20"></div>
+                   </div>
+                   <div class="p-8">
+                      <h3 class="text-lg font-black text-white mb-6 group-hover:text-[#C9A84C] transition-colors line-clamp-2 leading-tight">{{ rel.title }}</h3>
+                      <span class="text-[12px] font-black text-[#C9A84C] uppercase tracking-widest flex items-center group-hover:translate-x-2 transition-transform">Read Now <i class="ri-arrow-right-line ml-2"></i></span>
+                   </div>
+                </a>
+             }
+          </div>
+       </div>
+    </section>
+  }
+} @else {
+  <div class="min-h-[80vh] flex items-center justify-center text-center p-20 bg-[#f8f7f2] dogo-pattern">
+     <div class="max-w-md">
+        <div class="w-24 h-24 bg-[#e8f5ee] rounded-full flex items-center justify-center mx-auto mb-8">
+          <i class="ri-error-warning-fill text-5xl text-[#1B4332] animate-bounce"></i>
+        </div>
+        <h2 class="text-4xl font-black text-[#0d1a0f] mb-4">Article Not Found.</h2>
+        <p class="text-[#6B7280] font-medium mb-10 leading-relaxed text-lg">The Halal finance post you are looking for might have been moved or deleted.</p>
+        <button routerLink="/blog" class="bg-[#1B4332] text-[#C9A84C] px-10 py-5 rounded-2xl font-black shadow-xl shadow-[#1B4332]/20 hover:bg-[#2D6A4F] transition-all">Back to Articles</button>
+     </div>
+  </div>
+}

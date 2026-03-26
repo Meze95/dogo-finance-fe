@@ -1,37 +1,83 @@
 import { Routes } from '@angular/router';
 import { HomeLayout } from './layouts/home-layout/home-layout';
 import { LandingComponent } from './pages/landing/landing.component';
-import { InvestmentComponent } from './pages/investment/investment.component';
-import { StoriesComponent } from './pages/stories/stories.component';
 import { FAQComponent } from './pages/faq/faq.component';
-import { SavingsPlanComponent } from './pages/savings-plan/savings-plan.component';
+import { BlogComponent } from './pages/resources/blog/blog.component';
+import { BlogDetailComponent } from './pages/resources/blog-detail/blog-detail.component';
+import { CalculatorComponent } from './pages/resources/calculator/calculator.component';
+import { ReportsComponent } from './pages/resources/reports/reports.component';
+import { EbookComponent } from './pages/resources/ebook/ebook.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: HomeLayout,
     children: [
+      { path: '', component: LandingComponent },
+
+      // ---- PRODUCTS (single dynamic component, driven by :plan param) ----
       {
-        path: '',
-        component: LandingComponent,
+        path: 'products/:plan',
+        loadComponent: () => import('./pages/products/products.component').then(m => m.ProductsComponent)
+      },
+
+      // ---- TOOLS ----
+      {
+        path: 'zakat',
+        loadComponent: () => import('./pages/zakat/zakat.component').then(m => m.ZakatComponent)
       },
       {
-        path: 'invest',
-        component: InvestmentComponent,
+        path: 'goals',
+        loadComponent: () => import('./pages/goals/goals.component').then(m => m.GoalsComponent)
+      },
+      { path: 'savings-calculator', component: CalculatorComponent },
+
+      // ---- COMPANY / TRUST ----
+      {
+        path: 'shariah',
+        loadComponent: () => import('./pages/shariah/shariah.component').then(m => m.ShariahComponent)
       },
       {
-        path: 'stories',
-        component: StoriesComponent,
+        path: 'about',
+        loadComponent: () => import('./pages/about/about.component').then(m => m.AboutComponent)
       },
       {
-        path: 'faq',
-        component: FAQComponent,
+        path: 'regulatory',
+        loadComponent: () => import('./pages/regulatory/regulatory.component').then(m => m.RegulatoryComponent)
       },
       {
-        path: 'save/:plan',
-        component: SavingsPlanComponent,
+        path: 'security',
+        loadComponent: () => import('./pages/security/security.component').then(m => m.SecurityComponent)
       },
+      {
+        path: 'how-it-works',
+        loadComponent: () => import('./pages/how-it-works/how-it-works.component').then(m => m.HowItWorksComponent)
+      },
+      {
+        path: 'contact',
+        loadComponent: () => import('./pages/contact/contact.component').then(m => m.ContactComponent)
+      },
+      {
+        path: 'download',
+        loadComponent: () => import('./pages/download/download.component').then(m => m.DownloadComponent)
+      },
+
+      // ---- RESOURCES ----
+      { path: 'blog',     component: BlogComponent },
+      { path: 'blog/:id', component: BlogDetailComponent },
+      { path: 'reports',  component: ReportsComponent },
+      { path: 'ebook',    component: EbookComponent },
+      { path: 'faq',      component: FAQComponent },
     ],
   },
-  // Add other layout-wrapped routes here as needed
+  
+  // ---- AUTHENTICATION (Standalone Full Page Layouts) ----
+  {
+    path: 'login',
+    loadComponent: () => import('./pages/auth/login/login.component').then(m => m.LoginComponent)
+  },
+  {
+    path: 'register',
+    loadComponent: () => import('./pages/auth/register/register.component').then(m => m.RegisterComponent)
+  }
 ];

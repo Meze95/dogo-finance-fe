@@ -15,60 +15,60 @@ interface FAQCategory {
 
 const FAQ_DATA: FAQCategory[] = [
   {
-    title: "What is DogoFinance?",
+    title: "About DOGO Finance",
     isOpen: true,
     questions: [
       {
-        q: "What is DogoFinance?",
-        a: "DogoFinance is a simple and reliable online savings and investment platform that helps you save and invest with ease. We provide diverse plans to help you reach your financial goals.",
+        q: "What is DOGO Finance?",
+        a: "DOGO Finance is a premium, Shariah-compliant digital investment banking platform. We provide Nigerian investors with 100% Halal wealth management products, entirely free of Riba (interest).",
         isOpen: false
       },
       {
-        q: "Is DogoFinance secure?",
-        a: "Yes, security is our priority. We use 256-bit SSL encryption and bank-grade security protocols to ensure your data and funds are always protected.",
+        q: "How to know it is truly Halal?",
+        a: "Every product, from Mudarabah to Halal Equities, is certified by our independent Shariah Supervisory Board (SSB). We do not deal in interest, speculative trading (Gharar), or haram industries.",
         isOpen: false
       }
     ]
   },
   {
-    title: "Savings & Safety",
+    title: "Investments & Profit",
     isOpen: false,
     questions: [
       {
-        q: "How safe is my money?",
-        a: "Your funds are stored with our licensed partner banks and investment houses. DogoFinance itself is built on top of high-security infrastructure.",
+        q: "How is profit calculated instead of interest?",
+        a: "Unlike conventional interest (which guarantees a return regardless of business outcome), Halal profit is generated from real economic activity. Depending on the product, you either share profits at a pre-agreed ratio (Mudarabah) or earn from genuine asset leases (Ijarah).",
         isOpen: false
       },
       {
-        q: "What interest rate can I expect?",
-        a: "Our rates vary from 10% to 15.5% per annum depending on the plan you choose, such as SafeLock or Target Savings.",
+        q: "What happens if there's a loss?",
+        a: "In Islamic finance, risk and reward are shared. If an investment incurs a genuine loss through market conditions, it is shared proportionately. However, DOGO Finance strictly vets all assets to minimize risk and protect capital.",
         isOpen: false
       }
     ]
   },
   {
-    title: "Investify",
+    title: "Products",
     isOpen: false,
     questions: [
       {
-        q: "What is Investify?",
-        a: "Investify is a feature on DogoFinance that allows you to invest in low-to-medium risk opportunities such as Real Estate, Agriculture, and Transportation for higher returns.",
+        q: "What is the difference between Sukuk and Halal Equity?",
+        a: "Sukuk represents ownership in a tangible asset (like real estate) that pays a stable return. Halal Equity means buying shares in Shariah-compliant companies, where returns are based on stock market performance.",
         isOpen: false
       },
       {
-        q: "What is the minimum investment amount?",
-        a: "You can start investing with as little as ₦5,000 on most of our opportunities.",
+        q: "What is the minimum investment?",
+        a: "You can open a Halal investment position starting from ₦10,000 for Mudarabah accounts, easily funded via your secure Dogo Finance wallet.",
         isOpen: false
       }
     ]
   },
   {
-    title: "BVN & Bank Account",
+    title: "Security & Verification",
     isOpen: false,
     questions: [
       {
-        q: "Why do I need to provide my BVN?",
-        a: "The Bank Verification Number (BVN) is required by regulatory agencies to verify your identity and prevent fraud. DogoFinance does not have access to your bank balance or secondary information via BVN.",
+        q: "Why do I need to provide my BVN & NIN?",
+        a: "To protect the ecosystem and comply with CBN anti-money laundering regulations, we verify the identity of all investors. This data is heavily encrypted and compliant with NDPR.",
         isOpen: false
       }
     ]
