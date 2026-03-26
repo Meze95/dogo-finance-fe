@@ -193,7 +193,15 @@
     <!-- Mobile Navigation Menu -->
     <div class="lg:hidden" *ngIf="isMenuOpen">
       <div class="mt-4 pb-6 space-y-4">
-        <a href="#" class="block py-2 text-lg font-medium text-gray-800 border-b border-gray-50">Save</a>
+        <div class="border-b border-gray-50 pb-4">
+           <p class="text-xs font-black uppercase tracking-widest text-gray-400 mb-2">Save Plans</p>
+           <div class="grid grid-cols-2 gap-2">
+             <a routerLink="/save/piggybank" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Piggybank</a>
+             <a routerLink="/save/safelock" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Safelock</a>
+             <a routerLink="/save/targets" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Targets</a>
+             <a routerLink="/save/flex-naira" (click)="toggleMenu()" class="block py-2 text-sm font-black text-gray-800">Flex Naira</a>
+           </div>
+        </div>
         <a routerLink="/invest" (click)="toggleMenu()" class="block py-2 text-lg font-medium text-gray-800 border-b border-gray-50">Invest</a>
         <a routerLink="/stories" (click)="toggleMenu()" class="block py-2 text-lg font-medium text-gray-800 border-b border-gray-50">Stories</a>
         <a routerLink="/faq" (click)="toggleMenu()" class="block py-2 text-lg font-medium text-gray-800 border-b border-gray-50">FAQs</a>

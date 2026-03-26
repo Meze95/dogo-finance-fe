@@ -4,6 +4,7 @@ import { LandingComponent } from './pages/landing/landing.component';
 import { InvestmentComponent } from './pages/investment/investment.component';
 import { StoriesComponent } from './pages/stories/stories.component';
 import { FAQComponent } from './pages/faq/faq.component';
+import { SavingsPlanComponent } from './pages/savings-plan/savings-plan.component';
 
 export const routes: Routes = [
   {
@@ -25,6 +26,10 @@ export const routes: Routes = [
       {
         path: 'faq',
         component: FAQComponent,
+      },
+      {
+        path: 'save/:plan',
+        component: SavingsPlanComponent,
       },
     ],
   },

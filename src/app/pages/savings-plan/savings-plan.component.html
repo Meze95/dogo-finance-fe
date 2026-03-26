@@ -1,0 +1,131 @@
+<!-- Hero Section (Dynamic Colors) -->
+<section class="min-h-[80vh] flex items-center pt-24 pb-16 transition-colors duration-500" [style.background-color]="plan().accentColor">
+  <div class="max-w-7xl mx-auto px-6 md:px-12 w-full">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <!-- Text Content -->
+      <div class="animate-fade-in">
+        <div class="inline-flex items-center space-x-2 bg-white/60 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-bold mb-8 border border-white/80">
+          <i class="ri-medal-line" [style.color]="plan().themeColor"></i>
+          <span class="text-gray-700">Official Savings Plan</span>
+        </div>
+        <h1 class="text-6xl md:text-[85px] font-[900] leading-[0.95] mb-8 tracking-tighter text-[#0d1b2a]" [innerHTML]="plan().headline"></h1>
+        <p class="text-xl text-gray-500 mb-12 max-w-lg leading-relaxed font-medium">
+          {{ plan().subheadline }}
+        </p>
+        
+        <div class="flex flex-wrap gap-4 items-center">
+          <button class="flex items-center space-x-3 text-white px-10 py-5 rounded-2xl font-black hover:opacity-90 transition-all shadow-2xl hover:-translate-y-1" [style.background-color]="plan().themeColor">
+             <span>{{ plan().ctaText }}</span>
+          </button>
+          
+          <div class="ml-4 p-4 rounded-3xl bg-white/80 backdrop-blur-sm border border-white flex flex-col">
+             <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Interest rate</span>
+             <span class="text-2xl font-black text-[#0d1b2a]">{{ plan().interestRate }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Visual -->
+      <div class="relative flex justify-center lg:justify-end animate-float">
+         <div class="relative w-full max-w-lg p-4">
+            <div class="bg-white/40 backdrop-blur-3xl rounded-[50px] p-4 shadow-3xl border border-white/40 overflow-hidden aspect-square">
+               <img [src]="plan().visualUrl" [alt]="plan().name" class="w-full h-full object-cover rounded-[40px] shadow-lg">
+            </div>
+            
+            <!-- Floating Badge -->
+            <div class="absolute -left-10 bottom-20 p-6 bg-white rounded-3xl shadow-2xl border border-gray-50 flex items-center space-x-4 animate-bounce">
+               <div class="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center">
+                 <i class="ri-shield-user-fill text-2xl" [style.color]="plan().themeColor"></i>
+               </div>
+               <div>
+                  <p class="text-xs font-black uppercase text-gray-400">Security</p>
+                  <p class="font-bold text-[#0d1b2a]">100% Guaranteed</p>
+               </div>
+            </div>
+         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-24 bg-white relative overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6 md:px-12">
+    <div class="grid lg:grid-cols-3 gap-12">
+      <div *ngFor="let feat of plan().features" class="group p-10 rounded-[45px] bg-[#fbfbfc] border border-gray-50 transition-all hover:bg-white hover:shadow-2xl hover:-translate-y-2">
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-8 bg-white shadow-xl">
+           <i [class]="feat.icon + ' text-3xl'" [style.color]="plan().themeColor"></i>
+        </div>
+        <h3 class="text-2xl font-black text-[#0d1b2a] mb-4">{{ feat.title }}</h3>
+        <p class="text-gray-500 font-medium leading-relaxed">{{ feat.desc }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="py-24 bg-[#0d1b2a] text-white overflow-hidden relative">
+  <div class="absolute top-0 right-0 p-20 opacity-10">
+     <i class="ri-settings-4-fill text-[300px] animate-spin-slow"></i>
+  </div>
+  
+  <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+    <div class="flex flex-col lg:flex-row gap-20 items-center">
+       <div class="lg:w-1/2">
+          <h2 class="text-4xl md:text-6xl font-black mb-12 tracking-tighter">Setting up <br><span [style.color]="plan().themeColor">{{ plan().name }}</span> in seconds.</h2>
+          <div class="space-y-6">
+             <div *ngFor="let step of plan().howItWorks; let i = index" class="flex items-start space-x-6">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center border-2 border-white/20 font-black text-white shrink-0">
+                   {{ i + 1 }}
+                </div>
+                <p class="text-xl text-gray-300 font-medium pt-1">{{ step }}</p>
+             </div>
+          </div>
+       </div>
+       <div class="lg:w-1/2 w-full">
+          <div class="bg-white/5 backdrop-blur-3xl rounded-[60px] p-12 border border-white/10 text-center">
+             <i class="ri-rocket-2-fill text-6xl text-white mb-8 block"></i>
+             <h4 class="text-3xl font-black mb-6">Build your future. <br> One step at a time.</h4>
+             <button class="bg-white px-10 py-5 rounded-2xl font-black text-lg transition-all hover:bg-gray-100 shadow-3xl hover:-translate-y-1 block w-full" [style.color]="plan().themeColor">
+                Get Started
+             </button>
+          </div>
+       </div>
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA with Stats -->
+<section class="py-24 bg-white">
+  <div class="max-w-5xl mx-auto px-6 md:px-12 text-center">
+     <h2 class="text-4xl md:text-5xl font-black text-[#0d1b2a] mb-12 tracking-tighter">Over 6 million people can't be wrong.</h2>
+     <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20">
+        <div>
+           <p class="text-4xl font-black text-[#0d1b2a] mb-2">6M+</p>
+           <p class="text-xs font-black uppercase text-gray-400 tracking-widest">Active Savers</p>
+        </div>
+        <div>
+           <p class="text-4xl font-black text-[#0d1b2a] mb-2">12M+</p>
+           <p class="text-xs font-black uppercase text-gray-400 tracking-widest">Targets Set</p>
+        </div>
+        <div>
+           <p class="text-4xl font-black text-[#0d1b2a] mb-2">15%</p>
+           <p class="text-xs font-black uppercase text-gray-400 tracking-widest">Avg. Interest</p>
+        </div>
+        <div>
+           <p class="text-4xl font-black text-[#0d1b2a] mb-2">99%</p>
+           <p class="text-xs font-black uppercase text-gray-400 tracking-widest">Safe & Secure</p>
+        </div>
+     </div>
+     
+     <div class="p-16 rounded-[60px] text-white relative overflow-hidden group shadow-3xl" [style.background-color]="plan().themeColor">
+        <div class="absolute inset-0 bg-black/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+        <div class="relative z-10">
+           <h3 class="text-4xl font-black mb-8">Ready to grow with {{ plan().name }}?</h3>
+           <button class="bg-white px-12 py-5 rounded-2xl font-black text-lg hover:bg-gray-100 transition-all shadow-xl hover:-translate-y-2" [style.color]="plan().themeColor">
+              Create an Account Now
+           </button>
+        </div>
+     </div>
+  </div>
+</section>
