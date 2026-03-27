@@ -1,1 +1,138 @@
-<p>client-layout works!</p>
+<div class="min-h-screen bg-[#f8f7f2] font-sans flex overflow-hidden">
+  
+  <!-- Sidebar Overlay (Mobile) -->
+  @if(isMobileMenuOpen()) {
+    <div (click)="toggleMobileMenu()" class="fixed inset-0 bg-[#1B4332]/60 backdrop-blur-md z-[60] lg:hidden"></div>
+  }
+
+  <!-- SIDEBAR (Client Dashboard Variation) -->
+  <aside 
+    [class.w-72]="isSidebarOpen()"
+    [class.w-20]="!isSidebarOpen()"
+    [class.translate-x-0]="isMobileMenuOpen()"
+    [class.-translate-x-full]="!isMobileMenuOpen()"
+    class="fixed lg:static inset-y-0 left-0 bg-[#1B4332] text-white transition-all duration-500 z-[70] flex flex-col border-r border-[#1B4332]/20 shadow-2xl overflow-hidden lg:translate-x-0">
+    
+    <!-- Client Brand Header -->
+    <div class="h-20 flex items-center px-6 shrink-0 border-b border-white/5">
+      <div class="flex items-center space-x-4 overflow-hidden">
+        <div class="w-10 h-10 bg-[#C9A84C] rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-[#C9A84C]/20">
+          <i class="ri-gem-fill text-[#1B4332] text-2xl"></i>
+        </div>
+        <div class="flex flex-col leading-none transition-opacity duration-300" [class.opacity-0]="!isSidebarOpen()">
+          <span class="text-xl font-black tracking-tight">DOGO</span>
+          <span class="text-[9px] font-bold text-[#C9A84C] tracking-[0.2em] uppercase mt-0.5 whitespace-nowrap">Investor</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Area -->
+    <div class="flex-grow flex flex-col py-8 overflow-y-auto custom-scrollbar px-3 space-y-2">
+      @for(item of menuItems; track item.label) {
+        <a [routerLink]="item.link" routerLinkActive="bg-[#C9A84C] text-[#1B4332] shadow-xl shadow-[#C9A84C]/20" 
+           (click)="isMobileMenuOpen() ? toggleMobileMenu() : null"
+           class="flex items-center space-x-4 h-12 rounded-2xl transition-all group px-4 hover:bg-[#C9A84C]/10 text-white/80 hover:text-[#C9A84C]">
+          <div class="w-6 flex justify-center shrink-0">
+            <i [class]="item.icon" class="text-2xl transition-transform group-hover:scale-110"></i>
+          </div>
+          <span class="font-bold text-sm tracking-wide whitespace-nowrap transition-opacity duration-300"
+                [class.opacity-0]="!isSidebarOpen()"
+                [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">
+            {{ item.label }}
+          </span>
+          @if(isSidebarOpen() && item.label === 'Dashboard') {
+             <div class="ml-auto w-1.5 h-1.5 rounded-full bg-[#C9A84C] animate-pulse"></div>
+          }
+        </a>
+      }
+
+      <!-- Bottom Menu Divider -->
+      <div class="mt-auto pt-8 border-t border-white/5 space-y-2">
+        @for(item of bottomMenuItems; track item.label) {
+          <a [routerLink]="item.link" routerLinkActive="bg-[#C9A84C] text-[#1B4332]"
+             (click)="isMobileMenuOpen() ? toggleMobileMenu() : null"
+             class="flex items-center space-x-4 h-12 rounded-2xl transition-all group px-4 hover:bg-white/5 text-white/60 hover:text-white">
+            <div class="w-6 flex justify-center shrink-0">
+              <i [class]="item.icon" class="text-xl"></i>
+            </div>
+            <span class="font-bold text-sm tracking-wide whitespace-nowrap transition-opacity duration-300"
+                  [class.opacity-0]="!isSidebarOpen()"
+                  [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">
+              {{ item.label }}
+            </span>
+          </a>
+        }
+        
+        <!-- Toggle button (Sidebar) -->
+        <button (click)="toggleSidebar()" class="hidden lg:flex items-center space-x-4 h-12 w-full rounded-2xl hover:bg-white/5 px-4 text-white/30 transition-all mt-4">
+          <div class="w-6 flex justify-center shrink-0">
+            <i [class]="isSidebarOpen() ? 'ri-indent-decrease' : 'ri-indent-increase'" class="text-xl"></i>
+          </div>
+          <span class="font-bold text-[10px] uppercase tracking-widest transition-opacity duration-300" [class.opacity-0]="!isSidebarOpen()">Collapse Side</span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT WRAPPER -->
+  <div class="flex-grow flex flex-col h-screen overflow-hidden relative">
+    
+    <!-- CLIENT HEADER -->
+    <header class="h-20 shrink-0 bg-white/80 backdrop-blur-md border-b border-[#1B4332]/5 flex items-center justify-between px-4 lg:px-10 z-[40]">
+      
+      <!-- Mobile Menu Toggle -->
+      <button (click)="toggleMobileMenu()" class="lg:hidden w-12 h-12 flex items-center justify-center text-[#1B4332] bg-[#1B4332]/5 rounded-xl">
+        <i class="ri-menu-2-line text-2xl"></i>
+      </button>
+
+      <!-- Welcome Text (Desktop) -->
+      <div class="hidden md:block">
+        <h1 class="text-xl font-black text-[#0d1a0f] tracking-tight">Salaam, Ado Bayero 👋</h1>
+        <p class="text-[11px] font-bold text-[#6B7280] uppercase tracking-widest mt-0.5 flex items-center">
+          <span class="w-2 h-2 rounded-full bg-[#C9A84C] mr-2 shadow-sm animate-pulse"></span> Tier 2 Investor Profile
+        </p>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center space-x-4 lg:space-x-6">
+        <button class="w-10 h-10 rounded-xl bg-[#f8f7f2] flex items-center justify-center text-[#1B4332] hover:bg-[#C9A84C] hover:text-[#1B4332] transition-all relative group flex sm:hidden">
+            <i class="ri-search-line"></i>
+        </button>
+        
+        <!-- Search bar (Desktop) -->
+        <div class="hidden sm:flex items-center bg-[#f8f7f2] rounded-2xl px-4 py-2 border border-[#1B4332]/5 group focus-within:border-[#C9A84C] transition-all">
+          <i class="ri-search-line text-[#6B7280]"></i>
+          <input type="text" placeholder="Search..." class="bg-transparent border-none focus:outline-none px-3 text-sm font-medium w-24 md:w-48 text-[#0d1a0f]">
+          <span class="hidden xl:block text-[10px] font-black bg-white px-2 py-0.5 border border-[#1B4332]/10 rounded-md text-[#6B7280]">ALT + S</span>
+        </div>
+
+        <button class="w-10 h-10 rounded-xl bg-[#f8f7f2] border border-[#1B4332]/10 flex items-center justify-center text-[#1B4332] hover:bg-[#C9A84C] hover:text-[#1B4332] transition-all relative group">
+          <i class="ri-notification-3-line text-xl group-hover:scale-110 transition-transform"></i>
+          <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-[#f8f7f2]"></span>
+        </button>
+
+        <!-- Profile Pill -->
+        <div class="flex items-center bg-[#1B4332] p-1 rounded-2xl group cursor-pointer border border-[#1B4332]/20 hover:border-[#C9A84C] transition-all">
+          <div class="w-8 lg:w-9 h-8 lg:h-9 bg-[#C9A84C] rounded-xl flex items-center justify-center font-black text-[#1B4332]">
+            AB
+          </div>
+          <div class="px-3 hidden md:block">
+            <p class="text-[12px] font-black text-white leading-none">Ado Bayero</p>
+            <p class="text-[10px] font-bold text-[#C9A84C] leading-none mt-1">₦4.2M Portfolio</p>
+          </div>
+          <i class="ri-arrow-down-s-line text-white/40 group-hover:text-white pr-2 transition-colors hidden sm:block"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTENT DISPLAY -->
+    <main class="flex-grow overflow-y-auto p-4 md:p-10 custom-scrollbar relative">
+       <!-- Geometric pattern background decoration -->
+       <div class="absolute inset-0 dogo-pattern-light opacity-[0.03] pointer-events-none"></div>
+       <div>
+         <router-outlet></router-outlet>
+       </div>
+    </main>
+
+  </div>
+</div>

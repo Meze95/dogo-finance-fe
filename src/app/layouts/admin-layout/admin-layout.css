@@ -1,0 +1,48 @@
+:host { display: block; height: 100vh; overflow: hidden; }
+
+/* Admin-specific scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(201, 168, 76, 0.2);
+  border-radius: 12px;
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: rgba(201, 168, 76, 0.4);
+}
+
+/* Animations for admin KPI changes (e.g., balance updates) */
+.zoom-in {
+    animation: zoom-in 0.5s ease;
+}
+
+@keyframes zoom-in {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Sidebar transition optimization */
+aside {
+    transition: width 0.4s cubic-bezier(0.19, 1, 0.22, 1), transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    will-change: width, transform;
+}
+
+/* Fix text flow issues during sidebar transition */
+aside span, aside p {
+    transition: opacity 0.2s ease-in-out;
+}
+
+/* Responsive fixes for small devices */
+@media (max-width: 640px) {
+    header {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+}

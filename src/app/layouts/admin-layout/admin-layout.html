@@ -1,1 +1,137 @@
-<p>admin-layout works!</p>
+<div class="min-h-screen bg-[#f8f7f2] font-sans flex overflow-hidden">
+  
+  <!-- Sidebar Overlay (Mobile) -->
+  @if(isMobileMenuOpen()) {
+    <div (click)="toggleMobileMenu()" class="fixed inset-0 bg-[#0d1a0f]/60 backdrop-blur-md z-[60] lg:hidden"></div>
+  }
+
+  <!-- SIDEBAR (Elevated Dark Admin Variation) -->
+  <aside 
+    [class.w-72]="isSidebarOpen()"
+    [class.w-20]="!isSidebarOpen()"
+    [class.translate-x-0]="isMobileMenuOpen()"
+    [class.-translate-x-full]="!isMobileMenuOpen()"
+    class="fixed lg:static inset-y-0 left-0 bg-[#0d1a0f] text-white transition-all duration-500 z-[70] flex flex-col border-r border-[#1B4332]/20 shadow-2xl overflow-hidden lg:translate-x-0">
+    
+    <!-- Admin Header -->
+    <div class="h-20 flex items-center px-6 shrink-0 border-b border-white/5 bg-[#1B4332]/20">
+      <div class="flex items-center space-x-4 overflow-hidden">
+        <div class="w-10 h-10 bg-[#C9A84C] rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-[#C9A84C]/20">
+          <i class="ri-shield-user-fill text-[#1B4332] text-2xl"></i>
+        </div>
+        <div class="flex flex-col leading-none transition-opacity duration-300" [class.opacity-0]="!isSidebarOpen()">
+          <span class="text-xl font-black tracking-tight text-white uppercase italic">ADMIN</span>
+          <span class="text-[9px] font-bold text-[#C9A84C] tracking-[0.2em] uppercase mt-0.5 whitespace-nowrap">DOGO Finance</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Area -->
+    <div class="flex-grow flex flex-col py-8 overflow-y-auto custom-scrollbar px-3 space-y-2">
+      <p class="px-5 text-[10px] font-black uppercase tracking-[0.3em] text-[#C9A84C] mb-4 transition-opacity w-full overflow-hidden" [class.opacity-0]="!isSidebarOpen()">Main System</p>
+      
+      @for(item of menuItems; track item.label) {
+        <a [routerLink]="item.link" routerLinkActive="bg-[#C9A84C] text-[#1B4332] shadow-xl shadow-[#C9A84C]/20" 
+           (click)="isMobileMenuOpen() ? toggleMobileMenu() : null"
+           class="flex items-center space-x-4 h-12 rounded-2xl transition-all group px-4 hover:bg-[#1B4332]/40 text-white/80 hover:text-[#C9A84C]">
+          <div class="w-6 flex justify-center shrink-0">
+            <i [class]="item.icon" class="text-2xl transition-transform group-hover:scale-110"></i>
+          </div>
+          <span class="font-bold text-sm tracking-wide whitespace-nowrap transition-opacity duration-300" 
+                [class.opacity-0]="!isSidebarOpen()"
+                [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">
+            {{ item.label }}
+          </span>
+           @if(isSidebarOpen() && item.label === 'KYC & Verifications') {
+             <div class="ml-auto w-5 h-5 rounded-full bg-red-500 flex items-center justify-center text-[10px] font-black zoom-in text-white shadow-lg">12</div>
+          }
+        </a>
+      }
+
+      <!-- Management Divider -->
+      <div class="mt-auto pt-8 border-t border-white/5 space-y-2">
+        <p class="px-5 text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-4 transition-opacity w-full overflow-hidden" [class.opacity-0]="!isSidebarOpen()">Management</p>
+        
+        @for(item of managementItems; track item.label) {
+          <a [routerLink]="item.link" routerLinkActive="bg-white/10 text-[#C9A84C]"
+             (click)="isMobileMenuOpen() ? toggleMobileMenu() : null"
+             class="flex items-center space-x-4 h-12 rounded-2xl transition-all group px-4 hover:bg-white/5 text-white/60 hover:text-white">
+            <div class="w-6 flex justify-center shrink-0">
+              <i [class]="item.icon" class="text-xl"></i>
+            </div>
+            <span class="font-bold text-sm tracking-wide whitespace-nowrap transition-opacity duration-300"
+                  [class.opacity-0]="!isSidebarOpen()"
+                  [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">
+              {{ item.label }}
+            </span>
+          </a>
+        }
+        
+        <!-- Toggle button (Sidebar) -->
+        <button (click)="toggleSidebar()" class="hidden lg:flex items-center space-x-4 h-12 w-full rounded-2xl hover:bg-white/5 px-4 text-white/30 transition-all mt-4">
+          <div class="w-6 flex justify-center shrink-0">
+            <i [class]="isSidebarOpen() ? 'ri-arrow-left-s-line' : 'ri-arrow-right-s-line'" class="text-xl"></i>
+          </div>
+          <span class="font-bold text-[10px] uppercase tracking-widest transition-opacity duration-300" [class.opacity-0]="!isSidebarOpen()">Minimize Panel</span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT WRAPPER -->
+  <div class="flex-grow flex flex-col h-screen overflow-hidden relative">
+    
+    <!-- ADMIN GLASS HEADER -->
+    <header class="h-20 shrink-0 bg-white/80 backdrop-blur-md border-b border-[#1B4332]/10 flex items-center justify-between px-4 lg:px-10 z-[40]">
+      
+      <!-- Mobile Toggle -->
+      <button (click)="toggleMobileMenu()" class="lg:hidden w-12 h-12 flex items-center justify-center text-[#1B4332] bg-[#1B4332]/5 rounded-xl">
+        <i class="ri-menu-unfold-fill text-2xl"></i>
+      </button>
+
+      <!-- Welcome Admin -->
+      <div class="hidden md:block">
+        <h1 class="text-xl font-black text-[#0d1a0f] tracking-tight uppercase">System Overview</h1>
+        <p class="text-[11px] font-bold text-[#1B4332]/60 uppercase tracking-widest mt-0.5 flex items-center">
+          <span class="w-2 h-2 rounded-full bg-green-500 mr-2 shadow-sm animate-pulse"></span> Service Nodes: 12 Active · 100% Secure
+        </p>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center space-x-4 lg:space-x-6">
+        
+        <!-- Total AUM quick info (Desktop) -->
+        <div class="hidden sm:flex flex-col items-end px-6 border-r border-[#1B4332]/10">
+           <span class="text-[9px] font-black uppercase tracking-widest text-slate-400">Total System AUM</span>
+           <span class="text-lg font-black text-[#1B4332]">₦14.2 Billion</span>
+        </div>
+
+        <button class="w-10 h-10 rounded-xl bg-white border border-[#1B4332]/10 flex items-center justify-center text-[#1B4332] hover:bg-white hover:shadow-xl transition-all relative group">
+          <i class="ri-mail-send-line text-xl group-hover:text-[#C9A84C]"></i>
+          <span class="absolute -top-1 -right-1 w-5 h-5 bg-[#C9A84C] text-[#1B4332] text-[9px] font-black flex items-center justify-center rounded-full border-2 border-white">8</span>
+        </button>
+
+        <!-- Admin Profile Pill -->
+        <div class="flex items-center bg-[#0d1a0f] p-1.5 rounded-2xl shadow-xl shadow-[#0d1a0f]/10 group cursor-pointer border border-[#1B4332]/20 hover:border-[#C9A84C] transition-all">
+          <div class="w-8 lg:w-9 h-8 lg:h-9 bg-[#C9A84C] rounded-xl flex items-center justify-center font-black text-[#1B4332]">
+            SA
+          </div>
+          <div class="px-3 hidden md:block">
+            <p class="text-[11px] font-black text-white leading-none uppercase tracking-tighter">Super Admin</p>
+            <p class="text-[10px] font-bold text-[#C9A84C]/50 leading-none mt-1">Full Access</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTENT DISPLAY -->
+    <main class="flex-grow overflow-y-auto p-4 md:p-10 custom-scrollbar relative">
+       <!-- Geometric pattern background decoration -->
+       <div class="absolute inset-0 dogo-pattern opacity-[0.02] pointer-events-none"></div>
+       <div class="relative z-10">
+         <router-outlet></router-outlet>
+       </div>
+    </main>
+
+  </div>
+</div>

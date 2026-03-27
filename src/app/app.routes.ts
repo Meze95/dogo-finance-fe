@@ -79,5 +79,25 @@ export const routes: Routes = [
   {
     path: 'register',
     loadComponent: () => import('./pages/auth/register/register.component').then(m => m.RegisterComponent)
+  },
+
+  // ---- CLIENT DASHBOARD (Secured Layout) ----
+  {
+    path: 'client',
+    loadComponent: () => import('./layouts/client-layout/client-layout').then(m => m.ClientLayout),
+    children: [
+       { path: 'dashboard', loadComponent: () => import('./pages/client/dashboard/dashboard.component').then(m => m.ClientDashboardComponent) },
+       { path: 'settings',  loadComponent: () => import('./pages/client/settings/settings.component').then(m => m.SettingsComponent) },
+       { path: 'transactions', loadComponent: () => import('./pages/client/transactions/transactions.component').then(m => m.TransactionsComponent) }
+    ]
+  },
+
+  // ---- ADMIN PANEL (Secured Layout) ----
+  {
+    path: 'admin',
+    loadComponent: () => import('./layouts/admin-layout/admin-layout').then(m => m.AdminLayout),
+    children: [
+      { path: 'dashboard', loadComponent: () => import('./pages/admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) }
+    ]
   }
 ];

@@ -1,0 +1,10 @@
+# Project Development Rules for DogoFinance-FE
+
+1. **Strict Binding**: All data shown in HTML templates must be bound from TypeScript using **Angular Signals**. Do not use Observables or inline hardcoded text for dynamic content.
+2. **API Mocking Strategy**: Whenever a feature requires an API call, implement a dedicated mocked service method in the TypeScript component or a dedicated service.
+3. **Mock Responses**: Mocked methods must:
+   - Include a console log for the input parameters.
+   - Use `setTimeout` (1-2 seconds) to simulate network latency.
+   - Return a dummy success response or update a signal to indicate completion.
+   - Be structured so that they are easily replaceable when the backend is ready.
+4. **Consistency**: Ensure all components follow the premium Dogo Finance aesthetic (Forest Green, Gold, sleek transitions).

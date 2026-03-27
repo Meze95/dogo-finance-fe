@@ -1,0 +1,41 @@
+:host { display: block; }
+
+/* Admin Entrance Visuals */
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* System-style Progress Bar Animation */
+.animate-slide-in {
+  animation: slideIn 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  transform-origin: left;
+}
+
+@keyframes slideIn {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* Specific zoom for verification tasks */
+.zoom-in {
+    animation: zoom-in 0.4s ease forwards;
+}
+
+@keyframes zoom-in {
+    0% { transform: scale(0.9); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Admin Dashboard Specific Enhancements */
+div.lg\:col-span-2 {
+    transition: box-shadow 0.4s ease;
+}
+
+div.lg\:col-span-2:hover {
+    box-shadow: 0 40px 80px -15px rgba(27, 67, 50, 0.4);
+}
