@@ -41,8 +41,8 @@
 
     <!-- Navigation Area -->
     <div class="flex-grow flex flex-col py-8 overflow-y-auto custom-scrollbar px-3 space-y-2">
-      <p class="px-5 text-[10px] font-black uppercase tracking-[0.3em] text-[#C9A84C] mb-4 transition-opacity w-full overflow-hidden"
-        [class.opacity-0]="!isSidebarOpen()">Main System</p>
+      <p class="px-5 text-[10px] font-black uppercase tracking-[0.3em] text-[#C9A84C] mb-4 transition-opacity shrink-0 whitespace-nowrap overflow-hidden text-ellipsis"
+        [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">Main System</p>
 
       @for(item of menuItems; track item.label) {
       <a [routerLink]="item.link" routerLinkActive="bg-[#C9A84C] text-[#1B4332] shadow-xl shadow-[#C9A84C]/20"
@@ -64,9 +64,9 @@
       }
 
       <!-- Management Divider -->
-      <div class="mt-8 pt-8 border-t border-white/5 space-y-2">
-        <p class="px-5 text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-4 transition-opacity w-full overflow-hidden"
-          [class.opacity-0]="!isSidebarOpen()">Management</p>
+      <div class="mt-8 pt-8 border-t border-white/5 space-y-2 shrink-0">
+        <p class="px-5 text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-4 transition-opacity shrink-0 whitespace-nowrap overflow-hidden text-ellipsis"
+          [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">Management</p>
 
         @for(item of managementItems; track item.label) {
         @if(item.subItems) {

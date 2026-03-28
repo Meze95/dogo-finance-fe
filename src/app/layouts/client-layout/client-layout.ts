@@ -1,6 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-client-layout',
@@ -12,19 +12,20 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 export class ClientLayout {
   isSidebarOpen = signal(true);
   isMobileMenuOpen = signal(false);
+  isLoggingOut = signal(false);
+
+  private router = inject(Router);
 
   menuItems = [
-    { label: 'Dashboard', icon: 'ri-dashboard-fill', link: '/client/dashboard' },
-    { label: 'My Portfolio', icon: 'ri-pie-chart-2-fill', link: '/client/portfolio' },
-    { label: 'Halal Savings', icon: 'ri-safe-2-fill', link: '/client/savings' },
-    { label: 'Sukuk & Investments', icon: 'ri-bank-fill', link: '/client/investments' },
-    { label: 'Zakat Tracking', icon: 'ri-hand-heart-fill', link: '/client/zakat' },
-    { label: 'Transactions', icon: 'ri-exchange-funds-fill', link: '/client/transactions' }
+    { label: 'Dashboard',    icon: 'ri-dashboard-3-fill',      link: '/client/dashboard' },
+    { label: 'My Portfolio', icon: 'ri-pie-chart-2-fill',      link: '/client/portfolio' },
+    { label: 'Products',     icon: 'ri-box-3-line',            link: '/client/products' },
+    { label: 'Transactions', icon: 'ri-exchange-funds-fill',   link: '/client/transactions' },
   ];
 
-  bottomMenuItems = [
+  managementItems = [
     { label: 'Settings', icon: 'ri-settings-4-line', link: '/client/settings' },
-    { label: 'Help & Support', icon: 'ri-questionnaire-line', link: '/client/support' }
+    // { label: 'Help & Support', icon: 'ri-questionnaire-line', link: '/client/support' },
   ];
 
   toggleSidebar() {
@@ -33,5 +34,16 @@ export class ClientLayout {
 
   toggleMobileMenu() {
     this.isMobileMenuOpen.update(v => !v);
+  }
+
+  handleLogout() {
+    if (this.isMobileMenuOpen()) {
+      this.toggleMobileMenu();
+    }
+    this.isLoggingOut.set(true);
+    setTimeout(() => {
+      this.isLoggingOut.set(false);
+      this.router.navigate(['/login']);
+    }, 1800);
   }
 }

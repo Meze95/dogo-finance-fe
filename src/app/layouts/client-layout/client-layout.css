@@ -18,11 +18,14 @@
   background: rgba(201, 168, 76, 0.4);
 }
 
-/* Background patterns */
-.dogo-pattern-light {
-    background-image: radial-gradient(#1B4332 0.5px, transparent 0.5px);
-    background-size: 24px 24px;
-    opacity: 0.03;
+/* Animations for KPI changes and overlays */
+.zoom-in {
+    animation: zoom-in 0.5s ease;
+}
+
+@keyframes zoom-in {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
 }
 
 /* Transitions for sidebar animation override */
@@ -32,7 +35,7 @@ aside {
 }
 
 /* Handle text visibility in sidebar transition */
-aside span {
+aside span, aside p {
     transition: opacity 0.2s ease-in-out;
 }
 

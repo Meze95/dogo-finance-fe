@@ -1,41 +1,63 @@
-:host { display: block; }
-
-/* Admin Entrance Visuals */
-.animate-fade-in {
-  animation: fadeIn 0.6s ease-out forwards;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* System-style Progress Bar Animation */
+/* Custom animations for admin dashboard elements */
 .animate-slide-in {
-  animation: slideIn 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
-  transform-origin: left;
+    animation: slide-in 0.8s ease forwards;
 }
 
-@keyframes slideIn {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
+@keyframes slide-in {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(0); }
 }
 
-/* Specific zoom for verification tasks */
+.custom-scrollbar-h::-webkit-scrollbar {
+    height: 3px;
+    width: 3px;
+}
+
+.custom-scrollbar-h::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar-h::-webkit-scrollbar-thumb {
+    background: rgba(27, 67, 50, 0.1);
+    border-radius: 10px;
+}
+
+.custom-scrollbar-h:hover::-webkit-scrollbar-thumb {
+    background: rgba(201, 168, 76, 0.2);
+}
+
+/* Background patterns */
+.dogo-pattern {
+    background-image: radial-gradient(#C9A84C 0.5px, transparent 0.5px);
+    background-size: 24px 24px;
+}
+
+.shadow-pill {
+    box-shadow: 0 4px 12px rgba(27, 67, 50, 0.1), 0 2px 4px rgba(201, 168, 76, 0.05);
+}
+
+/* Donut chart hover interaction */
+svg circle {
+    transition: stroke-width 0.3s ease, stroke-dasharray 0.3s ease;
+    cursor: pointer;
+}
+
+svg circle:hover {
+    stroke-width: 14;
+}
+
+/* Zoom/Fade overrides */
 .zoom-in {
-    animation: zoom-in 0.4s ease forwards;
+    animation: zoom-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes zoom-in {
-    0% { transform: scale(0.9); opacity: 0; }
+    0% { transform: scale(0.95); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }
 }
 
-/* Admin Dashboard Specific Enhancements */
-div.lg\:col-span-2 {
-    transition: box-shadow 0.4s ease;
-}
-
-div.lg\:col-span-2:hover {
-    box-shadow: 0 40px 80px -15px rgba(27, 67, 50, 0.4);
+@media (max-width: 1024px) {
+    .h-48 {
+        height: 120px;
+    }
 }
