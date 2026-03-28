@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -13,8 +13,9 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 export class RegisterComponent {
   registerForm: FormGroup;
   showPassword = signal(false);
+  isProcessing = signal(false);
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private router: Router) {
     this.registerForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -38,7 +39,11 @@ export class RegisterComponent {
 
   onSubmit() {
     if (this.registerForm.valid) {
-      console.log('Registration Payload:', this.registerForm.value);
+      this.isProcessing.set(true);
+      setTimeout(() => {
+        this.isProcessing.set(false);
+        this.router.navigate(['/verify-email']);
+      }, 1500);
     } else {
       Object.keys(this.registerForm.controls).forEach(key => {
         this.registerForm.get(key)?.markAsTouched();

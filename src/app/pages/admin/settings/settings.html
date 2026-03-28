@@ -1,0 +1,111 @@
+<div class="space-y-10 animate-fade-in relative z-10">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h2 class="text-3xl font-black text-[#0d1a0f] tracking-tight">System Configuration</h2>
+      <p class="text-gray-500 text-sm mt-1 uppercase tracking-widest font-bold">Manage global variables and operational behaviors.</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <button (click)="saveConfig()" [disabled]="isSaving()" class="bg-[#1B4332] hover:bg-[#0d1a0f] text-white px-8 py-3 rounded-2xl font-black uppercase tracking-widest text-xs shadow-lg shadow-[#1B4332]/20 transition-all active:scale-95 flex items-center gap-2 disabled:opacity-50">
+        @if(isSaving()) {
+          <i class="ri-loader-4-line animate-spin text-lg"></i>
+          <span>Saving...</span>
+        } @else if(saveSuccess()) {
+          <i class="ri-check-line text-[#C9A84C] text-lg"></i>
+          <span class="text-[#C9A84C]">Applied!</span>
+        } @else {
+          <i class="ri-save-3-fill text-lg"></i>
+          <span>Apply Changes</span>
+        }
+      </button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Platform Status Card -->
+    <div class="bg-white rounded-[40px] p-8 border border-[#1B4332]/5 shadow-sm transform hover:-translate-y-1 transition-transform">
+      <div class="flex items-center gap-4 mb-8">
+        <div class="w-12 h-12 rounded-2xl bg-[#C9A84C]/20 text-[#C9A84C] flex items-center justify-center text-2xl shadow-sm">
+          <i class="ri-server-line"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-black text-[#0d1a0f]">Platform Status</h3>
+          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Global connection</p>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <div class="flex items-center justify-between p-4 rounded-3xl border-2 transition-colors cursor-pointer"
+             (click)="toggleMaintenance()"
+             [ngClass]="isMaintenanceMode() ? 'border-[#ff4d4f] bg-red-50' : 'border-[#1B4332]/10 bg-[#f8f7f2]'">
+          <div>
+            <h4 class="font-black text-sm" [ngClass]="isMaintenanceMode() ? 'text-[#ff4d4f]' : 'text-[#0d1a0f]'">Maintenance Mode</h4>
+            <p class="text-xs font-bold text-slate-500 mt-1">Locks clients from accessing accounts.</p>
+          </div>
+          
+          <!-- Toggle Switch -->
+          <button class="relative w-14 h-8 rounded-full transition-colors focus:outline-none pointer-events-none"
+                  [ngClass]="isMaintenanceMode() ? 'bg-[#ff4d4f]' : 'bg-slate-300'">
+            <div class="absolute top-1 bottom-1 w-6 rounded-full bg-white transition-all shadow-md"
+                 [ngClass]="isMaintenanceMode() ? 'left-[26px]' : 'left-1'"></div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Security Attributes Card -->
+    <div class="bg-white rounded-[40px] p-8 border border-[#1B4332]/5 shadow-sm transform hover:-translate-y-1 transition-transform lg:col-span-2">
+      <div class="flex items-center gap-4 mb-8">
+        <div class="w-12 h-12 rounded-2xl bg-[#1B4332]/10 text-[#1B4332] flex items-center justify-center text-2xl shadow-sm">
+          <i class="ri-shield-keyhole-line"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-black text-[#0d1a0f]">Security & Authenticity</h3>
+          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Brute-force and idle controls</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-xs font-black uppercase tracking-widest text-slate-500 mb-2">Session Timeout (Mins)</label>
+          <div class="relative">
+            <i class="ri-timer-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+            <input type="number" [(ngModel)]="sessionTimeout" class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-3 pl-12 pr-4 text-slate-800 font-bold outline-none transition-all" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-black uppercase tracking-widest text-slate-500 mb-2">Max Login Attempts</label>
+          <div class="relative">
+            <i class="ri-error-warning-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+            <input type="number" [(ngModel)]="maxLoginAttempts" class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-3 pl-12 pr-4 text-slate-800 font-bold outline-none transition-all" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Financial Variables Card -->
+    <div class="bg-white rounded-[40px] p-8 border border-[#1B4332]/5 shadow-sm lg:col-span-3 transform hover:-translate-y-1 transition-transform">
+      <div class="flex items-center gap-4 mb-8">
+        <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl shadow-sm">
+          <i class="ri-money-dollar-circle-fill"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-black text-[#0d1a0f]">Operational Parameters</h3>
+          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Transaction thresholds bounds</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+          <label class="block text-xs font-black uppercase tracking-widest text-slate-500 mb-2">Min. Automated Withdrawal (NGN)</label>
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-black">₦</span>
+            <input type="number" [(ngModel)]="minimumWithdrawal" class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-3 pl-10 pr-4 text-slate-800 font-black outline-none transition-all" />
+          </div>
+          <p class="text-[10px] font-bold text-slate-400 mt-2 tracking-wide">Payments below this threshold are executed automatically via Payout APIs without Admin consent.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -13,8 +13,9 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 export class LoginComponent {
   loginForm: FormGroup;
   showPassword = signal(false);
+  isProcessing = signal(false);
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private router: Router) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
@@ -27,7 +28,12 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      console.log('Login Payload:', this.loginForm.value);
+      this.isProcessing.set(true);
+      // Simulate API call and redirect
+      setTimeout(() => {
+         this.isProcessing.set(false);
+         this.router.navigate(['/client/dashboard']);
+      }, 1500);
     } else {
       this.loginForm.markAllAsTouched();
     }

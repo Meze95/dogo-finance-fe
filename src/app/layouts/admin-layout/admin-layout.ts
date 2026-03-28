@@ -1,6 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-admin-layout',
@@ -12,20 +12,29 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 export class AdminLayout {
   isSidebarOpen = signal(true);
   isMobileMenuOpen = signal(false);
+  openMenu = signal<string | null>(null);
+  isLoggingOut = signal(false);
+
+  private router = inject(Router);
 
   menuItems = [
     { label: 'Overview', icon: 'ri-dashboard-3-fill', link: '/admin/dashboard' },
-    { label: 'AUM Metrics', icon: 'ri-funds-box-fill', link: '/admin/aum' },
-    { label: 'KYC & Verifications', icon: 'ri-user-shield-fill', link: '/admin/verifications' },
-    { label: 'Shariah Monitoring', icon: 'ri-star-smile-fill', link: '/admin/compliance' },
-    { label: 'Halal Asset Pool', icon: 'ri-stack-line', link: '/admin/assets' },
-    { label: 'Zakat Disbursement', icon: 'ri-hand-heart-fill', link: '/admin/zakat' }
+    { label: 'Clients', icon: 'ri-user-star-line', link: '/admin/clients' },
+    { label: 'Product Management', icon: 'ri-box-3-line', link: '/admin/products' }
   ];
 
   managementItems = [
+    { label: 'Role Management', icon: 'ri-shield-keyhole-line', link: '/admin/roles' },
     { label: 'User Hub', icon: 'ri-group-2-line', link: '/admin/users' },
-    { label: 'Audit Logs', icon: 'ri-history-line', link: '/admin/logs' },
-    { label: 'System Config', icon: 'ri-settings-5-line', link: '/admin/settings' }
+    { label: 'System Config', icon: 'ri-settings-5-line', link: '/admin/settings' },
+    {
+      label: 'Account',
+      icon: 'ri-user-settings-line',
+      subItems: [
+        { label: 'Profile', link: '/admin/profile' },
+        { label: 'Logout', link: '/admin/logout' }
+      ]
+    }
   ];
 
   toggleSidebar() {
@@ -34,5 +43,27 @@ export class AdminLayout {
 
   toggleMobileMenu() {
     this.isMobileMenuOpen.update(v => !v);
+  }
+
+  toggleSubMenu(menuLabel: string) {
+    if (this.openMenu() === menuLabel) {
+      this.openMenu.set(null);
+    } else {
+      this.openMenu.set(menuLabel);
+    }
+  }
+
+  handleLogout() {
+    if (this.isMobileMenuOpen()) {
+      this.toggleMobileMenu();
+    }
+
+    this.isLoggingOut.set(true);
+
+    // Simulate dummy API call
+    setTimeout(() => {
+      this.isLoggingOut.set(false);
+      this.router.navigate(['/login']);
+    }, 1800);
   }
 }

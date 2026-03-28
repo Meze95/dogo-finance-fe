@@ -1,0 +1,137 @@
+<div class="space-y-10 animate-fade-in relative z-10 max-w-5xl">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h2 class="text-3xl font-black text-[#0d1a0f] tracking-tight">Your Profile</h2>
+      <p class="text-gray-500 text-sm mt-1 uppercase tracking-widest font-bold">Manage personal information and security settings.</p>
+    </div>
+  </div>
+
+  @if(successMessage()) {
+    <div class="bg-green-50 border-2 border-green-200 text-green-700 px-6 py-4 rounded-2xl font-bold flex items-center justify-between animate-slide-up shadow-sm">
+      <div class="flex items-center gap-3">
+        <i class="ri-checkbox-circle-fill text-xl"></i>
+        <span>{{ successMessage() }}</span>
+      </div>
+      <button (click)="successMessage.set(null)" class="text-green-500 hover:text-green-800 transition-colors"><i class="ri-close-line text-lg"></i></button>
+    </div>
+  }
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    
+    <!-- Profile Info (Left Col) -->
+    <div class="md:col-span-1 space-y-8">
+      <!-- Avatar Card -->
+      <div class="bg-white rounded-[40px] p-8 border border-[#1B4332]/5 shadow-sm text-center flex flex-col items-center justify-center transform hover:-translate-y-1 transition-transform">
+        <div class="w-32 h-32 rounded-3xl bg-[#C9A84C]/20 text-[#1B4332] flex items-center justify-center shadow-lg shadow-[#1B4332]/10 mb-6 font-black text-5xl uppercase border-4 border-white">
+          {{ userProfile().firstName.charAt(0) }}{{ userProfile().lastName.charAt(0) }}
+        </div>
+        <h3 class="text-2xl font-black text-[#0d1a0f]">{{ userProfile().firstName }} {{ userProfile().lastName }}</h3>
+        <p class="font-bold text-slate-500 uppercase tracking-widest text-xs mt-1">{{ userProfile().role }}</p>
+        
+        <div class="w-full mt-8 flex flex-col gap-3 text-left">
+           <div class="bg-[#f8f7f2] rounded-2xl p-4 transition-colors hover:bg-slate-100">
+             <p class="text-[10px] font-black uppercase tracking-widest text-[#C9A84C] mb-1">Email</p>
+             <p class="text-sm font-bold text-slate-700">{{ userProfile().email }}</p>
+           </div>
+           <div class="bg-[#f8f7f2] rounded-2xl p-4 transition-colors hover:bg-slate-100">
+             <p class="text-[10px] font-black uppercase tracking-widest text-[#C9A84C] mb-1">Phone</p>
+             <p class="text-sm font-bold text-slate-700">{{ userProfile().phone }}</p>
+           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Security & Password (Right Col) -->
+    <div class="md:col-span-2 space-y-8">
+      
+      <!-- 2FA Card -->
+      <div class="bg-white rounded-[40px] p-8 border border-[#1B4332]/5 shadow-sm transform hover:-translate-y-1 transition-transform">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-3xl shadow-sm shrink-0">
+              <i class="ri-shield-keyhole-fill"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-black text-[#0d1a0f]">Two-Factor Authentication</h3>
+              <p class="text-xs font-bold text-slate-500 mt-1 max-w-sm">Add an extra layer of security to your account by requiring an OTP code during login.</p>
+            </div>
+          </div>
+          
+          <button (click)="toggle2FA()" [disabled]="isProcessing2FA()" class="shrink-0 relative overflow-hidden text-xs font-black uppercase tracking-widest transition-all rounded-2xl px-6 py-4 border-2 group disabled:opacity-50"
+                  [ngClass]="is2FAEnabled() ? 'bg-red-50 border-red-200 text-red-600 hover:bg-red-600 hover:text-white hover:border-red-600' : 'bg-green-50 border-green-200 text-green-700 hover:bg-green-600 hover:text-white hover:border-green-600'">
+             @if(isProcessing2FA()) {
+                <span class="flex items-center justify-center">
+                  <i class="ri-loader-4-line animate-spin text-lg block"></i>
+                </span>
+             } @else {
+                <span class="flex items-center gap-2">
+                   <i [class]="is2FAEnabled() ? 'ri-lock-unlock-line text-lg' : 'ri-lock-line text-lg'"></i>
+                   <span>{{ is2FAEnabled() ? 'Disable 2FA' : 'Enable 2FA' }}</span>
+                </span>
+             }
+          </button>
+        </div>
+      </div>
+
+      <!-- Password Change Card -->
+      <div class="bg-white rounded-[40px] p-8 border border-[#1B4332]/5 shadow-sm transform hover:-translate-y-1 transition-transform">
+        <div class="flex items-center gap-4 mb-8">
+          <div class="w-12 h-12 rounded-2xl bg-[#1B4332]/10 text-[#1B4332] flex items-center justify-center text-2xl shadow-sm">
+            <i class="ri-lock-password-fill"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-black text-[#0d1a0f]">Password Management</h3>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Update credentials</p>
+          </div>
+        </div>
+
+        @if(passwordError()) {
+          <div class="mb-6 bg-red-50 text-red-600 border border-red-200 rounded-2xl p-4 text-xs font-bold uppercase tracking-wide flex items-center gap-2">
+            <i class="ri-error-warning-fill text-lg shrink-0"></i>
+            <span>{{ passwordError() }}</span>
+          </div>
+        }
+
+        <form (ngSubmit)="changePassword()" #pwdForm="ngForm" class="space-y-6">
+          <div>
+            <label class="block text-xs font-black uppercase tracking-widest text-slate-500 mb-2">Current Password</label>
+            <div class="relative">
+              <i class="ri-key-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+              <input type="password" name="currentPassword" [(ngModel)]="passwordForm().currentPassword" required placeholder="Enter current password" class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-3 pl-12 pr-4 text-slate-800 font-bold outline-none transition-all" />
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-xs font-black uppercase tracking-widest text-slate-500 mb-2">New Password</label>
+              <div class="relative">
+                <i class="ri-lock-unlock-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                <input type="password" name="newPassword" [(ngModel)]="passwordForm().newPassword" required placeholder="Choose new password" class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-3 pl-12 pr-4 text-slate-800 font-bold outline-none transition-all" />
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-black uppercase tracking-widest text-slate-500 mb-2">Confirm New Password</label>
+              <div class="relative">
+                <i class="ri-check-double-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                <input type="password" name="confirmPassword" [(ngModel)]="passwordForm().confirmPassword" required placeholder="Repeat new password" class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-3 pl-12 pr-4 text-slate-800 font-bold outline-none transition-all" />
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-4 flex justify-end">
+            <button type="submit" [disabled]="pwdForm.invalid || isProcessingPassword()" class="bg-[#1B4332] hover:bg-[#0d1a0f] text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs shadow-lg shadow-[#1B4332]/20 transition-all active:scale-95 flex items-center gap-2 disabled:opacity-50">
+              @if(isProcessingPassword()) {
+                <i class="ri-loader-4-line animate-spin text-lg"></i>
+                <span>Updating...</span>
+              } @else {
+                <i class="ri-shield-check-line text-lg"></i>
+                <span>Update Password</span>
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

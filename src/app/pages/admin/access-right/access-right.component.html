@@ -1,0 +1,113 @@
+<div class="space-y-8 animate-fade-in relative min-h-[calc(100vh-10rem)] flex flex-col">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <div class="flex items-center gap-3 mb-1">
+        <a routerLink="/admin/roles" class="text-slate-400 hover:text-[#C9A84C] transition-colors group">
+          <i class="ri-arrow-left-line text-2xl group-hover:-translate-x-1 transition-transform inline-block"></i>
+        </a>
+        <h2 class="text-3xl font-black text-[#0d1a0f] tracking-tight">{{ roleName() }}</h2>
+      </div>
+      <p class="text-gray-500 text-sm pl-9 uppercase tracking-widest font-bold">Configure precise access permissions securely.</p>
+    </div>
+    
+    <div class="flex items-center gap-3">
+        <button (click)="updateAccess()" class="bg-[#1B4332] hover:bg-[#0d1a0f] text-[#C9A84C] px-8 py-3 rounded-2xl font-black uppercase tracking-widest text-xs shadow-lg shadow-[#1B4332]/20 transition-all active:scale-95 flex items-center gap-2">
+            <span>Update Setup</span>
+            <i class="ri-shield-check-fill text-lg"></i>
+          </button>
+    </div>
+  </div>
+
+  <!-- Master-Detail Layout -->
+  <div class="flex flex-col lg:flex-row gap-8 flex-grow pb-12">
+      
+      <!-- LEFT: Module Tabs (Master) -->
+      <div class="w-full lg:w-1/3 shrink-0 flex flex-col space-y-3">
+          @for(module of modules(); track module.name; let i = $index) {
+          <button (click)="setActiveModule(i)" 
+                  class="w-full text-left px-6 py-5 rounded-[28px] transition-all flex items-center justify-between group overflow-hidden relative"
+                  [ngClass]="activeModuleIndex() === i ? 'bg-[#1B4332] shadow-xl shadow-[#1B4332]/20' : 'bg-white border border-[#1B4332]/5 hover:bg-slate-50 hover:shadow-md'">
+              
+              <div class="flex items-center gap-4 relative z-10 w-full pr-8">
+                  <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors"
+                       [ngClass]="activeModuleIndex() === i ? 'bg-[#C9A84C] text-[#1B4332]' : 'bg-[#f8f7f2] text-[#1B4332] group-hover:bg-[#C9A84C]/20'">
+                      <i [class]="module.icon" class="text-xl"></i>
+                  </div>
+                  <div class="truncate">
+                      <h4 class="font-black tracking-tight text-sm uppercase transition-colors"
+                          [ngClass]="activeModuleIndex() === i ? 'text-white' : 'text-[#0d1a0f]'">{{ module.name }}</h4>
+                      <!-- Short preview of how many sub-groups there are -->
+                      <p class="text-[10px] font-bold tracking-widest uppercase mt-0.5"
+                         [ngClass]="activeModuleIndex() === i ? 'text-[#C9A84C]' : 'text-slate-400'">
+                         {{ module.groups.length }} Config Group(s)
+                      </p>
+                  </div>
+              </div>
+              <i class="ri-arrow-right-s-line text-2xl absolute right-6 transition-transform"
+                 [ngClass]="activeModuleIndex() === i ? 'text-[#C9A84C] translate-x-1' : 'text-slate-300 group-hover:translate-x-1'"></i>
+          </button>
+          }
+      </div>
+
+      <!-- RIGHT: Detailed Permissions Pane (Detail) -->
+      <div class="w-full lg:w-2/3 flex flex-col">
+         @if(modules()[activeModuleIndex()]; as activeModule) {
+         <div class="bg-white rounded-[40px] border border-[#1B4332]/5 shadow-sm overflow-hidden flex-grow flex flex-col animate-fade-in">
+             
+             <!-- Pane Header -->
+             <div class="bg-[#f8f7f2] px-10 py-8 border-b border-slate-100 flex items-start justify-between">
+                <div>
+                    <h3 class="text-2xl font-black text-[#0d1a0f] tracking-tight uppercase flex items-center gap-3">
+                       <i [class]="activeModule.icon" class="text-[#C9A84C]"></i> {{ activeModule.name }} Matrix
+                    </h3>
+                    <p class="text-sm font-bold text-slate-500 uppercase tracking-widest mt-2 max-w-lg leading-relaxed">{{ activeModule.description }}</p>
+                </div>
+             </div>
+
+             <!-- Pane Body: Grouped Permissions -->
+             <div class="px-10 py-8 space-y-10 custom-scrollbar overflow-y-auto">
+                 @for(group of activeModule.groups; track group.groupName) {
+                 <div>
+                    <h5 class="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 mb-5 flex items-center gap-4">
+                        <span class="w-6 border-b-2 border-[#C9A84C]"></span>
+                        {{ group.groupName }}
+                        <span class="flex-grow border-b border-dashed border-slate-200"></span>
+                    </h5>
+                    
+                    <!-- Dynamic Flex Wrap Container for checkboxes. This auto-flows gracefully regardless of count. -->
+                    <div class="flex flex-wrap gap-x-8 gap-y-5">
+                       @for(perm of group.permissions; track perm.label) {
+                       <label class="flex items-center gap-3 cursor-pointer select-none group/checkbox relative">
+                           <div class="relative flex items-center">
+                               <input type="checkbox" [(ngModel)]="perm.selected" [ngClass]="perm.checkboxClass" class="w-6 h-6 rounded-lg border-2 border-slate-200 focus:ring-0 focus:ring-offset-0 transition-colors cursor-pointer" />
+                           </div>
+                           <span class="text-[11px] font-black uppercase tracking-widest text-slate-500 transition-colors" [ngClass]="perm.textHoverClass">{{ perm.label }}</span>
+                       </label>
+                       }
+                    </div>
+                 </div>
+                 }
+             </div>
+             
+         </div>
+         }
+      </div>
+  </div>
+
+  <!-- Custom Toast Notification -->
+  @if(showToast()) {
+    <div class="fixed top-24 right-10 z-[100] animate-slide-up flex flex-col pointer-events-none">
+      <div class="bg-[#0d1a0f] border border-[#1B4332]/30 p-4 pr-10 rounded-2xl shadow-2xl flex items-center gap-4 relative overflow-hidden">
+        <div class="w-10 h-10 rounded-xl bg-green-500/20 text-green-500 flex items-center justify-center shrink-0">
+          <i class="ri-check-double-line text-xl"></i>
+        </div>
+        <div>
+          <h4 class="text-white font-black text-sm uppercase tracking-wider mb-0.5">Setup Successful</h4>
+          <p class="text-slate-400 text-xs font-bold">{{ roleName() }} privileges securely logged.</p>
+        </div>
+        <div class="absolute bottom-0 left-0 h-1 bg-green-500 animate-toast-progress"></div>
+      </div>
+    </div>
+  }
+</div>
