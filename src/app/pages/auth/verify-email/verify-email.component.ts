@@ -1,42 +1,45 @@
-import { Component, signal, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, signal, OnInit, OnDestroy, inject, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-verify-email',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './verify-email.html',
-  styleUrl: './verify-email.css',
+  templateUrl: './verify-email.component.html',
+  styleUrl: './verify-email.component.css',
 })
-export class VerifyEmail implements OnInit, OnDestroy {
+export class VerifyEmailComponent implements OnInit, OnDestroy {
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  
   isProcessing = signal(false);
   isSuccess = signal(false);
   isResending = signal(false);
+  isAutoVerifying = signal(false);
   code = signal(['', '', '', '', '', '']);
   countdown = signal(60);
+  errorMessage = signal<string | null>(null);
+  email = signal<string | null>(null);
+
   private countdownTimer: any;
 
-  constructor(
-    private router: Router, 
-    private route: ActivatedRoute,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngOnInit() {
     this.startCountdown();
 
-    // Check for "code" query parameter from an email verification button
     this.route.queryParams.subscribe(params => {
+      this.email.set(params['email'] || null);
+      
+      // Check for an automatically prefilled code (if coming from a link)
       const codeParam = params['code'];
       if (codeParam && typeof codeParam === 'string' && codeParam.length === 6) {
-        // Prefill the 6 empty boxes dynamically
         this.code.set(codeParam.split(''));
-        
-        // Let the UI render the codes gracefully before blasting the simulation lock
-        setTimeout(() => {
-           this.verify();
-        }, 500);
+        this.isAutoVerifying.set(true);
+        this.verify();
       }
     });
   }
@@ -103,21 +106,50 @@ export class VerifyEmail implements OnInit, OnDestroy {
   }
 
   resendCode() {
-     this.isResending.set(true);
-     setTimeout(() => {
+    const emailStr = this.email();
+    if (!emailStr) {
+      this.errorMessage.set("Email not found. Please try registering again.");
+      return;
+    }
+
+    this.isResending.set(true);
+    this.errorMessage.set(null);
+
+    this.authService.resendCode(emailStr).subscribe({
+      next: (res) => {
         this.isResending.set(false);
         this.startCountdown();
-     }, 1500);
+        // Maybe show a success toast?
+      },
+      error: (err) => {
+        this.isResending.set(false);
+        this.errorMessage.set(err.error?.message || "Failed to resend code.");
+      }
+    });
   }
 
   verify() {
     const fullCode = this.code().join('');
-    if(fullCode.length === 6) {
+    const emailStr = this.email();
+    
+    if(fullCode.length === 6 && emailStr) {
        this.isProcessing.set(true);
-       setTimeout(() => {
-          this.isProcessing.set(false);
-          this.isSuccess.set(true);
-       }, 2000);
+       this.errorMessage.set(null);
+
+       this.authService.verifyEmail(emailStr, fullCode).subscribe({
+         next: (res) => {
+           this.isProcessing.set(false);
+           if (res.success || res.boolean) {
+             this.isSuccess.set(true);
+           } else {
+             this.errorMessage.set(res.message || "Verification failed.");
+           }
+         },
+         error: (err) => {
+           this.isProcessing.set(false);
+           this.errorMessage.set(err.error?.message || "Invalid or expired code.");
+         }
+       });
     }
   }
 

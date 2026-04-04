@@ -1,6 +1,7 @@
 import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-admin-layout',
@@ -16,6 +17,7 @@ export class AdminLayout {
   isLoggingOut = signal(false);
 
   private router = inject(Router);
+  private authService = inject(AuthService);
 
   menuItems = [
     { label: 'Overview',     icon: 'ri-dashboard-3-fill',      link: '/admin/dashboard' },
@@ -60,8 +62,9 @@ export class AdminLayout {
     }
 
     this.isLoggingOut.set(true);
+    this.authService.logout();
 
-    // Simulate dummy API call
+    // Give a short delay for the UI animation
     setTimeout(() => {
       this.isLoggingOut.set(false);
       this.router.navigate(['/login']);

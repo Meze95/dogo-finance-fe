@@ -257,16 +257,14 @@
                       <label class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40 ml-4">What is the relationship?</label>
                       <div class="relative">
                         <select 
-                          [value]="nokRelationship()"
-                          (change)="nokRelationship.set($any($event.target).value)"
+                          [value]="nokRelationshipId()"
+                          (change)="nokRelationshipId.set($any($event.target).value)"
                           class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none appearance-none transition-all cursor-pointer"
                         >
-                           <option value="Brother">Brother</option>
-                           <option value="Sister">Sister</option>
-                           <option value="Parent">Parent</option>
-                           <option value="Spouse">Spouse</option>
-                           <option value="Friend">Friend</option>
-                           <option value="Other">Other</option>
+                           <option value="" disabled selected>Select Relationship</option>
+                           @for(type of relationshipTypes(); track type.id || type.Id) {
+                              <option [value]="type.id || type.Id">{{ type.name || type.Name }}</option>
+                           }
                         </select>
                         <i class="ri-arrow-down-s-line absolute right-6 top-1/2 -translate-y-1/2 text-[#1B4332] pointer-events-none"></i>
                       </div>

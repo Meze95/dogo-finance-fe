@@ -162,22 +162,40 @@
               <app-card title="Registered Bank Accounts" icon="ri-bank-card-line">
                  @if(!isAddingBank()) {
                     <div class="mt-8 space-y-4">
-                       @for(bank of bankAccounts(); track bank.id) {
-                          <div class="flex items-center justify-between p-6 bg-[#f8f7f2] rounded-[32px] border border-[#1B4332]/5 group hover:bg-white hover:shadow-lg transition-all">
-                             <div class="flex items-center space-x-5">
-                                <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-[#1B4332] text-2xl shadow-sm">
-                                   <i class="ri-bank-line"></i>
-                                </div>
-                                <div>
-                                   <p class="font-black text-[#0d1a0f] text-sm">{{ bank.bankName }}</p>
-                                   <p class="text-xs font-mono text-[#6B7280]">{{ bank.accountNumber }}</p>
-                                </div>
-                             </div>
-                             <button (click)="deleteBank(bank.id!)" class="text-red-500 hover:text-red-700 transition-colors w-10 h-10 flex items-center justify-center rounded-full hover:bg-red-50">
-                                <i class="ri-delete-bin-line"></i>
-                             </button>
-                          </div>
-                       }
+                        @for(bank of bankAccounts(); track bank.customerBankId) {
+                           <div class="flex items-center justify-between p-6 bg-[#f8f7f2] rounded-[32px] border border-[#1B4332]/5 group hover:bg-white hover:shadow-lg transition-all" [class.border-[#C9A84C]]="bank.isDefault">
+                              <div class="flex items-center space-x-5">
+                                 <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-[#1B4332] text-2xl shadow-sm">
+                                    <div class="bank-avatar">
+                                       <img #bankLogo [src]="bank.bankLogo" (error)="bankLogo.style.display='none'; fallbackIcon.style.display='flex'" class="w-8 h-8 object-contain">
+                                       <div #fallbackIcon style="display: none;" class="w-8 h-8 items-center justify-center text-[#1B4332] text-xl">
+                                          <i class="ri-bank-line"></i>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div>
+                                    <div class="flex items-center space-x-2">
+                                       <p class="font-black text-[#0d1a0f] text-sm">{{ bank.bankName }}</p>
+                                       @if(bank.isDefault) {
+                                          <app-badge variant="gold" size="sm">Primary</app-badge>
+                                       }
+                                    </div>
+                                    <p class="text-xs font-mono text-[#6B7280]">{{ bank.accountNumber }}</p>
+                                    <p class="text-[10px] font-bold text-[#1B4332]/40 uppercase">{{ bank.accountName }}</p>
+                                 </div>
+                              </div>
+                              <div class="flex items-center space-x-2">
+                                 @if(!bank.isDefault) {
+                                    <button (click)="setDefaultBank(bank.customerBankId!)" class="text-[#1B4332] hover:text-[#C9A84C] text-[10px] font-black uppercase tracking-widest px-3 py-2 rounded-xl hover:bg-[#C9A84C]/5 transition-all">
+                                       Make Primary
+                                    </button>
+                                 }
+                                 <button (click)="deleteBank(bank.customerBankId!)" class="text-red-500 hover:text-red-700 transition-colors w-10 h-10 flex items-center justify-center rounded-full hover:bg-red-50">
+                                    <i class="ri-delete-bin-line"></i>
+                                 </button>
+                              </div>
+                           </div>
+                        }
                        @if(bankAccounts().length === 0) {
                           <div class="text-center py-8">
                              <p class="text-sm font-bold text-[#6B7280]">No bank accounts registered.</p>
@@ -190,31 +208,94 @@
                  } @else {
                     <div class="space-y-6 mt-6 mb-8">
                        <div>
-                          <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Select Bank</label>
-                          <div class="relative">
-                            <select [value]="newBankForm().bankCode" (change)="updateBankField('bankCode', $any($event.target).value)" class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none appearance-none transition-all cursor-pointer">
-                                <option value="" disabled selected>Choose destination bank</option>
-                                <option value="044">Access Bank</option>
-                                <option value="058">Guaranty Trust Bank</option>
-                                <option value="033">United Bank for Africa</option>
-                                <option value="057">Zenith Bank</option>
-                                <option value="011">First Bank of Nigeria</option>
-                            </select>
-                            <i class="ri-arrow-down-s-line absolute right-6 top-1/2 -translate-y-1/2 text-[#1B4332] pointer-events-none"></i>
-                          </div>
-                       </div>
-                       <div>
-                          <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Account Number</label>
-                          <input type="text" maxlength="10" [value]="newBankForm().accountNumber" (input)="updateBankField('accountNumber', $any($event.target).value.replace(/[^0-9]/g, ''))"
-                                 class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all placeholder:text-[#1B4332]/20" placeholder="10-digit account number">
-                       </div>
-                    </div>
-                    <div slot="footer-right" class="flex items-center space-x-3 w-full justify-end">
-                       <app-button variant="ghost" size="sm" (click)="cancelAddBank()" [disabled]="isSavingBank()">Cancel</app-button>
-                       <app-button variant="primary" size="sm" (click)="saveBank()" [disabled]="isSavingBank() || !newBankForm().bankCode || newBankForm().accountNumber?.length !== 10">
-                          {{ isSavingBank() ? 'Saving...' : 'Add Account' }}
-                       </app-button>
-                    </div>
+                           <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Select Bank</label>
+                           <div class="relative">
+                              <!-- Custom Dropdown Input -->
+                              <div (click)="showBankPicker.set(!showBankPicker())" 
+                                   class="w-full bg-[#f8f7f2] border-2 border-transparent hover:border-[#C9A84C]/50 focus-within:border-[#C9A84C] rounded-[24px] px-6 py-5 flex items-center justify-between cursor-pointer transition-all shadow-sm">
+                                 <div class="flex items-center space-x-4">
+                                    @if(selectedBank()) {
+                                       <div class="w-10 h-10 bg-white rounded-xl shadow-pill flex items-center justify-center p-2">
+                                          <img #selLogo [src]="selectedBank()?.logoUrl" (error)="selLogo.style.display='none'; selFallback.style.display='flex'" class="w-full h-full object-contain">
+                                          <div #selFallback style="display: none;" class="w-full h-full items-center justify-center text-[#1B4332]/20">
+                                             <i class="ri-bank-line text-xl"></i>
+                                          </div>
+                                       </div>
+                                       <div>
+                                          <p class="font-black text-[#0d1a0f] text-sm">{{ selectedBank()?.bankName }}</p>
+                                          <p class="text-[10px] font-bold text-[#C9A84C] uppercase tracking-[0.1em]">{{ selectedBank()?.bankCode }}</p>
+                                       </div>
+                                    } @else {
+                                       <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-[#1B4332]/20">
+                                          <i class="ri-bank-line text-xl"></i>
+                                       </div>
+                                       <span class="text-sm font-bold text-[#1B4332]/40">Choose destination bank</span>
+                                    }
+                                 </div>
+                                 <i class="ri-arrow-down-s-line text-[#1B4332] text-xl transition-transform" [class.rotate-180]="showBankPicker()"></i>
+                              </div>
+
+                              <!-- Custom Picker Popover -->
+                              @if(showBankPicker()) {
+                                 <div class="absolute top-[calc(100%+8px)] left-0 right-0 bg-white rounded-[32px] shadow-2xl border border-[#1B4332]/5 z-50 p-4 animate-in slide-in-from-top-4 duration-300">
+                                    <!-- Search Input -->
+                                    <div class="relative mb-4">
+                                       <i class="ri-search-2-line absolute left-5 top-1/2 -translate-y-1/2 text-[#1B4332]/30"></i>
+                                       <input type="text" #bankInput autofocus
+                                              [value]="bankSearchQuery()" 
+                                              (input)="bankSearchQuery.set($any($event.target).value)"
+                                              class="w-full bg-[#f8f7f2] rounded-2xl pl-12 pr-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none border-2 border-transparent focus:border-[#C9A84C] transition-all"
+                                              placeholder="Search bank name...">
+                                    </div>
+                                    
+                                    <!-- Scrollable List -->
+                                    <div class="max-h-[300px] overflow-y-auto custom-scrollbar-h space-y-2 pr-2">
+                                       @for(b of filteredBanks(); track b.bankId) {
+                                          <div (click)="selectBank(b)" 
+                                               class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-[#C9A84C]/5 border-2 border-transparent hover:border-[#C9A84C]/20 cursor-pointer transition-all group">
+                                             <div class="w-10 h-10 bg-[#f8f7f2] group-hover:bg-white rounded-xl flex items-center justify-center p-2 transition-colors">
+                                                <img #listLogo [src]="b.logoUrl" (error)="listLogo.style.display='none'; listFallback.style.display='flex'" class="w-full h-full object-contain">
+                                                <div #listFallback style="display: none;" class="w-full h-full items-center justify-center text-[#1B4332]/20">
+                                                   <i class="ri-bank-line text-lg"></i>
+                                                </div>
+                                             </div>
+                                             <div class="flex-grow">
+                                                <p class="font-black text-[#0d1a0f] text-sm group-hover:text-[#1B4332] transition-colors line-clamp-1">{{ b.bankName }}</p>
+                                                <p class="text-[10px] font-bold text-[#1B4332]/40 group-hover:text-[#C9A84C] uppercase tracking-[0.1em] transition-colors">{{ b.bankCode }}</p>
+                                             </div>
+                                             @if(b.bankId === newBankForm().bankId) {
+                                                <i class="ri-checkbox-circle-fill text-[#C9A84C] text-xl"></i>
+                                             }
+                                          </div>
+                                       }
+                                       @if(filteredBanks().length === 0) {
+                                          <div class="py-10 text-center">
+                                             <i class="ri-search-eye-line text-4xl text-[#1B4332]/10 mb-2 italic"></i>
+                                             <p class="text-xs font-bold text-[#1B4332]/30">No banks match your search</p>
+                                          </div>
+                                       }
+                                    </div>
+                                 </div>
+                              }
+                           </div>
+                        </div>
+                        <div>
+                           <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Account Name (Full Legal Name)</label>
+                           <input type="text" [value]="newBankForm().accountName" (input)="updateBankField('accountName', $any($event.target).value)"
+                                  class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all">
+                        </div>
+                        <div>
+                           <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Account Number</label>
+                           <input type="text" maxlength="10" [value]="newBankForm().accountNumber" (input)="updateBankField('accountNumber', $any($event.target).value.replace(/[^0-9]/g, ''))"
+                                  class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all placeholder:text-[#1B4332]/20" placeholder="10-digit account number">
+                        </div>
+                     </div>
+                     <div slot="footer-right" class="flex items-center space-x-3 w-full justify-end">
+                        <app-button variant="ghost" size="sm" (click)="cancelAddBank()" [disabled]="isSavingBank()">Cancel</app-button>
+                        <app-button variant="primary" size="sm" (click)="saveBank()" [disabled]="isSavingBank() || !newBankForm().bankId || newBankForm().accountNumber?.length !== 10">
+                           {{ isSavingBank() ? 'Saving...' : 'Add Account' }}
+                        </app-button>
+                     </div>
                  }
               </app-card>
            </div>
@@ -235,7 +316,7 @@
                           <span class="text-[10px] font-black uppercase text-red-500 tracking-[0.1em] mt-3 block">Pending Action</span>
                        }
                     </div>
-                    <app-button variant="outline" size="sm" class="w-full" (click)="startEditKin()">{{ nextOfKin() ? 'Update Details' : 'Add Next of Kin' }}</app-button>
+                    <app-button variant="outline" size="sm" class="w-full" (click)="startEditKin()">{{ nextOfKin() ? 'Change Next of Kin Details' : 'Add Next of Kin' }}</app-button>
                  } @else {
                     <div class="grid md:grid-cols-2 gap-8 mt-6 mb-8">
                        <div>
@@ -246,15 +327,19 @@
                        <div>
                           <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Relationship</label>
                           <div class="relative">
-                            <select [value]="editKinForm().relationship" (change)="updateKinField('relationship', $any($event.target).value)" class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none appearance-none transition-all cursor-pointer">
-                                <option value="Brother">Brother</option>
-                                <option value="Sister">Sister</option>
-                                <option value="Parent">Parent</option>
-                                <option value="Spouse">Spouse</option>
-                                <option value="Friend">Friend</option>
-                                <option value="Other">Other</option>
-                            </select>
-                            <i class="ri-arrow-down-s-line absolute right-6 top-1/2 -translate-y-1/2 text-[#1B4332] pointer-events-none"></i>
+                             <select [value]="editKinForm().relationship" (change)="updateKinField('relationship', $any($event.target).value)" class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none appearance-none transition-all cursor-pointer">
+                                 @for(type of relationships(); track type) {
+                                    <option [value]="type">{{ type }}</option>
+                                 }
+                                 @if(relationships().length === 0) {
+                                    <option value="Brother">Brother</option>
+                                    <option value="Sister">Sister</option>
+                                    <option value="Parent">Parent</option>
+                                    <option value="Spouse">Spouse</option>
+                                    <option value="Other">Other</option>
+                                 }
+                             </select>
+                             <i class="ri-arrow-down-s-line absolute right-6 top-1/2 -translate-y-1/2 text-[#1B4332] pointer-events-none"></i>
                           </div>
                        </div>
                        <div>
@@ -270,8 +355,8 @@
                     </div>
                     <div slot="footer-right" class="flex items-center space-x-3 w-full justify-end">
                        <app-button variant="ghost" size="sm" (click)="cancelEditKin()" [disabled]="isUpdatingKin()">Cancel</app-button>
-                       <app-button variant="primary" size="sm" (click)="saveKin()" [disabled]="isUpdatingKin()">
-                          {{ isUpdatingKin() ? 'Saving...' : 'Save Settings' }}
+                       <app-button variant="primary" size="sm" (click)="saveKin()" [disabled]="isUpdatingKin() || !editKinForm().fullName">
+                          {{ isUpdatingKin() ? 'Processing...' : (nextOfKin() ? 'Update Settings' : 'Add Next of Kin') }}
                        </app-button>
                     </div>
                  }

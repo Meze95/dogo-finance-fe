@@ -1,6 +1,7 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-client-layout',
@@ -10,21 +11,40 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
   styleUrl: './client-layout.css',
 })
 export class ClientLayout {
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
   isSidebarOpen = signal(true);
   isMobileMenuOpen = signal(false);
   isLoggingOut = signal(false);
 
-  private router = inject(Router);
+  user = this.authService.currentUser;
+  
+  userName = computed(() => {
+    const u = this.user();
+    if (!u) return 'Dogo User';
+    const first = u.FirstName || u.firstName || 'Dogo';
+    const last = u.LastName || u.lastName || 'User';
+    return `${first} ${last}`;
+  });
+
+  userInitials = computed(() => {
+    const u = this.user();
+    if (!u) return 'DU';
+    const first = u.FirstName || u.firstName || 'D';
+    const last = u.LastName || u.lastName || 'U';
+    return (first[0] + last[0]).toUpperCase();
+  });
 
   menuItems = [
     { label: 'Dashboard',    icon: 'ri-dashboard-3-fill',      link: '/client/dashboard' },
-    { label: 'My Portfolio', icon: 'ri-pie-chart-2-fill',      link: '/client/portfolio' },
-    { label: 'Products',     icon: 'ri-box-3-line',            link: '/client/products' },
+    // { label: 'My Portfolio', icon: 'ri-pie-chart-2-fill',      link: '/client/portfolio' },
+    { label: 'Invest',     icon: 'ri-box-3-line',            link: '/client/products' },
     { label: 'Transactions', icon: 'ri-exchange-funds-fill',   link: '/client/transactions' },
   ];
 
   managementItems = [
-    { label: 'Settings', icon: 'ri-settings-4-line', link: '/client/settings' },
+    { label: 'Account', icon: 'ri-settings-4-line', link: '/client/settings' },
     // { label: 'Help & Support', icon: 'ri-questionnaire-line', link: '/client/support' },
   ];
 
@@ -41,6 +61,7 @@ export class ClientLayout {
       this.toggleMobileMenu();
     }
     this.isLoggingOut.set(true);
+    this.authService.logout();
     setTimeout(() => {
       this.isLoggingOut.set(false);
       this.router.navigate(['/login']);
