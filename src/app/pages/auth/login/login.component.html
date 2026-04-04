@@ -60,6 +60,14 @@
 
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
         
+        <!-- Error Message -->
+        @if (errorMessage()) {
+          <div class="p-4 bg-red-50 border-l-4 border-red-500 rounded-2xl flex items-center gap-3 mb-6 animate-shake">
+            <i class="ri-error-warning-fill text-red-500 text-xl"></i>
+            <p class="text-red-700 text-sm font-bold">{{ errorMessage() }}</p>
+          </div>
+        }
+
         <!-- Email -->
         <div>
           <label class="block text-xs font-black uppercase tracking-widest text-[#0d1a0f]/60 mb-2">Email Address</label>
@@ -68,7 +76,7 @@
             <i class="ri-mail-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#C9A84C] transition-colors"></i>
           </div>
           @if(loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
-            <span class="text-red-500 text-xs font-bold mt-2 block">Enter a valid email.</span>
+            <span class="text-red-500 text-[10px] font-bold mt-2 block uppercase tracking-widest px-2">Enter a valid email.</span>
           }
         </div>
 
@@ -88,7 +96,7 @@
           </div>
 
           @if(loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
-            <span class="text-red-500 text-xs font-bold mt-2 block">Password is required.</span>
+            <span class="text-red-500 text-[10px] font-bold mt-2 block uppercase tracking-widest px-2">Password is required.</span>
           }
         </div>
 
@@ -99,7 +107,6 @@
             Sign In
           }
         </button>
-
       </form>
 
       <p class="text-center font-medium text-[#6B7280] mt-10">

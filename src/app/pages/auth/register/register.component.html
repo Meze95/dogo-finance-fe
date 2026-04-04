@@ -57,114 +57,149 @@
         <p class="text-[#6B7280] font-medium">Start your Halal investment journey today.</p>
       </div>
 
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-6">
-        
-        <div class="grid grid-cols-2 gap-6">
-          <!-- First Name -->
-          <div>
-            <label class="block text-xs font-black uppercase tracking-widest text-[#0d1a0f]/60 mb-2">First Name</label>
-            <div class="relative">
-              <input type="text" formControlName="firstName" class="w-full h-14 bg-white border border-[#1B4332]/10 rounded-2xl px-5 pl-12 font-medium text-[#0d1a0f] focus:outline-none focus:border-[#C9A84C] focus:ring-4 focus:ring-[#C9A84C]/10 transition-all placeholder:text-gray-400" placeholder="Ado" />
-              <i class="ri-user-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"></i>
+      @if(isSuccess()) {
+        <!-- Success Screen -->
+        <div class="animate-in fade-in zoom-in duration-700 flex flex-col items-center text-center">
+           <div class="w-24 h-24 bg-green-50 border-2 border-green-200 rounded-full flex items-center justify-center mb-8 relative">
+              <i class="ri-mail-send-fill text-5xl text-green-600"></i>
+              <div class="absolute -top-2 -right-2 w-8 h-8 bg-[#C9A84C] rounded-full flex items-center justify-center border-4 border-white">
+                <i class="ri-check-line text-[#1B4332] font-black"></i>
+              </div>
+           </div>
+           
+           <h1 class="text-3xl md:text-5xl font-black text-[#0d1a0f] mb-6 tracking-tighter">Registration <br><span class="text-[#1B4332]">Successful!</span></h1>
+           
+           <div class="bg-white/40 backdrop-blur-sm border-2 border-dashed border-[#1B4332]/10 p-8 rounded-[32px] mb-12">
+             <p class="text-lg text-[#6B7280] font-medium leading-relaxed">
+               We've sent a verification link to your email. Please click the link to activate your account and start your Halal investment journey.
+             </p>
+           </div>
+           
+           <div class="space-y-4 w-full">
+             <button routerLink="/login" class="w-full h-14 bg-[#1B4332] text-[#C9A84C] font-black rounded-2xl hover:bg-[#2D6A4F] hover:shadow-xl hover:shadow-[#1B4332]/20 transition-all uppercase tracking-widest text-sm flex items-center justify-center gap-2">
+               <i class="ri-login-box-line"></i> Back to Login
+             </button>
+             <p class="text-xs font-bold uppercase tracking-widest text-[#0d1a0f]/40 pt-4">Didn't receive any mail? Check your spam folder.</p>
+           </div>
+        </div>
+      } @else {
+        <!-- Registration Form -->
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-6 animate-in fade-in duration-500">
+          
+          <!-- Error Message -->
+          @if (errorMessage()) {
+            <div class="p-4 bg-red-50 border-l-4 border-red-500 rounded-xl flex items-center gap-3 animate-shake">
+              <i class="ri-error-warning-fill text-red-500 text-xl"></i>
+              <p class="text-red-700 text-sm font-bold">{{ errorMessage() }}</p>
             </div>
-            @if(registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched) {
-              <span class="text-red-500 text-xs font-bold mt-2 block">First name is required.</span>
-            }
-          </div>
-
-          <!-- Last Name -->
-          <div>
-            <label class="block text-xs font-black uppercase tracking-widest text-[#0d1a0f]/60 mb-2">Last Name</label>
-            <div class="relative">
-              <input type="text" formControlName="lastName" class="w-full h-14 bg-white border border-[#1B4332]/10 rounded-2xl px-5 pl-12 font-medium text-[#0d1a0f] focus:outline-none focus:border-[#C9A84C] focus:ring-4 focus:ring-[#C9A84C]/10 transition-all placeholder:text-gray-400" placeholder="Bayero" />
-              <i class="ri-user-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"></i>
+          }
+          
+          <div class="grid grid-cols-2 gap-6">
+            <!-- First Name -->
+            <div>
+              <label class="block text-xs font-black uppercase tracking-widest text-[#0d1a0f]/60 mb-2">First Name</label>
+              <div class="relative">
+                <input type="text" formControlName="firstName" class="w-full h-14 bg-white border border-[#1B4332]/10 rounded-2xl px-5 pl-12 font-medium text-[#0d1a0f] focus:outline-none focus:border-[#C9A84C] focus:ring-4 focus:ring-[#C9A84C]/10 transition-all placeholder:text-gray-400" placeholder="Ado" />
+                <i class="ri-user-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"></i>
+              </div>
+              @if(registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched) {
+                <span class="text-red-500 text-xs font-bold mt-2 block">First name is required.</span>
+              }
             </div>
-            @if(registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched) {
-              <span class="text-red-500 text-xs font-bold mt-2 block">Last name is required.</span>
-            }
-          </div>
-        </div>
 
-        <!-- Date of Birth -->
-        <div>
-          <label class="block text-xs font-black uppercase tracking-widest text-[#0d1a0f]/60 mb-2">Date of Birth</label>
-          <div class="relative group">
-            <input type="date" formControlName="dob" class="w-full h-14 bg-white border border-[#1B4332]/10 rounded-2xl px-5 pl-12 font-medium text-[#0d1a0f] focus:outline-none focus:border-[#C9A84C] focus:ring-4 focus:ring-[#C9A84C]/10 transition-all text-gray-400 focus:text-[#0d1a0f]" />
-            <i class="ri-calendar-event-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#C9A84C] transition-colors"></i>
+            <!-- Last Name -->
+            <div>
+              <label class="block text-xs font-black uppercase tracking-widest text-[#0d1a0f]/60 mb-2">Last Name</label>
+              <div class="relative">
+                <input type="text" formControlName="lastName" class="w-full h-14 bg-white border border-[#1B4332]/10 rounded-2xl px-5 pl-12 font-medium text-[#0d1a0f] focus:outline-none focus:border-[#C9A84C] focus:ring-4 focus:ring-[#C9A84C]/10 transition-all placeholder:text-gray-400" placeholder="Bayero" />
+                <i class="ri-user-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"></i>
+              </div>
+              @if(registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched) {
+                <span class="text-red-500 text-xs font-bold mt-2 block">Last name is required.</span>
+              }
+            </div>
           </div>
-          @if(registerForm.get('dob')?.invalid && registerForm.get('dob')?.touched) {
-            <span class="text-red-500 text-xs font-bold mt-2 block">Valid DOB is required.</span>
-          }
-        </div>
 
-        <!-- Email -->
-        <div>
-          <label class="block text-xs font-black uppercase tracking-widest text-[#0d1a0f]/60 mb-2">Email Address</label>
-          <div class="relative group">
-            <input type="email" formControlName="email" class="w-full h-14 bg-white border border-[#1B4332]/10 rounded-2xl px-5 pl-12 font-medium text-[#0d1a0f] focus:outline-none focus:border-[#C9A84C] focus:ring-4 focus:ring-[#C9A84C]/10 transition-all placeholder:text-gray-400" placeholder="ado.bayero@example.com" />
-            <i class="ri-mail-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#C9A84C] transition-colors"></i>
-          </div>
-          @if(registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
-            <span class="text-red-500 text-xs font-bold mt-2 block">Enter a valid email.</span>
-          }
-        </div>
-
-        <!-- Phone Number -->
-        <div>
-          <label class="block text-xs font-black uppercase tracking-widest text-[#0d1a0f]/60 mb-2">Phone Number</label>
-          <div class="relative group">
-            <input type="tel" formControlName="phone" class="w-full h-14 bg-white border border-[#1B4332]/10 rounded-2xl px-5 pl-12 font-medium text-[#0d1a0f] focus:outline-none focus:border-[#C9A84C] focus:ring-4 focus:ring-[#C9A84C]/10 transition-all placeholder:text-gray-400" placeholder="0801 234 5678" />
-            <i class="ri-phone-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#C9A84C] transition-colors"></i>
-          </div>
-          @if(registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched) {
-            <span class="text-red-500 text-xs font-bold mt-2 block">Phone number is required.</span>
-          }
-        </div>
-
-        <!-- Password Fields Wrapper -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Password -->
+          <!-- Date of Birth -->
           <div>
-            <label class="block text-xs font-black uppercase tracking-widest text-[#0d1a0f]/60 mb-2">Password</label>
+            <label class="block text-xs font-black uppercase tracking-widest text-[#0d1a0f]/60 mb-2">Date of Birth</label>
             <div class="relative group">
-              <input [type]="showPassword() ? 'text' : 'password'" formControlName="password" class="w-full h-14 bg-white border border-[#1B4332]/10 rounded-2xl px-5 pl-12 pr-12 font-medium text-[#0d1a0f] focus:outline-none focus:border-[#C9A84C] focus:ring-4 focus:ring-[#C9A84C]/10 transition-all placeholder:text-gray-400" placeholder="••••••••" />
-              <i class="ri-lock-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#C9A84C] transition-colors"></i>
-              <button type="button" (click)="togglePassword()" class="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#1B4332] transition-colors text-xl">
-                <i [class]="showPassword() ? 'ri-eye-line' : 'ri-eye-off-line'"></i>
-              </button>
+              <input type="date" formControlName="dob" class="w-full h-14 bg-white border border-[#1B4332]/10 rounded-2xl px-5 pl-12 font-medium text-[#0d1a0f] focus:outline-none focus:border-[#C9A84C] focus:ring-4 focus:ring-[#C9A84C]/10 transition-all text-gray-400 focus:text-[#0d1a0f]" />
+              <i class="ri-calendar-event-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#C9A84C] transition-colors"></i>
             </div>
-            @if(registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
-              <span class="text-red-500 text-xs font-bold mt-2 block">At least 8 characters.</span>
+            @if(registerForm.get('dob')?.invalid && registerForm.get('dob')?.touched) {
+              <span class="text-red-500 text-xs font-bold mt-2 block">Valid DOB is required.</span>
             }
           </div>
 
-          <!-- Confirm Password -->
+          <!-- Email -->
           <div>
-            <label class="block text-xs font-black uppercase tracking-widest text-[#0d1a0f]/60 mb-2">Confirm Password</label>
+            <label class="block text-xs font-black uppercase tracking-widest text-[#0d1a0f]/60 mb-2">Email Address</label>
             <div class="relative group">
-              <input [type]="showPassword() ? 'text' : 'password'" formControlName="confirmPassword" class="w-full h-14 bg-white border border-[#1B4332]/10 rounded-2xl px-5 pl-12 font-medium text-[#0d1a0f] focus:outline-none focus:border-[#C9A84C] focus:ring-4 focus:ring-[#C9A84C]/10 transition-all placeholder:text-gray-400" placeholder="••••••••" />
-              <i class="ri-lock-check-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#C9A84C] transition-colors"></i>
+              <input type="email" formControlName="email" class="w-full h-14 bg-white border border-[#1B4332]/10 rounded-2xl px-5 pl-12 font-medium text-[#0d1a0f] focus:outline-none focus:border-[#C9A84C] focus:ring-4 focus:ring-[#C9A84C]/10 transition-all placeholder:text-gray-400" placeholder="ado.bayero@example.com" />
+              <i class="ri-mail-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#C9A84C] transition-colors"></i>
             </div>
-            @if(registerForm.hasError('mismatch') && registerForm.get('confirmPassword')?.touched) {
-              <span class="text-red-500 text-xs font-bold mt-2 block">Passwords do not match.</span>
+            @if(registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+              <span class="text-red-500 text-xs font-bold mt-2 block">Enter a valid email.</span>
             }
           </div>
-        </div>
 
-        <button type="submit" [disabled]="isProcessing()" class="w-full h-14 bg-[#1B4332] text-[#C9A84C] font-black rounded-2xl hover:bg-[#2D6A4F] hover:shadow-xl hover:shadow-[#1B4332]/20 transition-all uppercase tracking-widest text-sm mt-6 disabled:opacity-70 flex items-center justify-center gap-2">
-          @if(isProcessing()) {
-            <i class="ri-loader-4-line animate-spin text-lg"></i> Creating Account...
-          } @else {
-            Create Account
-          }
-        </button>
+          <!-- Phone Number -->
+          <div>
+            <label class="block text-xs font-black uppercase tracking-widest text-[#0d1a0f]/60 mb-2">Phone Number</label>
+            <div class="relative group">
+              <input type="tel" formControlName="phone" class="w-full h-14 bg-white border border-[#1B4332]/10 rounded-2xl px-5 pl-12 font-medium text-[#0d1a0f] focus:outline-none focus:border-[#C9A84C] focus:ring-4 focus:ring-[#C9A84C]/10 transition-all placeholder:text-gray-400" placeholder="0801 234 5678" />
+              <i class="ri-phone-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#C9A84C] transition-colors"></i>
+            </div>
+            @if(registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched) {
+              <span class="text-red-500 text-xs font-bold mt-2 block">Phone number is required.</span>
+            }
+          </div>
 
-      </form>
+          <!-- Password Fields Wrapper -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Password -->
+            <div>
+              <label class="block text-xs font-black uppercase tracking-widest text-[#0d1a0f]/60 mb-2">Password</label>
+              <div class="relative group">
+                <input [type]="showPassword() ? 'text' : 'password'" formControlName="password" class="w-full h-14 bg-white border border-[#1B4332]/10 rounded-2xl px-5 pl-12 pr-12 font-medium text-[#0d1a0f] focus:outline-none focus:border-[#C9A84C] focus:ring-4 focus:ring-[#C9A84C]/10 transition-all placeholder:text-gray-400" placeholder="••••••••" />
+                <i class="ri-lock-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#C9A84C] transition-colors"></i>
+                <button type="button" (click)="togglePassword()" class="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#1B4332] transition-colors text-xl">
+                  <i [class]="showPassword() ? 'ri-eye-line' : 'ri-eye-off-line'"></i>
+                </button>
+              </div>
+              @if(registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
+                <span class="text-red-500 text-xs font-bold mt-2 block">At least 8 characters.</span>
+              }
+            </div>
 
-      <p class="text-center font-medium text-[#6B7280] mt-10">
-        Already have an account? 
-        <a routerLink="/login" class="text-[#1B4332] font-black hover:underline">Log in</a>
-      </p>
+            <!-- Confirm Password -->
+            <div>
+              <label class="block text-xs font-black uppercase tracking-widest text-[#0d1a0f]/60 mb-2">Confirm Password</label>
+              <div class="relative group">
+                <input [type]="showPassword() ? 'text' : 'password'" formControlName="confirmPassword" class="w-full h-14 bg-white border border-[#1B4332]/10 rounded-2xl px-5 pl-12 font-medium text-[#0d1a0f] focus:outline-none focus:border-[#C9A84C] focus:ring-4 focus:ring-[#C9A84C]/10 transition-all placeholder:text-gray-400" placeholder="••••••••" />
+                <i class="ri-lock-check-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#C9A84C] transition-colors"></i>
+              </div>
+              @if(registerForm.hasError('mismatch') && registerForm.get('confirmPassword')?.touched) {
+                <span class="text-red-500 text-xs font-bold mt-2 block">Passwords do not match.</span>
+              }
+            </div>
+          </div>
+
+          <button type="submit" [disabled]="isProcessing()" class="w-full h-14 bg-[#1B4332] text-[#C9A84C] font-black rounded-2xl hover:bg-[#2D6A4F] hover:shadow-xl hover:shadow-[#1B4332]/20 transition-all uppercase tracking-widest text-sm mt-6 disabled:opacity-70 flex items-center justify-center gap-2">
+            @if(isProcessing()) {
+              <i class="ri-loader-4-line animate-spin text-lg"></i> Creating Account...
+            } @else {
+              Create Account
+            }
+          </button>
+        </form>
+
+        <p class="text-center font-medium text-[#6B7280] mt-10">
+          Already have an account? 
+          <a routerLink="/login" class="text-[#1B4332] font-black hover:underline">Log in</a>
+        </p>
+      }
 
     </div>
   </div>

@@ -1,0 +1,145 @@
+<div class="min-h-screen bg-white flex flex-col font-['Inter']">
+  <!-- Nav Header -->
+  <header class="max-w-7xl mx-auto w-full px-6 py-6 flex items-center justify-between">
+    <div class="flex items-center gap-2 cursor-pointer" routerLink="/">
+      <div class="w-8 h-8 bg-[#1a3a5f] rounded-lg flex items-center justify-center">
+        <i class="ri-bank-line text-white"></i>
+      </div>
+      <span class="text-xl font-bold text-[#1a3a5f] tracking-tight">DogoFinance</span>
+    </div>
+    
+    <nav class="hidden md:flex items-center gap-8 text-[15px] font-semibold text-[#1a3a5f]/70">
+      <a routerLink="/about" class="hover:text-[#1a3a5f]">About</a>
+      <a routerLink="/faq" class="hover:text-[#1a3a5f]">FAQ</a>
+      <a routerLink="/blog" class="hover:text-[#1a3a5f]">Blog</a>
+      <a routerLink="/login" class="hover:text-[#1a3a5f]">Log In</a>
+      <a routerLink="/register" class="border border-[#1a3a5f] px-6 py-2 rounded-lg hover:bg-[#1a3a5f]/5 transition-all">Create a Free Account</a>
+    </nav>
+  </header>
+
+  <main class="flex-1 flex items-center justify-center px-6 py-12">
+    <div class="w-full max-w-sm">
+      <div class="text-center mb-10">
+        <h1 class="text-[32px] font-extrabold text-[#1a3a5f] mb-4">Email Verification</h1>
+      </div>
+
+      @if(isSuccess()) {
+        <!-- Success Content (Matches Image 2) -->
+        <div class="animate-in fade-in zoom-in duration-500 w-full max-w-sm mx-auto">
+           <div class="bg-[#e8f5e9] border border-[#c8e6c9] p-5 rounded-lg mb-8 flex items-start gap-4 relative">
+             <div class="flex-1">
+               <p class="text-[#2e7d32] text-[15px] font-medium leading-relaxed">
+                 Awesome! Email verified successfully. Please proceed to login to access your dashboard.
+               </p>
+             </div>
+             <button class="text-[#2e7d32] opacity-40 hover:opacity-100 absolute top-4 right-4">
+               <i class="ri-close-line"></i>
+             </button>
+           </div>
+
+           <div class="border-t border-dashed border-[#1a3a5f]/20 pt-8 mt-8">
+             <button 
+               routerLink="/login" 
+               class="w-full bg-[#1a3a5f] text-white py-4 rounded-lg font-bold text-lg hover:bg-[#112a47] transition-all shadow-md active:scale-[0.98]">
+               Proceed to Login
+             </button>
+           </div>
+        </div>
+      } @else if(isAutoVerifying() && isProcessing()) {
+        <!-- Auto-Verifying Loading State -->
+        <div class="flex flex-col items-center justify-center p-12 bg-white border-2 border-dashed border-[#1a3a5f]/10 rounded-[32px] animate-in fade-in duration-700">
+           <div class="w-16 h-16 border-4 border-[#1a3a5f]/10 border-t-[#1a3a5f] rounded-full animate-spin mb-6"></div>
+           <p class="text-[#1a3a5f] font-bold text-lg">Verifying your email...</p>
+           <p class="text-slate-400 text-sm mt-2">Just a moment please</p>
+        </div>
+      } @else {
+        <!-- Code Verification Form -->
+        <div class="bg-white border-2 border-dashed border-[#1a3a5f]/10 p-8 rounded-[32px] animate-in fade-in duration-500">
+          <p class="text-[#1a3a5f]/60 text-center font-medium mb-8 leading-relaxed">
+            Enter the 6-digit code sent to your email to complete your account setup.
+          </p>
+
+          <div class="flex gap-2 justify-between mb-8" (paste)="pasteCode($event)">
+              @for(digit of code(); track $index) {
+                <input 
+                  [id]="'code-' + $index"
+                  type="text" 
+                  inputmode="numeric"
+                  [value]="digit"
+                  (input)="onInput($event, $index)"
+                  (keydown)="onKeyDown($event, $index)"
+                  maxlength="1"
+                  class="w-12 h-14 text-center text-2xl font-bold bg-[#f8fafc] border border-slate-200 rounded-xl text-[#1a3a5f] focus:outline-none focus:border-[#1a3a5f] focus:ring-4 focus:ring-[#1a3a5f]/5 transition-all" />
+              }
+          </div>
+
+          <button 
+            (click)="verify()" 
+            [disabled]="isProcessing() || code().join('').length < 6"
+            class="w-full bg-[#1a3a5f] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#112a47] transition-all disabled:opacity-50 flex items-center justify-center gap-2">
+            @if(isProcessing()) {
+              <i class="ri-loader-4-line animate-spin text-xl"></i>
+            } @else {
+              Verify Account
+            }
+          </button>
+
+          @if(errorMessage()) {
+            <p class="text-red-500 text-sm font-bold text-center mt-6 animate-pulse">{{ errorMessage() }}</p>
+          }
+
+          <div class="text-center mt-8">
+            <button (click)="resendCode()" [disabled]="isResending() || countdown() > 0" class="text-[#1a3a5f] font-bold hover:underline opacity-60 hover:opacity-100 disabled:opacity-40">
+              @if(countdown() > 0) {
+                 Resend in {{ countdown() }}s
+              } @else {
+                 Resend Verification Code
+              }
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#f8f9fa] py-16 px-6">
+    <div class="max-w-7xl mx-auto">
+       <div class="flex flex-col md:flex-row justify-between gap-12 md:gap-4 border-b border-slate-200 pb-12 mb-12">
+          <div class="max-w-xs">
+            <div class="flex items-center gap-2 mb-6">
+               <div class="w-6 h-6 bg-[#1a3a5f] rounded flex items-center justify-center">
+                 <i class="ri-bank-line text-white text-xs"></i>
+               </div>
+               <span class="text-lg font-bold text-[#1a3a5f]">DogoFinance</span>
+            </div>
+            <p class="text-slate-500 text-sm leading-relaxed">
+              DogoFinance (formerly dogobank.ng) is Nigeria's premier financial platform. For over 5 years, we've helped thousands save and invest billions.
+            </p>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-16">
+             <div>
+                <h4 class="font-bold text-[#1a3a5f] mb-6 uppercase text-xs tracking-widest">Quick Links</h4>
+                <ul class="space-y-3 text-slate-500 text-sm font-medium">
+                  <li><a href="#" class="hover:text-[#1a3a5f]">AutoSave™</a></li>
+                  <li><a href="#" class="hover:text-[#1a3a5f]">DogoLink</a></li>
+                  <li><a href="#" class="hover:text-[#1a3a5f]">Quick Save™</a></li>
+                </ul>
+             </div>
+             <div>
+                <h4 class="font-bold text-[#1a3a5f] mb-6 uppercase text-xs tracking-widest">Company</h4>
+                <ul class="space-y-3 text-slate-500 text-sm font-medium">
+                  <li><a href="#" class="hover:text-[#1a3a5f]">About</a></li>
+                  <li><a href="#" class="hover:text-[#1a3a5f]">FAQs</a></li>
+                  <li><a href="#" class="hover:text-[#1a3a5f]">Terms of Use</a></li>
+                </ul>
+             </div>
+          </div>
+       </div>
+       <div class="text-center text-slate-400 text-xs font-semibold uppercase tracking-widest">
+         &copy; 2026 DogoFinance Limited. All rights reserved.
+       </div>
+    </div>
+  </footer>
+</div>

@@ -1,0 +1,71 @@
+<div class="min-h-screen bg-[#f8f7f2] font-sans p-6 md:p-10 flex flex-col items-center">
+  <div class="w-full max-w-xl bg-white rounded-[40px] shadow-sm p-8 md:p-12 relative">
+    
+    <!-- Header with Back Button -->
+    <div class="flex items-center mb-8">
+      <button (click)="goBack()" class="w-10 h-10 rounded-full bg-[#f8f7f2] flex items-center justify-center text-[#1B4332] hover:bg-[#1B4332] hover:text-white transition-all">
+        <i class="ri-arrow-left-s-line text-2xl"></i>
+      </button>
+    </div>
+
+    <!-- Title and Notice -->
+    <div class="mb-10">
+      <h1 class="text-3xl font-black text-[#0d1a0f] tracking-tighter mb-4">My Profile</h1>
+      <p class="text-red-500 font-bold text-sm leading-relaxed">
+        For security reasons, only your display picture can be changed in-app
+      </p>
+    </div>
+
+    <!-- Profile Details List -->
+    <div class="space-y-6">
+      
+      <!-- User ID -->
+      <div class="flex items-center justify-between py-5 border-b border-[#1B4332]/5">
+        <span class="text-xs font-black uppercase tracking-widest text-slate-400">User ID</span>
+        <span class="font-bold text-[#0d1a0f] text-sm">{{ displayId }}</span>
+      </div>
+
+      <!-- Display Picture -->
+      <div class="flex items-center justify-between py-5 border-b border-[#1B4332]/5">
+        <span class="text-xs font-black uppercase tracking-widest text-slate-400">Display Picture</span>
+        <div class="w-16 h-16 rounded-full bg-[#1B4332] flex items-center justify-center text-white text-3xl shadow-sm cursor-pointer hover:opacity-80 transition-opacity">
+          <i class="ri-user-fill"></i>
+        </div>
+      </div>
+
+      <!-- Name -->
+      <div class="flex items-center justify-between py-5 border-b border-[#1B4332]/5">
+        <span class="text-xs font-black uppercase tracking-widest text-slate-400">Name</span>
+        <span class="font-bold text-[#0d1a0f] text-sm">{{ firstName }} {{ lastName }}</span>
+      </div>
+
+      <!-- Email -->
+      <div class="flex items-center justify-between py-5 border-b border-[#1B4332]/5">
+        <span class="text-xs font-black uppercase tracking-widest text-slate-400">Email</span>
+        <span class="font-bold text-[#0d1a0f] text-sm">{{ email }}</span>
+      </div>
+
+      <!-- Phone Number -->
+      <div class="flex items-center justify-between py-5 border-b border-[#1B4332]/5">
+        <span class="text-xs font-black uppercase tracking-widest text-slate-400">Phone Number</span>
+        <span class="font-bold text-[#0d1a0f] text-sm">{{ phone }}</span>
+      </div>
+
+    </div>
+
+    <!-- Actions -->
+    <div class="mt-12">
+      <button (click)="cancel()" class="w-full h-16 bg-[#e63946] text-white rounded-2xl text-[13px] font-black uppercase tracking-widest hover:bg-[#d62828] transition-all shadow-xl shadow-red-500/10">
+        Cancel
+      </button>
+    </div>
+
+    <!-- Footer Support Info -->
+    <div class="mt-12 text-center">
+      <p class="text-[11px] font-bold text-slate-400 balance-text leading-relaxed">
+        To change your account details, please contact support on 0700 933 933 933 or email <span class="text-[#1B4332]">contact@piggyvest.com</span>
+      </p>
+    </div>
+
+  </div>
+</div>

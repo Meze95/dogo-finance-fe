@@ -1,5 +1,7 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../shared/services/auth.service';
+import { CustomerService } from '../../../shared/services/customer.service';
 
 export interface Transaction {
   id: string;
@@ -25,9 +27,18 @@ export interface InvestmentStub {
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class ClientDashboardComponent {
+export class ClientDashboardComponent implements OnInit {
+  private authService = inject(AuthService);
+  private customerService = inject(CustomerService);
+  
   // Signals for state management
-  userName = signal('Ado Bayero');
+  user = this.authService.currentUser;
+  
+  userName = computed(() => {
+    const u = this.user();
+    return u?.firstName ? `${u.firstName} ${u.lastName}` : 'Dogo User';
+  });
+
   totalPortfolio = signal(4250000);
   availableNaira = signal(150240);
   hideBalances = signal(false); // New Privacy Signal
@@ -39,12 +50,49 @@ export class ClientDashboardComponent {
     { label: 'Private Musharakah', value: 1550000, growth: 15.8, icon: 'ri-team-line', color: 'bg-[#2D6A4F]' }
   ]);
 
-  nextSteps = signal([
-    { title: 'Verify BVN', desc: 'Secure your financial records with BVN', icon: 'ri-fingerprint-line', action: 'Verify Now' },
-    { title: 'Verify Your NIN', desc: 'Secure your account identity', icon: 'ri-shield-user-line', action: 'Verify Now' },
-    { title: 'Create Transaction PIN', desc: 'Secure your wallet from unauthorized access', icon: 'ri-lock-password-line', action: 'Setup' },
-    { title: 'Add Next of Kin', desc: 'Manage your wealth legacy', icon: 'ri-parent-line', action: 'Update' }
-  ]);
+  nextSteps = signal<any[]>([]);
+
+  ngOnInit() {
+    this.loadTodoList();
+    this.loadRelationshipTypes();
+  }
+
+  loadRelationshipTypes() {
+    this.customerService.getRelationshipTypes().subscribe({
+        next: (res) => {
+            if (res.data) this.relationshipTypes.set(res.data);
+        }
+    });
+  }
+
+  loadTodoList() {
+    const customerId = this.user()?.CustomerId || this.user()?.customerId;
+    if (customerId) {
+        this.customerService.getTodoList(customerId).subscribe({
+          next: (res) => {
+             if (res.data) {
+                const mapped = res.data.map((item: any) => ({
+                    title: item.title || item.Title,
+                    desc: item.subtitle || item.Subtitle,
+                    icon: this.mapTodoIcon(item.icon || item.Icon),
+                    action: item.actionText || item.ActionText
+                }));
+                this.nextSteps.set(mapped);
+             }
+          }
+        });
+    }
+  }
+
+  mapTodoIcon(icon: string) {
+    switch (icon?.toLowerCase()) {
+        case 'fingerprint': return 'ri-fingerprint-line';
+        case 'security': return 'ri-shield-user-line';
+        case 'lock': return 'ri-lock-password-line';
+        case 'people': return 'ri-parent-line';
+        default: return 'ri-checkbox-circle-line';
+    }
+  }
 
   recentTransactions = signal<Transaction[]>([
     { id: '1', type: 'profit', amount: 18500, status: 'completed', date: 'Today, 10:45 AM', description: 'Mudarabah Q1 profit share' },
@@ -60,9 +108,10 @@ export class ClientDashboardComponent {
   pinInput = signal('');
   confirmPinInput = signal('');
   nokName = signal('');
-  nokRelationship = signal('Brother');
+  nokRelationshipId = signal<number | string>('');
   nokEmail = signal('');
   nokPhone = signal('');
+  relationshipTypes = signal<any[]>([]);
   isProcessing = signal(false);
   isSuccess = signal(false);
 
@@ -91,7 +140,7 @@ export class ClientDashboardComponent {
     this.pinInput.set('');
     this.confirmPinInput.set('');
     this.nokName.set('');
-    this.nokRelationship.set('Brother');
+    this.nokRelationshipId.set('');
     this.nokEmail.set('');
     this.nokPhone.set('');
     this.isProcessing.set(false);
@@ -117,26 +166,57 @@ export class ClientDashboardComponent {
     
     this.isProcessing.set(true);
     
-    // Dummy processing
-    if (isPinFlow) {
-      console.log(`Setting Transaction PIN: ${this.pinInput()}`);
-    } else if (isNokFlow) {
-      console.log(`Updating NOK: ${this.nokName()}, ${this.nokRelationship()}, ${this.nokEmail()}, ${this.nokPhone()}`);
-    } else {
-      console.log(`Verifying ${this.activeVerification().title}: ${this.verificationInput()}`);
-    }
-    
-    setTimeout(() => {
-      this.isProcessing.set(false);
-      this.isSuccess.set(true);
+    if (isNokFlow) {
+      const customerId = this.user()?.CustomerId || this.user()?.customerId;
+      const nokData = {
+        fullName: this.nokName(),
+        relationshipTypeId: Number(this.nokRelationshipId()),
+        email: this.nokEmail(),
+        phoneNumber: this.nokPhone(),
+        address: 'N/A' // Added default for API
+      };
       
-      // Remove from list after success
+      this.customerService.addNextOfKin(customerId, nokData).subscribe({
+        next: (res) => {
+          this.handleSuccessAction();
+        },
+        error: () => this.isProcessing.set(false)
+      });
+    } else if (isPinFlow) {
+      this.authService.setupPin({ 
+        pin: this.pinInput(), 
+        confirmPin: this.confirmPinInput() 
+      }).subscribe({
+        next: (res) => {
+          if (res.boolean || res.success) {
+            this.handleSuccessAction();
+          } else {
+            this.isProcessing.set(false);
+          }
+        },
+        error: (err) => {
+          console.error('PIN Setup Error:', err);
+          this.isProcessing.set(false);
+        }
+      });
+    } else {
+      // Dummy processing for BVN/NIN for now
       setTimeout(() => {
-        const verifiedTitle = this.activeVerification()?.title;
-        this.nextSteps.set(this.nextSteps().filter(s => s.title !== verifiedTitle));
-        this.closeModal();
-      }, 2000);
-    }, 1500);
+        this.handleSuccessAction();
+      }, 1500);
+    }
+  }
+
+  private handleSuccessAction() {
+    this.isProcessing.set(false);
+    this.isSuccess.set(true);
+    
+    // Remove from list after success
+    setTimeout(() => {
+      const verifiedTitle = this.activeVerification()?.title;
+      this.nextSteps.set(this.nextSteps().filter(s => s.title !== verifiedTitle));
+      this.closeModal();
+    }, 2000);
   }
 
   openTransactionModal(type: 'fund'|'withdraw') {

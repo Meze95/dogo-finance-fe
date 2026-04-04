@@ -129,9 +129,9 @@
 
       <!-- Welcome Text (Desktop) -->
       <div class="hidden md:block">
-        <h1 class="text-xl font-black text-[#0d1a0f] tracking-tight">Salaam, Ado Bayero 👋</h1>
+        <h1 class="text-xl font-black text-[#0d1a0f] tracking-tight">Salaam, {{ userName() }} 👋</h1>
         <p class="text-[11px] font-bold text-[#1B4332]/60 uppercase tracking-widest mt-0.5 flex items-center">
-          <span class="w-2 h-2 rounded-full bg-[#C9A84C] mr-2 shadow-sm animate-pulse"></span> Tier 2 · Investor Profile
+          <span class="w-2 h-2 rounded-full bg-[#C9A84C] mr-2 shadow-sm animate-pulse"></span> Grow your wealth the halal way
         </p>
       </div>
 
@@ -157,14 +157,14 @@
         </button>
 
         <!-- Client Profile Pill -->
-        <div
+        <div routerLink="/client/profile"
           class="flex items-center bg-[#1B4332] p-1.5 rounded-2xl shadow-xl shadow-[#0d1a0f]/10 group cursor-pointer border border-white/10 hover:border-[#C9A84C] transition-all">
           <div
             class="w-8 lg:w-9 h-8 lg:h-9 bg-[#C9A84C] rounded-xl flex items-center justify-center font-black text-[#1B4332]">
-            AB
+            {{ userInitials() }}
           </div>
           <div class="px-3 hidden md:block">
-            <p class="text-[11px] font-black text-white leading-none uppercase tracking-tighter">Ado Bayero</p>
+            <p class="text-[11px] font-black text-white leading-none uppercase tracking-tighter">{{ userName() }}</p>
             <p class="text-[10px] font-bold text-[#C9A84C]/50 leading-none mt-1">₦4.2M Portfolio</p>
           </div>
         </div>

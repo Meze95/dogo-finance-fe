@@ -1,6 +1,6 @@
 import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SettingsService, UserProfile, NextOfKin, BankAccount } from './settings.service';
+import { SettingsService, UserProfile, NextOfKin, BankAccount, Bank } from './settings.service';
 import { BadgeComponent } from '../../../shared/components/ui/badge.component';
 import { ButtonComponent } from '../../../shared/components/ui/button.component';
 import { CardComponent } from '../../../shared/components/ui/card.component';
@@ -48,24 +48,57 @@ export class SettingsComponent {
   isVerificationSuccess = signal(false);
 
   // --- Bank Accounts State ---
-  bankAccounts = signal<BankAccount[]>([
-    { id: '1', bankName: 'Guaranty Trust Bank', bankCode: '058', accountNumber: '0123456789' },
-    { id: '2', bankName: 'Zenith Bank', bankCode: '057', accountNumber: '2123456789' }
-  ]);
+  bankAccounts = signal<BankAccount[]>([]);
+  availableBanks = signal<Bank[]>([]);
+  bankSearchQuery = signal('');
   isAddingBank = signal(false);
   isSavingBank = signal(false);
-  newBankForm = signal<Partial<BankAccount>>({ bankName: '', bankCode: '', accountNumber: '' });
+  newBankForm = signal<Partial<BankAccount>>({ bankId: 0, accountNumber: '', accountName: '' });
+  showBankPicker = signal(false);
+
+  filteredBanks = () => {
+    const query = this.bankSearchQuery().toLowerCase();
+    return this.availableBanks().filter(b => b.bankName.toLowerCase().includes(query));
+  };
+
+  selectedBank = () => this.availableBanks().find(b => b.bankId === this.newBankForm().bankId);
+
+  constructor() {
+    this.loadBanks();
+    this.loadMyBanks();
+    this.loadNextOfKin();
+  }
+
+  loadNextOfKin() {
+    this.settingsService.getNextOfKin().subscribe(res => {
+      if (res.data) this.nextOfKin.set(res.data);
+    });
+  }
+
+  loadBanks() {
+    this.settingsService.getBanks().subscribe(res => {
+      if (res.data) this.availableBanks.set(res.data);
+    });
+  }
+
+  loadMyBanks() {
+    this.settingsService.getMyBanks().subscribe(res => {
+      if (res.data) this.bankAccounts.set(res.data);
+    });
+  }
+
+  loadRelationshipTypes() {
+    this.settingsService.getRelationshipTypes().subscribe(res => {
+      if (res.data) this.relationships.set(res.data);
+    });
+  }
 
   // --- Wealth Legacy State (Next of Kin) ---
   isEditingKin = signal(false);
   isUpdatingKin = signal(false);
-  nextOfKin = signal<NextOfKin | null>({
-    fullName: 'Aishat Bayero',
-    relationship: 'Wife',
-    email: 'aishat@example.com',
-    phone: '080 123 4567'
-  });
+  nextOfKin = signal<NextOfKin | null>(null);
   editKinForm = signal<Partial<NextOfKin>>({});
+  relationships = signal<string[]>([]);
 
   // --- Security State ---
   isTwoFactorEnabled = signal(false);
@@ -183,7 +216,9 @@ export class SettingsComponent {
 
   // --- Bank Actions ---
   startAddBank() {
-    this.newBankForm.set({ bankName: '', bankCode: '', accountNumber: '' });
+    this.newBankForm.set({ bankId: 0, accountNumber: '', accountName: this.userProfile().firstName + ' ' + this.userProfile().lastName });
+    this.bankSearchQuery.set('');
+    this.showBankPicker.set(false);
     this.isAddingBank.set(true);
   }
 
@@ -191,17 +226,18 @@ export class SettingsComponent {
     this.isAddingBank.set(false);
   }
 
+  selectBank(bank: Bank) {
+    this.newBankForm.set({ ...this.newBankForm(), bankId: bank.bankId });
+    this.showBankPicker.set(false);
+  }
+
   saveBank() {
     this.isSavingBank.set(true);
-    const bank = this.newBankForm() as BankAccount;
-    const bankNames: any = { '044': 'Access Bank', '058': 'Guaranty Trust Bank', '033': 'United Bank for Africa', '057': 'Zenith Bank', '011': 'First Bank of Nigeria' };
-    bank.bankName = bankNames[bank.bankCode] || 'Unknown Bank';
+    const bank = this.newBankForm();
 
     this.settingsService.addBankAccount(bank).subscribe({
       next: (res) => {
-        if(res.data) {
-          this.bankAccounts.update(banks => [...banks, res.data as BankAccount]);
-        }
+        this.loadMyBanks();
         this.isAddingBank.set(false);
         this.isSavingBank.set(false);
       },
@@ -209,13 +245,20 @@ export class SettingsComponent {
     });
   }
 
-  deleteBank(id: string) {
+  deleteBank(id: number) {
     this.settingsService.deleteBankAccount(id).subscribe(() => {
-      this.bankAccounts.update(banks => banks.filter(b => b.id !== id));
+      this.loadMyBanks();
     });
   }
 
-  updateBankField(field: keyof BankAccount, value: string) {
+  setDefaultBank(id: number) {
+    this.settingsService.setDefaultBank(id).subscribe(() => {
+      this.loadMyBanks();
+    });
+  }
+
+  updateBankField(field: keyof BankAccount, value: any) {
+    if (field === 'bankId') value = parseInt(value);
     this.newBankForm.set({ ...this.newBankForm(), [field]: value });
   }
 
