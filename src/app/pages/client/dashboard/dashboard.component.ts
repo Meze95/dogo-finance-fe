@@ -1,5 +1,6 @@
 import { Component, signal, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../shared/services/auth.service';
 import { CustomerService } from '../../../shared/services/customer.service';
 
@@ -23,7 +24,7 @@ export interface InvestmentStub {
 @Component({
   selector: 'app-client-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -39,9 +40,16 @@ export class ClientDashboardComponent implements OnInit {
     return u?.firstName ? `${u.firstName} ${u.lastName}` : 'Dogo User';
   });
 
-  totalPortfolio = signal(4250000);
   availableNaira = signal(150240);
   hideBalances = signal(false); // New Privacy Signal
+
+  totalActiveInvestment = computed(() => {
+    return this.activeInvestments().reduce((acc, curr) => acc + curr.value, 0);
+  });
+
+  totalPortfolioValue = computed(() => {
+    return this.totalActiveInvestment() + this.availableNaira();
+  });
 
   activeInvestments = signal<InvestmentStub[]>([
     { label: 'Mudarabah Fund', value: 1200000, growth: 12.5, icon: 'ri-seedling-line', color: 'bg-[#1B4332]' },
@@ -304,6 +312,24 @@ export class ClientDashboardComponent implements OnInit {
       case 'withdrawal': return 'ri-arrow-up-circle-fill text-red-500';
       case 'profit': return 'ri-medal-fill text-[#C9A84C]';
       default: return 'ri-briefcase-4-fill text-blue-500';
+    }
+  }
+
+  getIconForTypeSingle(type: string) {
+    switch (type) {
+      case 'deposit': return 'ri-arrow-down-circle-fill';
+      case 'withdrawal': return 'ri-arrow-up-circle-fill';
+      case 'profit': return 'ri-medal-fill';
+      default: return 'ri-briefcase-4-fill';
+    }
+  }
+
+  getIconBgColor(type: string) {
+    switch (type) {
+      case 'deposit': return 'bg-green-500';
+      case 'withdrawal': return 'bg-red-500';
+      case 'profit': return 'bg-[#C9A84C]';
+      default: return 'bg-blue-500';
     }
   }
 }

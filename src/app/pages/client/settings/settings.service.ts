@@ -108,9 +108,6 @@ export class SettingsService {
     return this.http.post<ApiResponse>(`${this.apiUrl}/Auth/pin/change`, pinData);
   }
 
-  updateLoginPin(pinData: TransactionPinUpdate) {
-    return this.http.post<ApiResponse>(`${this.apiUrl}/Auth/change-password`, { oldPassword: pinData.oldPin, newPassword: pinData.newPin });
-  }
 
   updateTwoFactorAuth(enabled: boolean) {
     return this.http.post<ApiResponse>(`${this.apiUrl}/Auth/2fa/toggle?status=${enabled}`, {});

@@ -7,6 +7,7 @@ import { BlogDetailComponent } from './pages/resources/blog-detail/blog-detail.c
 import { CalculatorComponent } from './pages/resources/calculator/calculator.component';
 import { ReportsComponent } from './pages/resources/reports/reports.component';
 import { EbookComponent } from './pages/resources/ebook/ebook.component';
+import { authGuard } from './shared/guards/auth.guard';
 
 export const routes: Routes = [
   // ---- AUTHENTICATION (Standalone Full Page Layouts) ----
@@ -34,6 +35,7 @@ export const routes: Routes = [
   // ---- CLIENT DASHBOARD (Secured Layout) ----
   {
     path: 'client',
+    canActivate: [authGuard],
     loadComponent: () => import('./layouts/client-layout/client-layout').then(m => m.ClientLayout),
     children: [
        { path: 'dashboard', loadComponent: () => import('./pages/client/dashboard/dashboard.component').then(m => m.ClientDashboardComponent) },
