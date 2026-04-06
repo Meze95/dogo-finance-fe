@@ -28,20 +28,19 @@
   </div>
 
   <!-- Main Dashboard Grid -->
-  <div class="grid xl:grid-cols-4 gap-8">
+  <div class="grid xl:grid-cols-1 gap-8">
     
-    <!-- Left 3 Columns: Main Stats & Assets -->
-    <div class="xl:col-span-3 space-y-8">
+    <!-- Main Content Column -->
+    <div class="space-y-8">
       
       <!-- Stats Row -->
       <div class="grid md:grid-cols-3 gap-6">
-        <!-- Total Portfolio -->
         <div class="bg-[#1B4332] rounded-[40px] p-8 text-white relative shadow-2xl shadow-[#1B4332]/20 group border border-white/10 overflow-hidden">
            <div class="absolute inset-0 dogo-pattern opacity-[0.05]"></div>
            <div class="relative z-10">
               <span class="text-[9px] font-black uppercase tracking-[0.3em] text-[#C9A84C]/80 block mb-6">Total Portfolio Value</span>
               <h2 class="text-4xl font-black tracking-tighter mb-4 leading-none">
-                {{ hideBalances() ? '••••••••' : '₦' + (totalPortfolio() | number) }}
+                {{ hideBalances() ? '••••••••' : '₦' + (totalPortfolioValue() | number) }}
               </h2>
               <div class="flex items-center text-xs font-bold text-green-400">
                 <i class="ri-arrow-right-up-line"></i> +12.5% vs Last Quarter
@@ -50,13 +49,13 @@
            <div class="absolute bottom-6 right-8 text-white/5 text-7xl"><i class="ri-pie-chart-2-fill"></i></div>
         </div>
 
-        <!-- Profit Tracking -->
+        <!-- Active Investment -->
         <div class="bg-white rounded-[40px] p-8 border border-[#1B4332]/5 shadow-sm group hover:shadow-xl transition-all relative overflow-hidden">
-           <span class="text-[9px] font-black uppercase tracking-[0.3em] text-[#1B4332]/40 block mb-6 px-1">Active Profits</span>
+           <span class="text-[9px] font-black uppercase tracking-[0.3em] text-[#1B4332]/40 block mb-6 px-1">Active Running Investment</span>
            <h2 class="text-4xl font-black tracking-tighter mb-4 leading-none text-[#1B4332]">
-              {{ hideBalances() ? '••••••' : '₦' + (totalGrowth() | number) }}
+              {{ hideBalances() ? '••••••' : '₦' + (totalActiveInvestment() | number) }}
            </h2>
-           <span class="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest px-1">Waiting for disbursement</span>
+           <span class="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest px-1">Diversified Growth Assets</span>
            <div class="absolute bottom-6 right-8 text-[#1B4332]/5 text-6xl group-hover:scale-110 transition-transform"><i class="ri-medal-fill"></i></div>
         </div>
 
@@ -82,92 +81,58 @@
         <div class="overflow-x-auto pb-10 mb-2 custom-scrollbar-h relative z-20">
         <div class="flex gap-6 p-1">
           @for(step of nextSteps(); track step.title) {
-            <div (click)="openModal(step)" class="flex-shrink-0 w-full md:w-[325px] group bg-white p-6 rounded-[32px] border border-[#1B4332]/5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer">
-               <div class="w-12 h-12 bg-[#f8f7f2] rounded-2xl flex items-center justify-center text-2xl text-[#1B4332] mb-6 group-hover:bg-[#1B4332] group-hover:text-white transition-colors">
-                 <i [class]="step.icon"></i>
+            <div (click)="openModal(step)" class="flex-shrink-0 w-full md:w-[325px] group bg-white px-6 py-5 rounded-[32px] border border-[#1B4332]/5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer relative overflow-hidden">
+               <h4 class="font-black text-sm text-[#0d1a0f] mb-1 translate-y-1">{{ step.title }}</h4>
+               <p class="text-xs font-medium text-[#6B7280] mb-8 translate-y-1">{{ step.desc }}</p>
+               
+               <div class="flex items-center justify-between mt-auto">
+                 <button class="text-[10px] font-black uppercase tracking-[0.2em] text-[#C9A84C] flex items-center group-hover:text-[#1B4332]">
+                    {{ step.action }} <i class="ri-arrow-right-line ml-1 transition-transform group-hover:translate-x-1"></i>
+                 </button>
+                 
+                 <div class="w-12 h-12 bg-[#f8f7f2] rounded-2xl flex items-center justify-center text-2xl text-[#1B4332] group-hover:bg-[#1B4332] group-hover:text-white transition-all shadow-sm">
+                   <i [class]="step.icon"></i>
+                 </div>
                </div>
-               <h4 class="font-black text-sm text-[#0d1a0f] mb-1">{{ step.title }}</h4>
-               <p class="text-xs font-medium text-[#6B7280] mb-6">{{ step.desc }}</p>
-               <button class="text-[10px] font-black uppercase tracking-[0.2em] text-[#C9A84C] flex items-center group-hover:text-[#1B4332]">
-                  {{ step.action }} <i class="ri-arrow-right-line ml-1 transition-transform group-hover:translate-x-1"></i>
-               </button>
             </div>
           }
         </div>
       </div>
     }
 
-      <!-- Portfolio Breakdown Table (Modern Styled) -->
+      <!-- Portfolio Breakdown Table (Recent Transactions) -->
       <div class="bg-white p-10 rounded-[50px] border border-[#1B4332]/5 shadow-sm">
         <div class="flex items-center justify-between mb-10">
-           <h3 class="text-xl font-black text-[#0d1a0f] uppercase tracking-tighter italic">Investment Distribution</h3>
-           <button class="text-[10px] font-black uppercase tracking-widest text-[#C9A84C] flex items-center">Generate Report <i class="ri-download-2-line ml-2"></i></button>
+           <h3 class="text-xl font-black text-[#0d1a0f] uppercase tracking-tighter italic">Recent Transactions</h3>
+           <button routerLink="/client/transactions" class="px-6 py-3 bg-[#f8f7f2] hover:bg-[#1B4332] hover:text-white text-[#1B4332] text-[10px] font-black uppercase tracking-widest rounded-xl transition-all flex items-center shadow-sm">
+              View All <i class="ri-arrow-right-line ml-2"></i>
+           </button>
         </div>
 
         <div class="space-y-4">
-           @for(asset of activeInvestments(); track asset.label) {
+           @for(tx of recentTransactions().slice(0, 5); track tx.id) {
              <div class="flex items-center justify-between p-6 bg-[#f8f7f2] rounded-[32px] border border-[#1B4332]/5 hover:bg-white hover:shadow-lg transition-all">
                 <div class="flex items-center space-x-5">
-                   <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-white" [class]="asset.color">
-                      <i [class]="asset.icon" class="text-xl"></i>
+                   <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-white" [class]="getIconBgColor(tx.type)">
+                      <i [class]="getIconForTypeSingle(tx.type)" class="text-xl"></i>
                    </div>
                    <div>
-                      <p class="font-black text-[#0d1a0f] text-sm">{{ asset.label }}</p>
-                      <p class="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest">Shariah Tier 1 Portfolio</p>
+                      <p class="font-black text-[#0d1a0f] text-sm">{{ tx.description }}</p>
+                      <p class="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest">{{ tx.date }}</p>
                    </div>
                 </div>
                 <div class="text-right">
-                   <p class="text-sm font-black text-[#0d1a0f]">₦{{ asset.value | number }}</p>
-                   <p class="text-[10px] font-black uppercase tracking-widest mt-0.5" [class]="asset.growth >= 0 ? 'text-green-500' : 'text-red-500'">
-                      ROI: {{ asset.growth }}%
+                   <p class="text-sm font-black" [class]="tx.type === 'deposit' || tx.type === 'profit' ? 'text-green-600' : 'text-[#0d1a0f]'">
+                      {{ tx.type === 'deposit' || tx.type === 'profit' ? '+' : '-' }}₦{{ tx.amount | number }}
+                   </p>
+                   <p class="text-[10px] font-black uppercase tracking-widest mt-0.5 opacity-40">
+                      {{ tx.status }}
                    </p>
                 </div>
              </div>
            }
         </div>
       </div>
-    </div>
-
-    <!-- Right Sidebar Column: Recent Activities & Info -->
-    <div class="xl:col-span-1 space-y-8">
-       <!-- Activity Log (As seen in Piggyvest but cleaner) -->
-       <div class="bg-white p-8 rounded-[40px] border border-[#1B4332]/5 shadow-sm flex flex-col h-fit">
-          <div class="flex items-center justify-between mb-8">
-             <h3 class="text-lg font-black text-[#0d1a0f] tracking-tight">Activities</h3>
-             <i class="ri-more-2-fill text-[#6B7280] opacity-30 cursor-pointer"></i>
-          </div>
-
-          <div class="space-y-8 min-h-[400px]">
-             @for(tx of recentTransactions(); track tx.id) {
-               <div class="flex items-start space-x-4 group/item cursor-pointer">
-                  <div class="w-10 h-10 shrink-0 bg-[#f8f7f2] border border-[#1B4332]/5 rounded-xl flex items-center justify-center transition-colors group-hover/item:bg-[#1B4332] group-hover/item:text-white">
-                     <i [class]="getIconForType(tx.type)" class="text-xl"></i>
-                  </div>
-                  <div class="flex-grow pt-0.5">
-                     <div class="flex items-start justify-between">
-                        <p class="text-[13px] font-bold text-[#0d1a0f] leading-snug group-hover/item:text-[#C9A84C] transition-colors">{{ tx.description }}</p>
-                        <span class="text-[11px] font-black ml-2">₦{{ tx.amount | number }}</span>
-                     </div>
-                     <p class="text-[11px] font-bold text-[#6B7280] uppercase tracking-widest mt-1 opacity-50">{{ tx.date }}</p>
-                  </div>
-               </div>
-             }
-          </div>
-
-          <button class="w-full mt-10 py-4 bg-[#f8f7f2] hover:bg-[#1B4332] hover:text-white text-[#1B4332] text-[10px] font-black uppercase tracking-widest rounded-2xl transition-all">Full Transaction Log</button>
-       </div>
-
-       <!-- Dogo Knowledge Mini Card -->
-       <div class="bg-gradient-to-br from-[#1B4332] to-[#0d1a0f] p-8 rounded-[40px] text-white overflow-hidden relative group">
-          <div class="absolute inset-0 dogo-pattern opacity-10"></div>
-          <div class="relative z-10">
-             <i class="ri-book-read-line text-4xl text-[#C9A84C] mb-6"></i>
-             <h4 class="text-xl font-black mb-4 tracking-tighter">Halal Finance Library</h4>
-             <p class="text-white/50 text-xs font-medium leading-relaxed mb-6">Understand Mudarabah and the power of ethical wealth building through our knowledge base.</p>
-             <button class="w-full py-3 bg-[#C9A84C] text-[#1B4332] font-black text-[11px] uppercase tracking-widest rounded-xl hover:bg-white hover:-translate-y-1 transition-all">Explore Resources</button>
-          </div>
-       </div>
-
     </div>
   </div>
 </div>

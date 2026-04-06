@@ -10,7 +10,8 @@ export type CardVariant = 'light' | 'dark' | 'gold' | 'flat';
   template: `
     <div 
       [class]="cardClasses()" 
-      class="rounded-[40px] p-8 relative overflow-hidden transition-all duration-400 group"
+      [class.overflow-hidden]="clip()"
+      class="rounded-[40px] p-8 relative transition-all duration-400 group"
     >
       @if (variant() !== 'flat') {
         <div class="absolute inset-0 dogo-pattern opacity-[0.05] pointer-events-none group-hover:opacity-[0.1] transition-opacity duration-500"></div>
@@ -59,6 +60,7 @@ export class CardComponent {
   subtitle = input<string>('');
   icon = input<string>('');
   variant = input<CardVariant>('light');
+  clip = input<boolean>(true);
 
   cardClasses = computed(() => {
     switch (this.variant()) {

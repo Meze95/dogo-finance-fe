@@ -1,6 +1,6 @@
 import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../shared/services/auth.service';
 import { UserRole } from '../../../shared/models/user-role.enum';
@@ -15,6 +15,7 @@ import { UserRole } from '../../../shared/models/user-role.enum';
 export class LoginComponent {
   private fb = inject(FormBuilder);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private authService = inject(AuthService);
   
   loginForm: FormGroup;
@@ -42,7 +43,9 @@ export class LoginComponent {
         next: (response) => {
           this.isProcessing.set(false);
           if (response.success || response.boolean) {
+            const user = response.data;
             // Save the user data to AuthService session
+<<<<<<< HEAD
             this.authService.setCurrentUser(response.data);
             
             // Redirect based on role
@@ -53,6 +56,21 @@ export class LoginComponent {
               this.router.navigate(['/admin/dashboard']);
             } else {
               this.router.navigate(['/client/dashboard']);
+=======
+            this.authService.setCurrentUser(user);
+            
+            // Handle role-based redirection
+            const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+            if (returnUrl) {
+              this.router.navigateByUrl(returnUrl);
+            } else {
+              // Standard dashboard redirection
+              if (user.role === 'Customer') {
+                this.router.navigate(['/client/dashboard']);
+              } else {
+                this.router.navigate(['/admin/dashboard']);
+              }
+>>>>>>> 2ab10c8614f1ad43afb44cc83d45124ae09f0391
             }
           } else {
             this.errorMessage.set(response.message || 'Login failed');

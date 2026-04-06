@@ -99,16 +99,12 @@ export class SettingsComponent {
   nextOfKin = signal<NextOfKin | null>(null);
   editKinForm = signal<Partial<NextOfKin>>({});
   relationships = signal<string[]>([]);
+  showRelationshipPicker = signal(false);
 
   // --- Security State ---
   isTwoFactorEnabled = signal(false);
   isUpdatingTwoFactor = signal(false);
 
-  isEditingLoginPin = signal(false);
-  isUpdatingLoginPin = signal(false);
-  hasLoginPin = signal(true);
-  loginPinForm = signal({ oldPin: '', newPin: '', confirmPin: '' });
-  loginPinError = signal('');
 
   isEditingPin = signal(false);
   isUpdatingPin = signal(false);
@@ -274,6 +270,7 @@ export class SettingsComponent {
 
   cancelEditKin() {
     this.isEditingKin.set(false);
+    this.showRelationshipPicker.set(false);
   }
 
   saveKin() {
@@ -313,48 +310,6 @@ export class SettingsComponent {
     });
   }
 
-  // Login PIN
-  startEditLoginPin() {
-    this.loginPinForm.set({ oldPin: '', newPin: '', confirmPin: '' });
-    this.loginPinError.set('');
-    this.isEditingLoginPin.set(true);
-  }
-  cancelEditLoginPin() {
-    this.isEditingLoginPin.set(false);
-    this.loginPinError.set('');
-  }
-  updateLoginPinField(field: 'oldPin' | 'newPin' | 'confirmPin', value: string) {
-    this.loginPinForm.set({ ...this.loginPinForm(), [field]: value.replace(/[^0-9]/g, '') });
-  }
-  saveLoginPin() {
-    const form = this.loginPinForm();
-    if (this.hasLoginPin() && !form.oldPin) {
-      this.loginPinError.set('Current PIN is required');
-      return;
-    }
-    if (form.newPin.length !== 6 || form.confirmPin.length !== 6) {
-      this.loginPinError.set('PIN must be exactly 6 digits');
-      return;
-    }
-    if (form.newPin !== form.confirmPin) {
-      this.loginPinError.set('New and Confirm PIN do not match');
-      return;
-    }
-
-    this.isUpdatingLoginPin.set(true);
-    this.loginPinError.set('');
-    this.settingsService.updateLoginPin({
-      oldPin: this.hasLoginPin() ? form.oldPin : undefined,
-      newPin: form.newPin
-    }).subscribe({
-      next: () => {
-        this.hasLoginPin.set(true);
-        this.isEditingLoginPin.set(false);
-        this.isUpdatingLoginPin.set(false);
-      },
-      error: () => this.isUpdatingLoginPin.set(false)
-    });
-  }
 
   // Transaction PIN
   startEditPin() {
