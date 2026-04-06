@@ -4,6 +4,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Observable, tap } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
+import { UserRole } from '../models/user-role.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,13 @@ export class AuthService {
   private apiUrl = environment.apiUrl;
   
   currentUser = signal<any>(this.getUserFromStorage());
+
+  hasRole(roles: UserRole[]): boolean {
+    const user = this.currentUser();
+    if (!user) return false;
+    const userRole = user.role || user.Role || user.userRole || user.UserRole;
+    return roles.includes(userRole as UserRole);
+  }
 
   signUp(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/Customer/signup`, data);

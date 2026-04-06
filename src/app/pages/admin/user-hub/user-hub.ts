@@ -1,6 +1,7 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AdminService } from '../../../shared/services/admin.service';
 
 interface User {
   id: string;
@@ -21,13 +22,59 @@ interface User {
   templateUrl: './user-hub.html',
   styleUrl: './user-hub.css',
 })
-export class UserHub {
-  users = signal<User[]>([
-    { id: '1', firstName: 'Kabir', lastName: 'Ademola', email: 'kabir@dogofinance.com', phone: '08012345678', role: 'Super Admin', status: 'Verified', accountStatus: 'Active', dateJoined: '01/10/2026' },
-    { id: '2', firstName: 'Fatima', lastName: 'Yusuf', email: 'f.yusuf@dogofinance.com', phone: '08123456789', role: 'Compliance Officer', status: 'Verified', accountStatus: 'Active', dateJoined: '02/14/2026' },
-    { id: '3', firstName: 'Chukwudi', lastName: 'Eze', email: 'c.eze@dogofinance.com', phone: '09012345678', role: 'Investment Manager', status: 'Unverified', accountStatus: 'Active', dateJoined: '02/20/2026' },
-    { id: '4', firstName: 'Aisha', lastName: 'Bello', email: 'a.bello@dogofinance.com', phone: '07012345678', role: 'Support Agent', status: 'Verified', accountStatus: 'Locked', dateJoined: '03/05/2026' }
-  ]);
+export class UserHub implements OnInit {
+  private adminService = inject(AdminService);
+  
+  users = signal<User[]>([]);
+  allRoles = signal<any[]>([]);
+  isProcessing = signal(false);
+
+  ngOnInit() {
+    this.loadAdmins();
+    this.loadRoles();
+  }
+
+  loadRoles() {
+    this.adminService.getRoles().subscribe({
+      next: (res) => {
+        // Standardize keys to lowercase for the frontend
+        const normalizedRoles = (res.data || []).map((r: any) => ({
+          id: r.id || r.Id || r.ID,
+          name: r.name || r.Name
+        }));
+        console.log('Normalized Roles:', normalizedRoles);
+        this.allRoles.set(normalizedRoles);
+      },
+      error: (err) => console.error('Failed to load roles', err)
+    });
+  }
+
+  loadAdmins() {
+    this.isProcessing.set(true);
+    this.adminService.getAdmins().subscribe({
+      next: (res) => {
+        const rawData = res.data || [];
+        console.log('Raw Admin Data:', rawData);
+
+        // Map backend TblUser properties to frontend User interface
+        const mappedUsers: User[] = rawData.map((u: any) => ({
+          id: String(u.userId || u.UserId),
+          firstName: u.firstName || u.FirstName || '',
+          lastName: u.lastName || u.LastName || '',
+          email: u.email || u.Email || '',
+          phone: u.phoneNumber || u.PhoneNumber || '',
+          role: u.role || (u.tblUserRoles?.[0]?.role?.name) || 'Admin', // Fallback
+          status: u.isActive === false ? 'Unverified' : 'Verified',
+          accountStatus: u.isLocked === true || u.isActive === false ? 'Locked' : 'Active',
+          dateJoined: u.createdAt || u.CreatedAt ? new Date(u.createdAt || u.CreatedAt).toLocaleDateString() : ''
+        }));
+
+        this.users.set(mappedUsers);
+        this.isProcessing.set(false);
+      },
+      error: () => this.isProcessing.set(false)
+    });
+  }
 
   searchQuery = signal('');
 
@@ -43,8 +90,6 @@ export class UserHub {
     );
   });
 
-  roles = ['Super Admin', 'Compliance Officer', 'Investment Manager', 'Support Agent'];
-
   // Modals state
   isModalOpen = signal(false);
   isDeleteModalOpen = signal(false);
@@ -54,8 +99,7 @@ export class UserHub {
   // Custom Dropdown State
   isRoleDropdownOpen = signal(false);
 
-  // Loading states
-  isProcessing = signal(false);
+  // Other state
   resendingMap = signal<Record<string, boolean>>({});
 
   // Form State
@@ -64,7 +108,7 @@ export class UserHub {
     lastName: '',
     email: '',
     phone: '',
-    role: 'Support Agent'
+    role: ''
   });
 
   openModal(user?: User) {
@@ -79,7 +123,7 @@ export class UserHub {
       });
     } else {
       this.editingUser.set(null);
-      this.userForm.set({ firstName: '', lastName: '', email: '', phone: '', role: 'Support Agent' });
+      this.userForm.set({ firstName: '', lastName: '', email: '', phone: '', role: '' });
     }
     this.isRoleDropdownOpen.set(false);
     this.isModalOpen.set(true);
@@ -95,6 +139,7 @@ export class UserHub {
   }
 
   selectRole(role: string) {
+    console.log('Selected Role:', role);
     this.userForm.update(form => ({ ...form, role }));
     this.isRoleDropdownOpen.set(false);
   }
@@ -105,31 +150,51 @@ export class UserHub {
 
     this.isProcessing.set(true);
 
-    setTimeout(() => {
-      const currentEditing = this.editingUser();
-      
-      if (currentEditing) {
-        this.users.update(draft => 
-          draft.map(u => u.id === currentEditing.id ? { ...u, firstName: form.firstName, lastName: form.lastName, email: form.email, phone: form.phone, role: form.role } : u)
-        );
-      } else {
-        const newUser: User = {
-          id: Math.random().toString(36).substring(2, 9),
-          firstName: form.firstName,
-          lastName: form.lastName,
-          email: form.email,
-          phone: form.phone,
-          role: form.role,
-          status: 'Unverified',
-          accountStatus: 'Active',
-          dateJoined: new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })
-        };
-        this.users.update(draft => [...draft, newUser]);
-      }
+    // Find Role ID (Case-insensitive)
+    const selectedRole = this.allRoles().find(r => 
+      String(r.name).toLowerCase().trim() === String(form.role).toLowerCase().trim()
+    );
+    const roleId = selectedRole?.id || 2; // Default to Admin if not found
 
-      this.isProcessing.set(false);
-      this.closeModal();
-    }, 800);
+    const request = {
+      userData: {
+        firstName: form.firstName,
+        lastName: form.lastName,
+        email: form.email,
+        phoneNumber: form.phone,
+        password: "StaffPass1234!", // Dummy to pass backend validation, backend will use its own default
+        confirmPassword: "StaffPass1234!",
+        dateOfBirth: "2000-01-01" // Dummy for staff
+      },
+      roleId: roleId
+    };
+
+    const currentEditing = this.editingUser();
+    if (currentEditing) {
+      this.adminService.updateAdmin(currentEditing.id, request).subscribe({
+        next: (res) => {
+          this.isProcessing.set(false);
+          this.loadAdmins();
+          this.closeModal();
+        },
+        error: (err) => {
+          this.isProcessing.set(false);
+          console.error('Failed to update user', err);
+        }
+      });
+    } else {
+      this.adminService.createAdmin(request).subscribe({
+        next: (res) => {
+          this.isProcessing.set(false);
+          this.loadAdmins();
+          this.closeModal();
+        },
+        error: (err) => {
+          this.isProcessing.set(false);
+          console.error('Failed to save user', err);
+        }
+      });
+    }
   }
 
   confirmDelete(id: string) {

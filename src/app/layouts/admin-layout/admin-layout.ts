@@ -67,7 +67,7 @@ export class AdminLayout {
     // Give a short delay for the UI animation
     setTimeout(() => {
       this.isLoggingOut.set(false);
-      this.router.navigate(['/login']);
+      this.router.navigate(['/admin/login']);
     }, 1800);
   }
 }

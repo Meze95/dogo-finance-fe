@@ -1,4 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -6,13 +6,13 @@ import { AuthService } from '../../../shared/services/auth.service';
 import { UserRole } from '../../../shared/models/user-role.enum';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-admin-login',
   standalone: true,
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  templateUrl: './admin-login.component.html',
+  styleUrl: './admin-login.component.css'
 })
-export class LoginComponent {
+export class AdminLoginComponent implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private authService = inject(AuthService);
@@ -29,6 +29,17 @@ export class LoginComponent {
     });
   }
 
+  ngOnInit() {
+    // Check if already logged in as staff
+    const user = this.authService.currentUser();
+    if (user) {
+       const role = user.role || user.Role || user.userRole;
+       if (role === UserRole.Admin || role === UserRole.SuperAdmin) {
+          this.router.navigate(['/admin/dashboard']);
+       }
+    }
+  }
+
   togglePassword() {
     this.showPassword.set(!this.showPassword());
   }
@@ -41,26 +52,21 @@ export class LoginComponent {
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
           this.isProcessing.set(false);
-          if (response.success || response.boolean) {
-            // Save the user data to AuthService session
-            this.authService.setCurrentUser(response.data);
-            
-            // Redirect based on role
-            const user = response.data;
-            const role = user.role || user.Role || user.userRole || user.UserRole;
-            
-            if (role === UserRole.Admin || role === UserRole.SuperAdmin) {
-              this.router.navigate(['/admin/dashboard']);
-            } else {
-              this.router.navigate(['/client/dashboard']);
-            }
+          const user = response.data;
+          const role = user.role || user.Role || user.userRole || user.UserRole;
+
+          // STRICT STAFF CHECK: Only Admin/SuperAdmin can login via this page
+          if (role === UserRole.Admin || role === UserRole.SuperAdmin) {
+            this.authService.setCurrentUser(user);
+            this.router.navigate(['/admin/dashboard']);
           } else {
-            this.errorMessage.set(response.message || 'Login failed');
+            this.errorMessage.set('Unauthorized! Please use the customer login terminal.');
+            this.authService.logout();
           }
         },
         error: (err) => {
           this.isProcessing.set(false);
-          this.errorMessage.set(err.error?.message || 'Access denied: Invalid email or password');
+          this.errorMessage.set(err.error?.message || 'Access denied: Invalid staff credentials');
         }
       });
     } else {

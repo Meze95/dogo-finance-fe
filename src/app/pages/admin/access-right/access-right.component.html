@@ -37,10 +37,10 @@
                   <div class="truncate">
                       <h4 class="font-black tracking-tight text-sm uppercase transition-colors"
                           [ngClass]="activeModuleIndex() === i ? 'text-white' : 'text-[#0d1a0f]'">{{ module.name }}</h4>
-                      <!-- Short preview of how many sub-groups there are -->
+                      <!-- Short preview of how many permissions -->
                       <p class="text-[10px] font-bold tracking-widest uppercase mt-0.5"
                          [ngClass]="activeModuleIndex() === i ? 'text-[#C9A84C]' : 'text-slate-400'">
-                         {{ module.groups.length }} Config Group(s)
+                         {{ module.permissions.length }} Permission(s)
                       </p>
                   </div>
               </div>
@@ -65,29 +65,18 @@
                 </div>
              </div>
 
-             <!-- Pane Body: Grouped Permissions -->
+             <!-- Pane Body: Permissions -->
              <div class="px-10 py-8 space-y-10 custom-scrollbar overflow-y-auto">
-                 @for(group of activeModule.groups; track group.groupName) {
-                 <div>
-                    <h5 class="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 mb-5 flex items-center gap-4">
-                        <span class="w-6 border-b-2 border-[#C9A84C]"></span>
-                        {{ group.groupName }}
-                        <span class="flex-grow border-b border-dashed border-slate-200"></span>
-                    </h5>
-                    
-                    <!-- Dynamic Flex Wrap Container for checkboxes. This auto-flows gracefully regardless of count. -->
-                    <div class="flex flex-wrap gap-x-8 gap-y-5">
-                       @for(perm of group.permissions; track perm.label) {
-                       <label class="flex items-center gap-3 cursor-pointer select-none group/checkbox relative">
-                           <div class="relative flex items-center">
-                               <input type="checkbox" [(ngModel)]="perm.selected" [ngClass]="perm.checkboxClass" class="w-6 h-6 rounded-lg border-2 border-slate-200 focus:ring-0 focus:ring-offset-0 transition-colors cursor-pointer" />
-                           </div>
-                           <span class="text-[11px] font-black uppercase tracking-widest text-slate-500 transition-colors" [ngClass]="perm.textHoverClass">{{ perm.label }}</span>
-                       </label>
-                       }
-                    </div>
-                 </div>
-                 }
+                  <div class="flex flex-wrap gap-x-8 gap-y-5">
+                     @for(perm of activeModule.permissions; track perm.id) {
+                     <label class="flex items-center gap-3 cursor-pointer select-none group/checkbox relative">
+                         <div class="relative flex items-center">
+                             <input type="checkbox" [(ngModel)]="perm.isSelected" [ngClass]="perm.checkboxClass" class="w-6 h-6 rounded-lg border-2 border-slate-200 focus:ring-0 focus:ring-offset-0 transition-colors cursor-pointer" />
+                         </div>
+                         <span class="text-[11px] font-black uppercase tracking-widest text-slate-500 transition-colors" [ngClass]="perm.textHoverClass">{{ perm.label }}</span>
+                     </label>
+                     }
+                  </div>
              </div>
              
          </div>

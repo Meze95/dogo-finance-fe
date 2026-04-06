@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { roleGuard } from './shared/guards/role.guard';
+import { UserRole } from './shared/models/user-role.enum';
 import { HomeLayout } from './layouts/home-layout/home-layout';
 import { LandingComponent } from './pages/landing/landing.component';
 import { FAQComponent } from './pages/faq/faq.component';
@@ -13,6 +15,10 @@ export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () => import('./pages/auth/login/login.component').then(m => m.LoginComponent)
+  },
+  {
+    path: 'admin/login',
+    loadComponent: () => import('./pages/auth/admin-login/admin-login.component').then(m => m.AdminLoginComponent)
   },
   {
     path: 'register',
@@ -35,6 +41,8 @@ export const routes: Routes = [
   {
     path: 'client',
     loadComponent: () => import('./layouts/client-layout/client-layout').then(m => m.ClientLayout),
+    canActivate: [roleGuard],
+    data: { roles: [UserRole.Customer] },
     children: [
        { path: 'dashboard', loadComponent: () => import('./pages/client/dashboard/dashboard.component').then(m => m.ClientDashboardComponent) },
        { path: 'settings',  loadComponent: () => import('./pages/client/settings/settings.component').then(m => m.SettingsComponent) },
@@ -47,10 +55,20 @@ export const routes: Routes = [
   {
     path: 'admin',
     loadComponent: () => import('./layouts/admin-layout/admin-layout').then(m => m.AdminLayout),
+    canActivate: [roleGuard],
+    data: { roles: [UserRole.Admin, UserRole.SuperAdmin] },
     children: [
       { path: 'dashboard', loadComponent: () => import('./pages/admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) },
-      { path: 'roles', loadComponent: () => import('./pages/admin/role-management/role-management.component').then(m => m.RoleManagementComponent) },
-      { path: 'roles/access/:id', loadComponent: () => import('./pages/admin/access-right/access-right.component').then(m => m.AccessRightComponent) },
+      { 
+        path: 'roles', 
+        loadComponent: () => import('./pages/admin/role-management/role-management.component').then(m => m.RoleManagementComponent),
+        data: { roles: [UserRole.Admin, UserRole.SuperAdmin], permission: 'ViewRoles' }
+      },
+      { 
+        path: 'roles/access/:id', 
+        loadComponent: () => import('./pages/admin/access-right/access-right.component').then(m => m.AccessRightComponent),
+        data: { roles: [UserRole.Admin, UserRole.SuperAdmin], permission: 'ManageAccessRights' }
+      },
       { path: 'users', loadComponent: () => import('./pages/admin/user-hub/user-hub').then(m => m.UserHub) },
       { path: 'clients', loadComponent: () => import('./pages/admin/clients/clients').then(m => m.Clients) },
       { path: 'transactions', loadComponent: () => import('./pages/admin/transactions/transactions.component').then(m => m.AdminTransactionsComponent) },
