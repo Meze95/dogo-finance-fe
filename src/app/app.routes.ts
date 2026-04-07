@@ -41,9 +41,8 @@ export const routes: Routes = [
   // ---- CLIENT DASHBOARD (Secured Layout) ----
   {
     path: 'client',
-    canActivate: [authGuard],
-    loadComponent: () => import('./layouts/client-layout/client-layout').then(m => m.ClientLayout),
     canActivate: [roleGuard],
+    loadComponent: () => import('./layouts/client-layout/client-layout').then(m => m.ClientLayout),
     data: { roles: [UserRole.Customer] },
     children: [
        { path: 'dashboard', loadComponent: () => import('./pages/client/dashboard/dashboard.component').then(m => m.ClientDashboardComponent) },

@@ -45,32 +45,16 @@ export class LoginComponent {
           if (response.success || response.boolean) {
             const user = response.data;
             // Save the user data to AuthService session
-<<<<<<< HEAD
             this.authService.setCurrentUser(response.data);
             
             // Redirect based on role
-            const user = response.data;
+            //const user = response.data;
             const role = user.role || user.Role || user.userRole || user.UserRole;
             
             if (role === UserRole.Admin || role === UserRole.SuperAdmin) {
               this.router.navigate(['/admin/dashboard']);
             } else {
               this.router.navigate(['/client/dashboard']);
-=======
-            this.authService.setCurrentUser(user);
-            
-            // Handle role-based redirection
-            const returnUrl = this.route.snapshot.queryParams['returnUrl'];
-            if (returnUrl) {
-              this.router.navigateByUrl(returnUrl);
-            } else {
-              // Standard dashboard redirection
-              if (user.role === 'Customer') {
-                this.router.navigate(['/client/dashboard']);
-              } else {
-                this.router.navigate(['/admin/dashboard']);
-              }
->>>>>>> 2ab10c8614f1ad43afb44cc83d45124ae09f0391
             }
           } else {
             this.errorMessage.set(response.message || 'Login failed');

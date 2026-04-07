@@ -17,14 +17,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   const user = authService.currentUser();
   
   if (user) {
-    if (user.role === 'Customer') {
-       return true;
-    }
-    
-    // Logged in but NOT a Customer
-    console.warn('Access denied: role must be Customer', user.role);
-    router.navigate(['/login']);
-    return false;
+    return true;
   }
 
   // Not logged in so redirect to login page with the return url
