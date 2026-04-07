@@ -206,79 +206,16 @@
                        <app-button variant="outline" size="sm" class="w-full" (click)="startAddBank()">Add New Bank Account</app-button>
                     </div>
                  } @else {
-                    <div class="space-y-6 mt-6 mb-8">
-                       <div>
-                           <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Select Bank</label>
-                           <div class="relative">
-                              <!-- Custom Dropdown Input -->
-                              <div (click)="showBankPicker.set(!showBankPicker())" 
-                                   class="w-full bg-[#f8f7f2] border-2 border-transparent hover:border-[#C9A84C]/50 focus-within:border-[#C9A84C] rounded-2xl px-6 py-3 flex items-center justify-between cursor-pointer transition-all">
-                                 <div class="flex items-center space-x-4">
-                                    @if(selectedBank()) {
-                                       <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center p-1.5">
-                                          <img #selLogo [src]="selectedBank()?.logoUrl" (error)="selLogo.style.display='none'; selFallback.style.display='flex'" class="w-full h-full object-contain">
-                                          <div #selFallback style="display: none;" class="w-full h-full items-center justify-center text-[#1B4332]/20">
-                                             <i class="ri-bank-line text-lg"></i>
-                                          </div>
-                                       </div>
-                                       <div>
-                                          <p class="font-bold text-[#0d1a0f] text-sm leading-tight">{{ selectedBank()?.bankName }}</p>
-                                          <p class="text-[9px] font-bold text-[#C9A84C] uppercase tracking-[0.1em]">{{ selectedBank()?.bankCode }}</p>
-                                       </div>
-                                    } @else {
-                                       <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-[#1B4332]/20">
-                                          <i class="ri-bank-line text-lg"></i>
-                                       </div>
-                                       <span class="text-xs font-bold text-[#1B4332]/40">Choose destination bank</span>
-                                    }
-                                 </div>
-                                 <i class="ri-arrow-down-s-line text-[#1B4332] text-lg transition-transform" [class.rotate-180]="showBankPicker()"></i>
-                              </div>
+                    <div class="space-y-6 mt-6 mb-8 overflow-visible">
+                        <app-dropdown 
+                           label="Select Bank"
+                           [options]="bankOptions()"
+                           [selectedValue]="newBankForm().bankId"
+                           (valueChange)="updateBankField('bankId', $event)"
+                           placeholder="Choose destination bank"
+                           placeholderIcon="ri-bank-line"
+                        ></app-dropdown>
 
-                              <!-- Custom Picker Popover -->
-                              @if(showBankPicker()) {
-                                 <div class="absolute top-[calc(100%+8px)] left-0 right-0 bg-white rounded-2xl shadow-2xl border border-[#1B4332]/10 z-[100] p-2 animate-in slide-in-from-top-4 duration-300">
-                                    <!-- Search Input -->
-                                    <div class="relative mb-2">
-                                       <i class="ri-search-2-line absolute left-4 top-1/2 -translate-y-1/2 text-[#1B4332]/30 text-sm"></i>
-                                       <input type="text" #bankInput autofocus
-                                              [value]="bankSearchQuery()" 
-                                              (input)="bankSearchQuery.set($any($event.target).value)"
-                                              class="w-full bg-[#f8f7f2] rounded-xl pl-10 pr-4 py-2.5 text-xs font-bold text-[#0d1a0f] outline-none border-2 border-transparent focus:border-[#C9A84C] transition-all"
-                                              placeholder="Search bank name...">
-                                    </div>
-                                    
-                                    <!-- Scrollable List -->
-                                    <div class="max-h-[220px] overflow-y-auto custom-scrollbar-h space-y-0.5 pr-1">
-                                       @for(b of filteredBanks(); track b.bankId) {
-                                          <div (click)="selectBank(b)" 
-                                               class="flex items-center space-x-3 py-2 px-3 rounded-xl hover:bg-[#C9A84C]/5 border-2 border-transparent hover:border-[#C9A84C]/20 cursor-pointer transition-all group">
-                                             <div class="w-7 h-7 bg-[#f8f7f2] group-hover:bg-white rounded-lg flex items-center justify-center p-1 transition-colors shadow-sm">
-                                                <img #listLogo [src]="b.logoUrl" (error)="listLogo.style.display='none'; listFallback.style.display='flex'" class="w-full h-full object-contain">
-                                                <div #listFallback style="display: none;" class="w-full h-full items-center justify-center text-[#1B4332]/20">
-                                                   <i class="ri-bank-line text-xs"></i>
-                                                </div>
-                                             </div>
-                                             <div class="flex-grow">
-                                                <p class="font-bold text-[#0d1a0f] text-xs group-hover:text-[#1B4332] transition-colors line-clamp-1 leading-tight">{{ b.bankName }}</p>
-                                                <p class="text-[9px] font-bold text-[#1B4332]/40 group-hover:text-[#C9A84C] uppercase tracking-[0.05em] transition-colors leading-none mt-0.5">{{ b.bankCode }}</p>
-                                             </div>
-                                             @if(b.bankId === newBankForm().bankId) {
-                                                <i class="ri-checkbox-circle-fill text-[#C9A84C] text-base"></i>
-                                             }
-                                          </div>
-                                       }
-                                       @if(filteredBanks().length === 0) {
-                                          <div class="py-6 text-center">
-                                             <i class="ri-search-eye-line text-2xl text-[#1B4332]/10 mb-1 italic"></i>
-                                             <p class="text-[10px] font-bold text-[#1B4332]/30 uppercase tracking-widest">No match</p>
-                                          </div>
-                                       }
-                                    </div>
-                                 </div>
-                              }
-                           </div>
-                        </div>
                         <div>
                            <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Account Name (Full Legal Name)</label>
                            <input type="text" [value]="newBankForm().accountName" (input)="updateBankField('accountName', $any($event.target).value)"
@@ -289,13 +226,13 @@
                            <input type="text" maxlength="10" [value]="newBankForm().accountNumber" (input)="updateBankField('accountNumber', $any($event.target).value.replace(/[^0-9]/g, ''))"
                                   class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all placeholder:text-[#1B4332]/20" placeholder="10-digit account number">
                         </div>
-                     </div>
-                     <div slot="footer-right" class="flex items-center space-x-3 w-full justify-end">
-                        <app-button variant="ghost" size="sm" (click)="cancelAddBank()" [disabled]="isSavingBank()">Cancel</app-button>
-                        <app-button variant="primary" size="sm" (click)="saveBank()" [disabled]="isSavingBank() || !newBankForm().bankId || newBankForm().accountNumber?.length !== 10">
-                           {{ isSavingBank() ? 'Saving...' : 'Add Account' }}
-                        </app-button>
-                     </div>
+                    </div>
+                    <div slot="footer-right" class="flex items-center space-x-3 w-full justify-end">
+                       <app-button variant="ghost" size="sm" (click)="cancelAddBank()" [disabled]="isSavingBank()">Cancel</app-button>
+                       <app-button variant="primary" size="sm" (click)="saveBank()" [disabled]="isSavingBank() || !newBankForm().bankId || newBankForm().accountNumber?.length !== 10">
+                          {{ isSavingBank() ? 'Saving...' : 'Add Account' }}
+                       </app-button>
+                    </div>
                  }
               </app-card>
            </div>
@@ -318,48 +255,22 @@
                     </div>
                     <app-button variant="outline" size="sm" class="w-full" (click)="startEditKin()">{{ nextOfKin() ? 'Change Next of Kin Details' : 'Add Next of Kin' }}</app-button>
                  } @else {
-                    <div class="grid md:grid-cols-2 gap-8 mt-6 mb-8">
+                    <div class="grid md:grid-cols-2 gap-8 mt-6 mb-8 overflow-visible">
                        <div>
                           <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Full Name</label>
                           <input type="text" [value]="editKinForm().fullName" (input)="updateKinField('fullName', $any($event.target).value)"
                                  class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all">
                        </div>
-                       <div>
-                          <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Relationship</label>
-                          <div class="relative">
-                             <!-- Custom Dropdown Trigger -->
-                             <div (click)="showRelationshipPicker.set(!showRelationshipPicker())" 
-                                  class="w-full bg-[#f8f7f2] border-2 border-transparent hover:border-[#C9A84C]/50 focus-within:border-[#C9A84C] rounded-2xl px-6 py-3 flex items-center justify-between cursor-pointer transition-all">
-                                <div class="flex items-center space-x-4">
-                                   <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-[#1B4332]/40">
-                                      <i class="ri-heart-line text-lg"></i>
-                                   </div>
-                                   <div>
-                                      <p class="font-bold text-[#0d1a0f] text-sm leading-tight">{{ editKinForm().relationship || 'Choose Relationship' }}</p>
-                                      <p class="text-[9px] font-bold text-[#C9A84C] uppercase tracking-[0.1em]">Verified Type</p>
-                                   </div>
-                                </div>
-                                <i class="ri-arrow-down-s-line text-[#1B4332] text-lg transition-transform" [class.rotate-180]="showRelationshipPicker()"></i>
-                             </div>
+                       
+                       <app-dropdown 
+                          label="Relationship"
+                          [options]="relationshipOptions()"
+                          [selectedValue]="editKinForm().relationship"
+                          (valueChange)="updateKinField('relationship', $event)"
+                          placeholder="Choose Relationship"
+                          placeholderIcon="ri-heart-line"
+                       ></app-dropdown>
 
-                             <!-- Custom Picker Popover -->
-                             @if(showRelationshipPicker()) {
-                                <div class="absolute top-[calc(100%+8px)] left-0 right-0 bg-white rounded-2xl shadow-2xl border border-[#1B4332]/10 z-[100] p-1.5 animate-in slide-in-from-top-4 duration-300">
-                                   <div class="space-y-0.5">
-                                      @for(type of (relationships().length > 0 ? relationships() : ['Brother', 'Sister', 'Parent', 'Spouse', 'Other']); track type) {
-                                         <div (click)="updateKinField('relationship', type); showRelationshipPicker.set(false)" 
-                                              class="flex items-center justify-between py-1.5 px-3 rounded-xl hover:bg-[#C9A84C]/5 border-2 border-transparent hover:border-[#C9A84C]/20 cursor-pointer transition-all group">
-                                            <span class="font-bold text-[#0d1a0f] text-xs group-hover:text-[#1B4332] transition-colors tracking-tight">{{ type }}</span>
-                                            @if(editKinForm().relationship === type) {
-                                               <i class="ri-checkbox-circle-fill text-[#C9A84C] text-base"></i>
-                                            }
-                                         </div>
-                                      }
-                                   </div>
-                                </div>
-                             }
-                          </div>
-                       </div>
                        <div>
                           <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Email</label>
                           <input type="email" [value]="editKinForm().email" (input)="updateKinField('email', $any($event.target).value)"
