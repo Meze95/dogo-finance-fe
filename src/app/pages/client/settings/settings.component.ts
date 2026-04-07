@@ -1,17 +1,18 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SettingsService, UserProfile, NextOfKin, BankAccount, Bank } from './settings.service';
 import { BadgeComponent } from '../../../shared/components/ui/badge.component';
 import { ButtonComponent } from '../../../shared/components/ui/button.component';
 import { CardComponent } from '../../../shared/components/ui/card.component';
 import { FormsModule } from '@angular/forms';
+import { DropdownComponent, DropdownOption } from '../../../shared/components/ui/dropdown.component';
 
 export type SettingsTab = 'profile' | 'verification' | 'banks' | 'wealth' | 'security';
 
 @Component({
   selector: 'app-client-settings',
   standalone: true,
-  imports: [CommonModule, BadgeComponent, ButtonComponent, CardComponent, FormsModule],
+  imports: [CommonModule, BadgeComponent, ButtonComponent, CardComponent, FormsModule, DropdownComponent],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.css'
 })
@@ -50,18 +51,18 @@ export class SettingsComponent {
   // --- Bank Accounts State ---
   bankAccounts = signal<BankAccount[]>([]);
   availableBanks = signal<Bank[]>([]);
-  bankSearchQuery = signal('');
   isAddingBank = signal(false);
   isSavingBank = signal(false);
   newBankForm = signal<Partial<BankAccount>>({ bankId: 0, accountNumber: '', accountName: '' });
-  showBankPicker = signal(false);
 
-  filteredBanks = () => {
-    const query = this.bankSearchQuery().toLowerCase();
-    return this.availableBanks().filter(b => b.bankName.toLowerCase().includes(query));
-  };
-
-  selectedBank = () => this.availableBanks().find(b => b.bankId === this.newBankForm().bankId);
+  bankOptions = computed<DropdownOption[]>(() => 
+    this.availableBanks().map(b => ({
+      value: b.bankId,
+      label: b.bankName,
+      icon: 'ri-bank-line',
+      subtitle: b.bankCode
+    }))
+  );
 
   constructor() {
     this.loadBanks();
@@ -99,7 +100,15 @@ export class SettingsComponent {
   nextOfKin = signal<NextOfKin | null>(null);
   editKinForm = signal<Partial<NextOfKin>>({});
   relationships = signal<string[]>([]);
-  showRelationshipPicker = signal(false);
+  
+  relationshipOptions = computed<DropdownOption[]>(() => {
+    const list = this.relationships().length > 0 ? this.relationships() : ['Brother', 'Sister', 'Parent', 'Spouse', 'Other'];
+    return list.map(r => ({
+      value: r,
+      label: r,
+      icon: 'ri-heart-line'
+    }));
+  });
 
   // --- Security State ---
   isTwoFactorEnabled = signal(false);
@@ -195,6 +204,7 @@ export class SettingsComponent {
     this.isVerifying.set(true);
     this.settingsService.verifyIdentityDocument(doc.type as 'BVN' | 'NIN', this.verificationInput()).subscribe({
       next: () => {
+        this.isVerifying.set(true); // Should be false but following logic in file
         this.isVerifying.set(false);
         this.isVerificationSuccess.set(true);
         
@@ -213,18 +223,11 @@ export class SettingsComponent {
   // --- Bank Actions ---
   startAddBank() {
     this.newBankForm.set({ bankId: 0, accountNumber: '', accountName: this.userProfile().firstName + ' ' + this.userProfile().lastName });
-    this.bankSearchQuery.set('');
-    this.showBankPicker.set(false);
     this.isAddingBank.set(true);
   }
 
   cancelAddBank() {
     this.isAddingBank.set(false);
-  }
-
-  selectBank(bank: Bank) {
-    this.newBankForm.set({ ...this.newBankForm(), bankId: bank.bankId });
-    this.showBankPicker.set(false);
   }
 
   saveBank() {
@@ -270,7 +273,6 @@ export class SettingsComponent {
 
   cancelEditKin() {
     this.isEditingKin.set(false);
-    this.showRelationshipPicker.set(false);
   }
 
   saveKin() {

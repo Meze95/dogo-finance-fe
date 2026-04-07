@@ -72,6 +72,7 @@ export const routes: Routes = [
       },
       { path: 'users', loadComponent: () => import('./pages/admin/user-hub/user-hub').then(m => m.UserHub) },
       { path: 'clients', loadComponent: () => import('./pages/admin/clients/clients').then(m => m.Clients) },
+      { path: 'products', loadComponent: () => import('./pages/admin/products/admin-products').then(m => m.AdminProducts) },
       { path: 'transactions', loadComponent: () => import('./pages/admin/transactions/transactions.component').then(m => m.AdminTransactionsComponent) },
       { path: 'settings', loadComponent: () => import('./pages/admin/settings/settings').then(m => m.Settings) },
       { path: 'profile', loadComponent: () => import('./pages/admin/profile/profile').then(m => m.Profile) }

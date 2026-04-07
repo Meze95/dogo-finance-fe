@@ -22,7 +22,7 @@ export class AdminLayout {
   menuItems = [
     { label: 'Overview',     icon: 'ri-dashboard-3-fill',      link: '/admin/dashboard' },
     { label: 'Clients',      icon: 'ri-user-star-line',       link: '/admin/clients' },
-    { label: 'Products',     icon: 'ri-box-3-line',           link: '/admin/products' },
+    { label: 'Product Management', icon: 'ri-box-3-line',           link: '/admin/products' },
     { label: 'Transactions', icon: 'ri-exchange-funds-fill',  link: '/admin/transactions' }
   ];
 
