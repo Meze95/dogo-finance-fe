@@ -95,8 +95,8 @@
                 </span>
               </td>
               <td class="py-5 px-4 space-y-1">
-                <div class="font-bold text-slate-700">{{ product.tenor }}</div>
-                <div class="text-[10px] font-bold text-slate-500 tracking-wider">{{ product.rate }}% Expected ROI</div>
+                <div class="font-bold text-slate-700">{{ product.minTenorInDays }} - {{ product.maxTenorInDays }} Days</div>
+                <div class="text-[10px] font-bold text-slate-500 tracking-wider">Product Code: {{ product.code }}</div>
               </td>
               <td class="py-5 px-4">
                 <span class="inline-flex px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm border"
@@ -152,7 +152,7 @@
             </div>
           </div>
           <h3 class="text-xl font-black text-[#0d1a0f] mb-1">{{ type.name }}</h3>
-          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Type ID: {{ type.productTypeId }}</p>
+          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">CODE: {{ type.code }}</p>
           
           <div class="space-y-3 mt-6">
              <div class="flex items-center gap-3">
@@ -250,16 +250,16 @@
           ></app-dropdown>
 
           <div class="space-y-1">
-            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Tenor</label>
-            <input type="text" [ngModel]="formData().tenor" (ngModelChange)="updateFormField('tenor', $event)" placeholder="e.g. 1-3 Years"
+            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Min Tenor (Days)</label>
+            <input type="number" [ngModel]="formData().minTenorInDays" (ngModelChange)="updateFormField('minTenorInDays', $event)" placeholder="e.g. 30"
                    class="w-full bg-[#f8f7f2] border border-[#1B4332]/5 rounded-2xl py-3.5 px-6 text-slate-800 font-bold outline-none focus:border-[#C9A84C] transition-all shadow-sm" />
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
           <div class="space-y-1">
-            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Expected Rate (%)</label>
-            <input type="number" [ngModel]="formData().rate" (ngModelChange)="updateFormField('rate', $event)" placeholder="12.5"
+            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Max Tenor (Days)</label>
+            <input type="number" [ngModel]="formData().maxTenorInDays" (ngModelChange)="updateFormField('maxTenorInDays', $event)" placeholder="e.g. 365"
                    class="w-full bg-[#f8f7f2] border border-[#1B4332]/5 rounded-2xl py-3.5 px-6 text-slate-800 font-bold outline-none focus:border-[#C9A84C] transition-all shadow-sm" />
           </div>
           <div class="flex flex-col justify-end pb-3">
@@ -431,7 +431,7 @@
     <div class="p-8 space-y-6 overflow-visible">
       <div class="space-y-1">
         <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Type Name</label>
-        <input type="text" [(ngModel)]="typeFormData().name" placeholder="e.g. Sukuk Fund"
+        <input type="text" [ngModel]="typeFormData().name" (ngModelChange)="updateTypeFormField('name', $event)" placeholder="e.g. Sukuk Fund"
                class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
       </div>
 
@@ -440,12 +440,12 @@
          
          <label class="flex items-center justify-between bg-[#f8f7f2] p-5 rounded-3xl cursor-pointer group hover:bg-[#C9A84C]/5 transition-colors border border-transparent hover:border-[#C9A84C]/20">
             <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Supports Allocation</span>
-            <input type="checkbox" [(ngModel)]="typeFormData().supportsAllocation" class="w-6 h-6 rounded-lg border-2 border-[#1B4332]/10 accent-[#C9A84C] cursor-pointer" />
+            <input type="checkbox" [ngModel]="typeFormData().supportsAllocation" (ngModelChange)="updateTypeFormField('supportsAllocation', $event)" class="w-6 h-6 rounded-lg border-2 border-[#1B4332]/10 accent-[#C9A84C] cursor-pointer" />
          </label>
 
          <label class="flex items-center justify-between bg-[#f8f7f2] p-5 rounded-3xl cursor-pointer group hover:bg-[#C9A84C]/5 transition-colors border border-transparent hover:border-[#C9A84C]/20">
             <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Supports Profit Sharing</span>
-            <input type="checkbox" [(ngModel)]="typeFormData().supportsProfitSharing" class="w-6 h-6 rounded-lg border-2 border-[#1B4332]/10 accent-[#C9A84C] cursor-pointer" />
+            <input type="checkbox" [ngModel]="typeFormData().supportsProfitSharing" (ngModelChange)="updateTypeFormField('supportsProfitSharing', $event)" class="w-6 h-6 rounded-lg border-2 border-[#1B4332]/10 accent-[#C9A84C] cursor-pointer" />
          </label>
       </div>
     </div>
@@ -489,7 +489,7 @@
     <div class="p-8 space-y-6 overflow-visible">
       <div class="space-y-1">
         <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Asset Class Name</label>
-        <input type="text" [(ngModel)]="assetFormData().name" placeholder="e.g. Federal Government Sukuk"
+        <input type="text" [ngModel]="assetFormData().name" (ngModelChange)="updateAssetFormField('name', $event)" placeholder="e.g. Federal Government Sukuk"
                class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
       </div>
 
@@ -501,7 +501,7 @@
                <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Shariah Compliant</span>
                <span class="text-[9px] font-bold text-slate-400">Ethical investment standard</span>
             </div>
-            <input type="checkbox" [(ngModel)]="assetFormData().isShariahCompliant" class="w-6 h-6 rounded-lg border-2 border-[#1B4332]/10 accent-[#1B4332] cursor-pointer" />
+            <input type="checkbox" [ngModel]="assetFormData().isShariahCompliant" (ngModelChange)="updateAssetFormField('isShariahCompliant', $event)" class="w-6 h-6 rounded-lg border-2 border-[#1B4332]/10 accent-[#1B4332] cursor-pointer" />
          </label>
       </div>
     </div>
@@ -537,7 +537,7 @@
          </button>
       </div>
 
-      <div class="grid grid-cols-3 gap-6 mb-10 pb-10 border-b border-slate-100">
+       <div class="grid grid-cols-3 gap-6 mb-10 pb-10 border-b border-slate-100">
          <div>
             <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Status</p>
             <span class="text-sm font-black text-[#0d1a0f] flex items-center gap-2">
@@ -550,8 +550,8 @@
             <span class="text-sm font-black text-[#0d1a0f]">{{ selectedProduct()?.riskLevel }} Risk</span>
          </div>
          <div>
-            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Expected ROI</p>
-            <span class="text-xl font-black text-[#C9A84C]">{{ selectedProduct()?.rate }}% p.a.</span>
+            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Tenor (Days)</p>
+            <span class="text-xl font-black text-[#C9A84C]">{{ selectedProduct()?.minTenorInDays }} - {{ selectedProduct()?.maxTenorInDays }}</span>
          </div>
       </div>
 

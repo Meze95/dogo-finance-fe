@@ -5,6 +5,8 @@ import { ProductService } from '../../../shared/services/product.service';
 import { Product, ProductAssetAllocation, ProductType, AssetType } from '../../../shared/models/product.model';
 import { DropdownComponent, DropdownOption } from '../../../shared/components/ui/dropdown.component';
 
+declare var Swal: any;
+
 @Component({
   selector: 'app-admin-products',
   standalone: true,
@@ -18,6 +20,8 @@ export class AdminProducts {
   products = this.productService.products;
   productTypes = this.productService.productTypes;
   assetTypes = this.productService.assetTypes;
+
+  isLoading = signal(false);
 
   // Computed Options for Dropdowns
   productTypeOptions = computed<DropdownOption[]>(() => 
@@ -43,7 +47,7 @@ export class AdminProducts {
 
     return this.products().filter(p => 
       p.name.toLowerCase().includes(query) ||
-      p.productId.toLowerCase().includes(query) ||
+      p.productId.toString().includes(query) ||
       p.riskLevel.toLowerCase().includes(query)
     );
   });
@@ -67,12 +71,8 @@ export class AdminProducts {
   allocationValidation = computed(() => {
     const list = this.allocations();
     const total = list.reduce((sum, a) => sum + (Number(a.targetPercentage) || 0), 0);
-    
-    // Check for duplicates
     const assetIds = list.map(a => a.assetTypeId);
     const duplicates = assetIds.filter((item, index) => assetIds.indexOf(item) !== index);
-    
-    // Check for range errors and identify specifically which cards have errors
     const errors = list.map(a => ({
       isDuplicate: duplicates.includes(a.assetTypeId),
       isOutOfRange: Number(a.targetPercentage) < Number(a.minPercentage) || 
@@ -83,35 +83,120 @@ export class AdminProducts {
     }));
     
     const hasAnyError = errors.some(e => e.isDuplicate || e.isOutOfRange || e.isInvalidPercentage);
-    
-    return {
-      total,
-      errors,
-      isValid: total === 100 && !hasAnyError,
-      hasDuplicates: duplicates.length > 0,
-    };
+    return { total, errors, isValid: total === 100 && !hasAnyError, hasDuplicates: duplicates.length > 0 };
   });
+
+  // Common Swal Confirm/Cancel Pattern
+  private confirmAction(action: string, execute: () => void) {
+    Swal.fire({
+      title: `Confirm ${action}`,
+      text: `Are you sure you want to proceed with this ${action.toLowerCase()}?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#C9A84C',
+      cancelButtonColor: '#96a5b1',
+      confirmButtonText: 'Yes, proceed!',
+      cancelButtonText: 'No, cancel',
+      background: '#f8f7f2',
+      color: '#0d1a0f',
+      customClass: { popup: 'rounded-[30px]' }
+    }).then((result: any) => {
+      if (result.isConfirmed) {
+        execute();
+      } else {
+        Swal.fire({
+          icon: 'info',
+          title: 'Operation Canceled',
+          text: `The ${action.toLowerCase()} operation was stopped.`,
+          timer: 1500,
+          showConfirmButton: false,
+          background: '#f8f7f2',
+          customClass: { popup: 'rounded-[30px]' }
+        });
+      }
+    });
+  }
+
+  // Common Swal Response Pattern with Custom BRANDED Loader
+  private handleResponse(obs: any, successTitle: string) {
+    const customLoaderHtml = `
+      <div class="flex flex-col items-center justify-center py-6">
+        <div class="relative w-24 h-24 mb-6">
+          <!-- Outer Rotating Ring -->
+          <div class="absolute inset-0 rounded-full border-[3px] border-slate-100 border-t-[#C9A84C] animate-spin"></div>
+          <!-- Inner Static Ring -->
+          <div class="absolute inset-2 rounded-full border-[1px] border-slate-200"></div>
+          <!-- Logo Center -->
+          <div class="absolute inset-4 rounded-full bg-[#1B4332] flex items-center justify-center shadow-lg">
+            <span class="text-[#C9A84C] text-2xl font-black italic">D</span>
+          </div>
+        </div>
+        <div class="text-[12px] font-black text-[#1B4332] uppercase tracking-[4px] mb-2">DOGO FINANCE</div>
+        <div class="flex gap-1.5 align-center">
+            <div class="w-1.5 h-1.5 rounded-full bg-[#C9A84C] animate-bounce" style="animation-delay: 0.1s"></div>
+            <div class="w-1.5 h-1.5 rounded-full bg-[#C9A84C] animate-bounce" style="animation-delay: 0.2s"></div>
+            <div class="w-1.5 h-1.5 rounded-full bg-[#C9A84C] animate-bounce" style="animation-delay: 0.3s"></div>
+        </div>
+      </div>
+    `;
+
+    Swal.fire({
+      html: customLoaderHtml,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      showConfirmButton: false,
+      background: '#f8f7f2',
+      customClass: {
+        popup: 'rounded-[40px] shadow-2xl border border-white/50'
+      }
+    });
+
+    obs.subscribe({
+      next: (res: any) => {
+        if (res.success) {
+          Swal.fire({ 
+            icon: 'success', 
+            title: successTitle, 
+            text: res.message || 'Updated successfully!', 
+            timer: 2500, 
+            showConfirmButton: false,
+            background: '#f8f7f2',
+            customClass: { popup: 'rounded-[30px]' }
+          });
+          this.closeModal();
+        } else {
+          Swal.fire({ 
+            icon: 'error', 
+            title: 'Action Failed', 
+            text: res.message || 'Something went wrong.',
+            background: '#f8f7f2',
+            customClass: { popup: 'rounded-[30px]' }
+          });
+        }
+      },
+      error: (err: any) => {
+        Swal.fire({ 
+          icon: 'error', 
+          title: 'Connection Lost', 
+          text: 'Unable to reach the server.',
+          background: '#f8f7f2',
+          customClass: { popup: 'rounded-[30px]' }
+        });
+      }
+    });
+  }
 
   openAddModal() {
     this.selectedProduct.set(null);
-    this.formData.set({
-      name: '',
-      productTypeId: this.productTypes()[0]?.productTypeId || '',
-      riskLevel: 'Low',
-      description: '',
-      isActive: true,
-      tenor: '',
-      rate: 0
-    });
+    this.formData.set({ name: '', productTypeId: this.productTypes()[0]?.productTypeId || 0, riskLevel: 'Low', description: '', isActive: true, minTenorInDays: 0, maxTenorInDays: 0 });
     this.allocations.set([]);
     this.isModalOpen.set(true);
   }
 
   editProduct(product: Product) {
     this.selectedProduct.set(product);
-    // Deep copy for form
     this.formData.set({ ...product });
-    this.allocations.set(product.allocations ? product.allocations.map(a => ({...a, id: a.id || 'temp-' + Math.random()})) : []);
+    this.allocations.set(product.allocations ? product.allocations.map(a => ({...a, id: a.id || 0})) : []);
     this.isModalOpen.set(true);
   }
 
@@ -120,19 +205,14 @@ export class AdminProducts {
     this.isViewModalOpen.set(true);
   }
 
-  // Helper to update formData signal properly (no mutation)
-  updateFormField(field: keyof Product, value: any) {
-    this.formData.update(data => ({ ...data, [field]: value }));
-  }
+  updateFormField(field: keyof Product, value: any) { this.formData.update(data => ({ ...data, [field]: value })); }
+  updateTypeFormField(field: keyof ProductType, value: any) { this.typeFormData.update(data => ({ ...data, [field]: value })); }
+  updateAssetFormField(field: keyof AssetType, value: any) { this.assetFormData.update(data => ({ ...data, [field]: value })); }
 
-  // Type-related methods
+  // Type Methods
   openAddTypeModal() {
     this.selectedType.set(null);
-    this.typeFormData.set({
-      name: '',
-      supportsAllocation: true,
-      supportsProfitSharing: false
-    });
+    this.typeFormData.set({ productTypeId: 0, name: '', supportsAllocation: true, supportsProfitSharing: false });
     this.isTypeModalOpen.set(true);
   }
 
@@ -143,28 +223,22 @@ export class AdminProducts {
   }
 
   saveType() {
-    const typeData: ProductType = {
-      ...this.typeFormData() as ProductType,
-      productTypeId: this.selectedType()?.productTypeId || '',
-      createdAt: this.selectedType()?.createdAt || new Date()
-    };
-    this.productService.saveProductType(typeData);
-    this.isTypeModalOpen.set(false);
+    this.confirmAction('Save Type', () => {
+      const typeData: ProductType = { ...this.typeFormData() as ProductType, productTypeId: this.selectedType()?.productTypeId || 0 };
+      this.handleResponse(this.productService.saveProductType(typeData), 'Type Saved');
+    });
   }
 
-  deleteType(id: string) {
-    if (confirm('Are you sure you want to delete this product type?')) {
-      this.productService.deleteProductType(id);
-    }
+  deleteType(id: number) {
+    this.confirmAction('Delete Type', () => {
+      this.handleResponse(this.productService.deleteProductType(id), 'Type Removed');
+    });
   }
 
-  // Asset Class Methods
+  // Asset Methods
   openAddAssetModal() {
     this.selectedAsset.set(null);
-    this.assetFormData.set({
-      name: '',
-      isShariahCompliant: true
-    });
+    this.assetFormData.set({ assetTypeId: 0, name: '', isShariahCompliant: true });
     this.isAssetModalOpen.set(true);
   }
 
@@ -175,59 +249,52 @@ export class AdminProducts {
   }
 
   saveAsset() {
-    const assetData: AssetType = {
-      ...this.assetFormData() as AssetType,
-      assetTypeId: this.selectedAsset()?.assetTypeId || '',
-      createdAt: this.selectedAsset()?.createdAt || new Date()
-    };
-    this.productService.saveAssetType(assetData);
-    this.isAssetModalOpen.set(false);
-  }
-
-  deleteAsset(id: string) {
-    if (confirm('Are you sure you want to delete this asset class?')) {
-      this.productService.deleteAssetType(id);
-    }
-  }
-
-  updateAllocationValue(index: number, field: keyof ProductAssetAllocation, value: any) {
-    this.allocations.update(list => {
-      const newList = [...list];
-      newList[index] = { ...newList[index], [field]: value };
-      return newList;
+    this.confirmAction('Save Asset Class', () => {
+      const assetData: AssetType = { ...this.assetFormData() as AssetType, assetTypeId: this.selectedAsset()?.assetTypeId || 0 };
+      this.handleResponse(this.productService.saveAssetType(assetData), 'Asset Saved');
     });
   }
 
+  deleteAsset(id: number) {
+    this.confirmAction('Delete Asset Class', () => {
+      this.handleResponse(this.productService.deleteAssetType(id), 'Asset Removed');
+    });
+  }
+
+  // Product Methods
+  saveProduct() {
+    const validation = this.allocationValidation();
+    if (!validation.isValid) {
+      Swal.fire({ icon: 'error', title: 'Validation Failed', text: 'Total allocation must be exactly 100%.', confirmButtonColor: '#C9A84C', background: '#f8f7f2', customClass: { popup: 'rounded-[30px]' } });
+      return;
+    }
+
+    this.confirmAction('Save Product', () => {
+      const productData: Product = { ...(this.selectedProduct() || {}), ...this.formData() as Product, allocations: this.allocations(), productId: this.selectedProduct()?.productId || 0 };
+      this.handleResponse(this.productService.saveProduct(productData), 'Product Saved');
+    });
+  }
+
+  deleteProduct(id: number) {
+    this.confirmAction('Delete Product', () => {
+      this.handleResponse(this.productService.deleteProduct(id), 'Product Removed');
+    });
+  }
+
+  updateAllocationValue(index: number, field: keyof ProductAssetAllocation, value: any) {
+    this.allocations.update(list => { const newList = [...list]; newList[index] = { ...newList[index], [field]: value }; return newList; });
+  }
+
   addAllocation() {
-    const newAlloc: ProductAssetAllocation = {
-      id: 'temp-' + Date.now(),
-      productId: this.selectedProduct()?.productId || '',
-      assetTypeId: this.assetTypes()[0]?.assetTypeId || '',
-      assetTypeName: this.assetTypes()[0]?.name || '',
-      targetPercentage: 0,
-      minPercentage: 0,
-      maxPercentage: 0
-    };
+    const newAlloc: ProductAssetAllocation = { id: 0, productId: this.selectedProduct()?.productId || 0, assetTypeId: this.assetTypes()[0]?.assetTypeId || 0, assetTypeName: this.assetTypes()[0]?.name || '', targetPercentage: 0, minPercentage: 0, maxPercentage: 0 };
     this.allocations.update(a => [...a, newAlloc]);
   }
 
-  removeAllocation(index: number) {
-    this.allocations.update(list => list.filter((_, i) => i !== index));
-  }
+  removeAllocation(index: number) { this.allocations.update(list => list.filter((_, i) => i !== index)); }
 
-  updateAllocationAsset(index: number, assetTypeId: string) {
+  updateAllocationAsset(index: number, assetTypeId: number) {
     const asset = this.assetTypes().find(a => a.assetTypeId === assetTypeId);
-    if (asset) {
-      this.allocations.update(list => {
-        const newList = [...list];
-        newList[index] = {
-           ...newList[index],
-           assetTypeId,
-           assetTypeName: asset.name
-        };
-        return newList;
-      });
-    }
+    if (asset) { this.allocations.update(list => { const newList = [...list]; newList[index] = { ...newList[index], assetTypeId, assetTypeName: asset.name }; return newList; }); }
   }
 
   closeModal() {
@@ -235,29 +302,5 @@ export class AdminProducts {
     this.isViewModalOpen.set(false);
     this.isTypeModalOpen.set(false);
     this.isAssetModalOpen.set(false);
-  }
-
-  saveProduct() {
-    const validation = this.allocationValidation();
-    if (!validation.isValid) {
-      alert('Please fix the errors in asset allocations before saving.');
-      return;
-    }
-
-    const productData: Product = {
-      ...(this.selectedProduct() || {}),
-      ...this.formData() as Product,
-      allocations: this.allocations(),
-      productId: this.selectedProduct()?.productId || ''
-    };
-
-    this.productService.saveProduct(productData);
-    this.closeModal();
-  }
-
-  deleteProduct(id: string) {
-    if (confirm('Are you sure you want to delete this product?')) {
-      this.productService.deleteProduct(id);
-    }
   }
 }

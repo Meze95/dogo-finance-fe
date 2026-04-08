@@ -1,96 +1,96 @@
-import { Injectable, signal } from '@angular/core';
-import { Product, ProductType, AssetType, ProductAssetAllocation } from '../models/product.model';
+import { Injectable, signal, computed, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { Product, ProductType, AssetType } from '../models/product.model';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  // Mock Data
-  productTypes = signal<ProductType[]>([
-    { productTypeId: 'PT-01', name: 'Fixed Income Fund', supportsAllocation: true, supportsProfitSharing: false, createdAt: new Date() },
-    { productTypeId: 'PT-02', name: 'Balanced Fund', supportsAllocation: true, supportsProfitSharing: true, createdAt: new Date() }
-  ]);
+  private http = inject(HttpClient);
+  public apiUrl = environment.apiUrl;
 
-  assetTypes = signal<AssetType[]>([
-    { assetTypeId: 'AT-01', name: 'FGN Sukuk', isShariahCompliant: true, createdAt: new Date() },
-    { assetTypeId: 'AT-02', name: 'Shariah Compliant Fixed Term', isShariahCompliant: true, createdAt: new Date() },
-    { assetTypeId: 'AT-03', name: 'Islamic Liquidity', isShariahCompliant: true, createdAt: new Date() },
-    { assetTypeId: 'AT-04', name: 'Nigerian Equities', isShariahCompliant: true, createdAt: new Date() }
-  ]);
+  // State Management via Signals
+  products = signal<Product[]>([]);
+  productTypes = signal<ProductType[]>([]);
+  assetTypes = signal<AssetType[]>([]);
 
-  products = signal<Product[]>([
-    { 
-      productId: 'P-01', name: 'Shariah Fixed Income Fund', productTypeId: 'PT-01', 
-      riskLevel: 'Low', description: 'Low risk Shariah-compliant fund focused on Sukuk.', 
-      isActive: true, tenor: '1-3 Years', rate: 12.5, createdAt: new Date(),
-      allocations: [
-        { id: 'A-01', productId: 'P-01', assetTypeId: 'AT-01', assetTypeName: 'FGN Sukuk (Medium–Long Tenor)', targetPercentage: 80, minPercentage: 70, maxPercentage: 100 },
-        { id: 'A-02', productId: 'P-01', assetTypeId: 'AT-02', assetTypeName: 'Shariah Compliant Fixed Term', targetPercentage: 15, minPercentage: 0, maxPercentage: 25 },
-        { id: 'A-03', productId: 'P-01', assetTypeId: 'AT-03', assetTypeName: 'Islamic Liquidity (Murabaha / Cash)', targetPercentage: 5, minPercentage: 0, maxPercentage: 5 }
-      ]
-    },
-    { 
-      productId: 'P-02', name: 'Shariah Balanced Fund', productTypeId: 'PT-02', 
-      riskLevel: 'Medium', description: 'Balanced fund including Sukuk and Shariah Equities.', 
-      isActive: true, tenor: '3-5 Years', rate: 15.0, createdAt: new Date(),
-      allocations: [
-        { id: 'A-04', productId: 'P-02', assetTypeId: 'AT-01', assetTypeName: 'FGN Sukuk', targetPercentage: 70, minPercentage: 70, maxPercentage: 100 },
-        { id: 'A-05', productId: 'P-02', assetTypeId: 'AT-04', assetTypeName: 'Shariah-Compliant Nigerian Equities', targetPercentage: 10, minPercentage: 0, maxPercentage: 30 },
-        { id: 'A-06', productId: 'P-02', assetTypeId: 'AT-02', assetTypeName: 'Shariah Compliant Fixed Term', targetPercentage: 15, minPercentage: 0, maxPercentage: 25 },
-        { id: 'A-07', productId: 'P-02', assetTypeId: 'AT-03', assetTypeName: 'Islamic Liquidity (Murabaha / Cash)', targetPercentage: 5, minPercentage: 0, maxPercentage: 5 }
-      ]
-    }
-  ]);
-
-  getAssetTypeName(id: string) {
-    return this.assetTypes().find(a => a.assetTypeId === id)?.name || 'Unknown Asset';
+  constructor() {
+    this.refreshAll();
   }
 
-  // Update or Create Product
-  saveProduct(product: Product) {
-    const list = this.products();
-    const index = list.findIndex(p => p.productId === product.productId);
-    if (index >= 0) {
-      list[index] = { ...product };
-      this.products.set([...list]);
-    } else {
-      this.products.update(p => [...p, { ...product, productId: 'P-' + (p.length + 1) }]);
-    }
+  refreshAll() {
+    this.getProductTypes();
+    this.getAssetTypes();
+    this.getProducts();
   }
 
-  deleteProduct(id: string) {
-    this.products.update(list => list.filter(p => p.productId !== id));
+  // Fetching Data
+  getProductTypes() {
+    this.http.get<any>(`${this.apiUrl}/Product/types`).subscribe(res => {
+      if (res.success) this.productTypes.set(res.data);
+    });
   }
 
-  // Manage Product Types
-  saveProductType(type: ProductType) {
-    const list = this.productTypes();
-    const index = list.findIndex(t => t.productTypeId === type.productTypeId);
-    if (index >= 0) {
-      list[index] = { ...type };
-      this.productTypes.set([...list]);
-    } else {
-      this.productTypes.update(t => [...t, { ...type, productTypeId: 'PT-' + (t.length + 1) }]);
-    }
+  getAssetTypes() {
+    this.http.get<any>(`${this.apiUrl}/Product/asset-types`).subscribe(res => {
+      if (res.success) this.assetTypes.set(res.data);
+    });
   }
 
-  deleteProductType(id: string) {
-    this.productTypes.update(list => list.filter(t => t.productTypeId !== id));
+  getProducts() {
+    this.http.get<any>(`${this.apiUrl}/Product`).subscribe(res => {
+      if (res.success) this.products.set(res.data);
+    });
   }
 
-  // Manage Asset Types
-  saveAssetType(type: AssetType) {
-    const list = this.assetTypes();
-    const index = list.findIndex(t => t.assetTypeId === type.assetTypeId);
-    if (index >= 0) {
-      list[index] = { ...type };
-      this.assetTypes.set([...list]);
-    } else {
-      this.assetTypes.update(t => [...t, { ...type, assetTypeId: 'AT-' + (t.length + 1) }]);
-    }
+  // Management Methods (Now returning Observables for component handling)
+  saveProductType(type: ProductType): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/Product/types`, type).pipe(
+      tap(res => {
+        if (res.success) this.getProductTypes();
+      })
+    );
   }
 
-  deleteAssetType(id: string) {
-    this.assetTypes.update(list => list.filter(t => t.assetTypeId !== id));
+  deleteProductType(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/Product/types/${id}`).pipe(
+      tap(res => {
+        if (res.success) this.getProductTypes();
+      })
+    );
+  }
+
+  saveAssetType(asset: AssetType): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/Product/asset-types`, asset).pipe(
+      tap(res => {
+        if (res.success) this.getAssetTypes();
+      })
+    );
+  }
+
+  deleteAssetType(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/Product/asset-types/${id}`).pipe(
+      tap(res => {
+        if (res.success) this.getAssetTypes();
+      })
+    );
+  }
+
+  saveProduct(product: Product): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/Product`, product).pipe(
+      tap(res => {
+        if (res.success) this.getProducts();
+      })
+    );
+  }
+
+  deleteProduct(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/Product/${id}`).pipe(
+      tap(res => {
+        if (res.success) this.getProducts();
+      })
+    );
   }
 }
