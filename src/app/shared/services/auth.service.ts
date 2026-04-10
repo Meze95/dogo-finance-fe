@@ -19,8 +19,11 @@ export class AuthService {
   hasRole(roles: UserRole[]): boolean {
     const user = this.currentUser();
     if (!user) return false;
+    // Standardizing on 'role' property
     const userRole = user.role || user.Role || user.userRole || user.UserRole;
-    return roles.includes(userRole as UserRole);
+    if (!userRole) return false;
+    
+    return roles.some(r => String(r).toLowerCase() === String(userRole).toLowerCase());
   }
 
   signUp(data: any): Observable<any> {
@@ -32,7 +35,8 @@ export class AuthService {
   }
 
   resendCode(email: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/Customer/resend-code?email=${email}`, {});
+    // Security Fix: Move sensitive data from query params to the POST body
+    return this.http.post(`${this.apiUrl}/Customer/resend-code`, { email });
   }
 
   login(credentials: any): Observable<any> {
@@ -122,11 +126,9 @@ export class AuthService {
 
     this.http.post(`${this.apiUrl}/Auth/logout`, {}, { headers }).subscribe({
       next: () => {
-        console.log('Backend logout success');
         this.setCurrentUser(null);
       },
       error: (err) => {
-        console.error('Backend logout failed', err);
         this.setCurrentUser(null);
       }
     });

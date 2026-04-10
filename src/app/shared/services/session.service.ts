@@ -19,7 +19,7 @@ export class SessionService implements OnDestroy {
   private platformId = inject(PLATFORM_ID);
   private apiUrl = environment.apiUrl;
 
-  private timeoutMinutes = signal<number>(30); // Default
+  private timeoutMinutes = signal<number>(10); // Default set to 10 mins as per requirement
   private activitySubscription?: Subscription;
   private timerSubscription?: Subscription;
 

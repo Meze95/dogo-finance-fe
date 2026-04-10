@@ -9,7 +9,6 @@ import { BlogDetailComponent } from './pages/resources/blog-detail/blog-detail.c
 import { CalculatorComponent } from './pages/resources/calculator/calculator.component';
 import { ReportsComponent } from './pages/resources/reports/reports.component';
 import { EbookComponent } from './pages/resources/ebook/ebook.component';
-import { authGuard } from './shared/guards/auth.guard';
 
 export const routes: Routes = [
   // ---- AUTHENTICATION (Standalone Full Page Layouts) ----
@@ -45,12 +44,12 @@ export const routes: Routes = [
     loadComponent: () => import('./layouts/client-layout/client-layout').then(m => m.ClientLayout),
     data: { roles: [UserRole.Customer] },
     children: [
-        { path: 'dashboard', loadComponent: () => import('./pages/client/dashboard/dashboard.component').then(m => m.ClientDashboardComponent) },
-        { path: 'products',  loadComponent: () => import('./pages/client/portfolios/portfolios.component').then(m => m.ClientPortfoliosComponent) },
-        { path: 'investments', loadComponent: () => import('./pages/client/investments/investments.component').then(m => m.ClientInvestmentsComponent) },
-        { path: 'settings',  loadComponent: () => import('./pages/client/settings/settings.component').then(m => m.SettingsComponent) },
-        { path: 'profile',   loadComponent: () => import('./pages/client/profile/profile.component').then(m => m.ProfileComponent) },
-        { path: 'transactions', loadComponent: () => import('./pages/client/transactions/transactions.component').then(m => m.TransactionsComponent) }
+      { path: 'dashboard', loadComponent: () => import('./pages/client/dashboard/dashboard.component').then(m => m.ClientDashboardComponent) },
+      { path: 'products', loadComponent: () => import('./pages/client/portfolios/portfolios.component').then(m => m.ClientPortfoliosComponent) },
+      { path: 'investments', loadComponent: () => import('./pages/client/investments/investments.component').then(m => m.ClientInvestmentsComponent) },
+      { path: 'settings', loadComponent: () => import('./pages/client/settings/settings.component').then(m => m.SettingsComponent) },
+      { path: 'profile', loadComponent: () => import('./pages/client/profile/profile.component').then(m => m.ProfileComponent) },
+      { path: 'transactions', loadComponent: () => import('./pages/client/transactions/transactions.component').then(m => m.TransactionsComponent) }
     ]
   },
 
@@ -62,13 +61,13 @@ export const routes: Routes = [
     data: { roles: [UserRole.Admin, UserRole.SuperAdmin] },
     children: [
       { path: 'dashboard', loadComponent: () => import('./pages/admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) },
-      { 
-        path: 'roles', 
+      {
+        path: 'roles',
         loadComponent: () => import('./pages/admin/role-management/role-management.component').then(m => m.RoleManagementComponent),
         data: { roles: [UserRole.Admin, UserRole.SuperAdmin], permission: 'ViewRoles' }
       },
-      { 
-        path: 'roles/access/:id', 
+      {
+        path: 'roles/access/:id',
         loadComponent: () => import('./pages/admin/access-right/access-right.component').then(m => m.AccessRightComponent),
         data: { roles: [UserRole.Admin, UserRole.SuperAdmin], permission: 'ManageAccessRights' }
       },
@@ -80,6 +79,10 @@ export const routes: Routes = [
       { path: 'settings', loadComponent: () => import('./pages/admin/settings/settings').then(m => m.Settings) },
       { path: 'profile', loadComponent: () => import('./pages/admin/profile/profile').then(m => m.Profile) }
     ]
+  },
+  {
+    path: 'access-denied',
+    loadComponent: () => import('./pages/error/access-denied/access-denied.component').then(m => m.AccessDeniedComponent)
   },
 
   // ---- ROOT LAYOUT (Home / Marketing) ----
@@ -137,11 +140,17 @@ export const routes: Routes = [
       },
 
       // ---- RESOURCES ----
-      { path: 'blog',     component: BlogComponent },
+      { path: 'blog', component: BlogComponent },
       { path: 'blog/:id', component: BlogDetailComponent },
-      { path: 'reports',  component: ReportsComponent },
-      { path: 'ebook',    component: EbookComponent },
-      { path: 'faq',      component: FAQComponent },
+      { path: 'reports', component: ReportsComponent },
+      { path: 'ebook', component: EbookComponent },
+      { path: 'faq', component: FAQComponent },
     ],
+  },
+
+  // ---- 404 NOT FOUND (Wildcard) ----
+  {
+    path: '**',
+    loadComponent: () => import('./pages/error/not-found/not-found.component').then(m => m.NotFoundComponent)
   }
 ];
