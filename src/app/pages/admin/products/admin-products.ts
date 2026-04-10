@@ -2,7 +2,7 @@ import { Component, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../shared/services/product.service';
-import { Product, ProductAssetAllocation, ProductType, AssetType } from '../../../shared/models/product.model';
+import { Product, ProductAssetAllocation, ProductType, AssetType, AssetInstrument } from '../../../shared/models/product.model';
 import { DropdownComponent, DropdownOption } from '../../../shared/components/ui/dropdown.component';
 
 declare var Swal: any;
@@ -15,7 +15,7 @@ declare var Swal: any;
   styleUrl: './admin-products.css',
 })
 export class AdminProducts {
-  private productService = inject(ProductService);
+  public productService = inject(ProductService);
   
   products = this.productService.products;
   productTypes = this.productService.productTypes;
@@ -38,8 +38,12 @@ export class AdminProducts {
     this.assetTypes().map(t => ({ value: t.assetTypeId, label: t.name, icon: 'ri-coin-line' }))
   );
 
+  instrumentAssetClassOptions = computed<DropdownOption[]>(() => 
+    this.assetTypes().map(t => ({ value: t.assetTypeId, label: t.name, icon: 'ri-bank-line' }))
+  );
+
   searchQuery = signal('');
-  activeTab = signal<'products' | 'types' | 'assets'>('products');
+  activeTab = signal<'products' | 'types' | 'assets' | 'instruments'>('products');
 
   filteredProducts = computed(() => {
     const query = this.searchQuery().toLowerCase().trim();
@@ -56,15 +60,18 @@ export class AdminProducts {
   isViewModalOpen = signal(false);
   isTypeModalOpen = signal(false);
   isAssetModalOpen = signal(false);
+  isInstrumentModalOpen = signal(false);
   
   selectedProduct = signal<Product | null>(null);
   selectedType = signal<ProductType | null>(null);
   selectedAsset = signal<AssetType | null>(null);
+  selectedInstrument = signal<AssetInstrument | null>(null);
   
   // Form State
   formData = signal<Partial<Product>>({});
   typeFormData = signal<Partial<ProductType>>({});
   assetFormData = signal<Partial<AssetType>>({});
+  instrumentFormData = signal<Partial<AssetInstrument>>({});
   allocations = signal<ProductAssetAllocation[]>([]);
 
   // Validation
@@ -73,16 +80,27 @@ export class AdminProducts {
     const total = list.reduce((sum, a) => sum + (Number(a.targetPercentage) || 0), 0);
     const assetIds = list.map(a => a.assetTypeId);
     const duplicates = assetIds.filter((item, index) => assetIds.indexOf(item) !== index);
-    const errors = list.map(a => ({
-      isDuplicate: duplicates.includes(a.assetTypeId),
-      isOutOfRange: Number(a.targetPercentage) < Number(a.minPercentage) || 
-                   Number(a.targetPercentage) > Number(a.maxPercentage),
-      isInvalidPercentage: Number(a.targetPercentage) < 0 || Number(a.targetPercentage) > 100 ||
-                          Number(a.minPercentage) < 0 || Number(a.minPercentage) > 100 ||
-                          Number(a.maxPercentage) < 0 || Number(a.maxPercentage) > 100
-    }));
     
-    const hasAnyError = errors.some(e => e.isDuplicate || e.isOutOfRange || e.isInvalidPercentage);
+    const errors = list.map(a => {
+      const instrumentTotal = (a.instruments || []).reduce((sum, inst) => sum + (Number(inst.percentage) || 0), 0);
+      const hasInstruments = (a.instruments || []).length > 0;
+      
+      const instrumentIds = (a.instruments || []).map(i => i.instrumentId);
+      const instrumentDuplicates = instrumentIds.filter((id, index) => instrumentIds.indexOf(id) !== index);
+      
+      return {
+        isDuplicate: duplicates.includes(a.assetTypeId),
+        isOutOfRange: Number(a.targetPercentage) < Number(a.minPercentage) || 
+                     Number(a.targetPercentage) > Number(a.maxPercentage),
+        isInvalidPercentage: Number(a.targetPercentage) < 0 || Number(a.targetPercentage) > 100,
+        instrumentsInvalidCharge: hasInstruments && instrumentTotal !== 100,
+        instrumentTotal: instrumentTotal,
+        hasDuplicateInstruments: instrumentDuplicates.length > 0,
+        duplicateInstrumentIds: instrumentDuplicates
+      };
+    });
+    
+    const hasAnyError = errors.some(e => e.isDuplicate || e.isOutOfRange || e.isInvalidPercentage || e.instrumentsInvalidCharge || e.hasDuplicateInstruments);
     return { total, errors, isValid: total === 100 && !hasAnyError, hasDuplicates: duplicates.length > 0 };
   });
 
@@ -235,6 +253,14 @@ export class AdminProducts {
     });
   }
 
+  getInstrumentOptions(assetTypeId: number): DropdownOption[] {
+    return this.getInstrumentsForAsset(assetTypeId).map(i => ({
+      value: i.id,
+      label: i.name,
+      icon: 'ri-bank-line'
+    }));
+  }
+
   // Asset Methods
   openAddAssetModal() {
     this.selectedAsset.set(null);
@@ -259,6 +285,36 @@ export class AdminProducts {
     this.confirmAction('Delete Asset Class', () => {
       this.handleResponse(this.productService.deleteAssetType(id), 'Asset Removed');
     });
+  }
+
+  // Instrument Methods
+  openAddInstrumentModal() {
+    this.selectedInstrument.set(null);
+    this.instrumentFormData.set({ id: 0, name: '', unitPrice: 0, assetTypeId: this.assetTypes()[0]?.assetTypeId || 0 });
+    this.isInstrumentModalOpen.set(true);
+  }
+
+  editInstrument(instrument: AssetInstrument) {
+    this.selectedInstrument.set(instrument);
+    this.instrumentFormData.set({ ...instrument });
+    this.isInstrumentModalOpen.set(true);
+  }
+
+  saveInstrument() {
+    this.confirmAction('Save Instrument', () => {
+      const instrumentData: AssetInstrument = { ...this.instrumentFormData() as AssetInstrument, id: this.selectedInstrument()?.id || 0 };
+      this.handleResponse(this.productService.saveInstrument(instrumentData), 'Instrument Saved');
+    });
+  }
+
+  deleteInstrument(id: number) {
+    this.confirmAction('Delete Instrument', () => {
+      this.handleResponse(this.productService.deleteInstrument(id), 'Instrument Removed');
+    });
+  }
+
+  getInstrumentsForAsset(assetTypeId: number) {
+    return this.productService.instruments().filter(i => i.assetTypeId === assetTypeId);
   }
 
   // Product Methods
@@ -294,7 +350,49 @@ export class AdminProducts {
 
   updateAllocationAsset(index: number, assetTypeId: number) {
     const asset = this.assetTypes().find(a => a.assetTypeId === assetTypeId);
-    if (asset) { this.allocations.update(list => { const newList = [...list]; newList[index] = { ...newList[index], assetTypeId, assetTypeName: asset.name }; return newList; }); }
+    if (asset) { 
+      this.allocations.update(list => { 
+        const newList = [...list]; 
+        newList[index] = { ...newList[index], assetTypeId, assetTypeName: asset.name, instruments: [] }; 
+        return newList; 
+      }); 
+    }
+  }
+
+  addInstrumentToAllocation(assetIndex: number) {
+    this.allocations.update(list => {
+      const newList = [...list];
+      const alloc = newList[assetIndex];
+      const availableInstruments = this.getInstrumentsForAsset(alloc.assetTypeId);
+      if (availableInstruments.length > 0) {
+        if (!alloc.instruments) alloc.instruments = [];
+        alloc.instruments.push({ id: 0, instrumentId: availableInstruments[0].id, instrumentName: availableInstruments[0].name, percentage: 0 });
+      }
+      return newList;
+    });
+  }
+
+  removeInstrumentFromAllocation(assetIndex: number, instrumentIndex: number) {
+    this.allocations.update(list => {
+      const newList = [...list];
+      newList[assetIndex].instruments = newList[assetIndex].instruments?.filter((_, i) => i !== instrumentIndex);
+      return newList;
+    });
+  }
+
+  updateInstrumentAllocationValue(assetIndex: number, instrumentIndex: number, field: any, value: any) {
+    this.allocations.update(list => {
+      const newList = [...list];
+      const instruments = newList[assetIndex].instruments;
+      if (instruments) {
+        instruments[instrumentIndex] = { ...instruments[instrumentIndex], [field]: value };
+        if (field === 'instrumentId') {
+          const inst = this.productService.instruments().find(i => i.id === value);
+          instruments[instrumentIndex].instrumentName = inst?.name;
+        }
+      }
+      return newList;
+    });
   }
 
   closeModal() {
@@ -302,5 +400,6 @@ export class AdminProducts {
     this.isViewModalOpen.set(false);
     this.isTypeModalOpen.set(false);
     this.isAssetModalOpen.set(false);
+    this.isInstrumentModalOpen.set(false);
   }
 }

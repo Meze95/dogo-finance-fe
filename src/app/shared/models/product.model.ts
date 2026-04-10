@@ -30,6 +30,21 @@ export interface AssetType {
   createdAt?: Date;
 }
 
+export interface AssetInstrument {
+  id: number;
+  name: string;
+  unitPrice: number;
+  assetTypeId: number;
+  assetTypeName?: string;
+}
+
+export interface InstrumentAllocation {
+  id: number;
+  instrumentId: number;
+  instrumentName?: string;
+  percentage: number; // Percentage of the asset class's total
+}
+
 export interface ProductAssetAllocation {
   id: number;
   productId: number;
@@ -38,4 +53,5 @@ export interface ProductAssetAllocation {
   targetPercentage: number;
   minPercentage: number;
   maxPercentage: number;
+  instruments?: InstrumentAllocation[];
 }

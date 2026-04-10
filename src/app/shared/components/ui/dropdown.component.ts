@@ -22,22 +22,23 @@ export interface DropdownOption {
       <div 
         (click)="toggle($event)"
         [class.border-[#C9A84C]]="isOpen()"
-        class="w-full bg-[#f8f7f2] border-2 border-transparent hover:border-[#C9A84C]/50 focus-within:border-[#C9A84C] rounded-2xl px-6 py-3.5 flex items-center justify-between cursor-pointer transition-all shadow-sm relative z-10"
+        [ngClass]="size() === 'small' ? 'px-4 py-2 rounded-xl' : 'px-6 py-3.5 rounded-2xl'"
+        class="w-full bg-[#f8f7f2] border-2 border-transparent hover:border-[#C9A84C]/50 focus-within:border-[#C9A84C] flex items-center justify-between cursor-pointer transition-all shadow-sm relative z-10"
       >
-        <div class="flex items-center space-x-4 min-w-0 flex-grow">
+        <div class="flex items-center space-x-3 min-w-0 flex-grow">
           <!-- Icon handling -->
           @if (currentOption()?.icon) {
-            <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-[#1B4332]/40 shadow-sm shrink-0">
-              <i [class]="currentOption()?.icon + ' text-lg'"></i>
+            <div [ngClass]="size() === 'small' ? 'w-6 h-6' : 'w-8 h-8'" class="bg-white rounded-lg flex items-center justify-center text-[#1B4332]/40 shadow-sm shrink-0">
+              <i [class]="currentOption()?.icon || ''" [ngClass]="size() === 'small' ? 'text-sm' : 'text-lg'"></i>
             </div>
           } @else if (placeholderIcon()) {
-            <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-[#1B4332]/10 shrink-0">
-              <i [class]="placeholderIcon() + ' text-lg'"></i>
+            <div [ngClass]="size() === 'small' ? 'w-6 h-6' : 'w-8 h-8'" class="bg-white rounded-lg flex items-center justify-center text-[#1B4332]/10 shrink-0">
+              <i [class]="placeholderIcon() || ''" [ngClass]="size() === 'small' ? 'text-sm' : 'text-lg'"></i>
             </div>
           }
           
           <div class="min-w-0 flex-grow">
-            <p class="font-bold text-[#0d1a0f] text-sm leading-tight truncate">
+            <p class="font-bold text-[#0d1a0f] leading-tight truncate" [ngClass]="size() === 'small' ? 'text-xs' : 'text-sm'">
               {{ currentOption()?.label || placeholder() }}
             </p>
             @if (currentOption()?.subtitle) {
@@ -106,6 +107,7 @@ export class DropdownComponent {
   selectedValue = input<any>(null);
   placeholder = input<string>('Select an option');
   placeholderIcon = input<string>('');
+  size = input<'normal' | 'small'>('normal');
   
   valueChange = output<any>();
   

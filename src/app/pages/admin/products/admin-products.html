@@ -32,6 +32,12 @@
             <span>New Asset Class</span>
           </button>
         }
+        @case('instruments') {
+          <button (click)="openAddInstrumentModal()" class="bg-[#C9A84C] hover:bg-[#9a7a2b] text-white px-6 py-3 rounded-2xl font-black shadow-lg transition-all flex items-center gap-2">
+            <i class="ri-add-line"></i>
+            <span>New Instrument</span>
+          </button>
+        }
       }
     </div>
   </div>
@@ -53,6 +59,11 @@
             class="px-8 py-3 rounded-[20px] text-xs font-black uppercase tracking-widest transition-all">
       Asset Classes
     </button>
+    <button (click)="activeTab.set('instruments')" 
+            [ngClass]="activeTab() === 'instruments' ? 'bg-[#C9A84C] text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'"
+            class="px-8 py-3 rounded-[20px] text-xs font-black uppercase tracking-widest transition-all">
+      Instruments
+    </button>
   </div>
 
   @if(activeTab() === 'products') {
@@ -63,8 +74,8 @@
           <thead>
             <tr class="border-b-2 border-slate-100">
               <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Product Name</th>
+              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Product Type</th>
               <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Risk Level</th>
-              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Tenor & Rate</th>
               <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Status</th>
               <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C] text-right">Actions</th>
             </tr>
@@ -80,8 +91,16 @@
                   </div>
                   <div>
                     <div class="font-black text-[#0d1a0f]">{{ product.name }}</div>
-                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">ID: {{ product.productId }}</div>
+                    <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">ID: {{ product.productId }} | Code: {{ product.code || 'N/A' }}</div>
                   </div>
+                </div>
+              </td>
+              <td class="py-5 px-4 font-black text-slate-700 text-xs">
+                <div class="flex items-center gap-3">
+                   <div class="w-8 h-8 rounded-xl bg-white text-[#1B4332]/40 shadow-sm border border-[#1B4332]/5 flex items-center justify-center">
+                      <i class="ri-folders-line text-base"></i>
+                   </div>
+                   {{ product.productTypeName || 'N/A' }}
                 </div>
               </td>
               <td class="py-5 px-4">
@@ -93,10 +112,6 @@
                       }">
                   {{ product.riskLevel }} Risk
                 </span>
-              </td>
-              <td class="py-5 px-4 space-y-1">
-                <div class="font-bold text-slate-700">{{ product.minTenorInDays }} - {{ product.maxTenorInDays }} Days</div>
-                <div class="text-[10px] font-bold text-slate-500 tracking-wider">Product Code: {{ product.code }}</div>
               </td>
               <td class="py-5 px-4">
                 <span class="inline-flex px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm border"
@@ -167,7 +182,7 @@
         </div>
       }
     </div>
-  } @else {
+  } @else if(activeTab() === 'assets') {
     <!-- Asset Classes List -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
        @for(asset of assetTypes(); track asset.assetTypeId) {
@@ -193,6 +208,49 @@
          </div>
        }
     </div>
+  } @else if(activeTab() === 'instruments') {
+    <!-- Instruments List -->
+    <div class="bg-white rounded-[40px] p-4 sm:p-8 border border-[#1B4332]/5 shadow-sm overflow-hidden animate-fade-in">
+      <div class="overflow-x-auto custom-scrollbar pb-4">
+        <table class="w-full text-left border-collapse min-w-[800px]">
+          <thead>
+            <tr class="border-b-2 border-slate-100">
+              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Instrument Name</th>
+              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Asset Class</th>
+              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Unit Price</th>
+              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C] text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="text-sm">
+            @for(inst of productService.instruments(); track inst.id) {
+            <tr class="border-b border-slate-50 hover:bg-[#f8f7f2] transition-colors group">
+              <td class="py-5 px-4">
+                <div class="font-black text-[#0d1a0f]">{{ inst.name }}</div>
+              </td>
+              <td class="py-5 px-4">
+                <span class="bg-slate-100 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest text-slate-600">
+                  {{ inst.assetTypeName }}
+                </span>
+              </td>
+              <td class="py-5 px-4">
+                <div class="font-black text-[#1B4332]">${{ inst.unitPrice | number:'1.2-2' }}</div>
+              </td>
+              <td class="py-5 px-4 text-right">
+                <div class="flex items-center justify-end gap-2">
+                  <button (click)="editInstrument(inst)" class="text-slate-400 hover:text-[#1B4332] p-2 hover:bg-[#1B4332]/10 rounded-2xl">
+                    <i class="ri-edit-line text-lg"></i>
+                  </button>
+                  <button (click)="deleteInstrument(inst.id)" class="text-slate-400 hover:text-red-500 p-2 hover:bg-red-500/10 rounded-2xl">
+                    <i class="ri-delete-bin-line text-lg"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
   }
 </div>
 
@@ -201,7 +259,7 @@
 <div class="fixed inset-0 z-[999] flex items-center justify-center px-4 animate-fade-in" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="overflow: visible;">
   <div class="fixed inset-0 bg-[#0d1a0f]/60 backdrop-blur-md transition-opacity" (click)="closeModal()"></div>
   
-  <div class="relative bg-white rounded-[40px] shadow-2xl w-full max-w-4xl transform transition-all animate-slide-up flex flex-col max-h-[90vh] overflow-visible">
+  <div class="relative bg-white rounded-[40px] shadow-2xl w-full max-w-6xl transform transition-all animate-slide-up flex flex-col max-h-[90vh] overflow-visible">
     <!-- Modal Header -->
     <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-[#f8f7f2] rounded-t-[40px] shrink-0">
       <div class="flex items-center gap-3">
@@ -218,28 +276,29 @@
     </div>
     
     <!-- Modal Body -->
-    <div class="p-8 overflow-y-auto custom-scrollbar grid grid-cols-1 md:grid-cols-2 gap-8" style="overflow-y: auto; overflow-x: visible;">
-      <!-- General Info -->
+    <div class="p-8 overflow-y-auto custom-scrollbar flex flex-col gap-10" style="max-height: 80vh; overflow-x: visible;">
+      <!-- General Info Section -->
       <div class="space-y-6" style="overflow: visible;">
         <h4 class="text-sm font-black text-[#C9A84C] uppercase tracking-widest border-b border-slate-100 pb-2">General Details</h4>
         
-        <!-- Product Type Selection -->
-        <app-dropdown 
-          label="Product Type"
-          [options]="productTypeOptions()"
-          [selectedValue]="formData().productTypeId"
-          (valueChange)="updateFormField('productTypeId', $event)"
-          placeholder="Choose Product Type"
-          placeholderIcon="ri-folders-line"
-        ></app-dropdown>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" style="overflow: visible;">
+          <div class="space-y-1">
+            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Product Name</label>
+            <input type="text" [ngModel]="formData().name" (ngModelChange)="updateFormField('name', $event)" placeholder="e.g. Shariah Balanced Fund"
+                   class="w-full bg-[#f8f7f2] border border-[#1B4332]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[#C9A84C] transition-all shadow-sm" />
+          </div>
 
-        <div class="space-y-1">
-          <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Product Name</label>
-          <input type="text" [ngModel]="formData().name" (ngModelChange)="updateFormField('name', $event)" placeholder="e.g. Shariah Balanced Fund"
-                 class="w-full bg-[#f8f7f2] border border-[#1B4332]/5 rounded-2xl py-3.5 px-6 text-slate-800 font-bold outline-none focus:border-[#C9A84C] transition-all shadow-sm" />
+          <app-dropdown 
+            label="Product Type"
+            [options]="productTypeOptions()"
+            [selectedValue]="formData().productTypeId"
+            (valueChange)="updateFormField('productTypeId', $event)"
+            placeholder="Choose Product Type"
+            placeholderIcon="ri-folders-line"
+          ></app-dropdown>
         </div>
 
-        <div class="grid grid-cols-2 gap-4" style="overflow: visible;">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" style="overflow: visible;">
           <app-dropdown 
             label="Risk Level"
             [options]="riskLevelOptions"
@@ -249,24 +308,11 @@
             placeholderIcon="ri-shield-line"
           ></app-dropdown>
 
-          <div class="space-y-1">
-            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Min Tenor (Days)</label>
-            <input type="number" [ngModel]="formData().minTenorInDays" (ngModelChange)="updateFormField('minTenorInDays', $event)" placeholder="e.g. 30"
-                   class="w-full bg-[#f8f7f2] border border-[#1B4332]/5 rounded-2xl py-3.5 px-6 text-slate-800 font-bold outline-none focus:border-[#C9A84C] transition-all shadow-sm" />
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4">
-          <div class="space-y-1">
-            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Max Tenor (Days)</label>
-            <input type="number" [ngModel]="formData().maxTenorInDays" (ngModelChange)="updateFormField('maxTenorInDays', $event)" placeholder="e.g. 365"
-                   class="w-full bg-[#f8f7f2] border border-[#1B4332]/5 rounded-2xl py-3.5 px-6 text-slate-800 font-bold outline-none focus:border-[#C9A84C] transition-all shadow-sm" />
-          </div>
-          <div class="flex flex-col justify-end pb-3">
-             <label class="flex items-center gap-3 cursor-pointer group">
-                <input type="checkbox" [ngModel]="formData().isActive" (ngModelChange)="updateFormField('isActive', $event)" class="w-5 h-5 rounded-lg border-2 border-[#1B4332]/10 checked:bg-[#C9A84C] accent-[#C9A84C]" />
-                <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Active Status</span>
-             </label>
+          <div class="flex flex-col justify-end">
+            <label class="flex items-center justify-between bg-[#f8f7f2] p-[1.125rem] rounded-[1.25rem] cursor-pointer group hover:bg-[#C9A84C]/5 transition-colors border border-transparent hover:border-[#C9A84C]/20">
+              <span class="text-[10px] font-black text-slate-700 uppercase tracking-widest">Active Status</span>
+              <input type="checkbox" [ngModel]="formData().isActive" (ngModelChange)="updateFormField('isActive', $event)" class="w-6 h-6 rounded-lg border-2 border-[#1B4332]/10 accent-[#C9A84C] cursor-pointer" />
+            </label>
           </div>
         </div>
 
@@ -277,85 +323,125 @@
         </div>
       </div>
 
-      <!-- Asset Allocation -->
-      <div class="space-y-6 flex flex-col h-full" style="overflow: visible;">
+      <!-- Asset & Instrument Allocation section -->
+      <div class="space-y-6" style="overflow: visible;">
         <div class="flex justify-between items-center border-b border-slate-100 pb-2">
-            <h4 class="text-sm font-black text-[#C9A84C] uppercase tracking-widest ">Asset Classes</h4>
+            <h4 class="text-sm font-black text-[#C9A84C] uppercase tracking-widest ">Asset & Instrument Allocation</h4>
             <button (click)="addAllocation()" class="text-[10px] font-black text-[#1B4332] uppercase tracking-widest flex items-center gap-1 hover:text-[#C9A84C] transition-colors">
               <i class="ri-add-circle-line text-sm"></i>
-              Add Asset
+              Add Asset Class
             </button>
         </div>
         
-        <div class="space-y-4 overflow-y-auto max-h-[400px] pr-2 custom-scrollbar flex-grow" style="overflow-x: visible;">
+        <div class="space-y-6" style="overflow: visible;">
           @for(alloc of allocations(); track alloc.id; let i = $index) {
-          <div class="p-6 bg-[#f8f7f2] border rounded-[32px] space-y-4 relative group/item transition-all"
-               [ngClass]="allocationValidation().errors[i]?.isDuplicate ? 'border-red-500 bg-red-50' : 'border-[#1B4332]/5'"
+          <div class="p-6 bg-[#f8f7f2] border rounded-[32px] space-y-6 relative group/item transition-all shadow-sm border-[#1B4332]/5"
+               [ngClass]="{'border-red-500 bg-red-50': allocationValidation().errors[i]?.isDuplicate}"
                style="overflow: visible;">
             
-            <button (click)="removeAllocation(i); $event.stopPropagation()" 
-                    class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center text-slate-300 hover:text-red-500 transition-all rounded-full hover:bg-red-50 z-20 group/trash">
-               <i class="ri-delete-bin-line text-lg"></i>
-            </button>
-
-            @if(allocationValidation().errors[i]?.isDuplicate) {
-              <div class="absolute top-5 right-14 flex items-center gap-1.5 text-red-600 animate-pulse">
-                <i class="ri-error-warning-fill text-xs"></i>
-                <span class="text-[9px] font-black uppercase tracking-widest">Duplicate Detected</span>
+            <div class="flex flex-col md:flex-row items-start gap-4">
+              <div class="flex-grow w-full md:max-w-[300px]">
+                <app-dropdown 
+                  label="Asset Class"
+                  [options]="assetTypeOptions()"
+                  [selectedValue]="alloc.assetTypeId"
+                  (valueChange)="updateAllocationAsset(i, $event)"
+                  placeholder="Select Asset Class"
+                  placeholderIcon="ri-coin-line"
+                ></app-dropdown>
               </div>
-            }
-
-            <app-dropdown 
-              label="Asset Class"
-              [options]="assetTypeOptions()"
-              [selectedValue]="alloc.assetTypeId"
-              (valueChange)="updateAllocationAsset(i, $event)"
-              placeholder="Select Asset"
-              placeholderIcon="ri-coin-line"
-            ></app-dropdown>
-
-            <div class="grid grid-cols-3 gap-3">
-              <div class="space-y-1">
-                <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-1" 
-                       [class.text-red-500]="allocationValidation().errors[i]?.isOutOfRange || allocationValidation().errors[i]?.isInvalidPercentage">
-                  Target %
-                  @if(allocationValidation().errors[i]?.isOutOfRange || allocationValidation().errors[i]?.isInvalidPercentage) {
-                    <i class="ri-error-warning-fill ml-1"></i>
-                  }
-                </label>
-                <input type="number" min="0" max="100" [ngModel]="alloc.targetPercentage" (ngModelChange)="updateAllocationValue(i, 'targetPercentage', $event)"
-                       [ngClass]="(allocationValidation().errors[i]?.isOutOfRange || allocationValidation().errors[i]?.isInvalidPercentage) ? 'border-red-500 text-red-600 focus:border-red-600' : 'border-[#1B4332]/5 focus:border-[#C9A84C]'"
-                       class="w-full bg-white border rounded-2xl py-2 px-4 text-xs font-black outline-none shadow-sm transition-all" />
-              </div>
-              <div class="space-y-1">
-                <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-1" [class.text-red-500]="(alloc.minPercentage || 0) < 0 || (alloc.minPercentage || 0) > 100">Min %</label>
-                <input type="number" min="0" max="100" [ngModel]="alloc.minPercentage" (ngModelChange)="updateAllocationValue(i, 'minPercentage', $event)"
-                       [ngClass]="((alloc.minPercentage || 0) < 0 || (alloc.minPercentage || 0) > 100) ? 'border-red-500 text-red-600' : 'border-[#1B4332]/5'"
-                       class="w-full bg-white border rounded-2xl py-2 px-4 text-xs font-black outline-none focus:border-[#C9A84C] shadow-sm transition-all" />
-              </div>
-              <div class="space-y-1">
-                <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-1" [class.text-red-500]="(alloc.maxPercentage || 0) < 0 || (alloc.maxPercentage || 0) > 100">Max %</label>
-                <input type="number" min="0" max="100" [ngModel]="alloc.maxPercentage" (ngModelChange)="updateAllocationValue(i, 'maxPercentage', $event)"
-                       [ngClass]="((alloc.maxPercentage || 0) < 0 || (alloc.maxPercentage || 0) > 100) ? 'border-red-500 text-red-600' : 'border-[#1B4332]/5'"
-                       class="w-full bg-white border rounded-2xl py-2 px-4 text-xs font-black outline-none focus:border-[#C9A84C] shadow-sm transition-all" />
+              
+              <div class="flex flex-grow items-center justify-between md:justify-end gap-3 pt-4 w-full">
+                <div class="flex flex-col items-center">
+                   <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1" [class.text-red-500]="allocationValidation().errors[i]?.isOutOfRange">Target %</label>
+                   <input type="number" min="0" max="100" [ngModel]="alloc.targetPercentage" (ngModelChange)="updateAllocationValue(i, 'targetPercentage', $event)"
+                          [class.border-red-500]="allocationValidation().errors[i]?.isOutOfRange"
+                          class="w-20 bg-white border border-[#1B4332]/10 rounded-xl py-2 px-3 text-xs font-black text-center outline-none focus:border-[#C9A84C]" />
+                </div>
+                <div class="flex flex-col items-center">
+                   <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Min %</label>
+                   <input type="number" min="0" max="100" [ngModel]="alloc.minPercentage" (ngModelChange)="updateAllocationValue(i, 'minPercentage', $event)"
+                          class="w-16 bg-white border border-[#1B4332]/10 rounded-xl py-2 px-2 text-xs font-bold text-center outline-none focus:border-[#C9A84C]" />
+                </div>
+                <div class="flex flex-col items-center">
+                   <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Max %</label>
+                   <input type="number" min="0" max="100" [ngModel]="alloc.maxPercentage" (ngModelChange)="updateAllocationValue(i, 'maxPercentage', $event)"
+                          class="w-16 bg-white border border-[#1B4332]/10 rounded-xl py-2 px-2 text-xs font-bold text-center outline-none focus:border-[#C9A84C]" />
+                </div>
+                <button (click)="removeAllocation(i)" 
+                        class="w-10 h-10 mt-5 flex items-center justify-center text-slate-300 hover:text-red-500 transition-all rounded-full hover:bg-red-50">
+                  <i class="ri-delete-bin-line text-lg"></i>
+                </button>
               </div>
             </div>
-            
-            @if(allocationValidation().errors[i]?.isInvalidPercentage) {
-              <p class="text-[9px] font-bold text-red-500 uppercase tracking-widest text-center mt-2 italic">
-                 Percentages must be between 0 and 100
-              </p>
-            } @else if(allocationValidation().errors[i]?.isOutOfRange) {
-              <p class="text-[9px] font-bold text-red-500 uppercase tracking-widest text-center mt-2 italic">
+
+            @if(allocationValidation().errors[i]?.isOutOfRange) {
+              <p class="text-[9px] font-bold text-red-500 uppercase tracking-widest text-right px-4">
                 Target must be between {{ alloc.minPercentage }}% and {{ alloc.maxPercentage }}%
               </p>
             }
+
+            <!-- Nested Instruments -->
+            <div class="bg-white/60 rounded-3xl p-5 space-y-4">
+              <div class="flex justify-between items-center">
+                <h5 class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]">Instruments (Distribution of {{ alloc.targetPercentage }}%)</h5>
+                <div class="flex items-center gap-3">
+                  @if(allocationValidation().errors[i]?.instrumentsInvalidCharge) {
+                    <span class="text-[9px] font-black text-red-500 uppercase tracking-widest flex items-center gap-1 animate-pulse">
+                      <i class="ri-error-warning-fill"></i> Total: {{ allocationValidation().errors[i]?.instrumentTotal }}% (Must be 100%)
+                    </span>
+                  }
+                  @if(allocationValidation().errors[i]?.hasDuplicateInstruments) {
+                    <span class="text-[9px] font-black text-red-500 uppercase tracking-widest flex items-center gap-1 animate-pulse">
+                      <i class="ri-error-warning-fill"></i> Duplicate Instruments
+                    </span>
+                  }
+                  <button (click)="addInstrumentToAllocation(i)" 
+                          class="text-[9px] font-black text-[#C9A84C] uppercase tracking-widest flex items-center gap-1">
+                    <i class="ri-add-line"></i> Add Instrument
+                  </button>
+                </div>
+              </div>
+
+              @if(alloc.instruments && alloc.instruments.length > 0) {
+                <div class="space-y-3">
+                  @for(instAlloc of alloc.instruments; track instAlloc.instrumentId; let j = $index) {
+                    <div class="flex items-center gap-4 bg-white p-3 rounded-2xl shadow-sm border border-slate-100 transition-all"
+                         [class.border-red-500]="allocationValidation().errors[i]?.duplicateInstrumentIds?.includes(instAlloc.instrumentId)"
+                         [class.bg-red-50]="allocationValidation().errors[i]?.duplicateInstrumentIds?.includes(instAlloc.instrumentId)">
+                      <div class="flex-grow min-w-0" style="overflow: visible;">
+                         <app-dropdown 
+                           [options]="getInstrumentOptions(alloc.assetTypeId)"
+                           [selectedValue]="instAlloc.instrumentId"
+                           (valueChange)="updateInstrumentAllocationValue(i, j, 'instrumentId', $event)"
+                           placeholder="Select Instrument"
+                           placeholderIcon="ri-bank-line"
+                           size="small"
+                         ></app-dropdown>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <input type="number" [ngModel]="instAlloc.percentage" (ngModelChange)="updateInstrumentAllocationValue(i, j, 'percentage', $event)"
+                               class="w-16 bg-slate-50 border-none text-[11px] font-black text-right rounded-xl py-2 px-2 outline-none" />
+                        <span class="text-[10px] font-black text-slate-400">%</span>
+                      </div>
+                      <button (click)="removeInstrumentFromAllocation(i, j)" class="text-slate-300 hover:text-red-500">
+                        <i class="ri-close-line text-lg"></i>
+                      </button>
+                    </div>
+                  }
+                </div>
+              } @else {
+                <div class="text-center py-4 border border-dashed border-slate-200 rounded-2xl">
+                   <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">No instruments added for this asset class.</p>
+                </div>
+              }
+            </div>
           </div>
           } @empty {
             <div class="py-10 text-center bg-[#f8f7f2] rounded-[40px] border border-dashed border-slate-200">
                <i class="ri-pie-chart-line text-3xl text-slate-300 block mb-2"></i>
                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">No assets allocated yet.</p>
-               <button (click)="addAllocation()" class="mt-4 text-[10px] font-black text-[#1B4332] uppercase tracking-widest underline">Start Allocating</button>
+               <button (click)="addAllocation()" class="mt-4 text-[10px] font-black text-[#1B4332] uppercase tracking-widest underline">Start Allocating Assets</button>
             </div>
           }
         </div>
@@ -363,7 +449,7 @@
         <!-- Allocation Footer -->
         <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
            <div>
-              <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Total Allocation</p>
+              <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Total Asset Allocation</p>
               <div class="flex items-center gap-2">
                  <span class="text-2xl font-black" [ngClass]="allocationValidation().total === 100 ? 'text-green-600' : 'text-red-500'">
                     {{ allocationValidation().total }}%
@@ -375,15 +461,10 @@
                  }
               </div>
            </div>
-           <div class="max-w-[150px] text-right">
+           <div class="max-w-[200px] text-right">
               <p class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">
-                 Total target must be exactly 100%
+                 Asset total must be 100%. Each asset class must also have 100% instrument distribution.
               </p>
-              @if(allocationValidation().hasDuplicates) {
-                 <p class="text-[9px] font-black text-red-500 uppercase tracking-widest mt-1">
-                    Remove Duplicate Assets
-                 </p>
-              }
            </div>
         </div>
       </div>
@@ -406,7 +487,66 @@
 </div>
 }
 
-<!-- Product Type Modal (rest as before) -->
+<!-- Instrument Modal -->
+@if(isInstrumentModalOpen()) {
+<div class="fixed inset-0 z-[999] flex items-center justify-center px-4 animate-fade-in" role="dialog" aria-modal="true">
+  <div class="fixed inset-0 bg-[#0d1a0f]/60 backdrop-blur-md transition-opacity" (click)="closeModal()"></div>
+  
+  <div class="relative bg-white rounded-[40px] shadow-2xl w-full max-w-md transform transition-all animate-slide-up flex flex-col font-jakarta">
+    <!-- Modal Header -->
+    <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-[#f8f7f2] rounded-t-[40px] shrink-0">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-[#C9A84C]/20 text-[#C9A84C] flex items-center justify-center">
+            <i class="ri-bank-line text-xl"></i>
+        </div>
+        <h3 class="text-xl font-black text-[#0d1a0f] tracking-tight">
+          {{ selectedInstrument() ? 'Edit Instrument' : 'New Instrument' }}
+        </h3>
+      </div>
+      <button type="button" (click)="closeModal()" class="text-slate-400 hover:text-red-500">
+        <i class="ri-close-large-line text-xl"></i>
+      </button>
+    </div>
+    
+    <!-- Modal Body -->
+    <div class="p-8 space-y-6 overflow-visible">
+      <div class="space-y-1">
+        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Instrument Name</label>
+        <input type="text" [ngModel]="instrumentFormData().name" (ngModelChange)="instrumentFormData.update(v => ({...v, name: $event}))" placeholder="e.g. Vanguard Total World Stock"
+               class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
+      </div>
+
+      <app-dropdown 
+        label="Parent Asset Class"
+        [options]="instrumentAssetClassOptions()"
+        [selectedValue]="instrumentFormData().assetTypeId"
+        (valueChange)="instrumentFormData.update(v => ({...v, assetTypeId: $event}))"
+        placeholder="Select Asset Class"
+        placeholderIcon="ri-coin-line"
+      ></app-dropdown>
+
+      <div class="space-y-1">
+        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Current Unit Price ($)</label>
+        <input type="number" [ngModel]="instrumentFormData().unitPrice" (ngModelChange)="instrumentFormData.update(v => ({...v, unitPrice: $event}))" placeholder="0.00"
+               class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="px-8 py-6 border-t border-slate-100 flex items-center justify-end gap-3 bg-[#f8f7f2] rounded-b-[40px] shrink-0">
+      <button type="button" (click)="closeModal()" class="px-6 py-2 rounded-2xl font-black text-slate-500 uppercase tracking-widest text-[10px]">
+        Cancel
+      </button>
+      <button (click)="saveInstrument()" class="bg-[#C9A84C] hover:bg-[#9a7a2b] text-white px-8 py-3.5 rounded-2xl font-black shadow-lg transition-all flex items-center gap-2 text-xs uppercase tracking-widest">
+        <i class="ri-save-line"></i>
+        <span>Save Instrument</span>
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Product Type Modal -->
 @if(isTypeModalOpen()) {
 <div class="fixed inset-0 z-[999] flex items-center justify-center px-4 animate-fade-in" role="dialog" aria-modal="true">
   <div class="fixed inset-0 bg-[#0d1a0f]/60 backdrop-blur-md transition-opacity" (click)="closeModal()"></div>
@@ -520,7 +660,7 @@
 </div>
 }
 
-<!-- View Details Modal (rest as before) -->
+<!-- View Details Modal -->
 @if(isViewModalOpen() && selectedProduct()) {
 <div class="fixed inset-0 z-[999] flex items-center justify-center px-4 animate-fade-in" aria-labelledby="modal-title" role="dialog" aria-modal="true">
   <div class="fixed inset-0 bg-[#0d1a0f]/60 backdrop-blur-md transition-opacity" (click)="closeModal()"></div>
