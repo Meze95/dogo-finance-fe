@@ -74,6 +74,40 @@
         </div>
       </div>
 
+      <!-- Recommended for you Section -->
+      <div class="space-y-6">
+        <div class="flex items-center justify-between px-2">
+            <h3 class="text-xl font-black text-[#0d1a0f] uppercase tracking-tighter italic">Recommended for you</h3>
+            <button routerLink="/client/products" class="text-[10px] font-black text-[#C9A84C] uppercase tracking-widest hover:text-[#1B4332] transition-colors">See all portfolios</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @for(p of suggestedProducts(); track p.productId) {
+                <div class="bg-white rounded-[40px] p-8 border border-[#1B4332]/5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all group flex flex-col h-full">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-[#f8f7f2] flex items-center justify-center text-[#C9A84C] transition-colors group-hover:bg-[#C9A84C] group-hover:text-white">
+                            <i class="ri-pie-chart-line text-2xl"></i>
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border border-[#1B4332]/5">
+                            {{ p.riskLevel }} Risk
+                        </span>
+                    </div>
+                    <h4 class="text-lg font-black text-[#0d1a0f] tracking-tight mb-2">{{ p.name }}</h4>
+                    <p class="text-xs font-medium text-slate-400 line-clamp-2 italic mb-8">"{{ p.description }}"</p>
+                    
+                    <div class="mt-auto grid grid-cols-2 gap-3">
+                        <button (click)="viewDetail(p)" class="w-full py-3 bg-[#f8f7f2] hover:bg-slate-100 text-[#1B4332] rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all">
+                            Explore
+                        </button>
+                        <button (click)="openInvest(p)" class="w-full py-3 bg-[#1B4332] hover:bg-[#2D6A4F] text-white rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all shadow-lg shadow-[#1B4332]/10">
+                            Invest
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+      </div>
+
       @if (nextSteps().length > 0) {
         <h3 class="text-xl font-black text-[#0d1a0f] uppercase tracking-tighter italic mb-4">Todo List</h3>
         
@@ -398,6 +432,130 @@
              }
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Dashboard Investment Modal -->
+@if(showInvestModal()) {
+    <div class="fixed inset-0 z-[1000] flex items-center justify-center p-4 animate-fade-in shadow-2xl">
+        <div class="absolute inset-0 bg-[#0d1a0f]/80 backdrop-blur-xl" (click)="showInvestModal.set(false)"></div>
+        <div class="relative bg-white rounded-[40px] shadow-2xl w-full max-w-md p-10 transform transition-all animate-slide-up text-center border border-[#1B4332]/5">
+            <div class="w-16 h-16 rounded-3xl bg-[#C9A84C]/20 text-[#C9A84C] flex items-center justify-center mx-auto mb-6 shadow-pill">
+                <i class="ri-copper-coin-line text-3xl"></i>
+            </div>
+            <h3 class="text-2xl font-black text-[#0d1a0f] tracking-tight mb-2">Initialize Investment</h3>
+            <p class="text-[10px] font-bold text-slate-400 mb-8 uppercase tracking-widest leading-relaxed">Choose your principal amount for <br><span class="text-[#1B4332] font-black">{{ selectedProduct()?.name }}</span></p>
+            
+            <div class="space-y-6 text-left mb-10">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-[#C9A84C] ml-1">Investment Amount (₦)</label>
+                    <div class="relative group">
+                        <div class="absolute left-6 top-1/2 -translate-y-1/2 text-xl font-black text-slate-300 group-focus-within:text-[#1B4332] transition-colors">₦</div>
+                        <input type="number" 
+                               [(ngModel)]="investAmount"
+                               class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-6 pl-12 pr-6 text-2xl font-black text-[#0d1a0f] outline-none transition-all shadow-sm"
+                               placeholder="0.00" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3">
+                <button (click)="confirmInvestment()" 
+                        [disabled]="isInvesting() || investAmount() <= 0"
+                        class="w-full bg-[#1B4332] disabled:opacity-50 hover:bg-[#2D6A4F] text-white py-5 rounded-[2rem] font-black text-[10px] uppercase tracking-widest shadow-2xl transition-all">
+                    @if(isInvesting()) {
+                        <i class="ri-loader-4-line animate-spin mr-2"></i> Initializing...
+                    } @else {
+                        Confirm Investment
+                    }
+                </button>
+                <button (click)="showInvestModal.set(false)" class="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-red-500 transition-colors py-2">Maybe Later</button>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Shared Strategy Overview Modal (Copied for Dashboard context) -->
+@if(showDetailModal() && selectedProduct()) {
+  <div class="fixed inset-0 z-[1100] flex items-center justify-center p-4 animate-fade-in shadow-2xl">
+    <div class="absolute inset-0 bg-[#0d1a0f]/80 backdrop-blur-md" (click)="showDetailModal.set(false)"></div>
+    
+    <div class="relative bg-white rounded-[40px] shadow-2xl w-full max-w-2xl transform transition-all animate-slide-up flex flex-col max-h-[90vh] overflow-hidden border border-[#1B4332]/5">
+      <!-- Header -->
+      <div class="p-8 pb-4 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-4">
+            <button (click)="showDetailModal.set(false)" class="w-10 h-10 rounded-2xl bg-[#f8f7f2] hover:bg-slate-100 flex items-center justify-center text-[#1B4332] transition-colors">
+                <i class="ri-arrow-left-line text-xl"></i>
+            </button>
+            <h3 class="text-2xl font-black text-[#0d1a0f] tracking-tight">Strategy Details</h3>
+        </div>
+        <button (click)="showDetailModal.set(false)" class="text-slate-400 hover:text-red-500 transition-colors">
+            <i class="ri-close-large-line text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="p-8 pt-4 overflow-y-auto custom-scrollbar-h space-y-10 flex-grow">
+        <div class="text-center space-y-4 py-4">
+            <div class="inline-flex px-4 py-1.5 rounded-full bg-[#C9A84C]/10 text-[#C9A84C] text-[10px] font-black uppercase tracking-[0.2em] mb-2">Recommended Strategy</div>
+            <h2 class="text-4xl font-black text-[#0d1a0f] tracking-tight leading-none">{{ selectedProduct()?.name }}</h2>
+            <p class="text-sm font-medium text-slate-500 max-w-md mx-auto italic">"{{ selectedProduct()?.description }}"</p>
+        </div>
+
+        <div class="space-y-8 bg-[#f8f7f2] p-8 rounded-[40px] border border-[#1B4332]/5">
+            <div class="flex justify-between items-center mb-6">
+                <h4 class="text-xs font-black text-[#1B4332] uppercase tracking-[0.3em]">Target Allocation</h4>
+                <span class="text-[9px] font-black text-[#C9A84C] uppercase tracking-widest flex items-center gap-1">
+                    <i class="ri-checkbox-circle-fill"></i> Audited
+                </span>
+            </div>
+
+            <div class="space-y-6">
+                @for(alloc of selectedProduct()?.allocations; track alloc.id; let i = $index) {
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center px-1">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-xl flex items-center justify-center text-white text-sm" [class]="getAssetColor(i)">
+                                <i class="ri-bank-line"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-black text-[#0d1a0f]">{{ alloc.assetTypeName }}</p>
+                                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ alloc.instruments?.length }} Instruments</p>
+                            </div>
+                        </div>
+                        <p class="text-xl font-black text-[#0d1a0f]">{{ alloc.targetPercentage }}%</p>
+                    </div>
+                    
+                    <div class="h-3 w-full bg-white rounded-full p-0.5 shadow-inner overflow-hidden">
+                        <div class="h-full rounded-full transition-all duration-1000 ease-out" 
+                             [class]="getAssetColor(i)"
+                             [style.width]="alloc.targetPercentage + '%'">
+                        </div>
+                    </div>
+
+                    <div class="pl-11 space-y-2">
+                        @for(inst of alloc.instruments; track inst.id) {
+                            <div class="flex items-center justify-between py-1 border-b border-[#1B4332]/5 last:border-0">
+                                <span class="text-[10px] font-bold text-slate-500">{{ inst.instrumentName }}</span>
+                                <span class="text-[9px] font-black text-slate-400">{{ inst.percentage }}%</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+      </div>
+
+      <!-- Action -->
+      <div class="p-8 border-t border-slate-50 bg-[#f8f7f2] shrink-0">
+        <button (click)="openInvest(selectedProduct()!)" 
+                class="w-full bg-[#1B4332] hover:bg-[#2D6A4F] text-white py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-2xl transition-all flex items-center justify-center gap-3">
+          <i class="ri-shield-check-fill text-[#C9A84C] text-lg"></i>
+          Initialize Investment Now
+        </button>
       </div>
     </div>
   </div>

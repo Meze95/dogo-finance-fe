@@ -30,6 +30,12 @@ export interface AssetType {
   createdAt?: Date;
 }
 
+export interface AdminUserInvestment extends UserInvestment {
+  clientName: string;
+  clientEmail: string;
+  clientInitials: string;
+}
+
 export interface AssetInstrument {
   id: number;
   name: string;
@@ -43,6 +49,28 @@ export interface InstrumentAllocation {
   instrumentId: number;
   instrumentName?: string;
   percentage: number; // Percentage of the asset class's total
+}
+
+export interface UserInvestment {
+  id: number;
+  productId: number;
+  productName: string;
+  totalInvested: number;
+  currentValue: number;
+  growthPercentage: number;
+  status: 'active' | 'exited';
+  investedAt: string;
+  holdings: InstrumentHolding[];
+}
+
+export interface InstrumentHolding {
+  id: number;
+  instrumentId: number;
+  instrumentName: string;
+  units: number;
+  purchasePrice: number;
+  currentPrice: number;
+  allocationPercentage: number;
 }
 
 export interface ProductAssetAllocation {

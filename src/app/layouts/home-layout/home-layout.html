@@ -157,12 +157,21 @@
 
       <!-- Desktop CTA Buttons -->
       <div class="hidden lg:flex items-center space-x-3">
-        <button routerLink="/login" class="px-6 py-2.5 font-black text-[#1B4332] border-2 border-[#1B4332]/20 rounded-xl hover:border-[#1B4332] transition-all text-[14px]">
-          Sign in
-        </button>
-        <button routerLink="/register" class="px-7 py-3 bg-[#1B4332] text-[#C9A84C] font-black rounded-xl hover:bg-[#2D6A4F] transition-all shadow-lg shadow-[#1B4332]/20 text-[14px]">
-          Create Free Account
-        </button>
+        @if (!isLoggedIn()) {
+          <button routerLink="/login" class="px-6 py-2.5 font-black text-[#1B4332] border-2 border-[#1B4332]/20 rounded-xl hover:border-[#1B4332] transition-all text-[14px]">
+            Sign in
+          </button>
+          <button routerLink="/register" class="px-7 py-3 bg-[#1B4332] text-[#C9A84C] font-black rounded-xl hover:bg-[#2D6A4F] transition-all shadow-lg shadow-[#1B4332]/20 text-[14px]">
+            Create Free Account
+          </button>
+        } @else {
+          <button [routerLink]="dashboardLink()" class="px-7 py-3 bg-[#1B4332] text-[#C9A84C] font-black rounded-xl hover:bg-[#2D6A4F] transition-all shadow-lg shadow-[#1B4332]/20 text-[14px]">
+            Dashboard
+          </button>
+          <button (click)="handleLogout()" class="px-6 py-2.5 font-black text-red-600 border-2 border-red-500/20 rounded-xl hover:bg-red-50 hover:border-red-500 transition-all text-[14px]">
+            Logout
+          </button>
+        }
       </div>
 
       <!-- Mobile Menu Button -->
@@ -204,8 +213,13 @@
         </a>
 
         <div class="pt-6 flex flex-col space-y-3">
-          <button routerLink="/login" (click)="toggleMenu()" class="w-full py-4 border-2 border-[#1B4332] text-[#1B4332] font-black rounded-xl">Sign In</button>
-          <button routerLink="/register" (click)="toggleMenu()" class="w-full py-4 bg-[#1B4332] text-[#C9A84C] font-black rounded-xl shadow-lg">Create Free Account</button>
+          @if (!isLoggedIn()) {
+            <button routerLink="/login" (click)="toggleMenu()" class="w-full py-4 border-2 border-[#1B4332] text-[#1B4332] font-black rounded-xl">Sign In</button>
+            <button routerLink="/register" (click)="toggleMenu()" class="w-full py-4 bg-[#1B4332] text-[#C9A84C] font-black rounded-xl shadow-lg">Create Free Account</button>
+          } @else {
+            <button [routerLink]="dashboardLink()" (click)="toggleMenu()" class="w-full py-4 bg-[#1B4332] text-[#C9A84C] font-black rounded-xl shadow-lg">Go to Dashboard</button>
+            <button (click)="handleLogout(); toggleMenu()" class="w-full py-4 border-2 border-red-500 text-red-600 font-black rounded-xl">Logout Session</button>
+          }
         </div>
       </div>
     </div>

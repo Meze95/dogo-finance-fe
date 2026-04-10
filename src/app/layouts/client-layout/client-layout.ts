@@ -19,7 +19,7 @@ export class ClientLayout {
   isLoggingOut = signal(false);
 
   user = this.authService.currentUser;
-  
+
   userName = computed(() => {
     const u = this.user();
     if (!u) return 'Dogo User';
@@ -37,10 +37,10 @@ export class ClientLayout {
   });
 
   menuItems = [
-    { label: 'Dashboard',    icon: 'ri-dashboard-3-fill',      link: '/client/dashboard' },
-    // { label: 'My Portfolio', icon: 'ri-pie-chart-2-fill',      link: '/client/portfolio' },
-    { label: 'Invest',     icon: 'ri-box-3-line',            link: '/client/products' },
-    { label: 'Transactions', icon: 'ri-exchange-funds-fill',   link: '/client/transactions' },
+    { label: 'Dashboard', icon: 'ri-dashboard-3-fill', link: '/client/dashboard' },
+    { label: 'Opportunities', icon: 'ri-funds-box-fill', link: '/client/products' },
+    { label: 'My Portfolio', icon: 'ri-pie-chart-2-fill', link: '/client/investments' },
+    { label: 'Transactions', icon: 'ri-exchange-box-fill', link: '/client/transactions' },
   ];
 
   managementItems = [

@@ -45,10 +45,12 @@ export const routes: Routes = [
     loadComponent: () => import('./layouts/client-layout/client-layout').then(m => m.ClientLayout),
     data: { roles: [UserRole.Customer] },
     children: [
-       { path: 'dashboard', loadComponent: () => import('./pages/client/dashboard/dashboard.component').then(m => m.ClientDashboardComponent) },
-       { path: 'settings',  loadComponent: () => import('./pages/client/settings/settings.component').then(m => m.SettingsComponent) },
-       { path: 'profile',   loadComponent: () => import('./pages/client/profile/profile.component').then(m => m.ProfileComponent) },
-       { path: 'transactions', loadComponent: () => import('./pages/client/transactions/transactions.component').then(m => m.TransactionsComponent) }
+        { path: 'dashboard', loadComponent: () => import('./pages/client/dashboard/dashboard.component').then(m => m.ClientDashboardComponent) },
+        { path: 'products',  loadComponent: () => import('./pages/client/portfolios/portfolios.component').then(m => m.ClientPortfoliosComponent) },
+        { path: 'investments', loadComponent: () => import('./pages/client/investments/investments.component').then(m => m.ClientInvestmentsComponent) },
+        { path: 'settings',  loadComponent: () => import('./pages/client/settings/settings.component').then(m => m.SettingsComponent) },
+        { path: 'profile',   loadComponent: () => import('./pages/client/profile/profile.component').then(m => m.ProfileComponent) },
+        { path: 'transactions', loadComponent: () => import('./pages/client/transactions/transactions.component').then(m => m.TransactionsComponent) }
     ]
   },
 
@@ -73,6 +75,7 @@ export const routes: Routes = [
       { path: 'users', loadComponent: () => import('./pages/admin/user-hub/user-hub').then(m => m.UserHub) },
       { path: 'clients', loadComponent: () => import('./pages/admin/clients/clients').then(m => m.Clients) },
       { path: 'products', loadComponent: () => import('./pages/admin/products/admin-products').then(m => m.AdminProducts) },
+      { path: 'investments', loadComponent: () => import('./pages/admin/investments/investments.component').then(m => m.AdminInvestmentsComponent) },
       { path: 'transactions', loadComponent: () => import('./pages/admin/transactions/transactions.component').then(m => m.AdminTransactionsComponent) },
       { path: 'settings', loadComponent: () => import('./pages/admin/settings/settings').then(m => m.Settings) },
       { path: 'profile', loadComponent: () => import('./pages/admin/profile/profile').then(m => m.Profile) }

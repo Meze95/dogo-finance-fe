@@ -55,11 +55,6 @@
           [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">
           {{ item.label }}
         </span>
-        @if(isSidebarOpen() && item.label === 'KYC & Verifications') {
-        <div
-          class="ml-auto w-5 h-5 rounded-full bg-red-500 flex items-center justify-center text-[10px] font-black zoom-in text-white shadow-lg">
-          12</div>
-        }
       </a>
       }
 
@@ -186,8 +181,6 @@
         <button
           class="w-10 h-10 rounded-xl bg-white border border-[#1B4332]/10 flex items-center justify-center text-[#1B4332] hover:bg-white hover:shadow-xl transition-all relative group">
           <i class="ri-mail-send-line text-xl group-hover:text-[#C9A84C]"></i>
-          <span
-            class="absolute -top-1 -right-1 w-5 h-5 bg-[#C9A84C] text-[#1B4332] text-[9px] font-black flex items-center justify-center rounded-full border-2 border-white">8</span>
         </button>
 
         <!-- Admin Profile Pill -->

@@ -1,8 +1,12 @@
 import { Component, signal, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../shared/services/auth.service';
 import { CustomerService } from '../../../shared/services/customer.service';
+import { ProductService } from '../../../shared/services/product.service';
+import { InvestmentService } from '../../../shared/services/investment.service';
+import { Product } from '../../../shared/models/product.model';
 
 export interface Transaction {
   id: string;
@@ -24,16 +28,26 @@ export interface InvestmentStub {
 @Component({
   selector: 'app-client-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
 export class ClientDashboardComponent implements OnInit {
   private authService = inject(AuthService);
   private customerService = inject(CustomerService);
+  private productService = inject(ProductService);
+  private investmentService = inject(InvestmentService);
   
   // Signals for state management
   user = this.authService.currentUser;
+  products = this.productService.products;
+  suggestedProducts = computed(() => this.products().filter(p => p.isActive).slice(0, 3));
+
+  showInvestModal = signal(false);
+  showDetailModal = signal(false);
+  selectedProduct = signal<Product | null>(null);
+  investAmount = signal<number>(100000);
+  isInvesting = signal(false);
   
   userName = computed(() => {
     const u = this.user();
@@ -61,8 +75,41 @@ export class ClientDashboardComponent implements OnInit {
   nextSteps = signal<any[]>([]);
 
   ngOnInit() {
+    this.productService.getProducts();
     this.loadTodoList();
     this.loadRelationshipTypes();
+  }
+
+  openInvest(product: Product) {
+    this.showDetailModal.set(false);
+    this.selectedProduct.set(product);
+    this.showInvestModal.set(true);
+    this.investAmount.set(100000);
+  }
+
+  viewDetail(product: Product) {
+    this.selectedProduct.set(product);
+    this.showDetailModal.set(true);
+  }
+
+  getAssetColor(index: number): string {
+    const colors = ['bg-[#1B4332]', 'bg-[#C9A84C]', 'bg-[#2D6A4F]', 'bg-[#0d1a0f]', 'bg-[#40916c]'];
+    return colors[index % colors.length];
+  }
+
+  confirmInvestment() {
+    if (!this.selectedProduct() || !this.investAmount()) return;
+    this.isInvesting.set(true);
+    this.investmentService.invest(this.selectedProduct()!.productId, this.investAmount()).subscribe({
+      next: () => {
+        this.isInvesting.set(false);
+        this.showInvestModal.set(false);
+        this.showDetailModal.set(false);
+        // Refresh local balance stub for demo
+        this.availableNaira.update(v => v + 50000); 
+      },
+      error: () => this.isInvesting.set(false)
+    });
   }
 
   loadRelationshipTypes() {

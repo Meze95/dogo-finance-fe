@@ -87,6 +87,42 @@ export class ProductService {
             ]
           }
         ]
+      },
+      {
+        productId: 2,
+        name: 'Agri-Sukuk Al-Murabaha',
+        code: 'AGS-2026',
+        productTypeId: 3,
+        productTypeName: 'Ethical Investing',
+        riskLevel: 'Medium',
+        description: 'Investment in agricultural processing and trade finance.',
+        isActive: true,
+        allocations: [
+          {
+            id: 3, productId: 2, assetTypeId: 3, assetTypeName: 'Sukuk', targetPercentage: 100, minPercentage: 90, maxPercentage: 100,
+            instruments: [
+              { id: 5, instrumentId: 5, instrumentName: 'Franklin Gulf Sukuk Fund', percentage: 100 }
+            ]
+          }
+        ]
+      },
+      {
+        productId: 3,
+        name: 'Real Estate Alpha Pool',
+        code: 'RE-ALPHA',
+        productTypeId: 3,
+        productTypeName: 'Ethical Investing',
+        riskLevel: 'Medium',
+        description: 'Direct exposure to shariah-compliant residential developments.',
+        isActive: true,
+        allocations: [
+          {
+             id: 4, productId: 3, assetTypeId: 4, assetTypeName: 'Cash', targetPercentage: 100, minPercentage: 100, maxPercentage: 100,
+             instruments: [
+               { id: 7, instrumentId: 7, instrumentName: 'Standard Chartered Murabaha', percentage: 100 }
+             ]
+          }
+        ]
       }
     ];
     this.products.set(mockProducts);

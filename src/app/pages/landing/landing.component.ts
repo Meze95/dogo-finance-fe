@@ -1,6 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { AuthService } from '../../shared/services/auth.service';
+import { UserRole } from '../../shared/models/user-role.enum';
 
 interface Product {
   id: string;
@@ -28,6 +30,21 @@ interface Testimonial {
   styleUrl: './landing.component.css'
 })
 export class LandingComponent {
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
+  isLoggedIn = computed(() => this.authService.currentUser() !== null);
+  
+  dashboardLink = computed(() => {
+    const user = this.authService.currentUser();
+    if (!user) return '/login';
+    return user.role === UserRole.Customer ? '/client/dashboard' : '/admin/dashboard';
+  });
+
+  handleLogout() {
+    this.authService.logout();
+    this.router.navigate(['/']);
+  }
 
   products = signal<Product[]>([
     {

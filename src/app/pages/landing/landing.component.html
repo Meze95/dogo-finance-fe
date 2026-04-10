@@ -33,9 +33,15 @@
         </p>
 
         <div class="flex flex-wrap gap-4 mb-14">
-          <button class="px-10 py-5 bg-[#1B4332] text-[#C9A84C] font-black rounded-2xl hover:bg-[#2D6A4F] transition-all shadow-xl shadow-[#1B4332]/25 text-lg">
-            Create Free Account
-          </button>
+          @if (!isLoggedIn()) {
+            <button routerLink="/register" class="px-10 py-5 bg-[#1B4332] text-[#C9A84C] font-black rounded-2xl hover:bg-[#2D6A4F] transition-all shadow-xl shadow-[#1B4332]/25 text-lg">
+              Create Free Account
+            </button>
+          } @else {
+            <button [routerLink]="dashboardLink()" class="px-10 py-5 bg-[#1B4332] text-[#C9A84C] font-black rounded-2xl hover:bg-[#2D6A4F] transition-all shadow-xl shadow-[#1B4332]/25 text-lg">
+              Go to Dashboard
+            </button>
+          }
           <a routerLink="/how-it-works" class="px-10 py-5 border-2 border-[#1B4332]/20 text-[#1B4332] font-black rounded-2xl hover:border-[#1B4332] hover:bg-[#e8f5ee] transition-all text-lg flex items-center gap-2">
             How It Works <i class="ri-arrow-right-line"></i>
           </a>
