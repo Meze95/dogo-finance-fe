@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../shared/services/product.service';
 import { Product, ProductAssetAllocation, ProductType, AssetType, AssetInstrument } from '../../../shared/models/product.model';
 import { DropdownComponent, DropdownOption } from '../../../shared/components/ui/dropdown.component';
+import { AlertService } from '../../../shared/services/alert.service';
 
 declare var Swal: any;
 
@@ -16,6 +17,7 @@ declare var Swal: any;
 })
 export class AdminProducts {
   public productService = inject(ProductService);
+  private alertService = inject(AlertService);
   
   products = this.productService.products;
   productTypes = this.productService.productTypes;
@@ -121,85 +123,29 @@ export class AdminProducts {
     }).then((result: any) => {
       if (result.isConfirmed) {
         execute();
-      } else {
-        Swal.fire({
-          icon: 'info',
-          title: 'Operation Canceled',
-          text: `The ${action.toLowerCase()} operation was stopped.`,
-          timer: 1500,
-          showConfirmButton: false,
-          background: '#f8f7f2',
-          customClass: { popup: 'rounded-[30px]' }
-        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.alertService.info('Operation Canceled', `The ${action.toLowerCase()} operation was stopped.`);
       }
     });
   }
 
-  // Common Swal Response Pattern with Custom BRANDED Loader
+  // Handle Response with Toast UI
   private handleResponse(obs: any, successTitle: string) {
-    const customLoaderHtml = `
-      <div class="flex flex-col items-center justify-center py-6">
-        <div class="relative w-24 h-24 mb-6">
-          <!-- Outer Rotating Ring -->
-          <div class="absolute inset-0 rounded-full border-[3px] border-slate-100 border-t-[#C9A84C] animate-spin"></div>
-          <!-- Inner Static Ring -->
-          <div class="absolute inset-2 rounded-full border-[1px] border-slate-200"></div>
-          <!-- Logo Center -->
-          <div class="absolute inset-4 rounded-full bg-[#1B4332] flex items-center justify-center shadow-lg">
-            <span class="text-[#C9A84C] text-2xl font-black italic">D</span>
-          </div>
-        </div>
-        <div class="text-[12px] font-black text-[#1B4332] uppercase tracking-[4px] mb-2">DOGO FINANCE</div>
-        <div class="flex gap-1.5 align-center">
-            <div class="w-1.5 h-1.5 rounded-full bg-[#C9A84C] animate-bounce" style="animation-delay: 0.1s"></div>
-            <div class="w-1.5 h-1.5 rounded-full bg-[#C9A84C] animate-bounce" style="animation-delay: 0.2s"></div>
-            <div class="w-1.5 h-1.5 rounded-full bg-[#C9A84C] animate-bounce" style="animation-delay: 0.3s"></div>
-        </div>
-      </div>
-    `;
-
-    Swal.fire({
-      html: customLoaderHtml,
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      showConfirmButton: false,
-      background: '#f8f7f2',
-      customClass: {
-        popup: 'rounded-[40px] shadow-2xl border border-white/50'
-      }
-    });
+    const loaderId = this.alertService.loading('Processing', 'Please wait...');
 
     obs.subscribe({
       next: (res: any) => {
-        if (res.success) {
-          Swal.fire({ 
-            icon: 'success', 
-            title: successTitle, 
-            text: res.message || 'Updated successfully!', 
-            timer: 2500, 
-            showConfirmButton: false,
-            background: '#f8f7f2',
-            customClass: { popup: 'rounded-[30px]' }
-          });
+        this.alertService.remove(loaderId);
+        if (res.success || res.boolean || res.message) {
+          this.alertService.success(successTitle, res.message || 'Updated successfully!');
           this.closeModal();
         } else {
-          Swal.fire({ 
-            icon: 'error', 
-            title: 'Action Failed', 
-            text: res.message || 'Something went wrong.',
-            background: '#f8f7f2',
-            customClass: { popup: 'rounded-[30px]' }
-          });
+          this.alertService.error('Action Failed', res.message || 'Something went wrong.');
         }
       },
       error: (err: any) => {
-        Swal.fire({ 
-          icon: 'error', 
-          title: 'Connection Lost', 
-          text: 'Unable to reach the server.',
-          background: '#f8f7f2',
-          customClass: { popup: 'rounded-[30px]' }
-        });
+        this.alertService.remove(loaderId);
+        this.alertService.error('Connection Lost', 'Unable to reach the server.');
       }
     });
   }
@@ -241,10 +187,8 @@ export class AdminProducts {
   }
 
   saveType() {
-    this.confirmAction('Save Type', () => {
-      const typeData: ProductType = { ...this.typeFormData() as ProductType, productTypeId: this.selectedType()?.productTypeId || 0 };
-      this.handleResponse(this.productService.saveProductType(typeData), 'Type Saved');
-    });
+    const typeData: ProductType = { ...this.typeFormData() as ProductType, productTypeId: this.selectedType()?.productTypeId || 0 };
+    this.handleResponse(this.productService.saveProductType(typeData), 'Type Saved');
   }
 
   deleteType(id: number) {
@@ -275,10 +219,8 @@ export class AdminProducts {
   }
 
   saveAsset() {
-    this.confirmAction('Save Asset Class', () => {
-      const assetData: AssetType = { ...this.assetFormData() as AssetType, assetTypeId: this.selectedAsset()?.assetTypeId || 0 };
-      this.handleResponse(this.productService.saveAssetType(assetData), 'Asset Saved');
-    });
+    const assetData: AssetType = { ...this.assetFormData() as AssetType, assetTypeId: this.selectedAsset()?.assetTypeId || 0 };
+    this.handleResponse(this.productService.saveAssetType(assetData), 'Asset Saved');
   }
 
   deleteAsset(id: number) {
@@ -301,10 +243,8 @@ export class AdminProducts {
   }
 
   saveInstrument() {
-    this.confirmAction('Save Instrument', () => {
-      const instrumentData: AssetInstrument = { ...this.instrumentFormData() as AssetInstrument, id: this.selectedInstrument()?.id || 0 };
-      this.handleResponse(this.productService.saveInstrument(instrumentData), 'Instrument Saved');
-    });
+    const instrumentData: AssetInstrument = { ...this.instrumentFormData() as AssetInstrument, id: this.selectedInstrument()?.id || 0 };
+    this.handleResponse(this.productService.saveInstrument(instrumentData), 'Instrument Saved');
   }
 
   deleteInstrument(id: number) {
@@ -321,14 +261,12 @@ export class AdminProducts {
   saveProduct() {
     const validation = this.allocationValidation();
     if (!validation.isValid) {
-      Swal.fire({ icon: 'error', title: 'Validation Failed', text: 'Total allocation must be exactly 100%.', confirmButtonColor: '#C9A84C', background: '#f8f7f2', customClass: { popup: 'rounded-[30px]' } });
+      this.alertService.error('Validation Failed', 'Total allocation must be exactly 100%.');
       return;
     }
 
-    this.confirmAction('Save Product', () => {
-      const productData: Product = { ...(this.selectedProduct() || {}), ...this.formData() as Product, allocations: this.allocations(), productId: this.selectedProduct()?.productId || 0 };
-      this.handleResponse(this.productService.saveProduct(productData), 'Product Saved');
-    });
+    const productData: Product = { ...(this.selectedProduct() || {}), ...this.formData() as Product, allocations: this.allocations(), productId: this.selectedProduct()?.productId || 0 };
+    this.handleResponse(this.productService.saveProduct(productData), 'Product Saved');
   }
 
   deleteProduct(id: number) {

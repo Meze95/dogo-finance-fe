@@ -7,6 +7,7 @@ import { CustomerService } from '../../../shared/services/customer.service';
 import { ProductService } from '../../../shared/services/product.service';
 import { InvestmentService } from '../../../shared/services/investment.service';
 import { Product } from '../../../shared/models/product.model';
+import { DropdownComponent, DropdownOption } from '../../../shared/components/ui/dropdown.component';
 
 export interface Transaction {
   id: string;
@@ -28,7 +29,7 @@ export interface InvestmentStub {
 @Component({
   selector: 'app-client-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, DropdownComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -181,6 +182,22 @@ export class ClientDashboardComponent implements OnInit {
     { id: '1', bankName: 'Guaranty Trust Bank', accountNumber: '0123456789' },
     { id: '2', bankName: 'Zenith Bank', accountNumber: '2123456789' }
   ]);
+
+  registeredBankOptions = computed<DropdownOption[]>(() => {
+    return this.registeredBanks().map(b => ({
+      value: b.id,
+      label: `${b.bankName} (${b.accountNumber})`,
+      icon: 'ri-bank-card-line'
+    }));
+  });
+
+  relationshipTypeOptions = computed<DropdownOption[]>(() => {
+    return this.relationshipTypes().map(t => ({
+      value: t.id || t.Id,
+      label: t.name || t.Name,
+      icon: 'ri-user-heart-line'
+    }));
+  });
 
   // Computed signals
   totalGrowth = computed(() => {

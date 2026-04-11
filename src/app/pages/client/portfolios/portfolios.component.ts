@@ -5,7 +5,7 @@ import { ProductService } from '../../../shared/services/product.service';
 import { InvestmentService } from '../../../shared/services/investment.service';
 import { Product, ProductAssetAllocation } from '../../../shared/models/product.model';
 
-declare var Swal: any;
+import { AlertService } from '../../../shared/services/alert.service';
 
 @Component({
   selector: 'app-client-portfolios',
@@ -17,6 +17,7 @@ declare var Swal: any;
 export class ClientPortfoliosComponent implements OnInit {
   private productService = inject(ProductService);
   private investmentService = inject(InvestmentService);
+  private alertService = inject(AlertService);
 
   products = this.productService.products;
   activeFilter = signal<string>('All');
@@ -63,15 +64,15 @@ export class ClientPortfoliosComponent implements OnInit {
       next: (res) => {
         this.isProcessing.set(false);
         this.closeModal();
-        Swal.fire({
-          icon: 'success',
-          title: 'Investment Successful',
-          text: `You have successfully invested ₦${this.investAmount().toLocaleString()} in ${this.selectedProduct()!.name}`,
-          confirmButtonColor: '#1B4332',
-          customClass: { popup: 'rounded-[30px]' }
-        });
+        this.alertService.success(
+          'Investment Successful',
+          `You have successfully invested ₦${this.investAmount().toLocaleString()} in ${this.selectedProduct()!.name}`
+        );
       },
-      error: () => this.isProcessing.set(false)
+      error: () => {
+        this.isProcessing.set(false);
+        this.alertService.error('Action Failed', 'We could not process your investment. Please try again.');
+      }
     });
   }
 

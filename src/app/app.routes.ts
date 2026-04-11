@@ -36,6 +36,10 @@ export const routes: Routes = [
     path: 'verify-email',
     loadComponent: () => import('./pages/auth/verify-email/verify-email.component').then(m => m.VerifyEmailComponent)
   },
+  {
+    path: 'lockout',
+    loadComponent: () => import('./pages/auth/lockout/lockout.component').then(m => m.LockoutComponent)
+  },
 
   // ---- CLIENT DASHBOARD (Secured Layout) ----
   {
