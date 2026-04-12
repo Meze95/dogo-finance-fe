@@ -80,3 +80,23 @@
 .shadow-pill {
   box-shadow: 0 20px 40px -10px rgba(34, 197, 94, 0.3);
 }
+
+.animate-shake {
+  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+.slide-in-from-right-4 {
+  animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(1rem); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}

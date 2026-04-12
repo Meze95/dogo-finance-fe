@@ -74,7 +74,7 @@
                    <div class="p-2 bg-[#1B4332]/5 rounded-lg text-[#1B4332]">
                       <i class="ri-funds-box-fill text-xl"></i>
                    </div>
-                   <span class="text-sm font-bold text-[#0d1a0f]">{{ inv.productName }}</span>
+                   <span class="text-sm font-bold text-[#0d1a0f]">{{ inv.portfolioName }}</span>
                 </div>
               </td>
               <td class="px-8 py-6">
@@ -139,7 +139,7 @@
       <div class="p-8 border-b border-[#1B4332]/5 flex justify-between items-center bg-[#f8f7f2]">
         <div>
           <h3 class="text-2xl font-black text-[#0d1a0f] tracking-tighter">Portfolio Audit</h3>
-          <p class="text-[10px] font-black text-[#C9A84C] uppercase tracking-widest mt-1">{{ selectedInvestment()?.clientName }} · {{ selectedInvestment()?.productName }}</p>
+          <p class="text-[10px] font-black text-[#C9A84C] uppercase tracking-widest mt-1">{{ selectedInvestment()?.clientName }} · {{ selectedInvestment()?.portfolioName }}</p>
         </div>
         <button (click)="closeModal()" class="w-12 h-12 rounded-xl bg-white border border-[#1B4332]/10 flex items-center justify-center text-[#1B4332] hover:bg-black hover:text-white transition-all shadow-sm">
           <i class="ri-close-line text-2xl"></i>

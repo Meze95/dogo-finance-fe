@@ -7,6 +7,7 @@ import { CustomerService } from '../../../shared/services/customer.service';
 import { ProductService } from '../../../shared/services/product.service';
 import { InvestmentService } from '../../../shared/services/investment.service';
 import { Product } from '../../../shared/models/product.model';
+import { TransactionService } from '../../../shared/services/transaction.service';
 
 export interface Transaction {
   id: string;
@@ -37,16 +38,17 @@ export class ClientDashboardComponent implements OnInit {
   private customerService = inject(CustomerService);
   private productService = inject(ProductService);
   private investmentService = inject(InvestmentService);
+  private transactionService = inject(TransactionService);
   
   // Signals for state management
   user = this.authService.currentUser;
-  products = this.productService.products;
-  suggestedProducts = computed(() => this.products().filter(p => p.isActive).slice(0, 3));
+  portfolios = this.productService.portfolios;
+  suggestedPortfolios = computed(() => this.portfolios().filter(p => p.isActive).slice(0, 3));
 
   showInvestModal = signal(false);
   showDetailModal = signal(false);
-  selectedProduct = signal<Product | null>(null);
-  investAmount = signal<number>(100000);
+  selectedPortfolio = signal<Product | null>(null);
+  investAmount = signal<number>(0);
   isInvesting = signal(false);
   
   userName = computed(() => {
@@ -75,20 +77,20 @@ export class ClientDashboardComponent implements OnInit {
   nextSteps = signal<any[]>([]);
 
   ngOnInit() {
-    this.productService.getProducts();
+    this.productService.getPortfolios();
     this.loadTodoList();
     this.loadRelationshipTypes();
   }
 
-  openInvest(product: Product) {
+  openInvest(portfolio: Product) {
     this.showDetailModal.set(false);
-    this.selectedProduct.set(product);
+    this.selectedPortfolio.set(portfolio);
     this.showInvestModal.set(true);
-    this.investAmount.set(100000);
+    this.investAmount.set(0);
   }
 
-  viewDetail(product: Product) {
-    this.selectedProduct.set(product);
+  viewDetail(portfolio: Product) {
+    this.selectedPortfolio.set(portfolio);
     this.showDetailModal.set(true);
   }
 
@@ -98,9 +100,9 @@ export class ClientDashboardComponent implements OnInit {
   }
 
   confirmInvestment() {
-    if (!this.selectedProduct() || !this.investAmount()) return;
+    if (!this.selectedPortfolio() || !this.investAmount()) return;
     this.isInvesting.set(true);
-    this.investmentService.invest(this.selectedProduct()!.productId, this.investAmount()).subscribe({
+    this.investmentService.invest(this.selectedPortfolio()!.portfolioId, this.investAmount()).subscribe({
       next: () => {
         this.isInvesting.set(false);
         this.showInvestModal.set(false);
@@ -182,6 +184,22 @@ export class ClientDashboardComponent implements OnInit {
     { id: '2', bankName: 'Zenith Bank', accountNumber: '2123456789' }
   ]);
 
+  // Funding specific states
+  fundingStep = signal<'amount' | 'source' | 'card' | 'otp' | 'virtual' | 'success'>('amount');
+  selectedSource = signal<'card' | 'virtual' | null>(null);
+  cardNumber = signal('');
+  expiryDate = signal('');
+  cvv = signal('');
+  cardPin = signal('');
+  otpInput = signal('');
+  currentReference = signal('');
+  errorMessage = signal('');
+
+  virtualAccounts = signal<{bankName: string, accountName: string, accountNumber: string}[]>([
+    { bankName: 'Sterling Bank', accountName: 'Sherifdeen Malik', accountNumber: '5309804611' },
+    { bankName: 'Wema Bank', accountName: 'Sherifdeen Malik', accountNumber: '7829304112' }
+  ]);
+
   // Computed signals
   totalGrowth = computed(() => {
     const assets = this.activeInvestments();
@@ -200,6 +218,7 @@ export class ClientDashboardComponent implements OnInit {
     this.nokPhone.set('');
     this.isProcessing.set(false);
     this.isSuccess.set(false);
+    this.errorMessage.set('');
   }
 
   closeModal() {
@@ -235,7 +254,10 @@ export class ClientDashboardComponent implements OnInit {
         next: (res) => {
           this.handleSuccessAction();
         },
-        error: () => this.isProcessing.set(false)
+        error: (err) => {
+          this.isProcessing.set(false);
+          this.errorMessage.set(err.error?.message || 'Failed to update Next of Kin');
+        }
       });
     } else if (isPinFlow) {
       this.authService.setupPin({ 
@@ -247,18 +269,39 @@ export class ClientDashboardComponent implements OnInit {
             this.handleSuccessAction();
           } else {
             this.isProcessing.set(false);
+            this.errorMessage.set(res.message || 'PIN setup failed');
           }
         },
         error: (err) => {
           console.error('PIN Setup Error:', err);
           this.isProcessing.set(false);
+          this.errorMessage.set(err.error?.message || 'Error setting up PIN');
         }
       });
     } else {
-      // Dummy processing for BVN/NIN for now
-      setTimeout(() => {
-        this.handleSuccessAction();
-      }, 1500);
+      const customerId = this.user()?.CustomerId || this.user()?.customerId;
+      const idNumber = this.verificationInput();
+      const isBvnFlow = this.activeVerification()?.actionType === 'BVN_VERIFY' || this.activeVerification()?.title === 'Verify BVN';
+      
+      const verification$ = isBvnFlow 
+        ? this.customerService.verifyBvn(customerId, idNumber)
+        : this.customerService.verifyNin(customerId, idNumber);
+
+      verification$.subscribe({
+        next: (res) => {
+          if (res.success || res.boolean) {
+            this.handleSuccessAction();
+          } else {
+            this.isProcessing.set(false);
+            this.errorMessage.set(res.message || 'Verification failed');
+          }
+        },
+        error: (err) => {
+          console.error('Verification Error:', err);
+          this.isProcessing.set(false);
+          this.errorMessage.set(err.error?.message || 'Server connection error');
+        }
+      });
     }
   }
 
@@ -279,6 +322,14 @@ export class ClientDashboardComponent implements OnInit {
     this.transactionAmount.set('');
     this.withdrawAccountId.set('');
     this.withdrawPin.set('');
+    this.fundingStep.set('amount');
+    this.selectedSource.set(null);
+    this.cardNumber.set('');
+    this.expiryDate.set('');
+    this.cvv.set('');
+    this.cardPin.set('');
+    this.otpInput.set('');
+    this.errorMessage.set('');
     this.showTransactionModal.set(true);
     this.isProcessing.set(false);
   }
@@ -292,44 +343,105 @@ export class ClientDashboardComponent implements OnInit {
     
     this.isProcessing.set(true);
     const amount = Number(this.transactionAmount());
+    const customerId = this.user()?.CustomerId || this.user()?.customerId;
     
     if (this.transactionType() === 'fund') {
-      // 1. Close our modal first so Monnify modal takes over without interference
-      this.closeTransactionModal();
+      if (this.fundingStep() === 'amount') {
+        this.fundingStep.set('source');
+        this.isProcessing.set(false);
+        return;
+      }
 
-      // 2. Monnify SDK integration
-      const monnify = (window as any).MonnifySDK;
-      if(monnify) {
-        monnify.initialize({
-          amount: amount,
-          currency: "NGN",
-          reference: new String((new Date()).getTime()),
-          customerFullName: this.userName(),
-          customerEmail: "customer@example.com",
-          apiKey: "MK_TEST_SAF7HR5F3F",
-          contractCode: "1234567890",
-          paymentDescription: "Wallet Funding",
-          isTestMode: true,
-          onComplete: (response: any) => {
-            console.log("Monnify Payment Complete", response);
-            this.availableNaira.update(val => val + amount);
-            // Add to recent transactions statically
-            this.recentTransactions.update(txs => [
-              { id: Math.random().toString(), type: 'deposit', amount, status: 'completed', date: 'Just now', description: 'Wallet funding (Monnify)' },
-              ...txs
-            ]);
+      if (this.fundingStep() === 'source') {
+        if (this.selectedSource() === 'card') {
+           this.fundingStep.set('card');
+           this.isProcessing.set(false);
+        } else if (this.selectedSource() === 'virtual') {
+           this.transactionService.getVirtualAccount().subscribe({
+             next: (res) => {
+               if (res.success && res.data) {
+                 // The backend returns a single entity or list. Let's wrap as array for template.
+                 const acc = res.data;
+                 this.virtualAccounts.set([{
+                    bankName: acc.bankName,
+                    accountName: `${this.authService.currentUser()?.firstName} ${this.authService.currentUser()?.lastName}`, // Use from auth for safety or acc
+                    accountNumber: acc.accountNumber
+                 }]);
+                 this.fundingStep.set('virtual');
+               } else {
+                 this.errorMessage.set(res.message || 'Could not retrieve virtual account');
+               }
+               this.isProcessing.set(false);
+             },
+             error: () => {
+               this.errorMessage.set('Error connecting to payment provider');
+               this.isProcessing.set(false);
+             }
+           });
+        } else {
+           this.isProcessing.set(false);
+        }
+        return;
+      }
+
+      if (this.fundingStep() === 'card') {
+        // Step 1: Initiate Deposit
+        this.transactionService.initiateDeposit(customerId, amount).subscribe({
+          next: (res) => {
+             const ref = res.data.reference;
+             this.currentReference.set(ref);
+
+             // Step 2: Extract Expiry
+             const [month, year] = this.expiryDate().split('/');
+
+             // Step 3: Charge Card
+             this.transactionService.chargeCard({
+               reference: ref,
+               cardNumber: this.cardNumber().replace(/\s/g, ''),
+               expiryMonth: month,
+               expiryYear: '20' + year,
+               cvv: this.cvv(),
+               pin: this.cardPin()
+             }).subscribe({
+                next: (chargeRes) => {
+                   if (chargeRes.data?.status === 'OTP_AUTH_REQUIRED' || chargeRes.data?.responseCode === '00') {
+                      this.fundingStep.set('otp');
+                      this.isProcessing.set(false);
+                   } else if (chargeRes.data?.status === 'SUCCESS') {
+                      this.finalizeDeposit();
+                   } else {
+                      this.errorMessage.set(chargeRes.data?.message || 'Charge failed');
+                      this.isProcessing.set(false);
+                   }
+                },
+                error: (err) => {
+                   this.errorMessage.set('Card processing error');
+                   this.isProcessing.set(false);
+                }
+             });
           },
-          onClose: (data: any) => {
-            console.log("Monnify Payment Modal Closed", data);
-            this.isProcessing.set(false);
+          error: () => this.isProcessing.set(false)
+        });
+        return;
+      }
+
+      if (this.fundingStep() === 'otp') {
+        this.transactionService.authorizeDeposit({
+          reference: this.currentReference(),
+          otp: this.otpInput()
+        }).subscribe({
+          next: () => {
+             this.finalizeDeposit();
+          },
+          error: () => {
+             this.errorMessage.set('Authorization failed');
+             this.isProcessing.set(false);
           }
         });
-      } else {
-         console.error('MonnifySDK is not loaded!');
-         this.isProcessing.set(false);
+        return;
       }
     } else {
-      // Withdrawal logic (hits local backend, which would process Monnify disbursement server-side)
+      // Withdrawal logic ... maintains existing
       const amount = Number(this.transactionAmount());
       
       if(!this.withdrawAccountId() || !this.withdrawPin() || amount > this.availableNaira()) {
@@ -351,6 +463,30 @@ export class ClientDashboardComponent implements OnInit {
         ]);
       }, 1500);
     }
+  }
+
+  finalizeDeposit() {
+    this.transactionService.confirmDeposit(this.currentReference()).subscribe({
+      next: () => {
+        this.isProcessing.set(false);
+        this.fundingStep.set('success');
+        this.availableNaira.update(val => val + Number(this.transactionAmount()));
+        this.recentTransactions.update(txs => [
+          { id: Math.random().toString(), type: 'deposit', amount: Number(this.transactionAmount()), status: 'completed', date: 'Just now', description: 'Wallet funding (Card)' },
+          ...txs
+        ]);
+        setTimeout(() => this.closeTransactionModal(), 3000);
+      },
+      error: () => {
+        this.errorMessage.set('Verification failed. Contact support if debited.');
+        this.isProcessing.set(false);
+      }
+    });
+  }
+
+  copyToClipboard(text: string) {
+    navigator.clipboard.writeText(text);
+    // Maybe show a toast
   }
 
   getIconForType(type: string) {

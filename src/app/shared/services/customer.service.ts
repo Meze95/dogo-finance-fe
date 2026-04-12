@@ -29,4 +29,12 @@ export class CustomerService {
   addNextOfKin(customerId: number | string, data: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/${customerId}/next-of-kin`, data);
   }
+
+  verifyBvn(customerId: number | string, bvn: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/${customerId}/verify-bvn`, { bvn });
+  }
+
+  verifyNin(customerId: number | string, nin: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/${customerId}/verify-nin`, { nin });
+  }
 }

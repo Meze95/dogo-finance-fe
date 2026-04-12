@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="flex gap-4">
-        <button routerLink="/client/products" class="bg-[#C9A84C] hover:bg-[#b39540] text-[#1B4332] px-8 py-4 rounded-3xl font-black text-[10px] uppercase tracking-widest shadow-xl transition-all">New Investment</button>
+        <button routerLink="/client/portfolios" class="bg-[#C9A84C] hover:bg-[#b39540] text-[#1B4332] px-8 py-4 rounded-3xl font-black text-[10px] uppercase tracking-widest shadow-xl transition-all">New Investment</button>
       </div>
     </div>
   </div>
@@ -36,7 +36,7 @@
               <i class="ri-briefcase-4-fill text-3xl"></i>
             </div>
             <div>
-              <h4 class="text-lg font-black text-[#0d1a0f] tracking-tight">{{ inv.productName }}</h4>
+              <h4 class="text-lg font-black text-[#0d1a0f] tracking-tight">{{ inv.portfolioName }}</h4>
               <p class="text-[10px] font-black text-[#1B4332] uppercase tracking-[0.2em] mt-1">{{ inv.investedAt | date }}</p>
             </div>
           </div>
@@ -65,7 +65,7 @@
           </div>
           <h4 class="text-xl font-black text-slate-400 tracking-tight">No Active Investments</h4>
           <p class="text-[11px] font-bold text-slate-300 uppercase tracking-widest mt-2">Start growing your wealth today</p>
-          <button routerLink="/client/products" class="mt-8 px-10 py-4 bg-[#1B4332] text-white rounded-3xl font-black text-[10px] uppercase tracking-widest shadow-xl">Browse Portfolios</button>
+          <button routerLink="/client/portfolios" class="mt-8 px-10 py-4 bg-[#1B4332] text-white rounded-3xl font-black text-[10px] uppercase tracking-widest shadow-xl">Browse Portfolios</button>
         </div>
       }
     </div>
@@ -132,7 +132,7 @@
           <div class="p-8 border-t border-slate-50 flex items-center gap-4 bg-red-50/30">
             <button (click)="handleExitAll()" class="flex-grow bg-[#1B4332] hover:bg-[#2D6A4F] text-white py-5 rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-[#1B4332]/20 transition-all flex items-center justify-center gap-3">
                 <i class="ri-logout-box-r-line text-lg"></i>
-                Sell All Instruments in this Product
+                Sell All Instruments in this Portfolio
             </button>
           </div>
         </div>

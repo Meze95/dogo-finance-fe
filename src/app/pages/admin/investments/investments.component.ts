@@ -24,7 +24,7 @@ export class AdminInvestmentsComponent implements OnInit {
   filteredInvestments = computed(() => {
     const search = this.searchTerm().toLowerCase();
     const items = this.allInvestments().filter(inv => 
-      inv.productName.toLowerCase().includes(search) ||
+      inv.portfolioName.toLowerCase().includes(search) ||
       inv.clientName.toLowerCase().includes(search) ||
       inv.clientEmail.toLowerCase().includes(search)
     );
@@ -36,7 +36,7 @@ export class AdminInvestmentsComponent implements OnInit {
   totalItems = computed(() => {
     const search = this.searchTerm().toLowerCase();
     return this.allInvestments().filter(inv => 
-      inv.productName.toLowerCase().includes(search) ||
+      inv.portfolioName.toLowerCase().includes(search) ||
       inv.clientName.toLowerCase().includes(search) ||
       inv.clientEmail.toLowerCase().includes(search)
     ).length;

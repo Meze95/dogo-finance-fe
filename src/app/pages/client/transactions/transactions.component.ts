@@ -13,7 +13,7 @@ export interface Transaction {
   description: string;
   paymentMethod?: string;
   bankInfo?: string;
-  productName?: string;
+  portfolioName?: string;
 }
 
 @Component({
@@ -24,16 +24,16 @@ export interface Transaction {
 })
 export class TransactionsComponent {
   transactions = signal<Transaction[]>([
-    { id: '1', reference: 'TRX-882941', type: 'liquidation', amount: 450000, status: 'completed', date: 'Apr 10, 2026 • 09:15 AM', description: 'Full Liquidation: Halal Growth Strategy', productName: 'Halal Growth Strategy' },
-    { id: '2', reference: 'TRX-882940', type: 'investment', amount: 300000, status: 'completed', date: 'Apr 08, 2026 • 02:30 PM', description: 'Investment: Ethical Tech Portfolio', productName: 'Ethical Tech Portfolio' },
+    { id: '1', reference: 'TRX-882941', type: 'liquidation', amount: 450000, status: 'completed', date: 'Apr 10, 2026 • 09:15 AM', description: 'Full Liquidation: Halal Growth Strategy', portfolioName: 'Halal Growth Strategy' },
+    { id: '2', reference: 'TRX-882940', type: 'investment', amount: 300000, status: 'completed', date: 'Apr 08, 2026 • 02:30 PM', description: 'Investment: Ethical Tech Portfolio', portfolioName: 'Ethical Tech Portfolio' },
     { id: '3', reference: 'TRX-98234710', type: 'profit', amount: 18500, status: 'completed', date: 'Mar 27, 2026 • 10:45 AM', description: 'Mudarabah Q1 Profit Share' },
     { id: '4', reference: 'TRX-98234711', type: 'deposit', amount: 500000, status: 'completed', date: 'Mar 26, 2026 • 02:15 PM', description: 'Wallet Funding (Monnify)', paymentMethod: 'Card Payment' },
-    { id: '5', reference: 'TRX-882939', type: 'liquidation', amount: 25000, status: 'completed', date: 'Mar 25, 2026 • 11:45 AM', description: 'Partial Sell: Sukuk Al-Ijarah (10 units)', productName: 'Sukuk Al-Ijarah' },
+    { id: '5', reference: 'TRX-882939', type: 'liquidation', amount: 25000, status: 'completed', date: 'Mar 25, 2026 • 11:45 AM', description: 'Partial Sell: Sukuk Al-Ijarah (10 units)', portfolioName: 'Sukuk Al-Ijarah' },
     { id: '6', reference: 'TRX-98234713', type: 'withdrawal', amount: 12000, status: 'pending', date: 'Mar 24, 2026 • 11:20 AM', description: 'Withdrawal to Zenith Bank', bankInfo: 'Zenith Bank • 2123456789' },
     { id: '7', reference: 'TRX-98234715', type: 'profit', amount: 4500, status: 'completed', date: 'Feb 28, 2026 • 10:00 AM', description: 'Sukuk Monthly Yield' },
     { id: '8', reference: 'TRX-98234716', type: 'withdrawal', amount: 25000, status: 'completed', date: 'Feb 15, 2026 • 04:30 PM', description: 'Withdrawal to GTBank', bankInfo: 'Guaranty Trust Bank • 0123456789' },
     { id: '9', reference: 'TRX-98234717', type: 'profit', amount: 2200, status: 'completed', date: 'Feb 10, 2026 • 09:00 AM', description: 'Agri-Yield Sukuk II Profit' },
-    { id: '10', reference: 'TRX-98234719', type: 'investment', amount: 150000, status: 'completed', date: 'Jan 30, 2026 • 02:30 PM', description: 'Investment: Real Estate Alpha Pool', productName: 'Real Estate Alpha Pool' },
+    { id: '10', reference: 'TRX-98234719', type: 'investment', amount: 150000, status: 'completed', date: 'Jan 30, 2026 • 02:30 PM', description: 'Investment: Real Estate Alpha Pool', portfolioName: 'Real Estate Alpha Pool' },
     { id: '11', reference: 'TRX-98234722', type: 'deposit', amount: 1000000, status: 'completed', date: 'Jan 05, 2026 • 08:45 AM', description: 'Initial Account Funding', paymentMethod: 'Direct Debit' },
   ]);
 

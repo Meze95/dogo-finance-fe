@@ -1,6 +1,7 @@
 import { Injectable, inject, signal, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
@@ -13,6 +14,7 @@ export class AuthService {
   private http = inject(HttpClient);
   private platformId = inject(PLATFORM_ID);
   private apiUrl = environment.apiUrl;
+  private router = inject(Router);
   
   currentUser = signal<any>(this.getUserFromStorage());
 
@@ -116,6 +118,7 @@ export class AuthService {
     const user = this.currentUser();
     if (!user) {
       this.setCurrentUser(null);
+      this.router.navigate(['/login']);
       return;
     }
 
@@ -127,9 +130,11 @@ export class AuthService {
     this.http.post(`${this.apiUrl}/Auth/logout`, {}, { headers }).subscribe({
       next: () => {
         this.setCurrentUser(null);
+        this.router.navigate(['/login']);
       },
       error: (err) => {
         this.setCurrentUser(null);
+        this.router.navigate(['/login']);
       }
     });
   }

@@ -1,5 +1,5 @@
 export interface ProductType {
-  productTypeId: number;
+  portfolioTypeId: number;
   name: string;
   code: string;
   supportsAllocation: boolean;
@@ -8,18 +8,19 @@ export interface ProductType {
 }
 
 export interface Product {
-  productId: number;
+  portfolioId: number;
   name: string;
   code: string;
-  productTypeId: number;
+  portfolioTypeId: number;
   riskLevel: string;
   description: string;
   isActive: boolean;
   minTenorInDays?: number;
   maxTenorInDays?: number;
+  expectedAnnualReturn?: number;
   createdAt?: Date;
   allocations?: ProductAssetAllocation[];
-  productTypeName?: string;
+  portfolioTypeName?: string;
 }
 
 export interface AssetType {
@@ -39,9 +40,12 @@ export interface AdminUserInvestment extends UserInvestment {
 export interface AssetInstrument {
   id: number;
   name: string;
+  code?: string;
   unitPrice: number;
   assetTypeId: number;
   assetTypeName?: string;
+  priceDate?: string;
+  priceSource?: string;
 }
 
 export interface InstrumentAllocation {
@@ -53,8 +57,8 @@ export interface InstrumentAllocation {
 
 export interface UserInvestment {
   id: number;
-  productId: number;
-  productName: string;
+  portfolioId: number;
+  portfolioName: string;
   totalInvested: number;
   currentValue: number;
   growthPercentage: number;
@@ -75,7 +79,7 @@ export interface InstrumentHolding {
 
 export interface ProductAssetAllocation {
   id: number;
-  productId: number;
+  portfolioId: number;
   assetTypeId: number;
   assetTypeName?: string; // For UI display
   targetPercentage: number;

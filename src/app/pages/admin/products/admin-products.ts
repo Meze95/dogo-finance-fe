@@ -17,15 +17,15 @@ declare var Swal: any;
 export class AdminProducts {
   public productService = inject(ProductService);
   
-  products = this.productService.products;
-  productTypes = this.productService.productTypes;
+  portfolios = this.productService.portfolios;
+  portfolioTypes = this.productService.portfolioTypes;
   assetTypes = this.productService.assetTypes;
 
   isLoading = signal(false);
 
   // Computed Options for Dropdowns
-  productTypeOptions = computed<DropdownOption[]>(() => 
-    this.productTypes().map(t => ({ value: t.productTypeId, label: t.name, icon: 'ri-folders-line' }))
+  portfolioTypeOptions = computed<DropdownOption[]>(() => 
+    this.portfolioTypes().map(t => ({ value: t.portfolioTypeId, label: t.name, icon: 'ri-folders-line' }))
   );
 
   riskLevelOptions: DropdownOption[] = [
@@ -43,15 +43,15 @@ export class AdminProducts {
   );
 
   searchQuery = signal('');
-  activeTab = signal<'products' | 'types' | 'assets' | 'instruments'>('products');
+  activeTab = signal<'portfolios' | 'types' | 'assets' | 'instruments'>('portfolios');
 
-  filteredProducts = computed(() => {
+  filteredPortfolios = computed(() => {
     const query = this.searchQuery().toLowerCase().trim();
-    if (!query) return this.products();
+    if (!query) return this.portfolios();
 
-    return this.products().filter(p => 
+    return this.portfolios().filter(p => 
       p.name.toLowerCase().includes(query) ||
-      p.productId.toString().includes(query) ||
+      p.portfolioId.toString().includes(query) ||
       p.riskLevel.toLowerCase().includes(query)
     );
   });
@@ -135,16 +135,13 @@ export class AdminProducts {
     });
   }
 
-  // Common Swal Response Pattern with Custom BRANDED Loader
+  // Common Swal Response Pattern
   private handleResponse(obs: any, successTitle: string) {
     const customLoaderHtml = `
       <div class="flex flex-col items-center justify-center py-6">
         <div class="relative w-24 h-24 mb-6">
-          <!-- Outer Rotating Ring -->
           <div class="absolute inset-0 rounded-full border-[3px] border-slate-100 border-t-[#C9A84C] animate-spin"></div>
-          <!-- Inner Static Ring -->
           <div class="absolute inset-2 rounded-full border-[1px] border-slate-200"></div>
-          <!-- Logo Center -->
           <div class="absolute inset-4 rounded-full bg-[#1B4332] flex items-center justify-center shadow-lg">
             <span class="text-[#C9A84C] text-2xl font-black italic">D</span>
           </div>
@@ -206,20 +203,20 @@ export class AdminProducts {
 
   openAddModal() {
     this.selectedProduct.set(null);
-    this.formData.set({ name: '', productTypeId: this.productTypes()[0]?.productTypeId || 0, riskLevel: 'Low', description: '', isActive: true, minTenorInDays: 0, maxTenorInDays: 0 });
+    this.formData.set({ name: '', code: '', portfolioTypeId: this.portfolioTypes()[0]?.portfolioTypeId || 0, riskLevel: 'Low', description: '', isActive: true, minTenorInDays: 0, maxTenorInDays: 0 });
     this.allocations.set([]);
     this.isModalOpen.set(true);
   }
 
-  editProduct(product: Product) {
-    this.selectedProduct.set(product);
-    this.formData.set({ ...product });
-    this.allocations.set(product.allocations ? product.allocations.map(a => ({...a, id: a.id || 0})) : []);
+  editPortfolio(portfolio: Product) {
+    this.selectedProduct.set(portfolio);
+    this.formData.set({ ...portfolio });
+    this.allocations.set(portfolio.allocations ? portfolio.allocations.map(a => ({...a, id: a.id || 0})) : []);
     this.isModalOpen.set(true);
   }
 
-  viewProduct(product: Product) {
-    this.selectedProduct.set(product);
+  viewPortfolio(portfolio: Product) {
+    this.selectedProduct.set(portfolio);
     this.isViewModalOpen.set(true);
   }
 
@@ -230,7 +227,7 @@ export class AdminProducts {
   // Type Methods
   openAddTypeModal() {
     this.selectedType.set(null);
-    this.typeFormData.set({ productTypeId: 0, name: '', supportsAllocation: true, supportsProfitSharing: false });
+    this.typeFormData.set({ portfolioTypeId: 0, name: '', code: '', supportsAllocation: true, supportsProfitSharing: false });
     this.isTypeModalOpen.set(true);
   }
 
@@ -242,19 +239,27 @@ export class AdminProducts {
 
   saveType() {
     this.confirmAction('Save Type', () => {
-      const typeData: ProductType = { ...this.typeFormData() as ProductType, productTypeId: this.selectedType()?.productTypeId || 0 };
-      this.handleResponse(this.productService.saveProductType(typeData), 'Type Saved');
+      const typeData: ProductType = { ...this.typeFormData() as ProductType, portfolioTypeId: this.selectedType()?.portfolioTypeId || 0 };
+      this.handleResponse(this.productService.savePortfolioType(typeData), 'Type Saved');
     });
   }
 
   deleteType(id: number) {
     this.confirmAction('Delete Type', () => {
-      this.handleResponse(this.productService.deleteProductType(id), 'Type Removed');
+      this.handleResponse(this.productService.deletePortfolioType(id), 'Type Removed');
     });
   }
 
   getInstrumentOptions(assetTypeId: number): DropdownOption[] {
-    return this.getInstrumentsForAsset(assetTypeId).map(i => ({
+    let instruments = this.getInstrumentsForAsset(assetTypeId);
+    
+    // Fallback: if no instruments match this specific asset class (or relationship is missing),
+    // show all available instruments so the UI remains functional.
+    if (instruments.length === 0) {
+      instruments = this.productService.instruments();
+    }
+
+    return instruments.map(i => ({
       value: i.id,
       label: i.name,
       icon: 'ri-bank-line'
@@ -264,7 +269,7 @@ export class AdminProducts {
   // Asset Methods
   openAddAssetModal() {
     this.selectedAsset.set(null);
-    this.assetFormData.set({ assetTypeId: 0, name: '', isShariahCompliant: true });
+    this.assetFormData.set({ assetTypeId: 0, name: '', code: '', isShariahCompliant: true });
     this.isAssetModalOpen.set(true);
   }
 
@@ -290,7 +295,15 @@ export class AdminProducts {
   // Instrument Methods
   openAddInstrumentModal() {
     this.selectedInstrument.set(null);
-    this.instrumentFormData.set({ id: 0, name: '', unitPrice: 0, assetTypeId: this.assetTypes()[0]?.assetTypeId || 0 });
+    this.instrumentFormData.set({ 
+      id: 0, 
+      name: '', 
+      code: '', 
+      unitPrice: 0, 
+      priceDate: new Date().toISOString().split('T')[0], 
+      priceSource: 'Manual Entry', 
+      assetTypeId: this.assetTypes()[0]?.assetTypeId || 0 
+    });
     this.isInstrumentModalOpen.set(true);
   }
 
@@ -317,23 +330,23 @@ export class AdminProducts {
     return this.productService.instruments().filter(i => i.assetTypeId === assetTypeId);
   }
 
-  // Product Methods
-  saveProduct() {
+  // Portfolio Methods
+  savePortfolio() {
     const validation = this.allocationValidation();
     if (!validation.isValid) {
-      Swal.fire({ icon: 'error', title: 'Validation Failed', text: 'Total allocation must be exactly 100%.', confirmButtonColor: '#C9A84C', background: '#f8f7f2', customClass: { popup: 'rounded-[30px]' } });
+      Swal.fire({ icon: 'error', title: 'Validation Failed', text: 'Total allocation must be exactly 100%. Each asset class must also have 100% instrument distribution.', confirmButtonColor: '#C9A84C', background: '#f8f7f2', customClass: { popup: 'rounded-[30px]' } });
       return;
     }
 
-    this.confirmAction('Save Product', () => {
-      const productData: Product = { ...(this.selectedProduct() || {}), ...this.formData() as Product, allocations: this.allocations(), productId: this.selectedProduct()?.productId || 0 };
-      this.handleResponse(this.productService.saveProduct(productData), 'Product Saved');
+    this.confirmAction('Save Portfolio', () => {
+      const portfolioData: Product = { ...(this.selectedProduct() || {}), ...this.formData() as Product, allocations: this.allocations(), portfolioId: this.selectedProduct()?.portfolioId || 0 };
+      this.handleResponse(this.productService.savePortfolio(portfolioData), 'Portfolio Saved');
     });
   }
 
-  deleteProduct(id: number) {
-    this.confirmAction('Delete Product', () => {
-      this.handleResponse(this.productService.deleteProduct(id), 'Product Removed');
+  deletePortfolio(id: number) {
+    this.confirmAction('Delete Portfolio', () => {
+      this.handleResponse(this.productService.deletePortfolio(id), 'Portfolio Removed');
     });
   }
 
@@ -342,7 +355,7 @@ export class AdminProducts {
   }
 
   addAllocation() {
-    const newAlloc: ProductAssetAllocation = { id: 0, productId: this.selectedProduct()?.productId || 0, assetTypeId: this.assetTypes()[0]?.assetTypeId || 0, assetTypeName: this.assetTypes()[0]?.name || '', targetPercentage: 0, minPercentage: 0, maxPercentage: 0 };
+    const newAlloc: ProductAssetAllocation = { id: 0, portfolioId: this.selectedProduct()?.portfolioId || 0, assetTypeId: this.assetTypes()[0]?.assetTypeId || 0, assetTypeName: this.assetTypes()[0]?.name || '', targetPercentage: 0, minPercentage: 0, maxPercentage: 0 };
     this.allocations.update(a => [...a, newAlloc]);
   }
 
@@ -363,7 +376,13 @@ export class AdminProducts {
     this.allocations.update(list => {
       const newList = [...list];
       const alloc = newList[assetIndex];
-      const availableInstruments = this.getInstrumentsForAsset(alloc.assetTypeId);
+      let availableInstruments = this.getInstrumentsForAsset(alloc.assetTypeId);
+      
+      // Fallback to all instruments if none found for this asset class
+      if (availableInstruments.length === 0) {
+        availableInstruments = this.productService.instruments();
+      }
+
       if (availableInstruments.length > 0) {
         if (!alloc.instruments) alloc.instruments = [];
         alloc.instruments.push({ id: 0, instrumentId: availableInstruments[0].id, instrumentName: availableInstruments[0].name, percentage: 0 });

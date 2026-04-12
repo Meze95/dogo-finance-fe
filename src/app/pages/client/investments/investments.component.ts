@@ -54,7 +54,7 @@ export class ClientInvestmentsComponent implements OnInit {
 
     Swal.fire({
       title: 'Exit Portfolio?',
-      text: `Are you sure you want to sell all instruments in ${this.selectedInvestment()!.productName}?`,
+      text: `Are you sure you want to sell all instruments in ${this.selectedInvestment()!.portfolioName}?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',

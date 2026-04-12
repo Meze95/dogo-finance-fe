@@ -15,37 +15,37 @@ export class InvestmentService {
   allInvestments = signal<AdminUserInvestment[]>([]);
 
   constructor() {
-    this.productService.getProducts(); // Ensure products are loaded
+    this.productService.getPortfolios(); // Ensure portfolios are loaded
     this.loadMockInvestments();
     this.loadAllAdminInvestments();
   }
 
   loadMockInvestments() {
-    // Generate some mock investments based on existing products
-    const products = this.productService.products();
-    if (products.length === 0) return;
+    // Generate some mock investments based on existing portfolios
+    const portfolios = this.productService.portfolios();
+    if (portfolios.length === 0) return;
 
     const mock: UserInvestment[] = [
       {
         id: 1,
-        productId: products[0].productId,
-        productName: products[0].name,
+        portfolioId: portfolios[0].portfolioId,
+        portfolioName: portfolios[0].name,
         totalInvested: 1000000,
         currentValue: 1125000,
         growthPercentage: 12.5,
         status: 'active',
         investedAt: '2026-01-15',
-        holdings: this.generateMockHoldings(products[0], 1000000)
+        holdings: this.generateMockHoldings(portfolios[0], 1000000)
       }
     ];
     this.userInvestments.set(mock);
   }
 
-  private generateMockHoldings(product: Product, totalAmount: number): InstrumentHolding[] {
+  private generateMockHoldings(portfolio: Product, totalAmount: number): InstrumentHolding[] {
     const holdings: InstrumentHolding[] = [];
-    if (!product.allocations) return holdings;
+    if (!portfolio.allocations) return holdings;
 
-    product.allocations.forEach(alloc => {
+    portfolio.allocations.forEach(alloc => {
       const assetAmount = totalAmount * (alloc.targetPercentage / 100);
       if (alloc.instruments) {
         alloc.instruments.forEach(instAlloc => {
@@ -69,20 +69,20 @@ export class InvestmentService {
     return holdings;
   }
 
-  invest(productId: number, amount: number): Observable<any> {
-    const product = this.productService.products().find(p => p.productId === productId);
-    if (!product) return of({ success: false, message: 'Product not found' });
+  invest(portfolioId: number, amount: number): Observable<any> {
+    const portfolio = this.productService.portfolios().find(p => p.portfolioId === portfolioId);
+    if (!portfolio) return of({ success: false, message: 'Portfolio not found' });
 
     const newInvestment: UserInvestment = {
       id: Math.floor(Math.random() * 10000),
-      productId: product.productId,
-      productName: product.name,
+      portfolioId: portfolio.portfolioId,
+      portfolioName: portfolio.name,
       totalInvested: amount,
       currentValue: amount,
       growthPercentage: 0,
       status: 'active',
       investedAt: new Date().toISOString().split('T')[0],
-      holdings: this.generateMockHoldings(product, amount)
+      holdings: this.generateMockHoldings(portfolio, amount)
     };
 
     return of({ success: true }).pipe(
@@ -92,12 +92,13 @@ export class InvestmentService {
   }
 
   exitPortfolio(investmentId: number): Observable<any> {
+    // ... logic remains same, but using renamed models if needed (UserInvestment already renamed fields)
     return of({ success: true }).pipe(
       delay(1500),
       tap(() => {
         this.userInvestments.update(prev => 
           prev.map(inv => inv.id === investmentId ? { ...inv, status: 'exited' as const } : inv)
-          .filter(inv => inv.status === 'active') // Remove from active list for simplicity in this UI
+          .filter(inv => inv.status === 'active')
         );
       })
     );
@@ -124,7 +125,6 @@ export class InvestmentService {
               return { ...h, units: Math.max(0, h.units - units) };
             }).filter(h => h.units > 0);
             
-            // Recalculate total value
             const newVal = newHoldings.reduce((sum, h) => sum + (h.units * h.currentPrice), 0);
             return { ...inv, holdings: newHoldings, currentValue: newVal };
           }).filter(inv => inv.holdings.length > 0);
@@ -134,21 +134,21 @@ export class InvestmentService {
   }
 
   loadAllAdminInvestments() {
-    const products = this.productService.products();
-    if (products.length === 0) {
+    const portfolios = this.productService.portfolios();
+    if (portfolios.length === 0) {
       setTimeout(() => this.loadAllAdminInvestments(), 500);
       return;
     }
 
-    const p0 = products[0];
-    const p1 = products[1] || products[0];
-    const p2 = products[2] || products[0];
+    const p0 = portfolios[0];
+    const p1 = portfolios[1] || portfolios[0];
+    const p2 = portfolios[2] || portfolios[0];
 
     const mock: AdminUserInvestment[] = [
       {
         id: 101,
-        productId: p0.productId,
-        productName: p0.name,
+        portfolioId: p0.portfolioId,
+        portfolioName: p0.name,
         totalInvested: 2500000,
         currentValue: 2850000,
         growthPercentage: 14.0,
@@ -161,8 +161,8 @@ export class InvestmentService {
       },
       {
         id: 102,
-        productId: p1.productId,
-        productName: p1.name,
+        portfolioId: p1.portfolioId,
+        portfolioName: p1.name,
         totalInvested: 5000000,
         currentValue: 5300000,
         growthPercentage: 6.0,
@@ -175,8 +175,8 @@ export class InvestmentService {
       },
       {
         id: 103,
-        productId: p2.productId,
-        productName: p2.name,
+        portfolioId: p2.portfolioId,
+        portfolioName: p2.name,
         totalInvested: 1200000,
         currentValue: 1250000,
         growthPercentage: 4.1,

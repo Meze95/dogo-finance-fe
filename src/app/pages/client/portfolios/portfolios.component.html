@@ -37,7 +37,7 @@
 
   <!-- Portfolios Grid -->
   <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-    @for(product of activeProducts(); track product.productId) {
+    @for(product of activePortfolios(); track product.portfolioId) {
       <div class="group bg-white rounded-[40px] overflow-hidden border border-[#1B4332]/5 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 flex flex-col h-full">
         <!-- Card Header with Graphic -->
         <div class="p-8 pb-4 relative transition-all bg-gradient-to-br from-[#f8f7f2] to-white group-hover:from-[#1B4332] group-hover:to-[#2D6A4F]">
@@ -54,8 +54,15 @@
               {{ product.riskLevel }} Risk
             </span>
           </div>
+          
+          <div class="mb-2">
+            <span class="text-[9px] font-black uppercase tracking-widest text-[#C9A84C]/90 group-hover:text-white/90">
+                {{ product.expectedAnnualReturn }}% Average Return
+            </span>
+          </div>
+
           <h3 class="text-2xl font-black text-[#0d1a0f] group-hover:text-white tracking-tight mb-2">{{ product.name }}</h3>
-          <p class="text-xs font-bold text-[#1B4332]/50 group-hover:text-white/60 uppercase tracking-widest">{{ product.productTypeName }}</p>
+          <p class="text-xs font-bold text-[#1B4332]/50 group-hover:text-white/60 uppercase tracking-widest">{{ product.portfolioTypeName }}</p>
         </div>
 
         <div class="p-8 pt-6 flex-grow flex flex-col space-y-8">
@@ -100,7 +107,7 @@
 </div>
 
 <!-- Detailed Strategy Modal -->
-@if(showDetailModal() && selectedProduct()) {
+@if(showDetailModal() && selectedPortfolio()) {
   <div class="fixed inset-0 z-[999] flex items-center justify-center p-4 animate-fade-in" role="dialog" aria-modal="true">
     <div class="fixed inset-0 bg-[#0d1a0f]/60 backdrop-blur-md transition-opacity" (click)="closeModal()"></div>
     
@@ -123,8 +130,39 @@
         <!-- Intro -->
         <div class="text-center space-y-4 py-4">
             <div class="inline-flex px-4 py-1.5 rounded-full bg-[#C9A84C]/10 text-[#C9A84C] text-[10px] font-black uppercase tracking-[0.2em] mb-2">Recommended</div>
-            <h1 class="text-4xl font-black text-[#0d1a0f] tracking-tight leading-none">{{ selectedProduct()?.name }}</h1>
-            <p class="text-sm font-medium text-slate-500 max-w-md mx-auto italic">"{{ selectedProduct()?.description }}"</p>
+            <h1 class="text-4xl font-black text-[#0d1a0f] tracking-tight leading-none">{{ selectedPortfolio()?.name }}</h1>
+            <p class="text-sm font-medium text-slate-500 max-w-md mx-auto italic">"{{ selectedPortfolio()?.description }}"</p>
+        </div>
+
+        <!-- Performance Visual Breakdown -->
+        <div class="bg-white p-10 rounded-[40px] border border-[#1B4332]/5 text-center shadow-sm space-y-4">
+            <h4 class="text-xs font-black text-[#1B4332] uppercase tracking-[0.3em]">Performance</h4>
+            <div class="space-y-1">
+                <p class="text-4xl font-black text-[#0d1a0f] tracking-tighter">{{ selectedPortfolio()?.expectedAnnualReturn }}%</p>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Average return</p>
+            </div>
+            <p class="text-[10px] font-medium text-slate-400 italic">Estimated based on historical returns</p>
+            
+            <div class="pt-8 px-4">
+                <p class="text-[11px] font-medium text-slate-500 leading-relaxed">
+                    If you invested <span class="font-bold text-[#1B4332]">NGA 100,000</span> in Jan 2020<br>
+                    you would have <span class="font-bold text-[#1B4332]">NGA {{ (100000 * (1 + (selectedPortfolio()?.expectedAnnualReturn || 0)/100 * 4)) | number:'1.0-0' }}</span> today*
+                </p>
+            </div>
+
+            <!-- Visual Graph -->
+            <div class="h-32 w-full relative mt-6 px-4">
+                <svg viewBox="0 0 400 100" class="w-full h-full">
+                    <path d="M0,80 Q50,75 100,60 T200,50 T300,30 T400,10" 
+                          fill="none" 
+                          stroke="#1B4332" 
+                          stroke-width="3" 
+                          stroke-linecap="round" />
+                    <circle cx="280" cy="35" r="5" fill="#1B4332" />
+                </svg>
+            </div>
+
+            <button class="text-[9px] font-black uppercase tracking-widest text-[#C9A84C] underline decoration-2 underline-offset-4">Disclaimer</button>
         </div>
 
         <!-- Allocation Visualization (Mobile Style) -->
@@ -138,7 +176,7 @@
             </div>
 
             <div class="space-y-6">
-                @for(alloc of selectedProduct()?.allocations; track alloc.id; let i = $index) {
+                @for(alloc of selectedPortfolio()?.allocations; track alloc.id; let i = $index) {
                 <div class="space-y-4">
                     <div class="flex justify-between items-center">
                         <div class="flex items-center gap-3">
@@ -168,12 +206,12 @@
                         @for(inst of alloc.instruments; track inst.id) {
                             <div class="flex items-center justify-between py-2 border-b border-white/40 last:border-0 group/inst">
                                 <span class="text-[11px] font-bold text-slate-500 group-hover:text-[#1B4332] transition-colors">{{ inst.instrumentName }}</span>
-                                <div class="flex items-center gap-2">
+                                <!-- <div class="flex items-center gap-2">
                                     <div class="w-8 h-0.5 bg-slate-200 rounded-full overflow-hidden">
                                         <div class="h-full bg-slate-400" [style.width]="inst.percentage + '%'"></div>
                                     </div>
                                     <span class="text-[9px] font-black text-slate-400">{{ inst.percentage }}%</span>
-                                </div>
+                                </div> -->
                             </div>
                         }
                     </div>
@@ -205,7 +243,7 @@
                 <i class="ri-copper-coin-line text-3xl"></i>
             </div>
             <h3 class="text-2xl font-black text-[#0d1a0f] tracking-tight mb-2">Invest in Strategy</h3>
-            <p class="text-sm font-medium text-slate-400 mb-8 lowercase">Choose your principal amount for <span class="text-[#1B4332] font-black">{{ selectedProduct()?.name }}</span></p>
+            <p class="text-sm font-medium text-slate-400 mb-8 lowercase">Choose your principal amount for <span class="text-[#1B4332] font-black">{{ selectedPortfolio()?.name }}</span></p>
             
             <div class="space-y-6 text-left mb-10">
                 <div class="space-y-2">

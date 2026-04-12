@@ -18,17 +18,17 @@ export class ClientPortfoliosComponent implements OnInit {
   private productService = inject(ProductService);
   private investmentService = inject(InvestmentService);
 
-  products = this.productService.products;
+  portfolios = this.productService.portfolios;
   activeFilter = signal<string>('All');
   
-  activeProducts = computed(() => {
-    const all = this.products().filter(p => p.isActive);
+  activePortfolios = computed(() => {
+    const all = this.portfolios().filter(p => p.isActive);
     const filter = this.activeFilter();
     if (filter === 'All') return all;
     return all.filter(p => p.riskLevel === filter);
   });
 
-  selectedProduct = signal<Product | null>(null);
+  selectedPortfolio = signal<Product | null>(null);
   showDetailModal = signal(false);
 
   // Investment State
@@ -37,11 +37,11 @@ export class ClientPortfoliosComponent implements OnInit {
   isProcessing = signal(false);
 
   ngOnInit() {
-    this.productService.getProducts();
+    this.productService.getPortfolios();
   }
 
-  viewDetail(product: Product) {
-    this.selectedProduct.set(product);
+  viewDetail(portfolio: Product) {
+    this.selectedPortfolio.set(portfolio);
     this.showDetailModal.set(true);
   }
 
@@ -56,17 +56,17 @@ export class ClientPortfoliosComponent implements OnInit {
   }
 
   confirmInvestment() {
-    if (!this.selectedProduct() || this.investAmount() <= 0) return;
+    if (!this.selectedPortfolio() || this.investAmount() <= 0) return;
 
     this.isProcessing.set(true);
-    this.investmentService.invest(this.selectedProduct()!.productId, this.investAmount()).subscribe({
+    this.investmentService.invest(this.selectedPortfolio()!.portfolioId, this.investAmount()).subscribe({
       next: (res) => {
         this.isProcessing.set(false);
         this.closeModal();
         Swal.fire({
           icon: 'success',
           title: 'Investment Successful',
-          text: `You have successfully invested ₦${this.investAmount().toLocaleString()} in ${this.selectedProduct()!.name}`,
+          text: `You have successfully invested ₦${this.investAmount().toLocaleString()} in ${this.selectedPortfolio()!.name}`,
           confirmButtonColor: '#1B4332',
           customClass: { popup: 'rounded-[30px]' }
         });

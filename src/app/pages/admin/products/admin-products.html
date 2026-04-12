@@ -14,10 +14,10 @@
       </div>
       
       @switch(activeTab()) {
-        @case('products') {
+        @case('portfolios') {
           <button (click)="openAddModal()" class="bg-[#1B4332] hover:bg-[#2D6A4F] text-white px-6 py-3 rounded-2xl font-black shadow-lg transition-all flex items-center gap-2">
             <i class="ri-add-line"></i>
-            <span>New Product</span>
+            <span>New Portfolio</span>
           </button>
         }
         @case('types') {
@@ -44,15 +44,15 @@
 
   <!-- Tabs Navigation -->
   <div class="flex items-center gap-2 bg-white/50 p-1.5 rounded-[24px] border border-[#1B4332]/5 w-fit">
-    <button (click)="activeTab.set('products')" 
-            [ngClass]="activeTab() === 'products' ? 'bg-[#1B4332] text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'"
+    <button (click)="activeTab.set('portfolios')" 
+            [ngClass]="activeTab() === 'portfolios' ? 'bg-[#1B4332] text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'"
             class="px-8 py-3 rounded-[20px] text-xs font-black uppercase tracking-widest transition-all">
-      Investment Products
+      Portfolios
     </button>
     <button (click)="activeTab.set('types')" 
             [ngClass]="activeTab() === 'types' ? 'bg-[#C9A84C] text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'"
             class="px-8 py-3 rounded-[20px] text-xs font-black uppercase tracking-widest transition-all">
-      Product Types
+      Portfolio Types
     </button>
     <button (click)="activeTab.set('assets')" 
             [ngClass]="activeTab() === 'assets' ? 'bg-slate-800 text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'"
@@ -66,32 +66,32 @@
     </button>
   </div>
 
-  @if(activeTab() === 'products') {
-    <!-- Products Table Card -->
+  @if(activeTab() === 'portfolios') {
+    <!-- Portfolios Table Card -->
     <div class="bg-white rounded-[40px] p-4 sm:p-8 border border-[#1B4332]/5 shadow-sm overflow-hidden animate-fade-in">
       <div class="overflow-x-auto custom-scrollbar pb-4">
         <table class="w-full text-left border-collapse min-w-[800px]">
           <thead>
             <tr class="border-b-2 border-slate-100">
-              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Product Name</th>
-              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Product Type</th>
+              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Portfolio Name</th>
+              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Portfolio Type</th>
               <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Risk Level</th>
               <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Status</th>
               <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C] text-right">Actions</th>
             </tr>
           </thead>
           <tbody class="text-sm">
-            @for(product of filteredProducts(); track product.productId; let i = $index) {
+            @for(portfolio of filteredPortfolios(); track portfolio.portfolioId; let i = $index) {
             <tr class="border-b border-slate-50 hover:bg-[#f8f7f2] transition-colors group">
               <td class="py-5 px-4">
                 <div class="flex items-center gap-4">
                   <div class="w-10 h-10 rounded-2xl flex items-center justify-center font-black text-xs text-white shadow-sm shrink-0 uppercase
                               bg-[#1B4332]">
-                    {{ product.name.charAt(0) }}
+                    {{ portfolio.name.charAt(0) }}
                   </div>
                   <div>
-                    <div class="font-black text-[#0d1a0f]">{{ product.name }}</div>
-                    <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">ID: {{ product.productId }} | Code: {{ product.code || 'N/A' }}</div>
+                    <div class="font-black text-[#0d1a0f]">{{ portfolio.name }}</div>
+                    <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">ID: {{ portfolio.portfolioId }} | Code: {{ portfolio.code || 'N/A' }}</div>
                   </div>
                 </div>
               </td>
@@ -100,37 +100,37 @@
                    <div class="w-8 h-8 rounded-xl bg-white text-[#1B4332]/40 shadow-sm border border-[#1B4332]/5 flex items-center justify-center">
                       <i class="ri-folders-line text-base"></i>
                    </div>
-                   {{ product.productTypeName || 'N/A' }}
+                   {{ portfolio.portfolioTypeName || 'N/A' }}
                 </div>
               </td>
               <td class="py-5 px-4">
                 <span class="inline-flex px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm border"
                       [ngClass]="{
-                        'bg-blue-50 text-blue-700 border-blue-200': product.riskLevel === 'Low',
-                        'bg-orange-50 text-orange-700 border-orange-200': product.riskLevel === 'Medium',
-                        'bg-red-50 text-red-700 border-red-200': product.riskLevel === 'High'
+                        'bg-blue-50 text-blue-700 border-blue-200': portfolio.riskLevel === 'Low',
+                        'bg-orange-50 text-orange-700 border-orange-200': portfolio.riskLevel === 'Medium',
+                        'bg-red-50 text-red-700 border-red-200': portfolio.riskLevel === 'High'
                       }">
-                  {{ product.riskLevel }} Risk
+                  {{ portfolio.riskLevel }} Risk
                 </span>
               </td>
               <td class="py-5 px-4">
                 <span class="inline-flex px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm border"
                       [ngClass]="{
-                        'bg-green-50 text-green-700 border-green-200': product.isActive,
-                        'bg-slate-50 text-slate-700 border-slate-200': !product.isActive
+                        'bg-green-50 text-green-700 border-green-200': portfolio.isActive,
+                        'bg-slate-50 text-slate-700 border-slate-200': !portfolio.isActive
                       }">
-                  {{ product.isActive ? 'Active' : 'Inactive' }}
+                  {{ portfolio.isActive ? 'Active' : 'Inactive' }}
                 </span>
               </td>
               <td class="py-5 px-4 text-right">
                 <div class="flex items-center justify-end gap-2">
-                  <button (click)="viewProduct(product)" class="text-slate-400 hover:text-[#C9A84C] transition-colors p-2 hover:bg-[#C9A84C]/10 rounded-2xl" title="View Details">
+                  <button (click)="viewPortfolio(portfolio)" class="text-slate-400 hover:text-[#C9A84C] transition-colors p-2 hover:bg-[#C9A84C]/10 rounded-2xl" title="View Details">
                     <i class="ri-eye-line text-lg"></i>
                   </button>
-                  <button (click)="editProduct(product)" class="text-slate-400 hover:text-[#1B4332] transition-colors p-2 hover:bg-[#1B4332]/10 rounded-2xl" title="Edit Product">
+                  <button (click)="editPortfolio(portfolio)" class="text-slate-400 hover:text-[#1B4332] transition-colors p-2 hover:bg-[#1B4332]/10 rounded-2xl" title="Edit Portfolio">
                     <i class="ri-edit-line text-lg"></i>
                   </button>
-                  <button (click)="deleteProduct(product.productId)" class="text-slate-400 hover:text-red-500 transition-colors p-2 hover:bg-red-500/10 rounded-2xl" title="Delete Product">
+                  <button (click)="deletePortfolio(portfolio.portfolioId)" class="text-slate-400 hover:text-red-500 transition-colors p-2 hover:bg-red-500/10 rounded-2xl" title="Delete Portfolio">
                     <i class="ri-delete-bin-line text-lg"></i>
                   </button>
                 </div>
@@ -143,7 +143,7 @@
                     <div class="w-16 h-16 rounded-3xl bg-slate-50 flex items-center justify-center text-2xl text-slate-300">
                       <i class="ri-box-3-line"></i>
                     </div>
-                    <p>No products found matching "{{ searchQuery() }}"</p>
+                    <p>No portfolios found matching "{{ searchQuery() }}"</p>
                   </div>
                 </td>
               </tr>
@@ -155,7 +155,7 @@
   } @else if(activeTab() === 'types') {
     <!-- Product Types List -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
-      @for(type of productTypes(); track type.productTypeId) {
+      @for(type of portfolioTypes(); track type.portfolioTypeId) {
         <div class="bg-white rounded-[32px] p-8 border border-[#1B4332]/5 shadow-sm hover:shadow-md transition-all group">
           <div class="flex justify-between items-start mb-6">
             <div class="w-12 h-12 rounded-2xl bg-[#C9A84C]/10 text-[#C9A84C] flex items-center justify-center text-xl">
@@ -163,7 +163,7 @@
             </div>
             <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                <button (click)="editType(type)" class="text-slate-400 hover:text-[#C9A84C] p-1"><i class="ri-edit-line"></i></button>
-               <button (click)="deleteType(type.productTypeId)" class="text-slate-400 hover:text-red-500 p-1"><i class="ri-delete-bin-line"></i></button>
+               <button (click)="deleteType(type.portfolioTypeId)" class="text-slate-400 hover:text-red-500 p-1"><i class="ri-delete-bin-line"></i></button>
             </div>
           </div>
           <h3 class="text-xl font-black text-[#0d1a0f] mb-1">{{ type.name }}</h3>
@@ -216,8 +216,9 @@
           <thead>
             <tr class="border-b-2 border-slate-100">
               <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Instrument Name</th>
-              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Asset Class</th>
-              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Unit Price</th>
+              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Instrument Code</th>
+              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">NAV</th>
+              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Price Source</th>
               <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C] text-right">Actions</th>
             </tr>
           </thead>
@@ -229,11 +230,16 @@
               </td>
               <td class="py-5 px-4">
                 <span class="bg-slate-100 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest text-slate-600">
-                  {{ inst.assetTypeName }}
+                  {{ inst.code }}
                 </span>
               </td>
               <td class="py-5 px-4">
-                <div class="font-black text-[#1B4332]">${{ inst.unitPrice | number:'1.2-2' }}</div>
+                <div class="font-black text-[#1B4332]">N{{ inst.unitPrice | number:'1.2-2' }}</div>
+              </td>
+              <td class="py-5 px-4">
+                <span class="bg-slate-100 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest text-slate-600">
+                  {{ inst.priceSource }}
+                </span>
               </td>
               <td class="py-5 px-4 text-right">
                 <div class="flex items-center justify-end gap-2">
@@ -267,7 +273,7 @@
             <i class="ri-settings-4-line text-xl"></i>
         </div>
         <h3 class="text-xl font-black text-[#0d1a0f] tracking-tight" id="modal-title">
-          {{ selectedProduct() ? 'Edit Product' : 'New Product' }}
+          {{ selectedProduct() ? 'Edit Portfolio' : 'New Portfolio' }}
         </h3>
       </div>
       <button type="button" (click)="closeModal()" class="text-slate-400 hover:text-red-500 transition-colors">
@@ -283,17 +289,23 @@
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6" style="overflow: visible;">
           <div class="space-y-1">
-            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Product Name</label>
+            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Portfolio Name</label>
             <input type="text" [ngModel]="formData().name" (ngModelChange)="updateFormField('name', $event)" placeholder="e.g. Shariah Balanced Fund"
                    class="w-full bg-[#f8f7f2] border border-[#1B4332]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[#C9A84C] transition-all shadow-sm" />
           </div>
 
+          <div class="space-y-1">
+            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Portfolio Code</label>
+            <input type="text" [ngModel]="formData().code" (ngModelChange)="updateFormField('code', $event)" placeholder="e.g. PRD-001"
+                   class="w-full bg-[#f8f7f2] border border-[#1B4332]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[#C9A84C] transition-all shadow-sm" />
+          </div>
+
           <app-dropdown 
-            label="Product Type"
-            [options]="productTypeOptions()"
-            [selectedValue]="formData().productTypeId"
-            (valueChange)="updateFormField('productTypeId', $event)"
-            placeholder="Choose Product Type"
+            label="Portfolio Type"
+            [options]="portfolioTypeOptions()"
+            [selectedValue]="formData().portfolioTypeId"
+            (valueChange)="updateFormField('portfolioTypeId', $event)"
+            placeholder="Choose Portfolio Type"
             placeholderIcon="ri-folders-line"
           ></app-dropdown>
         </div>
@@ -405,7 +417,7 @@
 
               @if(alloc.instruments && alloc.instruments.length > 0) {
                 <div class="space-y-3">
-                  @for(instAlloc of alloc.instruments; track instAlloc.instrumentId; let j = $index) {
+                  @for(instAlloc of alloc.instruments; track j; let j = $index) {
                     <div class="flex items-center gap-4 bg-white p-3 rounded-2xl shadow-sm border border-slate-100 transition-all"
                          [class.border-red-500]="allocationValidation().errors[i]?.duplicateInstrumentIds?.includes(instAlloc.instrumentId)"
                          [class.bg-red-50]="allocationValidation().errors[i]?.duplicateInstrumentIds?.includes(instAlloc.instrumentId)">
@@ -476,11 +488,11 @@
         Cancel
       </button>
       <button 
-        (click)="saveProduct()" 
+        (click)="savePortfolio()" 
         [disabled]="!allocationValidation().isValid"
         class="bg-[#1B4332] disabled:bg-slate-300 disabled:cursor-not-allowed hover:bg-[#2D6A4F] text-white px-10 py-3 rounded-2xl font-black shadow-lg transition-all flex items-center gap-2">
         <i class="ri-save-line"></i>
-        <span>Save Product</span>
+        <span>Save Portfolio</span>
       </button>
     </div>
   </div>
@@ -515,18 +527,36 @@
         <input type="text" [ngModel]="instrumentFormData().name" (ngModelChange)="instrumentFormData.update(v => ({...v, name: $event}))" placeholder="e.g. Vanguard Total World Stock"
                class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
       </div>
+      <div class="space-y-1">
+        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Instrument Code</label>
+        <input type="text" [ngModel]="instrumentFormData().code" (ngModelChange)="instrumentFormData.update(v => ({...v, code: $event}))" placeholder="e.g. FGN-2031"
+               class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
+      </div>
 
-      <app-dropdown 
-        label="Parent Asset Class"
+      <!-- <app-dropdown 
+        label="Asset Class"
         [options]="instrumentAssetClassOptions()"
         [selectedValue]="instrumentFormData().assetTypeId"
         (valueChange)="instrumentFormData.update(v => ({...v, assetTypeId: $event}))"
         placeholder="Select Asset Class"
         placeholderIcon="ri-coin-line"
-      ></app-dropdown>
+      ></app-dropdown> -->
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="space-y-1">
+          <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Price Date</label>
+          <input type="date" [ngModel]="instrumentFormData().priceDate" (ngModelChange)="instrumentFormData.update(v => ({...v, priceDate: $event}))"
+                 class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
+        </div>
+        <div class="space-y-1">
+          <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Price Source</label>
+          <input type="text" [ngModel]="instrumentFormData().priceSource" (ngModelChange)="instrumentFormData.update(v => ({...v, priceSource: $event}))" placeholder="e.g. Manual Entry"
+                 class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
+        </div>
+      </div>
 
       <div class="space-y-1">
-        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Current Unit Price ($)</label>
+        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">NET ASSET VALUE (N)</label>
         <input type="number" [ngModel]="instrumentFormData().unitPrice" (ngModelChange)="instrumentFormData.update(v => ({...v, unitPrice: $event}))" placeholder="0.00"
                class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
       </div>
@@ -559,7 +589,7 @@
             <i class="ri-folders-line text-xl"></i>
         </div>
         <h3 class="text-xl font-black text-[#0d1a0f] tracking-tight">
-          {{ selectedType() ? 'Edit Type' : 'New Product Type' }}
+          {{ selectedType() ? 'Edit Type' : 'New Portfolio Type' }}
         </h3>
       </div>
       <button type="button" (click)="closeModal()" class="text-slate-400 hover:text-red-500">
@@ -575,6 +605,12 @@
                class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
       </div>
 
+      <div class="space-y-1">
+        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Type Code</label>
+        <input type="text" [ngModel]="typeFormData().code" (ngModelChange)="updateTypeFormField('code', $event)" placeholder="e.g. SKK-001"
+               class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
+      </div>
+
       <div class="space-y-4">
          <p class="text-[10px] font-black uppercase tracking-widest text-[#C9A84C]">Configuration</p>
          
@@ -583,10 +619,10 @@
             <input type="checkbox" [ngModel]="typeFormData().supportsAllocation" (ngModelChange)="updateTypeFormField('supportsAllocation', $event)" class="w-6 h-6 rounded-lg border-2 border-[#1B4332]/10 accent-[#C9A84C] cursor-pointer" />
          </label>
 
-         <label class="flex items-center justify-between bg-[#f8f7f2] p-5 rounded-3xl cursor-pointer group hover:bg-[#C9A84C]/5 transition-colors border border-transparent hover:border-[#C9A84C]/20">
+         <!-- <label class="flex items-center justify-between bg-[#f8f7f2] p-5 rounded-3xl cursor-pointer group hover:bg-[#C9A84C]/5 transition-colors border border-transparent hover:border-[#C9A84C]/20">
             <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Supports Profit Sharing</span>
             <input type="checkbox" [ngModel]="typeFormData().supportsProfitSharing" (ngModelChange)="updateTypeFormField('supportsProfitSharing', $event)" class="w-6 h-6 rounded-lg border-2 border-[#1B4332]/10 accent-[#C9A84C] cursor-pointer" />
-         </label>
+         </label> -->
       </div>
     </div>
 
@@ -630,6 +666,12 @@
       <div class="space-y-1">
         <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Asset Class Name</label>
         <input type="text" [ngModel]="assetFormData().name" (ngModelChange)="updateAssetFormField('name', $event)" placeholder="e.g. Federal Government Sukuk"
+               class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
+      </div>
+
+      <div class="space-y-1">
+        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Asset Class Code</label>
+        <input type="text" [ngModel]="assetFormData().code" (ngModelChange)="updateAssetFormField('code', $event)" placeholder="e.g. ASSET-001"
                class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
       </div>
 
@@ -734,7 +776,7 @@
       </div>
 
       <div class="mt-12 flex justify-end">
-          <button (click)="editProduct(selectedProduct()!)" class="flex items-center gap-2 bg-[#1B4332] text-white px-8 py-4 rounded-3xl font-black shadow-xl hover:scale-105 transition-transform">
+          <button (click)="editPortfolio(selectedProduct()!)" class="flex items-center gap-2 bg-[#1B4332] text-white px-8 py-4 rounded-3xl font-black shadow-xl hover:scale-105 transition-transform">
              <i class="ri-edit-2-line"></i>
              Edit Investment Policy
           </button>
