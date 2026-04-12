@@ -10,11 +10,12 @@ export interface AdminTransaction {
   clientInitials: string;
   type: 'deposit' | 'withdrawal' | 'profit' | 'investment' | 'liquidation';
   amount: number;
-  status: 'completed' | 'pending' | 'failed';
+  status: 'completed' | 'pending' | 'failed' | 'rejected';
   date: string;
   description: string;
   paymentMethod?: string;
   bankInfo?: string;
+  notes?: string;
 }
 
 @Component({
@@ -34,6 +35,7 @@ export class AdminTransactionsComponent {
     { id: '7',  reference: 'TRX-98234715', clientName: 'Zubair Al-Farooq', clientInitials: 'ZF', type: 'profit',    amount: 5000,   status: 'completed', date: 'Feb 28, 2026 • 10:00 AM', description: 'Sukuk Monthly Yield' },
     { id: '8',  reference: 'TRX-98234716', clientName: 'Halima Ibrahim',   clientInitials: 'HI', type: 'withdrawal',amount: 25000,  status: 'completed', date: 'Feb 15, 2026 • 04:30 PM', description: 'Withdrawal to GTBank', bankInfo: 'Guaranty Trust Bank • 0123456789' },
     { id: '9',  reference: 'TRX-98234719', clientName: 'Abubakar Sadiq',   clientInitials: 'AS', type: 'investment',amount: 1000000, status: 'completed', date: 'Jan 30, 2026 • 02:30 PM', description: 'Invest: Real Estate Alpha Pool' },
+    { id: '10', reference: 'TRX-98234720', clientName: 'Musa Abdullahi',   clientInitials: 'MA', type: 'withdrawal',amount: 50000, status: 'rejected', date: 'Dec 12, 2025 • 10:15 AM', description: 'Withdrawal to Zenith Bank', bankInfo: 'Zenith Bank • 2123456789', notes: 'Rejected: Bank account name mismatch. Automatically refunded.' }
   ]);
 
   activeFilter = signal<'all' | 'deposit' | 'withdrawal' | 'profit' | 'investment' | 'liquidation'>('all');
@@ -106,7 +108,8 @@ export class AdminTransactionsComponent {
     switch(status) {
       case 'completed': return 'success';
       case 'pending':   return 'warning';
-      case 'failed':    return 'error';
+      case 'failed':
+      case 'rejected':  return 'error';
       default:          return 'info';
     }
   }

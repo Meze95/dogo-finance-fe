@@ -20,11 +20,12 @@ export class AdminLayout {
   private authService = inject(AuthService);
 
   menuItems = [
-    { label: 'System Overview', icon: 'ri-dashboard-3-fill',      link: '/admin/dashboard' },
-    { label: 'Clients Hub',      icon: 'ri-user-star-line',       link: '/admin/clients' },
-    { label: 'Plan & Products', icon: 'ri-funds-box-line',        link: '/admin/products' },
-    { label: 'Active Investments', icon: 'ri-briefcase-4-fill',    link: '/admin/investments' },
-    { label: 'System Ledger',   icon: 'ri-exchange-box-fill',  link: '/admin/transactions' }
+    { label: 'System Overview', icon: 'ri-dashboard-3-fill', link: '/admin/dashboard' },
+    { label: 'Clients Hub', icon: 'ri-user-star-line', link: '/admin/clients' },
+    { label: 'Plan & Products', icon: 'ri-funds-box-line', link: '/admin/products' },
+    { label: 'Investments', icon: 'ri-briefcase-4-fill', link: '/admin/investments' },
+    { label: 'Withdrawal', icon: 'ri-bank-card-line', link: '/admin/withdrawals' },
+    { label: 'System Ledger', icon: 'ri-exchange-box-fill', link: '/admin/transactions' }
   ];
 
   managementItems = [

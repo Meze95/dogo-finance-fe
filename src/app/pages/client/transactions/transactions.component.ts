@@ -8,12 +8,13 @@ export interface Transaction {
   reference: string;
   type: 'deposit' | 'withdrawal' | 'profit' | 'investment' | 'liquidation';
   amount: number;
-  status: 'completed' | 'pending' | 'failed';
+  status: 'completed' | 'pending' | 'failed' | 'rejected';
   date: string;
   description: string;
   paymentMethod?: string;
   bankInfo?: string;
   portfolioName?: string;
+  notes?: string;
 }
 
 @Component({
@@ -35,6 +36,7 @@ export class TransactionsComponent {
     { id: '9', reference: 'TRX-98234717', type: 'profit', amount: 2200, status: 'completed', date: 'Feb 10, 2026 • 09:00 AM', description: 'Agri-Yield Sukuk II Profit' },
     { id: '10', reference: 'TRX-98234719', type: 'investment', amount: 150000, status: 'completed', date: 'Jan 30, 2026 • 02:30 PM', description: 'Investment: Real Estate Alpha Pool', portfolioName: 'Real Estate Alpha Pool' },
     { id: '11', reference: 'TRX-98234722', type: 'deposit', amount: 1000000, status: 'completed', date: 'Jan 05, 2026 • 08:45 AM', description: 'Initial Account Funding', paymentMethod: 'Direct Debit' },
+    { id: '12', reference: 'TRX-98234723', type: 'withdrawal', amount: 50000, status: 'rejected', date: 'Dec 12, 2025 • 10:15 AM', description: 'Withdrawal to Zenith Bank', notes: 'Rejected: Bank account name mismatch. Automatically refunded.' }
   ]);
 
   activeFilter = signal<'all' | 'deposit' | 'withdrawal' | 'profit' | 'investment' | 'liquidation'>('all');
@@ -109,7 +111,8 @@ export class TransactionsComponent {
     switch(status) {
       case 'completed': return 'success';
       case 'pending': return 'warning';
-      case 'failed': return 'error';
+      case 'failed':
+      case 'rejected': return 'error';
       default: return 'info';
     }
   }

@@ -235,6 +235,12 @@
                   <span class="text-sm font-bold text-[#0d1a0f] sm:text-right">{{ selectedTransaction()?.bankInfo }}</span>
                </div>
             }
+            @if(selectedTransaction()?.notes) {
+               <div class="mt-4 p-4 rounded-2xl bg-red-50 border border-red-100 flex flex-col gap-1">
+                  <span class="text-[11px] font-black text-red-600 uppercase tracking-widest shrink-0">Admin Note / Reason</span>
+                  <span class="text-sm font-bold text-red-900">{{ selectedTransaction()?.notes }}</span>
+               </div>
+            }
          </div>
 
          <div class="grid grid-cols-2 gap-3 mt-10">
