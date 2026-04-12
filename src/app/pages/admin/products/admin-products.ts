@@ -131,34 +131,7 @@ export class AdminProducts {
 
   // Common Swal Response Pattern
   private handleResponse(obs: any, successTitle: string) {
-    const customLoaderHtml = `
-      <div class="flex flex-col items-center justify-center py-6">
-        <div class="relative w-24 h-24 mb-6">
-          <div class="absolute inset-0 rounded-full border-[3px] border-slate-100 border-t-[#C9A84C] animate-spin"></div>
-          <div class="absolute inset-2 rounded-full border-[1px] border-slate-200"></div>
-          <div class="absolute inset-4 rounded-full bg-[#1B4332] flex items-center justify-center shadow-lg">
-            <span class="text-[#C9A84C] text-2xl font-black italic">D</span>
-          </div>
-        </div>
-        <div class="text-[12px] font-black text-[#1B4332] uppercase tracking-[4px] mb-2">DOGO FINANCE</div>
-        <div class="flex gap-1.5 align-center">
-            <div class="w-1.5 h-1.5 rounded-full bg-[#C9A84C] animate-bounce" style="animation-delay: 0.1s"></div>
-            <div class="w-1.5 h-1.5 rounded-full bg-[#C9A84C] animate-bounce" style="animation-delay: 0.2s"></div>
-            <div class="w-1.5 h-1.5 rounded-full bg-[#C9A84C] animate-bounce" style="animation-delay: 0.3s"></div>
-        </div>
-      </div>
-    `;
-
-    Swal.fire({
-      html: customLoaderHtml,
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      showConfirmButton: false,
-      background: '#f8f7f2',
-      customClass: {
-        popup: 'rounded-[40px] shadow-2xl border border-white/50'
-      }
-    });
+    const loaderId = this.alertService.loading(successTitle, 'Processing your request...');
 
     obs.subscribe({
       next: (res: any) => {

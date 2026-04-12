@@ -7,6 +7,8 @@ import { Product, ProductAssetAllocation } from '../../../shared/models/product.
 
 import { AlertService } from '../../../shared/services/alert.service';
 
+declare var Swal: any;
+
 @Component({
   selector: 'app-client-portfolios',
   standalone: true,

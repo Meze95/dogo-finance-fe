@@ -8,6 +8,7 @@ import { ProductService } from '../../../shared/services/product.service';
 import { InvestmentService } from '../../../shared/services/investment.service';
 import { Product } from '../../../shared/models/product.model';
 import { TransactionService } from '../../../shared/services/transaction.service';
+import { DropdownComponent } from '../../../shared/components/ui/dropdown.component';
 
 export interface Transaction {
   id: string;
@@ -200,11 +201,24 @@ export class ClientDashboardComponent implements OnInit {
     { bankName: 'Wema Bank', accountName: 'Sherifdeen Malik', accountNumber: '7829304112' }
   ]);
 
-  // Computed signals
   totalGrowth = computed(() => {
     const assets = this.activeInvestments();
     return assets.reduce((acc, curr) => acc + (curr.value * (curr.growth / 100)), 0);
   });
+
+  registeredBankOptions = computed(() => 
+    this.registeredBanks().map(bank => ({
+      value: bank.id,
+      label: `${bank.bankName} (${bank.accountNumber})`
+    }))
+  );
+
+  relationshipTypeOptions = computed(() => 
+    this.relationshipTypes().map(type => ({
+      value: type.id || type.Id,
+      label: type.name || type.Name
+    }))
+  );
 
   openModal(step: any) {
     this.activeVerification.set(step);
