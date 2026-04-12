@@ -5,7 +5,7 @@ import { ProductService } from '../../../shared/services/product.service';
 import { InvestmentService } from '../../../shared/services/investment.service';
 import { Product, ProductAssetAllocation } from '../../../shared/models/product.model';
 
-declare var Swal: any;
+import { AlertService } from '../../../shared/services/alert.service';
 
 @Component({
   selector: 'app-client-portfolios',
@@ -17,6 +17,7 @@ declare var Swal: any;
 export class ClientPortfoliosComponent implements OnInit {
   private productService = inject(ProductService);
   private investmentService = inject(InvestmentService);
+  private alertService = inject(AlertService);
 
   portfolios = this.productService.portfolios;
   activeFilter = signal<string>('All');

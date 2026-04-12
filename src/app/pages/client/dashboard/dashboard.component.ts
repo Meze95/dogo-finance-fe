@@ -29,7 +29,7 @@ export interface InvestmentStub {
 @Component({
   selector: 'app-client-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, DropdownComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })

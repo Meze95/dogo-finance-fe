@@ -4,8 +4,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { AuthService } from './auth.service';
-import { fromEvent, merge, Observable, Subscription, timer } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { fromEvent, merge, Subscription, timer } from 'rxjs';
 
 declare var Swal: any;
 
@@ -69,7 +68,7 @@ export class SessionService implements OnDestroy {
     if (this.timerSubscription) this.timerSubscription.unsubscribe();
 
     const timeoutMs = this.timeoutMinutes() * 60 * 1000;
-    
+
     // We start a timer that will fire after the timeout
     this.timerSubscription = timer(timeoutMs).subscribe(() => {
       this.handleTimeout();
@@ -81,20 +80,9 @@ export class SessionService implements OnDestroy {
     if (!user) return; // Already logged out or never logged in
 
     this.stopMonitoring();
-    
-    Swal.fire({
-      title: 'Session Expired',
-      text: 'You have been inactive for a while. For your security, you have been logged out.',
-      icon: 'warning',
-      confirmButtonText: 'Login Again',
-      confirmButtonColor: '#C9A84C',
-      allowOutsideClick: false,
-      background: '#f8f7f2',
-      customClass: { popup: 'rounded-[30px]' }
-    }).then(() => {
-      this.authService.logout();
-      this.router.navigate(['/auth/login']);
-    });
+
+    this.authService.logout();
+    this.router.navigate(['/lockout']);
   }
 
   stopMonitoring() {

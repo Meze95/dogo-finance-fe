@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../shared/services/product.service';
 import { Product, ProductAssetAllocation, ProductType, AssetType, AssetInstrument } from '../../../shared/models/product.model';
 import { DropdownComponent, DropdownOption } from '../../../shared/components/ui/dropdown.component';
+import { AlertService } from '../../../shared/services/alert.service';
 
 declare var Swal: any;
 
@@ -16,6 +17,7 @@ declare var Swal: any;
 })
 export class AdminProducts {
   public productService = inject(ProductService);
+  private alertService = inject(AlertService);
   
   portfolios = this.productService.portfolios;
   portfolioTypes = this.productService.portfolioTypes;
@@ -121,16 +123,8 @@ export class AdminProducts {
     }).then((result: any) => {
       if (result.isConfirmed) {
         execute();
-      } else {
-        Swal.fire({
-          icon: 'info',
-          title: 'Operation Canceled',
-          text: `The ${action.toLowerCase()} operation was stopped.`,
-          timer: 1500,
-          showConfirmButton: false,
-          background: '#f8f7f2',
-          customClass: { popup: 'rounded-[30px]' }
-        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.alertService.info('Operation Canceled', `The ${action.toLowerCase()} operation was stopped.`);
       }
     });
   }
@@ -168,35 +162,17 @@ export class AdminProducts {
 
     obs.subscribe({
       next: (res: any) => {
-        if (res.success) {
-          Swal.fire({ 
-            icon: 'success', 
-            title: successTitle, 
-            text: res.message || 'Updated successfully!', 
-            timer: 2500, 
-            showConfirmButton: false,
-            background: '#f8f7f2',
-            customClass: { popup: 'rounded-[30px]' }
-          });
+        this.alertService.remove(loaderId);
+        if (res.success || res.boolean || res.message) {
+          this.alertService.success(successTitle, res.message || 'Updated successfully!');
           this.closeModal();
         } else {
-          Swal.fire({ 
-            icon: 'error', 
-            title: 'Action Failed', 
-            text: res.message || 'Something went wrong.',
-            background: '#f8f7f2',
-            customClass: { popup: 'rounded-[30px]' }
-          });
+          this.alertService.error('Action Failed', res.message || 'Something went wrong.');
         }
       },
       error: (err: any) => {
-        Swal.fire({ 
-          icon: 'error', 
-          title: 'Connection Lost', 
-          text: 'Unable to reach the server.',
-          background: '#f8f7f2',
-          customClass: { popup: 'rounded-[30px]' }
-        });
+        this.alertService.remove(loaderId);
+        this.alertService.error('Connection Lost', 'Unable to reach the server.');
       }
     });
   }
@@ -280,10 +256,8 @@ export class AdminProducts {
   }
 
   saveAsset() {
-    this.confirmAction('Save Asset Class', () => {
-      const assetData: AssetType = { ...this.assetFormData() as AssetType, assetTypeId: this.selectedAsset()?.assetTypeId || 0 };
-      this.handleResponse(this.productService.saveAssetType(assetData), 'Asset Saved');
-    });
+    const assetData: AssetType = { ...this.assetFormData() as AssetType, assetTypeId: this.selectedAsset()?.assetTypeId || 0 };
+    this.handleResponse(this.productService.saveAssetType(assetData), 'Asset Saved');
   }
 
   deleteAsset(id: number) {
@@ -314,10 +288,8 @@ export class AdminProducts {
   }
 
   saveInstrument() {
-    this.confirmAction('Save Instrument', () => {
-      const instrumentData: AssetInstrument = { ...this.instrumentFormData() as AssetInstrument, id: this.selectedInstrument()?.id || 0 };
-      this.handleResponse(this.productService.saveInstrument(instrumentData), 'Instrument Saved');
-    });
+    const instrumentData: AssetInstrument = { ...this.instrumentFormData() as AssetInstrument, id: this.selectedInstrument()?.id || 0 };
+    this.handleResponse(this.productService.saveInstrument(instrumentData), 'Instrument Saved');
   }
 
   deleteInstrument(id: number) {

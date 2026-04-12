@@ -263,19 +263,13 @@
                    <!-- RELATIONSHIP -->
                    <div class="space-y-2">
                       <label class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40 ml-4">What is the relationship?</label>
-                      <div class="relative">
-                        <select 
-                          [value]="nokRelationshipId()"
-                          (change)="nokRelationshipId.set($any($event.target).value)"
-                          class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none appearance-none transition-all cursor-pointer"
-                        >
-                           <option value="" disabled selected>Select Relationship</option>
-                           @for(type of relationshipTypes(); track type.id || type.Id) {
-                              <option [value]="type.id || type.Id">{{ type.name || type.Name }}</option>
-                           }
-                        </select>
-                        <i class="ri-arrow-down-s-line absolute right-6 top-1/2 -translate-y-1/2 text-[#1B4332] pointer-events-none"></i>
-                      </div>
+                      <app-dropdown
+                        [options]="relationshipTypeOptions()"
+                        [selectedValue]="nokRelationshipId()"
+                        (valueChange)="nokRelationshipId.set($event)"
+                        placeholder="Select Relationship"
+                        placeholderIcon="ri-parent-line"
+                      ></app-dropdown>
                    </div>
 
                    <!-- NOK EMAIL -->
@@ -577,19 +571,13 @@
                 </div>
                 <div>
                    <label class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40 ml-4">Select Receiving Account</label>
-                   <div class="relative">
-                      <select 
-                        [value]="withdrawAccountId()"
-                        (change)="withdrawAccountId.set($any($event.target).value)"
-                        class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none appearance-none transition-all cursor-pointer"
-                      >
-                         <option value="" disabled selected>Choose destination account</option>
-                         @for(bank of registeredBanks(); track bank.id) {
-                           <option [value]="bank.id">{{ bank.bankName }} ({{ bank.accountNumber }})</option>
-                         }
-                      </select>
-                      <i class="ri-arrow-down-s-line absolute right-6 top-1/2 -translate-y-1/2 text-[#1B4332] pointer-events-none"></i>
-                   </div>
+                   <app-dropdown
+                     [options]="registeredBankOptions()"
+                     [selectedValue]="withdrawAccountId()"
+                     (valueChange)="withdrawAccountId.set($event)"
+                     placeholder="Choose destination account"
+                     placeholderIcon="ri-bank-line"
+                   ></app-dropdown>
                 </div>
                 <div>
                   <label class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40 ml-4">Transaction PIN</label>

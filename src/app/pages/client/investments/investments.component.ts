@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { InvestmentService } from '../../../shared/services/investment.service';
 import { UserInvestment, InstrumentHolding } from '../../../shared/models/product.model';
+import { AlertService } from '../../../shared/services/alert.service';
 
 declare var Swal: any;
 
@@ -15,6 +16,7 @@ declare var Swal: any;
 })
 export class ClientInvestmentsComponent implements OnInit {
   private investmentService = inject(InvestmentService);
+  private alertService = inject(AlertService);
 
   userInvestments = this.investmentService.userInvestments;
   
@@ -69,9 +71,12 @@ export class ClientInvestmentsComponent implements OnInit {
           next: () => {
             this.isProcessing.set(false);
             this.closeModal();
-            Swal.fire('Exited!', 'Your funds have been returned to your wallet.', 'success');
+            this.alertService.success('Exited!', 'Your funds have been returned to your wallet.');
           },
-          error: () => this.isProcessing.set(false)
+          error: () => {
+            this.isProcessing.set(false);
+            this.alertService.error('Action Failed', 'Could not exit portfolio.');
+          }
         });
       }
     });
@@ -96,9 +101,12 @@ export class ClientInvestmentsComponent implements OnInit {
         this.investmentService.liquidateEverything().subscribe({
           next: () => {
             this.isProcessing.set(false);
-            Swal.fire('Liquidated!', 'All your investments have been converted to cash.', 'success');
+            this.alertService.success('Liquidated!', 'All your investments have been converted to cash.');
           },
-          error: () => this.isProcessing.set(false)
+          error: () => {
+            this.isProcessing.set(false);
+            this.alertService.error('Action Failed', 'Failed to liquidate investments.');
+          }
         });
       }
     });
@@ -122,9 +130,12 @@ export class ClientInvestmentsComponent implements OnInit {
       next: () => {
         this.isProcessing.set(false);
         this.selectedHolding.set(null);
-        Swal.fire('Sold!', 'Instrument units sold successfully.', 'success');
+        this.alertService.success('Sold!', 'Instrument units sold successfully.');
       },
-      error: () => this.isProcessing.set(false)
+      error: () => {
+        this.isProcessing.set(false);
+        this.alertService.error('Action Failed', 'Failed to sell instrument units.');
+      }
     });
   }
 }
