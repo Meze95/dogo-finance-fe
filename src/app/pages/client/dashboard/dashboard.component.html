@@ -42,9 +42,9 @@
               <h2 class="text-4xl font-black tracking-tighter mb-4 leading-none">
                 {{ hideBalances() ? '••••••••' : '₦' + (totalPortfolioValue() | number) }}
               </h2>
-              <div class="flex items-center text-xs font-bold text-green-400">
-                <i class="ri-arrow-right-up-line"></i> +12.5% vs Last Quarter
-              </div>
+              <!-- <div class="flex items-center text-xs font-bold text-green-400">
+                <i class="ri-arrow-right-up-line"></i> {{ portfolioGrowth() | number:'1.1-1' }}% vs Last Quarter
+              </div> -->
            </div>
            <div class="absolute bottom-6 right-8 text-white/5 text-7xl"><i class="ri-pie-chart-2-fill"></i></div>
         </div>
@@ -69,7 +69,7 @@
                     {{ hideBalances() ? '••••••' : '₦' + (availableNaira() | number) }}
                  </h2>
               </div>
-              <button class="mt-4 text-[10px] font-black uppercase tracking-widest underline decoration-2 underline-offset-4 hover:decoration-[#1B4332]">View Wallet History</button>
+              <!-- <button class="mt-4 text-[10px] font-black uppercase tracking-widest underline decoration-2 underline-offset-4 hover:decoration-[#1B4332]">View Wallet History</button> -->
            </div>
         </div>
       </div>
@@ -442,6 +442,44 @@
               </div>
             </div>
 
+            <!-- STEP: BVN VERIFICATION (Integrated in funding flow) -->
+            <div *ngSwitchCase="'bvn'" class="space-y-6 animate-in slide-in-from-right-4 duration-300">
+               <div class="text-center">
+                  <h4 class="text-xl font-black text-[#0d1a0f] italic tracking-tighter mb-2">Verify your BVN</h4>
+                  <p class="text-[11px] font-bold text-[#6B7280] uppercase tracking-widest mb-8">Monnify requires BVN for virtual accounts</p>
+               </div>
+
+               <div class="relative group">
+                <input 
+                  type="text" 
+                  placeholder="Enter 11-digit BVN" 
+                  maxlength="11"
+                  [value]="verificationInput()"
+                  (input)="verificationInput.set($any($event.target).value.replace(/[^0-9]/g, ''))"
+                  class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-5 text-sm font-bold text-[#0d1a0f] outline-none transition-all placeholder:text-[#1B4332]/20"
+                >
+                <div class="absolute right-6 top-1/2 -translate-y-1/2 text-[#1B4332]/10 group-focus-within:text-[#C9A84C] transition-colors">
+                  <i class="ri-fingerprint-line text-xl"></i>
+                </div>
+              </div>
+
+               <button 
+                  (click)="verifyBvnInFlow()"
+                  [disabled]="verificationInput().length !== 11 || isProcessing()"
+                  class="w-full h-16 bg-[#1B4332] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[#2D6A4F] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl shadow-[#1B4332]/20 flex items-center justify-center relative overflow-hidden"
+                >
+                  @if (isProcessing()) {
+                    <div class="flex items-center space-x-2">
+                      <div class="w-2 h-2 rounded-full bg-[#C9A84C] animate-pulse"></div>
+                      <span>Verifying...</span>
+                    </div>
+                  } @else {
+                    <span>Verify & Create Account</span>
+                    <i class="ri-shield-check-line text-lg ml-2"></i>
+                  }
+               </button>
+            </div>
+
             <!-- STEP: VIRTUAL ACCOUNT -->
             <div *ngSwitchCase="'virtual'" class="space-y-6 animate-in slide-in-from-right-4 duration-300">
                <div class="text-center">
@@ -493,14 +531,12 @@
                       placeholder="0000 0000 0000 0000" 
                       maxlength="19"
                       [value]="cardNumber()"
-                      (input)="cardNumber.set($any($event.target).value)"
+                      (input)="onCardNumberInput($event)"
                       class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all"
                     >
                     <i class="ri-bank-card-line absolute right-6 top-1/2 -translate-y-1/2 text-[#1B4332]/20"></i>
                   </div>
-               </div>
-
-               <div class="grid grid-cols-2 gap-4">
+               </div>               <div class="grid grid-cols-2 gap-4">
                   <div>
                     <label class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40 ml-4">Expiry (MM/YY)</label>
                     <input 
@@ -508,18 +544,18 @@
                       placeholder="12/26" 
                       maxlength="5"
                       [value]="expiryDate()"
-                      (input)="expiryDate.set($any($event.target).value)"
+                      (input)="onExpiryInput($event)"
                       class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all"
                     >
                   </div>
                   <div>
                     <label class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40 ml-4">CVV</label>
                     <input 
-                      type="password" 
+                      type="text" 
                       placeholder="123" 
-                      maxlength="3"
+                      maxlength="4"
                       [value]="cvv()"
-                      (input)="cvv.set($any($event.target).value)"
+                      (input)="cvv.set($any($event.target).value.replace(/\D/g, ''))"
                       class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all"
                     >
                   </div>
@@ -532,10 +568,10 @@
                   maxlength="4"
                   placeholder="****" 
                   [value]="cardPin()"
-                  (input)="cardPin.set($any($event.target).value)"
+                  (input)="cardPin.set($any($event.target).value.replace(/\D/g, ''))"
                   class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all"
                 >
-             </div>
+              </div>
             </div>
 
             <!-- STEP: OTP -->
@@ -612,10 +648,10 @@
             </div>
           }
 
-          @if (fundingStep() !== 'success') {
+          @if (fundingStep() !== 'success' && fundingStep() !== 'virtual' && fundingStep() !== 'bvn') {
             <button 
               (click)="processTransaction()"
-              [disabled]="isProcessing() || !transactionAmount() || (transactionType() === 'fund' && fundingStep() === 'source' && !selectedSource())"
+              [disabled]="isProcessing() || !transactionAmount() || (transactionType() === 'fund' && fundingStep() === 'source' && !selectedSource()) || (transactionType() === 'fund' && fundingStep() === 'card' && !isCardValid())"
               class="w-full h-16 mt-10 bg-[#1B4332] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[#2D6A4F] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl shadow-[#1B4332]/20 flex items-center justify-center relative overflow-hidden"
             >
                @if (isProcessing()) {

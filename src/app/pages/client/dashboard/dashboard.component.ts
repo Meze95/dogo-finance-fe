@@ -57,23 +57,20 @@ export class ClientDashboardComponent implements OnInit {
     return u?.firstName ? `${u.firstName} ${u.lastName}` : 'Dogo User';
   });
 
-  availableNaira = signal(150240);
+  availableNaira = signal(0);
+  actualInvestedValue = signal(0);
+  portfolioGrowth = signal(12.5); // Placeholder for growth percentage
   hideBalances = signal(false); // New Privacy Signal
 
   totalActiveInvestment = computed(() => {
-    return this.activeInvestments().reduce((acc, curr) => acc + curr.value, 0);
+    return this.actualInvestedValue();
   });
 
   totalPortfolioValue = computed(() => {
-    return this.totalActiveInvestment() + this.availableNaira();
+    return this.actualInvestedValue() + this.availableNaira();
   });
 
-  activeInvestments = signal<InvestmentStub[]>([
-    { label: 'Mudarabah Fund', value: 1200000, growth: 12.5, icon: 'ri-seedling-line', color: 'bg-[#1B4332]' },
-    { label: 'Sukuk Bonds', value: 850000, growth: 8.2, icon: 'ri-bank-line', color: 'bg-[#C9A84C]' },
-    { label: 'Halal Equity', value: 500000, growth: -2.1, icon: 'ri-line-chart-line', color: 'bg-[#0d1a0f]' },
-    { label: 'Private Musharakah', value: 1550000, growth: 15.8, icon: 'ri-team-line', color: 'bg-[#2D6A4F]' }
-  ]);
+  activeInvestments = signal<InvestmentStub[]>([]);
 
   nextSteps = signal<any[]>([]);
 
@@ -81,6 +78,31 @@ export class ClientDashboardComponent implements OnInit {
     this.productService.getPortfolios();
     this.loadTodoList();
     this.loadRelationshipTypes();
+    this.loadDashboardData();
+  }
+
+  loadDashboardData() {
+    const customerId = this.user()?.CustomerId || this.user()?.customerId;
+    if (!customerId) return;
+
+    this.transactionService.getWallet(customerId).subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.availableNaira.set(res.data.balance || res.data.Balance || 0);
+        }
+      }
+    });
+
+    this.transactionService.getPortfolioSummary().subscribe({
+        next: (res) => {
+            if (res.success && res.data) {
+                this.actualInvestedValue.set(res.data.currentValue || res.data.CurrentValue || 0);
+                this.portfolioGrowth.set(res.data.returnPercentage || res.data.ReturnPercentage || 0);
+            }
+        }
+    });
+
+    // Optionally load history or holdings here to populate activeInvestments list
   }
 
   openInvest(portfolio: Product) {
@@ -186,7 +208,7 @@ export class ClientDashboardComponent implements OnInit {
   ]);
 
   // Funding specific states
-  fundingStep = signal<'amount' | 'source' | 'card' | 'otp' | 'virtual' | 'success'>('amount');
+  fundingStep = signal<'amount' | 'source' | 'card' | 'otp' | 'virtual' | 'bvn' | 'success'>('amount');
   selectedSource = signal<'card' | 'virtual' | null>(null);
   cardNumber = signal('');
   expiryDate = signal('');
@@ -196,14 +218,35 @@ export class ClientDashboardComponent implements OnInit {
   currentReference = signal('');
   errorMessage = signal('');
 
-  virtualAccounts = signal<{bankName: string, accountName: string, accountNumber: string}[]>([
-    { bankName: 'Sterling Bank', accountName: 'Sherifdeen Malik', accountNumber: '5309804611' },
-    { bankName: 'Wema Bank', accountName: 'Sherifdeen Malik', accountNumber: '7829304112' }
-  ]);
+  virtualAccounts = signal<{bankName: string, accountName: string, accountNumber: string}[]>([]);
 
   totalGrowth = computed(() => {
     const assets = this.activeInvestments();
     return assets.reduce((acc, curr) => acc + (curr.value * (curr.growth / 100)), 0);
+  });
+
+  isCardValid = computed(() => {
+    const card = this.cardNumber().replace(/\s/g, '');
+    const expiry = this.expiryDate();
+    const cvv = this.cvv();
+    const pin = this.cardPin();
+
+    if (card.length < 16 || card.length > 19) return false;
+    
+    // Expiry validation
+    if (!/^\d{2}\/\d{2}$/.test(expiry)) return false;
+    const [m, y] = expiry.split('/').map(Number);
+    if (m < 1 || m > 12) return false;
+    
+    const now = new Date();
+    const currentYear = now.getFullYear() % 100;
+    const currentMonth = now.getMonth() + 1;
+    if (y < currentYear || (y === currentYear && m < currentMonth)) return false;
+
+    if (cvv.length < 3 || cvv.length > 4) return false;
+    if (pin.length !== 4) return false;
+
+    return true;
   });
 
   registeredBankOptions = computed(() => 
@@ -352,6 +395,92 @@ export class ClientDashboardComponent implements OnInit {
     this.showTransactionModal.set(false);
   }
 
+  fetchVirtualAccount() {
+    this.isProcessing.set(true);
+    this.errorMessage.set('');
+
+    console.log('--- fetchVirtualAccount called ---');
+    this.transactionService.getVirtualAccount().subscribe({
+      next: (res: any) => {
+        try {
+          console.log('Virtual Account Response Received:', res);
+          
+          // More robust success check
+          const isSuccess = res?.success === true || res?.Success === true || res?.status === 200 || res?.Status === 200 || res?.boolean === true;
+          const dataPayload = res?.data || res?.Data;
+          const message = res?.message || res?.Message || '';
+
+          if (isSuccess && dataPayload) {
+            const accountsData = Array.isArray(dataPayload) ? dataPayload : [dataPayload];
+             
+            if (accountsData.length === 0) {
+              this.errorMessage.set('No virtual accounts found for your profile.');
+              this.isProcessing.set(false);
+              return;
+            }
+
+            const currentUser = this.user();
+            const displayName = currentUser ? `${currentUser.firstName || ''} ${currentUser.lastName || ''}`.trim() : 'Dogo Customer';
+
+            const formattedAccounts = accountsData.map((acc: any) => ({
+              bankName: acc.bankName || acc.BankName || acc.bank_name || 'Bank',
+              accountName: acc.accountName || acc.AccountName || acc.account_name || displayName,
+              accountNumber: acc.accountNumber || acc.AccountNumber || acc.account_number || '0000000000'
+            }));
+
+            console.log('Processed virtual accounts:', formattedAccounts);
+            this.virtualAccounts.set(formattedAccounts);
+            
+            // Transition to virtual account view
+            this.fundingStep.set('virtual');
+          } else {
+            console.warn('Virtual account fetch failed validation:', res);
+            if (message && message.toLowerCase().includes('bvn')) {
+              this.fundingStep.set('bvn');
+            } else {
+              this.errorMessage.set(message || 'Payment provider could not provide account details.');
+            }
+          }
+        } catch (e) {
+          console.error('Fatal error parsing virtual account data:', e);
+          this.errorMessage.set('An interface error occurred. Please try again later.');
+        } finally {
+          this.isProcessing.set(false);
+        }
+      },
+      error: (err) => {
+        console.error('Network error fetching virtual account:', err);
+        const errorMsg = err.error?.message || err.error?.Message || 'Connection to banking provider failed.';
+        this.errorMessage.set(errorMsg);
+        this.isProcessing.set(false);
+      }
+    });
+  }
+
+  verifyBvnInFlow() {
+    if (this.verificationInput().length !== 11) return;
+    this.isProcessing.set(true);
+    const customerId = this.user()?.CustomerId || this.user()?.customerId;
+    
+    this.customerService.verifyBvn(customerId, this.verificationInput()).subscribe({
+      next: (res) => {
+        if (res.success || res.boolean) {
+          // Update todo list to remove BVN task
+          this.nextSteps.set(this.nextSteps().filter(s => !s.title.includes('BVN')));
+          // Now fetch the account
+          this.fetchVirtualAccount();
+        } else {
+          this.isProcessing.set(false);
+          this.errorMessage.set(res.message || 'BVN Verification failed');
+        }
+      },
+      error: (err) => {
+        this.isProcessing.set(false);
+        this.errorMessage.set(err.error?.message || 'Verification error');
+      }
+    });
+  }
+
   processTransaction() {
     if(!this.transactionAmount()) return;
     
@@ -371,27 +500,15 @@ export class ClientDashboardComponent implements OnInit {
            this.fundingStep.set('card');
            this.isProcessing.set(false);
         } else if (this.selectedSource() === 'virtual') {
-           this.transactionService.getVirtualAccount().subscribe({
-             next: (res) => {
-               if (res.success && res.data) {
-                 // The backend returns a single entity or list. Let's wrap as array for template.
-                 const acc = res.data;
-                 this.virtualAccounts.set([{
-                    bankName: acc.bankName,
-                    accountName: `${this.authService.currentUser()?.firstName} ${this.authService.currentUser()?.lastName}`, // Use from auth for safety or acc
-                    accountNumber: acc.accountNumber
-                 }]);
-                 this.fundingStep.set('virtual');
-               } else {
-                 this.errorMessage.set(res.message || 'Could not retrieve virtual account');
-               }
-               this.isProcessing.set(false);
-             },
-             error: () => {
-               this.errorMessage.set('Error connecting to payment provider');
-               this.isProcessing.set(false);
-             }
-           });
+            // Check for BVN verification from todo list
+            const needsBvn = this.nextSteps().some(s => s.action === 'VERIFY NOW' && s.title.includes('BVN'));
+            
+            if (needsBvn) {
+                this.fundingStep.set('bvn');
+                this.isProcessing.set(false);
+            } else {
+                this.fetchVirtualAccount();
+            }
         } else {
            this.isProcessing.set(false);
         }
@@ -528,5 +645,29 @@ export class ClientDashboardComponent implements OnInit {
       case 'profit': return 'bg-[#C9A84C]';
       default: return 'bg-blue-500';
     }
+  }
+
+  onCardNumberInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/\D/g, ''); // Remove non-digits
+    if (value.length > 19) value = value.slice(0, 19);
+    
+    // Format with spaces
+    const formatted = value.match(/.{1,4}/g)?.join(' ') || value;
+    this.cardNumber.set(formatted);
+    input.value = formatted;
+  }
+
+  onExpiryInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/\D/g, '');
+    if (value.length > 4) value = value.slice(0, 4);
+    
+    if (value.length >= 2) {
+      value = value.slice(0, 2) + '/' + value.slice(2);
+    }
+    
+    this.expiryDate.set(value);
+    input.value = value;
   }
 }

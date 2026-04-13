@@ -50,6 +50,14 @@ export class TransactionService {
     return this.http.get<ApiResponse>(`${this.apiUrl}/wallet/${customerId}`);
   }
 
+  getPortfolioSummary(): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.apiUrl}/portfolioSummary`);
+  }
+
+  getHoldings(customerId: number): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.apiUrl}/holdings/${customerId}`);
+  }
+
   getHistory(): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(`${this.apiUrl}/history`);
   }
