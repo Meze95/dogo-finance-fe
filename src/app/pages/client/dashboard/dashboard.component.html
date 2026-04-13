@@ -102,45 +102,47 @@
 
 
       <!-- Recommended for you Section -->
-      <div class="space-y-6">
-        <div class="flex items-center justify-between px-2">
-            <h3 class="text-xl font-black text-[#0d1a0f] uppercase tracking-tighter italic">Recommended for you</h3>
-            <button routerLink="/client/portfolios" class="text-[10px] font-black text-[#C9A84C] uppercase tracking-widest hover:text-[#1B4332] transition-colors">See all portfolios</button>
-        </div>
+      @if (suggestedPortfolios().length > 0) {
+        <div class="space-y-6">
+          <div class="flex items-center justify-between px-2">
+              <h3 class="text-xl font-black text-[#0d1a0f] uppercase tracking-tighter italic">Recommended for you</h3>
+              <button routerLink="/client/portfolios" class="text-[10px] font-black text-[#C9A84C] uppercase tracking-widest hover:text-[#1B4332] transition-colors">See all portfolios</button>
+          </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            @for(p of suggestedPortfolios(); track p.portfolioId) {
-                <div class="bg-white rounded-[40px] p-8 border border-[#1B4332]/5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all group flex flex-col h-full">
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="w-12 h-12 rounded-2xl bg-[#f8f7f2] flex items-center justify-center text-[#C9A84C] transition-colors group-hover:bg-[#C9A84C] group-hover:text-white">
-                            <i class="ri-pie-chart-line text-2xl"></i>
-                        </div>
-                        <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border border-[#1B4332]/5">
-                            {{ p.riskLevel }} Risk
-                        </span>
-                    </div>
-                    <h4 class="text-lg font-black text-[#0d1a0f] tracking-tight mb-2">{{ p.name }}</h4>
-                    
-                    <div class="mb-4">
-                        <span class="text-[10px] font-black uppercase tracking-widest text-green-600 bg-green-50 px-2 py-1 rounded-md">
-                            {{ p.expectedAnnualReturn }}% Average Return
-                        </span>
-                    </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              @for(p of suggestedPortfolios(); track p.portfolioId) {
+                  <div class="bg-white rounded-[40px] p-8 border border-[#1B4332]/5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all group flex flex-col h-full">
+                      <div class="flex justify-between items-start mb-6">
+                          <div class="w-12 h-12 rounded-2xl bg-[#f8f7f2] flex items-center justify-center text-[#C9A84C] transition-colors group-hover:bg-[#C9A84C] group-hover:text-white">
+                              <i class="ri-pie-chart-line text-2xl"></i>
+                          </div>
+                          <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border border-[#1B4332]/5">
+                              {{ p.riskLevel }} Risk
+                          </span>
+                      </div>
+                      <h4 class="text-lg font-black text-[#0d1a0f] tracking-tight mb-2">{{ p.name }}</h4>
+                      
+                      <div class="mb-4">
+                          <span class="text-[10px] font-black uppercase tracking-widest text-green-600 bg-green-50 px-2 py-1 rounded-md">
+                              {{ p.expectedAnnualReturn }}% Average Return
+                          </span>
+                      </div>
 
-                    <p class="text-xs font-medium text-slate-400 line-clamp-2 italic mb-8">"{{ p.description }}"</p>
-                    
-                    <div class="mt-auto grid grid-cols-2 gap-3">
-                        <button (click)="viewDetail(p)" class="w-full py-3 bg-[#f8f7f2] hover:bg-slate-100 text-[#1B4332] rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all">
-                            Explore
-                        </button>
-                        <button (click)="openInvest(p)" class="w-full py-3 bg-[#1B4332] hover:bg-[#2D6A4F] text-white rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all shadow-lg shadow-[#1B4332]/10">
-                            Invest
-                        </button>
-                    </div>
-                </div>
-            }
+                      <p class="text-xs font-medium text-slate-400 line-clamp-2 italic mb-8">"{{ p.description }}"</p>
+                      
+                      <div class="mt-auto grid grid-cols-2 gap-3">
+                          <button (click)="viewDetail(p)" class="w-full py-3 bg-[#f8f7f2] hover:bg-slate-100 text-[#1B4332] rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all">
+                              Explore
+                          </button>
+                          <button (click)="openInvest(p)" class="w-full py-3 bg-[#1B4332] hover:bg-[#2D6A4F] text-white rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all shadow-lg shadow-[#1B4332]/10">
+                              Invest
+                          </button>
+                      </div>
+                  </div>
+              }
+          </div>
         </div>
-      </div>
+      }
 
       
       <!-- Portfolio Breakdown Table (Recent Transactions) -->
