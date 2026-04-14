@@ -220,6 +220,25 @@ export class ClientDashboardComponent implements OnInit {
 
   virtualAccounts = signal<{bankName: string, accountName: string, accountNumber: string}[]>([]);
 
+  cardType = signal<string>('');
+
+  cardTypeIcon = computed(() => {
+    switch (this.cardType()) {
+      case 'visa': return 'ri-visa-fill text-blue-600';
+      case 'mastercard': return 'ri-mastercard-fill text-orange-500';
+      case 'verve': return 'ri-bank-card-fill text-green-600';
+      default: return 'ri-bank-card-line text-[#1B4332]/20';
+    }
+  });
+
+  detectCardType(number: string): string {
+    const cleanNumber = number.replace(/\D/g, '');
+    if (/^4/.test(cleanNumber)) return 'visa';
+    if (/^5[1-5]/.test(cleanNumber) || /^(222[1-9]|22[3-9]|2[3-6]|27[01]|2720)/.test(cleanNumber)) return 'mastercard';
+    if (/^(5060|5061|5078|5079|6500|6504|6509|6511)/.test(cleanNumber)) return 'verve';
+    return '';
+  }
+
   totalGrowth = computed(() => {
     const assets = this.activeInvestments();
     return assets.reduce((acc, curr) => acc + (curr.value * (curr.growth / 100)), 0);
@@ -231,7 +250,7 @@ export class ClientDashboardComponent implements OnInit {
     const cvv = this.cvv();
     const pin = this.cardPin();
 
-    if (card.length < 16 || card.length > 19) return false;
+    if (card.length < 16) return false;
     
     // Expiry validation
     if (!/^\d{2}\/\d{2}$/.test(expiry)) return false;
@@ -241,12 +260,41 @@ export class ClientDashboardComponent implements OnInit {
     const now = new Date();
     const currentYear = now.getFullYear() % 100;
     const currentMonth = now.getMonth() + 1;
+    
+    // Check expiration: current year > expiry year OR (same year AND current month > expiry month)
     if (y < currentYear || (y === currentYear && m < currentMonth)) return false;
 
-    if (cvv.length < 3 || cvv.length > 4) return false;
-    if (pin.length !== 4) return false;
+    if (cvv.length !== 3) return false;
+    
+    // Relaxed PIN check: Valid if empty (optional) OR exactly 4 digits
+    if (pin.length > 0 && pin.length !== 4) return false;
 
     return true;
+  });
+
+  validationError = computed(() => {
+    if (this.fundingStep() !== 'card') return '';
+    
+    const card = this.cardNumber().replace(/\s/g, '');
+    const expiry = this.expiryDate();
+    const cvv = this.cvv();
+    const pin = this.cardPin();
+
+    if (card && card.length < 16) return 'Enter a valid 16-digit card number';
+    
+    if (expiry.length === 5) {
+      const [m, y] = expiry.split('/').map(Number);
+      const now = new Date();
+      const currentYear = now.getFullYear() % 100;
+      const currentMonth = now.getMonth() + 1;
+      if (m < 1 || m > 12) return 'Invalid expiry month';
+      if (y < currentYear || (y === currentYear && m < currentMonth)) return 'This card has expired';
+    }
+
+    if (cvv && cvv.length !== 3) return 'CVV must be 3 digits';
+    if (pin && pin.length !== 4) return 'PIN must be 4 digits';
+
+    return '';
   });
 
   registeredBankOptions = computed(() => 
@@ -384,6 +432,7 @@ export class ClientDashboardComponent implements OnInit {
     this.cardNumber.set('');
     this.expiryDate.set('');
     this.cvv.set('');
+    this.cardType.set('');
     this.cardPin.set('');
     this.otpInput.set('');
     this.errorMessage.set('');
@@ -519,7 +568,7 @@ export class ClientDashboardComponent implements OnInit {
         // Step 1: Initiate Deposit
         this.transactionService.initiateDeposit(customerId, amount).subscribe({
           next: (res) => {
-             const ref = res.data.reference;
+             const ref = res.data.transref;
              this.currentReference.set(ref);
 
              // Step 2: Extract Expiry
@@ -534,17 +583,22 @@ export class ClientDashboardComponent implements OnInit {
                cvv: this.cvv(),
                pin: this.cardPin()
              }).subscribe({
-                next: (chargeRes) => {
-                   if (chargeRes.data?.status === 'OTP_AUTH_REQUIRED' || chargeRes.data?.responseCode === '00') {
-                      this.fundingStep.set('otp');
-                      this.isProcessing.set(false);
-                   } else if (chargeRes.data?.status === 'SUCCESS') {
-                      this.finalizeDeposit();
-                   } else {
-                      this.errorMessage.set(chargeRes.data?.message || 'Charge failed');
-                      this.isProcessing.set(false);
-                   }
-                },
+                 next: (chargeRes) => {
+                    const data = chargeRes.data;
+                    const body = data?.responseBody || data?.ResponseBody;
+                    const status = body?.status || body?.Status || data?.status;
+                    const rCode = data?.responseCode || data?.ResponseCode;
+
+                    if (status === 'OTP_AUTH_REQUIRED') {
+                       this.fundingStep.set('otp');
+                       this.isProcessing.set(false);
+                    } else if (status === 'SUCCESS' || rCode === '0' || rCode === '00') {
+                       this.finalizeDeposit();
+                    } else {
+                       this.errorMessage.set(body?.message || body?.Message || data?.message || data?.responseMessage || 'Charge failed');
+                       this.isProcessing.set(false);
+                    }
+                 },
                 error: (err) => {
                    this.errorMessage.set('Card processing error');
                    this.isProcessing.set(false);
@@ -651,6 +705,8 @@ export class ClientDashboardComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     let value = input.value.replace(/\D/g, ''); // Remove non-digits
     if (value.length > 19) value = value.slice(0, 19);
+    
+    this.cardType.set(this.detectCardType(value));
     
     // Format with spaces
     const formatted = value.match(/.{1,4}/g)?.join(' ') || value;

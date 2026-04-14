@@ -536,7 +536,7 @@
                       (input)="onCardNumberInput($event)"
                       class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all"
                     >
-                    <i class="ri-bank-card-line absolute right-6 top-1/2 -translate-y-1/2 text-[#1B4332]/20"></i>
+                    <i [class]="cardTypeIcon()" class="absolute right-6 top-1/2 -translate-y-1/2 text-xl transition-all duration-300"></i>
                   </div>
                </div>               <div class="grid grid-cols-2 gap-4">
                   <div>
@@ -555,7 +555,7 @@
                     <input 
                       type="text" 
                       placeholder="123" 
-                      maxlength="4"
+                      maxlength="3"
                       [value]="cvv()"
                       (input)="cvv.set($any($event.target).value.replace(/\D/g, ''))"
                       class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all"
@@ -574,6 +574,12 @@
                   class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all"
                 >
               </div>
+
+              @if (validationError()) {
+                <div class="p-4 bg-red-50 text-red-600 rounded-2xl text-[11px] uppercase font-black tracking-widest animate-in fade-in duration-300 text-center mt-2">
+                  <i class="ri-error-warning-line mr-2"></i> {{ validationError() }}
+                </div>
+              }
             </div>
 
             <!-- STEP: OTP -->
@@ -682,7 +688,7 @@
             <div class="w-16 h-16 rounded-3xl bg-[#C9A84C]/20 text-[#C9A84C] flex items-center justify-center mx-auto mb-6 shadow-pill">
                 <i class="ri-copper-coin-line text-3xl"></i>
             </div>
-            <h3 class="text-2xl font-black text-[#0d1a0f] tracking-tight mb-2">Initialize Investment</h3>
+            <!-- <h3 class="text-2xl font-black text-[#0d1a0f] tracking-tight mb-2">Initialize Investment</h3> -->
             <p class="text-[10px] font-bold text-slate-400 mb-8 uppercase tracking-widest leading-relaxed">Choose your principal amount for <br><span class="text-[#1B4332] font-black">{{ selectedPortfolio()?.name }}</span></p>
             
             <div class="space-y-6 text-left mb-10">
@@ -705,7 +711,7 @@
                     @if(isInvesting()) {
                         <i class="ri-loader-4-line animate-spin mr-2"></i> Initializing...
                     } @else {
-                        Confirm Investment
+                        Proceed
                     }
                 </button>
                 <button (click)="showInvestModal.set(false)" class="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-red-500 transition-colors py-2">Maybe Later</button>
