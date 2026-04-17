@@ -1,7 +1,9 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, inject, OnInit, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BadgeComponent } from '../../../shared/components/ui/badge.component';
+import { TransactionService } from '../../../shared/services/transaction.service';
+import { AuthService } from '../../../shared/services/auth.service';
 
 export interface Transaction {
   id: string;
@@ -23,21 +25,62 @@ export interface Transaction {
   imports: [CommonModule, BadgeComponent, FormsModule],
   templateUrl: './transactions.component.html',
 })
-export class TransactionsComponent {
-  transactions = signal<Transaction[]>([
-    { id: '1', reference: 'TRX-882941', type: 'liquidation', amount: 450000, status: 'completed', date: 'Apr 10, 2026 • 09:15 AM', description: 'Full Liquidation: Halal Growth Strategy', portfolioName: 'Halal Growth Strategy' },
-    { id: '2', reference: 'TRX-882940', type: 'investment', amount: 300000, status: 'completed', date: 'Apr 08, 2026 • 02:30 PM', description: 'Investment: Ethical Tech Portfolio', portfolioName: 'Ethical Tech Portfolio' },
-    { id: '3', reference: 'TRX-98234710', type: 'profit', amount: 18500, status: 'completed', date: 'Mar 27, 2026 • 10:45 AM', description: 'Mudarabah Q1 Profit Share' },
-    { id: '4', reference: 'TRX-98234711', type: 'deposit', amount: 500000, status: 'completed', date: 'Mar 26, 2026 • 02:15 PM', description: 'Wallet Funding (Monnify)', paymentMethod: 'Card Payment' },
-    { id: '5', reference: 'TRX-882939', type: 'liquidation', amount: 25000, status: 'completed', date: 'Mar 25, 2026 • 11:45 AM', description: 'Partial Sell: Sukuk Al-Ijarah (10 units)', portfolioName: 'Sukuk Al-Ijarah' },
-    { id: '6', reference: 'TRX-98234713', type: 'withdrawal', amount: 12000, status: 'pending', date: 'Mar 24, 2026 • 11:20 AM', description: 'Withdrawal to Zenith Bank', bankInfo: 'Zenith Bank • 2123456789' },
-    { id: '7', reference: 'TRX-98234715', type: 'profit', amount: 4500, status: 'completed', date: 'Feb 28, 2026 • 10:00 AM', description: 'Sukuk Monthly Yield' },
-    { id: '8', reference: 'TRX-98234716', type: 'withdrawal', amount: 25000, status: 'completed', date: 'Feb 15, 2026 • 04:30 PM', description: 'Withdrawal to GTBank', bankInfo: 'Guaranty Trust Bank • 0123456789' },
-    { id: '9', reference: 'TRX-98234717', type: 'profit', amount: 2200, status: 'completed', date: 'Feb 10, 2026 • 09:00 AM', description: 'Agri-Yield Sukuk II Profit' },
-    { id: '10', reference: 'TRX-98234719', type: 'investment', amount: 150000, status: 'completed', date: 'Jan 30, 2026 • 02:30 PM', description: 'Investment: Real Estate Alpha Pool', portfolioName: 'Real Estate Alpha Pool' },
-    { id: '11', reference: 'TRX-98234722', type: 'deposit', amount: 1000000, status: 'completed', date: 'Jan 05, 2026 • 08:45 AM', description: 'Initial Account Funding', paymentMethod: 'Direct Debit' },
-    { id: '12', reference: 'TRX-98234723', type: 'withdrawal', amount: 50000, status: 'rejected', date: 'Dec 12, 2025 • 10:15 AM', description: 'Withdrawal to Zenith Bank', notes: 'Rejected: Bank account name mismatch. Automatically refunded.' }
-  ]);
+export class TransactionsComponent implements OnInit {
+  private transactionService = inject(TransactionService);
+  private authService = inject(AuthService);
+  
+  transactions = signal<Transaction[]>([]);
+  isLoading = signal<boolean>(false);
+
+  constructor() {
+    // Wait for user to be available before loading history
+    // This prevents calling the API too early during hydration/refresh
+    effect(() => {
+      const user = this.authService.currentUser();
+      if (user) {
+        this.loadHistory();
+      }
+    });
+  }
+
+  ngOnInit() {}
+
+  loadHistory() {
+    this.isLoading.set(true);
+    this.transactionService.getHistory().subscribe({
+      next: (res) => {
+        if (res.success && Array.isArray(res.data)) {
+          const mapped = res.data.map((t: any) => ({
+             id: t.id,
+             reference: t.reference,
+             type: t.type,
+             amount: t.amount,
+             status: t.status,
+             date: this.formatDate(t.date),
+             description: t.description
+          }));
+          this.transactions.set(mapped);
+        }
+        this.isLoading.set(false);
+      },
+      error: () => this.isLoading.set(false)
+    });
+  }
+
+  formatDate(dateStr: string): string {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    // Format: Apr 10, 2026 • 09:15 AM
+    return date.toLocaleString('en-US', { 
+      month: 'short', 
+      day: '2-digit', 
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true 
+    }).replace(',', ''); // Remove first comma to match pattern more closely after tweak
+  }
+
 
   activeFilter = signal<'all' | 'deposit' | 'withdrawal' | 'profit' | 'investment' | 'liquidation'>('all');
   searchTerm = signal<string>('');

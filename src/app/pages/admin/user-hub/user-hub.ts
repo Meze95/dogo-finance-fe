@@ -5,6 +5,7 @@ import { AdminService } from '../../../shared/services/admin.service';
 
 interface User {
   id: string;
+  userName: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -59,6 +60,7 @@ export class UserHub implements OnInit {
         // Map backend TblUser properties to frontend User interface
         const mappedUsers: User[] = rawData.map((u: any) => ({
           id: String(u.userId || u.UserId),
+          userName: u.userName || u.UserName || '',
           firstName: u.firstName || u.FirstName || '',
           lastName: u.lastName || u.LastName || '',
           email: u.email || u.Email || '',
@@ -103,27 +105,24 @@ export class UserHub implements OnInit {
   resendingMap = signal<Record<string, boolean>>({});
 
   // Form State
-  userForm = signal({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    role: ''
-  });
+  formUsername = signal('');
+  formEmail = signal('');
+  formPhone = signal('');
+  formRole = signal('');
 
-  openModal(user?: User) {
+  openModal(user?: User | any) {
     if (user) {
       this.editingUser.set(user);
-      this.userForm.set({
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        phone: user.phone,
-        role: user.role
-      });
+      this.formUsername.set(user.userName || user.UserName || '');
+      this.formEmail.set(user.email || user.Email || '');
+      this.formPhone.set(user.phone || user.Phone || user.phoneNumber || user.PhoneNumber || '');
+      this.formRole.set(user.role || user.Role || '');
     } else {
       this.editingUser.set(null);
-      this.userForm.set({ firstName: '', lastName: '', email: '', phone: '', role: '' });
+      this.formUsername.set('');
+      this.formEmail.set('');
+      this.formPhone.set('');
+      this.formRole.set('');
     }
     this.isRoleDropdownOpen.set(false);
     this.isModalOpen.set(true);
@@ -140,28 +139,36 @@ export class UserHub implements OnInit {
 
   selectRole(role: string) {
     console.log('Selected Role:', role);
-    this.userForm.update(form => ({ ...form, role }));
+    this.formRole.set(role);
     this.isRoleDropdownOpen.set(false);
   }
 
   submitUser() {
-    const form = this.userForm();
-    if (!form.firstName || !form.lastName || !form.email || !form.phone || !form.role) return;
+    const username = this.formUsername();
+    const email = this.formEmail();
+    const phone = this.formPhone();
+    const role = this.formRole();
+    
+    if (!username || !email || !phone || !role) return;
 
     this.isProcessing.set(true);
 
     // Find Role ID (Case-insensitive)
     const selectedRole = this.allRoles().find(r => 
-      String(r.name).toLowerCase().trim() === String(form.role).toLowerCase().trim()
+      String(r.name).toLowerCase().trim() === String(role).toLowerCase().trim()
     );
     const roleId = selectedRole?.id || 2; // Default to Admin if not found
 
+    const nameParts = username.trim().split(' ');
+    const fName = nameParts[0] || 'Admin';
+    const lName = nameParts.slice(1).join(' ') || 'User';
+
     const request = {
       userData: {
-        firstName: form.firstName,
-        lastName: form.lastName,
-        email: form.email,
-        phoneNumber: form.phone,
+        firstName: fName,
+        lastName: lName,
+        email: email,
+        phoneNumber: phone,
         password: "StaffPass1234!", // Dummy to pass backend validation, backend will use its own default
         confirmPassword: "StaffPass1234!",
         dateOfBirth: "2000-01-01" // Dummy for staff

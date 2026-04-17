@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { of, delay, Observable, map } from 'rxjs';
+import { of, delay, Observable, map, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { AuthService } from '../../../shared/services/auth.service';
 
@@ -20,9 +20,15 @@ export interface UserProfile {
   tier: string;
 }
 
+export interface RelationshipType {
+  id: number;
+  name: string;
+}
+
 export interface NextOfKin {
   fullName: string;
-  relationship: string;
+  relationship: string; // The Name (e.g. Spouse)
+  relationshipId?: number; // The numeric ID for the backend
   email: string;
   phone: string;
 }
@@ -58,12 +64,20 @@ export class SettingsService {
   private apiUrl = environment.apiUrl;
 
   private get customerId() {
-    return this.authService.currentUser()?.CustomerId || 0;
+    const user = this.authService.currentUser();
+    return user?.CustomerId || user?.customerId || user?.userId || 0;
   }
 
+  // Cache for relationship types to help with mapping
+  private _relationshipTypes: RelationshipType[] = [];
+
   // Profile
+  getProfile(): Observable<ApiResponse<UserProfile>> {
+    return this.http.get<ApiResponse<UserProfile>>(`${this.apiUrl}/Customer/profile`);
+  }
+
   updateProfile(profileData: Partial<UserProfile>) {
-    return this.http.post<ApiResponse>(`${this.apiUrl}/Auth/update-profile`, profileData);
+    return this.http.post<ApiResponse>(`${this.apiUrl}/Customer/update-profile`, profileData);
   }
 
   updateProfilePicture(base64Image: string) {
@@ -85,10 +99,11 @@ export class SettingsService {
         return {
           ...res,
           data: {
-            fullName: data.fullName || data.FullName,
-            email: data.email || data.Email,
-            phone: data.phoneNumber || data.PhoneNumber || data.phone,
-            relationship: data.relationshipType?.type || data.RelationshipType?.Type || data.relationship
+            fullName: data.fullName || data.name,
+            email: data.email,
+            phone: data.phoneNumber || data.phone,
+            relationship: data.relationshipType?.name || data.relationshipName || "Other",
+            relationshipId: data.relationshipTypeId
           } as NextOfKin
         };
       })
@@ -96,14 +111,36 @@ export class SettingsService {
   }
 
   addNextOfKin(kinData: NextOfKin) {
-    return this.http.post<ApiResponse>(`${this.apiUrl}/Customer/${this.customerId}/next-of-kin`, kinData);
+    const payload = {
+      FullName: kinData.fullName,
+      RelationshipTypeId: kinData.relationshipId || 1, // Default to 1 if not set
+      PhoneNumber: kinData.phone,
+      Email: kinData.email,
+      Address: "Not Provided"
+    };
+    return this.http.post<ApiResponse>(`${this.apiUrl}/Customer/${this.customerId}/next-of-kin`, payload);
   }
   
   updateNextOfKin(kinData: NextOfKin) {
-    return this.http.put<ApiResponse>(`${this.apiUrl}/Customer/${this.customerId}/next-of-kin`, kinData);
+    const payload = {
+      FullName: kinData.fullName,
+      RelationshipTypeId: kinData.relationshipId || 1,
+      PhoneNumber: kinData.phone,
+      Email: kinData.email,
+      Address: "Not Provided"
+    };
+    return this.http.put<ApiResponse>(`${this.apiUrl}/Customer/${this.customerId}/next-of-kin`, payload);
   }
   
   // Security
+  setupTransactionPin(data: { pin: string, confirmPin: string }) {
+    const payload = {
+      Pin: data.pin,
+      ConfirmPin: data.confirmPin
+    };
+    return this.http.post<ApiResponse>(`${this.apiUrl}/Auth/pin/setup`, payload);
+  }
+
   updateTransactionPin(pinData: TransactionPinUpdate) {
     return this.http.post<ApiResponse>(`${this.apiUrl}/Auth/pin/change`, pinData);
   }
@@ -134,7 +171,11 @@ export class SettingsService {
     return this.http.post<ApiResponse>(`${this.apiUrl}/Bank/accounts/${id}/default`, {});
   }
 
-  getRelationshipTypes(): Observable<ApiResponse<string[]>> {
-    return this.http.get<ApiResponse<string[]>>(`${this.apiUrl}/Customer/relationship-types`);
+  getRelationshipTypes(): Observable<ApiResponse<RelationshipType[]>> {
+    return this.http.get<ApiResponse<RelationshipType[]>>(`${this.apiUrl}/Customer/relationship-types`).pipe(
+      tap(res => {
+        if (res.data) this._relationshipTypes = res.data;
+      })
+    );
   }
 }

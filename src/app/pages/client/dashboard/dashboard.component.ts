@@ -1,4 +1,4 @@
-import { Component, signal, computed, inject, OnInit } from '@angular/core';
+import { Component, signal, computed, inject, OnInit, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -41,6 +41,16 @@ export class ClientDashboardComponent implements OnInit {
   private investmentService = inject(InvestmentService);
   private transactionService = inject(TransactionService);
   
+  constructor() {
+    // Reactively load data when user is available
+    effect(() => {
+        if (this.user()) {
+            this.loadTodoList();
+            this.loadDashboardData();
+        }
+    });
+  }
+  
   // Signals for state management
   user = this.authService.currentUser;
   portfolios = this.productService.portfolios;
@@ -49,7 +59,7 @@ export class ClientDashboardComponent implements OnInit {
   showInvestModal = signal(false);
   showDetailModal = signal(false);
   selectedPortfolio = signal<Product | null>(null);
-  investAmount = signal<number>(0);
+  investAmount = signal<string>('');
   isInvesting = signal(false);
   
   userName = computed(() => {
@@ -76,40 +86,99 @@ export class ClientDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.productService.getPortfolios();
-    this.loadTodoList();
     this.loadRelationshipTypes();
-    this.loadDashboardData();
+    // loadDashboardData is now triggered by the effect in constructor
+    
+    // Auto-refresh balance every 30 seconds for "real-time" feel
+    const intervalId = setInterval(() => {
+      this.loadDashboardData();
+    }, 30000);
+    
+    // Cleanup on destroy logic would be good, but for now we'll just set it
   }
 
   loadDashboardData() {
+    const userId = this.user()?.UserId || this.user()?.userId;
     const customerId = this.user()?.CustomerId || this.user()?.customerId;
-    if (!customerId) return;
 
-    this.transactionService.getWallet(customerId).subscribe({
-      next: (res) => {
-        if (res.success && res.data) {
-          this.availableNaira.set(res.data.balance || res.data.Balance || 0);
-        }
-      }
+    // These endpoints rely on the Auth Token (User Identity)
+    this.transactionService.getHistory().subscribe({
+        next: (res: any) => {
+            console.log('RAW TRANSACTION HISTORY:', res); // Debug: Check the exact payload
+            let data = res?.data || res?.Data || res;
+            
+            // If data is an object, try to find an array inside it (fallback for different API structures)
+            if (data && typeof data === 'object' && !Array.isArray(data)) {
+                const arrayProp = Object.values(data).find(v => Array.isArray(v));
+                if (arrayProp) data = arrayProp;
+            }
+
+            const isArray = Array.isArray(data);
+            if (isArray) {
+                const mapped = data.map((tx: any) => ({
+                    id: (tx.transactionId || tx.TransactionId || tx.id || tx.Id || Math.random())?.toString(),
+                    type: ((tx.transactionType === 2 || tx.TransactionType === 2 || String(tx.narration || tx.Narration || '').toLowerCase().includes('withdraw')) ? 'withdrawal' : 'deposit') as 'deposit' | 'withdrawal' | 'profit' | 'investment',
+                    amount: tx.amount || tx.Amount || tx.value || tx.Value || 0,
+                    status: (tx.status === 1 || tx.Status === 1 || String(tx.status || '').toLowerCase() === 'success' || String(tx.status || '').toLowerCase() === 'completed') ? 'completed' : 'pending' as 'completed' | 'pending',
+                    date: this.formatDate(tx.createdAt || tx.CreatedAt || tx.date || tx.Date || tx.transactionDate || tx.TransactionDate),
+                    description: tx.narration || tx.Narration || tx.description || tx.Description || (tx.transactionType === 1 ? 'Deposit' : 'Withdrawal')
+                }));
+                this.recentTransactions.set(mapped);
+            }
+        },
+        error: (err) => console.error('Dashboard Activity Error:', err)
     });
 
     this.transactionService.getPortfolioSummary().subscribe({
-        next: (res) => {
-            if (res.success && res.data) {
-                this.actualInvestedValue.set(res.data.currentValue || res.data.CurrentValue || 0);
-                this.portfolioGrowth.set(res.data.returnPercentage || res.data.ReturnPercentage || 0);
+        next: (res: any) => {
+            const isSuccess = res?.success === true || res?.Success === true || res?.status === 200;
+            const data = res?.data || res?.Data;
+            
+            if (isSuccess && data) {
+                this.actualInvestedValue.set(data.currentValue || data.CurrentValue || 0);
+                this.portfolioGrowth.set(data.returnPercentage || data.ReturnPercentage || 0);
             }
         }
     });
 
-    // Optionally load history or holdings here to populate activeInvestments list
+    // This endpoint specifically needs the CustomerId
+    if (customerId) {
+        this.transactionService.getWallet(customerId).subscribe({
+          next: (res: any) => {
+            const isSuccess = res?.success === true || res?.Success === true || res?.boolean === true;
+            const data = res?.data || res?.Data;
+            
+            if (isSuccess && data) {
+              this.availableNaira.set(data.balance || data.Balance || 0);
+            }
+          }
+        });
+    }
+  }
+
+  formatDate(dateStr: string): string {
+    if (!dateStr) return 'Recent';
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+    if (days === 0) {
+      return `Today, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    } else if (days === 1) {
+      return 'Yesterday';
+    } else if (days < 7) {
+      return `${days} days ago`;
+    } else {
+      return date.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
+    }
   }
 
   openInvest(portfolio: Product) {
     this.showDetailModal.set(false);
     this.selectedPortfolio.set(portfolio);
     this.showInvestModal.set(true);
-    this.investAmount.set(0);
+    this.investAmount.set('');
   }
 
   viewDetail(portfolio: Product) {
@@ -125,7 +194,7 @@ export class ClientDashboardComponent implements OnInit {
   confirmInvestment() {
     if (!this.selectedPortfolio() || !this.investAmount()) return;
     this.isInvesting.set(true);
-    this.investmentService.invest(this.selectedPortfolio()!.portfolioId, this.investAmount()).subscribe({
+    this.investmentService.invest(this.selectedPortfolio()!.portfolioId, Number(this.investAmount())).subscribe({
       next: () => {
         this.isInvesting.set(false);
         this.showInvestModal.set(false);
@@ -174,12 +243,7 @@ export class ClientDashboardComponent implements OnInit {
     }
   }
 
-  recentTransactions = signal<Transaction[]>([
-    { id: '1', type: 'profit', amount: 18500, status: 'completed', date: 'Today, 10:45 AM', description: 'Mudarabah Q1 profit share' },
-    { id: '2', type: 'deposit', amount: 50000, status: 'completed', date: 'Yesterday', description: 'Wallet funding via Bank' },
-    { id: '3', type: 'investment', amount: 200000, status: 'completed', date: '2 days ago', description: 'Sukuk Al-Ijarah Subscription' },
-    { id: '4', type: 'withdrawal', amount: 12000, status: 'pending', date: '2 days ago', description: 'Withdraw to Zenith Bank' }
-  ]);
+  recentTransactions = signal<Transaction[]>([]);
 
   // Modal & Verification State
   showVerificationModal = signal(false);
@@ -209,6 +273,7 @@ export class ClientDashboardComponent implements OnInit {
 
   // Funding specific states
   fundingStep = signal<'amount' | 'source' | 'card' | 'otp' | 'virtual' | 'bvn' | 'success'>('amount');
+  otpMessage = signal('');
   selectedSource = signal<'card' | 'virtual' | null>(null);
   cardNumber = signal('');
   expiryDate = signal('');
@@ -216,6 +281,7 @@ export class ClientDashboardComponent implements OnInit {
   cardPin = signal('');
   otpInput = signal('');
   currentReference = signal('');
+  currentChargeId = signal('');
   errorMessage = signal('');
 
   virtualAccounts = signal<{bankName: string, accountName: string, accountNumber: string}[]>([]);
@@ -225,8 +291,9 @@ export class ClientDashboardComponent implements OnInit {
   cardTypeIcon = computed(() => {
     switch (this.cardType()) {
       case 'visa': return 'ri-visa-fill text-blue-600';
-      case 'mastercard': return 'ri-mastercard-fill text-orange-500';
+      case 'mastercard': return 'fa-brands fa-cc-mastercard text-orange-500';
       case 'verve': return 'ri-bank-card-fill text-green-600';
+      case 'amex': return 'fa-brands fa-cc-amex text-blue-400';
       default: return 'ri-bank-card-line text-[#1B4332]/20';
     }
   });
@@ -235,8 +302,23 @@ export class ClientDashboardComponent implements OnInit {
     const cleanNumber = number.replace(/\D/g, '');
     if (/^4/.test(cleanNumber)) return 'visa';
     if (/^5[1-5]/.test(cleanNumber) || /^(222[1-9]|22[3-9]|2[3-6]|27[01]|2720)/.test(cleanNumber)) return 'mastercard';
+    if (/^3[47]/.test(cleanNumber)) return 'amex';
     if (/^(5060|5061|5078|5079|6500|6504|6509|6511)/.test(cleanNumber)) return 'verve';
     return '';
+  }
+
+  luhnCheck(cardNumber: string): boolean {
+    let sum = 0;
+    let shouldDouble = false;
+    for (let i = cardNumber.length - 1; i >= 0; i--) {
+      let digit = parseInt(cardNumber.charAt(i), 10);
+      if (shouldDouble) {
+        if ((digit *= 2) > 9) digit -= 9;
+      }
+      sum += digit;
+      shouldDouble = !shouldDouble;
+    }
+    return sum % 10 === 0;
   }
 
   totalGrowth = computed(() => {
@@ -250,7 +332,11 @@ export class ClientDashboardComponent implements OnInit {
     const cvv = this.cvv();
     const pin = this.cardPin();
 
-    if (card.length < 16) return false;
+    const type = this.cardType();
+    let minLen = 16;
+    if (type === 'amex') minLen = 15;
+
+    if (card.length < minLen || !this.luhnCheck(card)) return false;
     
     // Expiry validation
     if (!/^\d{2}\/\d{2}$/.test(expiry)) return false;
@@ -280,7 +366,12 @@ export class ClientDashboardComponent implements OnInit {
     const cvv = this.cvv();
     const pin = this.cardPin();
 
-    if (card && card.length < 16) return 'Enter a valid 16-digit card number';
+    const type = this.cardType();
+    let minLen = 16;
+    if (type === 'amex') minLen = 15;
+
+    if (card && card.length < minLen) return 'Enter a valid card number';
+    if (card && card.length >= minLen && !this.luhnCheck(card)) return 'Invalid card number (fails check)';
     
     if (expiry.length === 5) {
       const [m, y] = expiry.split('/').map(Number);
@@ -589,7 +680,10 @@ export class ClientDashboardComponent implements OnInit {
                     const status = body?.status || body?.Status || data?.status;
                     const rCode = data?.responseCode || data?.ResponseCode;
 
-                    if (status === 'OTP_AUTH_REQUIRED') {
+                    if (status === 'OTP_AUTH_REQUIRED' || status === 'OTP_AUTHORIZATION_REQUIRED' || status?.includes('OTP')) {
+                       const otpMsg = body?.otpData?.message || body?.message || 'Please enter the OTP sent to your phone/email';
+                       this.otpMessage.set(otpMsg);
+                       this.currentChargeId.set(body?.otpData?.id || '');
                        this.fundingStep.set('otp');
                        this.isProcessing.set(false);
                     } else if (status === 'SUCCESS' || rCode === '0' || rCode === '00') {
@@ -613,6 +707,7 @@ export class ClientDashboardComponent implements OnInit {
       if (this.fundingStep() === 'otp') {
         this.transactionService.authorizeDeposit({
           reference: this.currentReference(),
+          id: this.currentChargeId(),
           otp: this.otpInput()
         }).subscribe({
           next: () => {
@@ -639,7 +734,7 @@ export class ClientDashboardComponent implements OnInit {
       setTimeout(() => {
         this.isProcessing.set(false);
         this.closeTransactionModal();
-        this.availableNaira.update(val => val - amount);
+        this.loadDashboardData(); // Refresh actual balance from backend
         
         // Add to recent transactions statically
         this.recentTransactions.update(txs => [
@@ -655,7 +750,7 @@ export class ClientDashboardComponent implements OnInit {
       next: () => {
         this.isProcessing.set(false);
         this.fundingStep.set('success');
-        this.availableNaira.update(val => val + Number(this.transactionAmount()));
+        this.loadDashboardData(); // Refresh actual balance from backend
         this.recentTransactions.update(txs => [
           { id: Math.random().toString(), type: 'deposit', amount: Number(this.transactionAmount()), status: 'completed', date: 'Just now', description: 'Wallet funding (Card)' },
           ...txs
@@ -701,15 +796,54 @@ export class ClientDashboardComponent implements OnInit {
     }
   }
 
+  onAmountInput(event: Event, type: 'fund' | 'invest' = 'fund') {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/\D/g, ''); // Digits only
+    
+    // Remove leading zeros
+    if (value.length > 1 && value.startsWith('0')) {
+      value = value.replace(/^0+/, '');
+    }
+    
+    const formatted = this.formatWithCommas(value);
+    
+    if (type === 'invest') {
+      this.investAmount.set(value);
+    } else {
+      this.transactionAmount.set(value);
+    }
+    
+    input.value = formatted;
+  }
+
+  formatWithCommas(value: string): string {
+    if (!value) return '';
+    return value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
   onCardNumberInput(event: Event) {
     const input = event.target as HTMLInputElement;
     let value = input.value.replace(/\D/g, ''); // Remove non-digits
-    if (value.length > 19) value = value.slice(0, 19);
     
-    this.cardType.set(this.detectCardType(value));
+    const determinedType = this.detectCardType(value);
+    this.cardType.set(determinedType);
     
-    // Format with spaces
-    const formatted = value.match(/.{1,4}/g)?.join(' ') || value;
+    let maxDigits = 19;
+    if (determinedType === 'amex') maxDigits = 15;
+    if (determinedType === 'mastercard') maxDigits = 16;
+    
+    if (value.length > maxDigits) value = value.slice(0, maxDigits);
+    
+    let formatted = value;
+    if (determinedType === 'amex') {
+       const p1 = value.slice(0, 4);
+       const p2 = value.slice(4, 10);
+       const p3 = value.slice(10, 15);
+       formatted = p1 + (p2 ? ' ' + p2 : '') + (p3 ? ' ' + p3 : '');
+    } else {
+       formatted = value.match(/.{1,4}/g)?.join(' ') || value;
+    }
+    
     this.cardNumber.set(formatted);
     input.value = formatted;
   }

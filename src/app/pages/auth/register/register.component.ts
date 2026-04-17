@@ -21,17 +21,32 @@ export class RegisterComponent {
   isProcessing = signal(false);
   isSuccess = signal(false);
   errorMessage = signal<string | null>(null);
+  genders = signal<any[]>([]);
 
   constructor() {
     this.registerForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       dob: ['', Validators.required],
+      genderId: ['', Validators.required],
+      isPep: [false],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
+
+    this.loadGenders();
+  }
+
+  loadGenders() {
+    this.authService.getGenders().subscribe({
+      next: (res) => {
+        if (res.success || res.boolean) {
+          this.genders.set(res.data);
+        }
+      }
+    });
   }
 
   // Custom validator to check if passwords match
@@ -58,6 +73,8 @@ export class RegisterComponent {
         password: formData.password,
         confirmPassword: formData.confirmPassword,
         dateOfBirth: formData.dob,
+        genderId: parseInt(formData.genderId),
+        isPoliticallyExposed: formData.isPep,
         referralCode: '' // Optional
       };
 

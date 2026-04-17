@@ -1,11 +1,14 @@
-import { Component, signal, inject, computed } from '@angular/core';
+import { Component, signal, inject, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SettingsService, UserProfile, NextOfKin, BankAccount, Bank } from './settings.service';
+import { AuthService } from '../../../shared/services/auth.service';
 import { BadgeComponent } from '../../../shared/components/ui/badge.component';
 import { ButtonComponent } from '../../../shared/components/ui/button.component';
 import { CardComponent } from '../../../shared/components/ui/card.component';
 import { FormsModule } from '@angular/forms';
 import { DropdownComponent, DropdownOption } from '../../../shared/components/ui/dropdown.component';
+
+declare var Swal: any;
 
 export type SettingsTab = 'profile' | 'verification' | 'banks' | 'wealth' | 'security';
 
@@ -26,12 +29,12 @@ export class SettingsComponent {
   isUpdatingProfile = signal(false);
   isUpdatingAvatar = signal(false);
   userProfile = signal<UserProfile>({
-    firstName: 'Ado',
-    lastName: 'Bayero',
-    email: 'ado.bayero@example.com',
-    phone: '+234 801 234 5678',
-    avatar: 'AB',
-    tier: 'Tier 2 Investor'
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    avatar: '',
+    tier: ''
   });
   editProfileForm = signal<Partial<UserProfile>>({});
   profileImage = signal<string | null>(null);
@@ -64,10 +67,28 @@ export class SettingsComponent {
     }))
   );
 
+  private authService = inject(AuthService);
+
   constructor() {
-    this.loadBanks();
-    this.loadMyBanks();
-    this.loadNextOfKin();
+    // Wait for user to be available before loading settings
+    effect(() => {
+      const user = this.authService.currentUser();
+      if (user) {
+        this.loadProfile();
+        this.loadBanks();
+        this.loadMyBanks();
+        this.loadNextOfKin();
+        this.loadRelationshipTypes();
+      }
+    });
+  }
+
+  loadProfile() {
+    this.settingsService.getProfile().subscribe(res => {
+      if (res.data) {
+        this.userProfile.set(res.data);
+      }
+    });
   }
 
   loadNextOfKin() {
@@ -99,25 +120,30 @@ export class SettingsComponent {
   isUpdatingKin = signal(false);
   nextOfKin = signal<NextOfKin | null>(null);
   editKinForm = signal<Partial<NextOfKin>>({});
-  relationships = signal<string[]>([]);
+  relationships = signal<any[]>([]);
   
   relationshipOptions = computed<DropdownOption[]>(() => {
-    const list = this.relationships().length > 0 ? this.relationships() : ['Brother', 'Sister', 'Parent', 'Spouse', 'Other'];
-    return list.map(r => ({
-      value: r,
-      label: r,
+    return this.relationships().map(r => ({
+      value: r.id,
+      label: r.name,
       icon: 'ri-heart-line'
     }));
   });
 
   // --- Security State ---
-  isTwoFactorEnabled = signal(false);
+  isTwoFactorEnabled = computed(() => {
+    const user = this.authService.currentUser();
+    return user?.is2faEnabled || user?.Is2faEnabled || false;
+  });
   isUpdatingTwoFactor = signal(false);
 
 
   isEditingPin = signal(false);
   isUpdatingPin = signal(false);
-  hasPin = signal(true); 
+  hasPin = computed(() => {
+    const user = this.authService.currentUser();
+    return user?.isPinSet || user?.IsPinSet || false;
+  }); 
   pinForm = signal({ oldPin: '', newPin: '', confirmPin: '' });
   pinError = signal('');
 
@@ -174,8 +200,28 @@ export class SettingsComponent {
         }
         this.isEditingProfile.set(false);
         this.isUpdatingProfile.set(false);
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Profile Updated',
+          text: 'Your personal information has been saved.',
+          timer: 2000,
+          showConfirmButton: false,
+          background: '#f8f7f2',
+          customClass: { popup: 'rounded-[30px]' }
+        });
       },
-      error: () => this.isUpdatingProfile.set(false)
+      error: (err: any) => {
+        this.isUpdatingProfile.set(false);
+        Swal.fire({
+          icon: 'error',
+          title: 'Update Failed',
+          text: err.error?.message || 'We could not update your profile.',
+          confirmButtonColor: '#1B4332',
+          background: '#f8f7f2',
+          customClass: { popup: 'rounded-[30px]' }
+        });
+      }
     });
   }
 
@@ -239,20 +285,95 @@ export class SettingsComponent {
         this.loadMyBanks();
         this.isAddingBank.set(false);
         this.isSavingBank.set(false);
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Account Added',
+          text: 'Your bank account has been successfully registered.',
+          confirmButtonColor: '#1B4332',
+          background: '#f8f7f2',
+          customClass: { popup: 'rounded-[30px]' }
+        });
       },
-      error: () => this.isSavingBank.set(false)
+      error: (err: any) => {
+        this.isSavingBank.set(false);
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed to Add Bank',
+          text: err.error?.message || 'We could not link your bank account at this time.',
+          confirmButtonColor: '#1B4332',
+          background: '#f8f7f2',
+          customClass: { popup: 'rounded-[30px]' }
+        });
+      }
     });
   }
 
   deleteBank(id: number) {
-    this.settingsService.deleteBankAccount(id).subscribe(() => {
-      this.loadMyBanks();
+    Swal.fire({
+      title: 'Remove Bank Account?',
+      text: "You won't be able to withdraw to this account until you re-link it.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#1B4332',
+      confirmButtonText: 'Yes, Remove It',
+      background: '#f8f7f2',
+      customClass: { popup: 'rounded-[30px]' }
+    }).then((result: any) => {
+      if (result.isConfirmed) {
+        this.settingsService.deleteBankAccount(id).subscribe({
+          next: () => {
+            this.loadMyBanks();
+            Swal.fire({
+              icon: 'success',
+              title: 'Removed!',
+              text: 'The bank account has been removed.',
+              timer: 2000,
+              showConfirmButton: false,
+              background: '#f8f7f2',
+              customClass: { popup: 'rounded-[30px]' }
+            });
+          },
+          error: () => {
+             Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Could not remove the bank account.',
+              confirmButtonColor: '#1B4332',
+              background: '#f8f7f2',
+              customClass: { popup: 'rounded-[30px]' }
+            });
+          }
+        });
+      }
     });
   }
 
   setDefaultBank(id: number) {
-    this.settingsService.setDefaultBank(id).subscribe(() => {
-      this.loadMyBanks();
+    this.settingsService.setDefaultBank(id).subscribe({
+      next: () => {
+        this.loadMyBanks();
+        Swal.fire({
+          icon: 'success',
+          title: 'Default Set',
+          text: 'This account will now be used for withdrawals.',
+          timer: 2000,
+          showConfirmButton: false,
+          background: '#f8f7f2',
+          customClass: { popup: 'rounded-[30px]' }
+        });
+      },
+      error: () => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Could not set default bank.',
+          confirmButtonColor: '#1B4332',
+          background: '#f8f7f2',
+          customClass: { popup: 'rounded-[30px]' }
+        });
+      }
     });
   }
 
@@ -266,7 +387,15 @@ export class SettingsComponent {
     if (this.nextOfKin()) {
       this.editKinForm.set({ ...this.nextOfKin() });
     } else {
-      this.editKinForm.set({ fullName: '', relationship: 'Brother', email: '', phone: '' });
+      // Find a default relationship ID if available
+      const defaultRel = this.relationships().find(r => r.name === 'Brother' || r.name === 'Other') || this.relationships()[0];
+      this.editKinForm.set({ 
+        fullName: '', 
+        relationship: defaultRel?.name || 'Brother', 
+        relationshipId: defaultRel?.id || 1,
+        email: '', 
+        phone: '' 
+      });
     }
     this.isEditingKin.set(true);
   }
@@ -276,6 +405,7 @@ export class SettingsComponent {
   }
 
   saveKin() {
+    // ... logic remains same, uses updated payload mapping in service
     this.isUpdatingKin.set(true);
     const kinData = this.editKinForm() as NextOfKin;
     
@@ -285,18 +415,47 @@ export class SettingsComponent {
 
     requestArgs.subscribe({
       next: (res) => {
-        if(res.data) {
-          this.nextOfKin.set(res.data);
-        }
+        this.loadNextOfKin(); // Reload to get fresh data with mappings
         this.isEditingKin.set(false);
         this.isUpdatingKin.set(false);
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Security Contact Saved',
+          text: 'Your Next of Kin details have been updated.',
+          timer: 2000,
+          showConfirmButton: false,
+          background: '#f8f7f2',
+          customClass: { popup: 'rounded-[30px]' }
+        });
       },
-      error: () => this.isUpdatingKin.set(false)
+      error: (err: any) => {
+        this.isUpdatingKin.set(false);
+        Swal.fire({
+          icon: 'error',
+          title: 'Action Failed',
+          text: err.error?.message || 'Could not save Next of Kin details.',
+          confirmButtonColor: '#1B4332',
+          background: '#f8f7f2',
+          customClass: { popup: 'rounded-[30px]' }
+        });
+      }
     });
   }
 
-  updateKinField(field: keyof NextOfKin, value: string) {
-    this.editKinForm.set({ ...this.editKinForm(), [field]: value });
+  updateKinField(field: keyof NextOfKin, value: any) {
+    if (field === 'relationship') {
+      // If relationship is being set, we are likely getting the ID from the dropdown
+      const relId = parseInt(value);
+      const rel = this.relationships().find(r => r.id === relId);
+      this.editKinForm.set({ 
+        ...this.editKinForm(), 
+        relationshipId: relId,
+        relationship: rel?.name || ''
+      });
+    } else {
+      this.editKinForm.set({ ...this.editKinForm(), [field]: value });
+    }
   }
 
   // --- Security Actions ---
@@ -305,7 +464,9 @@ export class SettingsComponent {
     const newState = !this.isTwoFactorEnabled();
     this.settingsService.updateTwoFactorAuth(newState).subscribe({
       next: () => {
-        this.isTwoFactorEnabled.set(newState);
+        // Update user session
+        const user = this.authService.currentUser();
+        this.authService.setCurrentUser({ ...user, is2faEnabled: newState, Is2faEnabled: newState });
         this.isUpdatingTwoFactor.set(false);
       },
       error: () => this.isUpdatingTwoFactor.set(false)
@@ -343,16 +504,42 @@ export class SettingsComponent {
 
     this.isUpdatingPin.set(true);
     this.pinError.set('');
-    this.settingsService.updateTransactionPin({
-      oldPin: this.hasPin() ? form.oldPin : undefined,
-      newPin: form.newPin
-    }).subscribe({
-      next: () => {
-        this.hasPin.set(true);
+    
+    const request = this.hasPin() 
+      ? this.settingsService.updateTransactionPin({ oldPin: form.oldPin, newPin: form.newPin })
+      : this.settingsService.setupTransactionPin({ pin: form.newPin, confirmPin: form.confirmPin });
+
+    request.subscribe({
+      next: (res: any) => {
+        // Update the user session in place to reflect PIN is now set
+        const currentUser = this.authService.currentUser();
+        this.authService.setCurrentUser({ ...currentUser, isPinSet: true, IsPinSet: true });
+        
         this.isEditingPin.set(false);
         this.isUpdatingPin.set(false);
+        
+        Swal.fire({
+          icon: 'success',
+          title: 'PIN Updated',
+          text: 'Your security PIN has been changed successfully.',
+          timer: 2000,
+          showConfirmButton: false,
+          background: '#f8f7f2',
+          customClass: { popup: 'rounded-[30px]' }
+        });
       },
-      error: () => this.isUpdatingPin.set(false)
+      error: (err: any) => {
+        this.isUpdatingPin.set(false);
+        this.pinError.set(err.error?.message || 'Failed to update PIN');
+        Swal.fire({
+          icon: 'error',
+          title: 'PIN Update Failed',
+          text: err.error?.message || 'Could not change your security PIN.',
+          confirmButtonColor: '#1B4332',
+          background: '#f8f7f2',
+          customClass: { popup: 'rounded-[30px]' }
+        });
+      }
     });
   }
 }

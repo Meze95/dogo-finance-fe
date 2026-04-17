@@ -29,8 +29,10 @@ export class SessionService implements OnDestroy {
   }
 
   private initSessionManagement() {
-    // 1. Fetch timeout from DB
-    this.http.get<any>(`${this.apiUrl}/SystemSetting/timeout`).subscribe({
+    // 1. Fetch timeout from DB - explicitly skip interceptor to avoid auth issues during startup
+    this.http.get<any>(`${this.apiUrl}/SystemSetting/timeout`, { 
+      headers: { 'skip-interceptor': 'true' } 
+    }).subscribe({
       next: (res) => {
         if (res.success && res.data?.timeoutInMinutes) {
           this.timeoutMinutes.set(res.data.timeoutInMinutes);

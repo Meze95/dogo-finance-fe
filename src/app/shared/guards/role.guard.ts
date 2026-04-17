@@ -15,7 +15,22 @@ export const roleGuard: CanActivateFn = (route, state) => {
     return true;
   }
 
-  const user = authService.currentUser();
+  // SOURCE OF TRUTH: On refresh, we must check localStorage directly because
+  // signals might still be initializing/hydrating.
+  const storedUser = localStorage.getItem('dogo_user');
+  let user: any = null;
+
+  if (storedUser) {
+    try {
+      user = JSON.parse(storedUser);
+      // Sync signal if it's currently null
+      if (!authService.currentUser()) {
+        authService.setCurrentUser(user);
+      }
+    } catch (e) {
+      user = null;
+    }
+  }
 
   // 1. Check if user is logged in
   if (!user) {

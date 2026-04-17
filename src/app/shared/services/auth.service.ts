@@ -2,7 +2,7 @@ import { Injectable, inject, signal, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
-import { Observable, tap } from 'rxjs';
+import { Observable, tap, BehaviorSubject, filter, take, switchMap, of, throwError, catchError } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { UserRole } from '../models/user-role.enum';
@@ -15,8 +15,12 @@ export class AuthService {
   private platformId = inject(PLATFORM_ID);
   private apiUrl = environment.apiUrl;
   private router = inject(Router);
-  
+  private isRefreshingToken = false;
+  private refreshTokenSubject = new BehaviorSubject<any>(null);
+
   currentUser = signal<any>(this.getUserFromStorage());
+  
+  constructor() {}
 
   hasRole(roles: UserRole[]): boolean {
     const user = this.currentUser();
@@ -30,6 +34,10 @@ export class AuthService {
 
   signUp(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/Customer/signup`, data);
+  }
+
+  getGenders(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/Customer/genders`);
   }
 
   verifyEmail(email: string, code: string): Observable<any> {
@@ -70,19 +78,48 @@ export class AuthService {
   }
 
   refreshToken(): Observable<any> {
+    if (this.isRefreshingToken) {
+      return this.refreshTokenSubject.pipe(
+        filter(res => res !== null),
+        take(1)
+      );
+    }
+
+    this.isRefreshingToken = true;
+    this.refreshTokenSubject.next(null);
+
     const user = this.currentUser();
     const token = user?.Token || user?.token;
     const refreshToken = user?.RefreshToken || user?.refreshToken;
 
-    // We pass the refreshToken in a header so the backend can identify the specific session
-    const headers = new HttpHeaders().set('X-Refresh-Token', refreshToken || '');
+    if (!refreshToken) {
+      this.isRefreshingToken = false;
+      return throwError(() => new Error('No refresh token available'));
+    }
 
-    return this.http.post<any>(`${this.apiUrl}/Auth/refresh`, { token, refreshToken }, { headers }).pipe(
+    // Explicitly bypass interceptor headers for this request to avoid potential recursion or bad state
+    const headers = new HttpHeaders()
+      .set('X-Refresh-Token', refreshToken)
+      .set('skip-interceptor', 'true'); 
+
+    return this.http.post<any>(`${this.apiUrl}/Auth/refresh`, { 
+      Token: token, 
+      RefreshToken: refreshToken 
+    }, { headers }).pipe(
       tap((response: any) => {
+        this.isRefreshingToken = false;
         if (response.success && response.data) {
           const updatedUser = { ...user, ...response.data };
           this.setCurrentUser(updatedUser);
+          this.refreshTokenSubject.next(response);
+        } else {
+          this.refreshTokenSubject.next(null);
         }
+      }),
+      catchError(err => {
+        this.isRefreshingToken = false;
+        this.refreshTokenSubject.next(null);
+        return throwError(() => err);
       })
     );
   }

@@ -15,6 +15,7 @@ export interface MonnifyChargeRequest {
 
 export interface MonnifyAuthorizeRequest {
   reference: string;
+  id: string;
   otp: string;
 }
 

@@ -120,16 +120,36 @@
             </div>
           </div>
 
-          <!-- Date of Birth -->
-          <div>
-            <label class="block text-xs font-black uppercase tracking-widest text-[#0d1a0f]/60 mb-2">Date of Birth</label>
-            <div class="relative group">
-              <input type="date" formControlName="dob" class="w-full h-14 bg-white border border-[#1B4332]/10 rounded-2xl px-5 pl-12 font-medium text-[#0d1a0f] focus:outline-none focus:border-[#C9A84C] focus:ring-4 focus:ring-[#C9A84C]/10 transition-all text-gray-400 focus:text-[#0d1a0f]" />
-              <i class="ri-calendar-event-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#C9A84C] transition-colors"></i>
+          <div class="grid grid-cols-2 gap-6">
+            <!-- Date of Birth -->
+            <div>
+              <label class="block text-xs font-black uppercase tracking-widest text-[#0d1a0f]/60 mb-2">Date of Birth</label>
+              <div class="relative group">
+                <input type="date" formControlName="dob" class="w-full h-14 bg-white border border-[#1B4332]/10 rounded-2xl px-5 pl-12 font-medium text-[#0d1a0f] focus:outline-none focus:border-[#C9A84C] focus:ring-4 focus:ring-[#C9A84C]/10 transition-all text-gray-400 focus:text-[#0d1a0f]" />
+                <i class="ri-calendar-event-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#C9A84C] transition-colors"></i>
+              </div>
+              @if(registerForm.get('dob')?.invalid && registerForm.get('dob')?.touched) {
+                <span class="text-red-500 text-xs font-bold mt-2 block">Valid DOB is required.</span>
+              }
             </div>
-            @if(registerForm.get('dob')?.invalid && registerForm.get('dob')?.touched) {
-              <span class="text-red-500 text-xs font-bold mt-2 block">Valid DOB is required.</span>
-            }
+
+            <!-- Gender -->
+            <div>
+              <label class="block text-xs font-black uppercase tracking-widest text-[#0d1a0f]/60 mb-2">Gender</label>
+              <div class="relative group">
+                <select formControlName="genderId" class="w-full h-14 bg-white border border-[#1B4332]/10 rounded-2xl px-5 pl-12 font-medium text-[#0d1a0f] focus:outline-none focus:border-[#C9A84C] focus:ring-4 focus:ring-[#C9A84C]/10 transition-all appearance-none">
+                  <option value="" disabled selected>Select Gender</option>
+                  @for(g of genders(); track g.id) {
+                    <option [value]="g.id">{{ g.name }}</option>
+                  }
+                </select>
+                <i class="ri-parent-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#C9A84C] transition-colors"></i>
+                <i class="ri-arrow-down-s-line absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+              </div>
+              @if(registerForm.get('genderId')?.invalid && registerForm.get('genderId')?.touched) {
+                <span class="text-red-500 text-xs font-bold mt-2 block">Gender is required.</span>
+              }
+            </div>
           </div>
 
           <!-- Email -->
@@ -184,6 +204,22 @@
                 <span class="text-red-500 text-xs font-bold mt-2 block">Passwords do not match.</span>
               }
             </div>
+          </div>
+
+          <!-- PEP Checkbox -->
+          <div class="p-4 bg-white/50 border border-[#1B4332]/5 rounded-2xl">
+            <label class="flex items-start space-x-4 cursor-pointer group">
+              <div class="relative flex items-center mt-1">
+                <input type="checkbox" formControlName="isPep" class="peer h-6 w-6 appearance-none rounded-lg border-2 border-[#1B4332]/10 bg-white checked:bg-[#1B4332] checked:border-[#1B4332] transition-all cursor-pointer" />
+                <i class="ri-check-line absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"></i>
+              </div>
+              <div class="flex-1">
+                <span class="block text-sm font-black text-[#0d1a0f] leading-tight">Politically Exposed Person (PEP)</span>
+                <p class="text-[10px] font-medium text-[#6B7280] leading-normal mt-1">
+                  Tick this box if you or a close associate hold a prominent public office or are related to someone who does.
+                </p>
+              </div>
+            </label>
           </div>
 
           <button type="submit" [disabled]="isProcessing()" class="w-full h-14 bg-[#1B4332] text-[#C9A84C] font-black rounded-2xl hover:bg-[#2D6A4F] hover:shadow-xl hover:shadow-[#1B4332]/20 transition-all uppercase tracking-widest text-sm mt-6 disabled:opacity-70 flex items-center justify-center gap-2">

@@ -40,40 +40,47 @@
   <!-- Transaction List Grid -->
   <div class="bg-white rounded-[40px] border border-[#1B4332]/5 shadow-sm p-4 md:p-8">
     <div class="space-y-4 min-h-[50vh]">
-      @for(tx of filteredTransactions(); track tx.id) {
-        <div (click)="viewDetails(tx)" class="flex flex-col sm:flex-row sm:items-center justify-between p-6 bg-[#f8f7f2] rounded-[32px] border border-[#1B4332]/5 group hover:bg-white hover:shadow-lg transition-all cursor-pointer gap-4">
-           
-           <div class="flex items-center space-x-5">
-              <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shrink-0 group-hover:scale-110 transition-transform" [class]="getIconForType(tx.type)">
-                 <i [class]="getIconForType(tx.type).split(' ')[0]"></i>
-              </div>
-              <div>
-                 <p class="font-black text-[#0d1a0f] text-base group-hover:text-[#C9A84C] transition-colors leading-tight">{{ tx.description }}</p>
-                 <div class="flex items-center space-x-2 mt-1">
-                    <span class="text-[10px] font-black text-[#6B7280] uppercase tracking-widest">{{ tx.date }}</span>
-                 </div>
-              </div>
-           </div>
+      @if(isLoading()) {
+        <div class="flex flex-col items-center justify-center h-80 animate-in fade-in duration-500">
+           <div class="w-12 h-12 border-4 border-[#1B4332]/10 border-t-[#C9A84C] rounded-full animate-spin"></div>
+           <p class="text-[10px] font-black text-[#6B7280] uppercase tracking-widest mt-4">Fetching Records...</p>
+        </div>
+      } @else {
+        @for(tx of filteredTransactions(); track tx.id) {
+          <div (click)="viewDetails(tx)" class="flex flex-col sm:flex-row sm:items-center justify-between p-6 bg-[#f8f7f2] rounded-[32px] border border-[#1B4332]/5 group hover:bg-white hover:shadow-lg transition-all cursor-pointer gap-4">
+             
+             <div class="flex items-center space-x-5">
+                <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shrink-0 group-hover:scale-110 transition-transform" [class]="getIconForType(tx.type)">
+                   <i [class]="getIconForType(tx.type).split(' ')[0]"></i>
+                </div>
+                <div>
+                   <p class="font-black text-[#0d1a0f] text-base group-hover:text-[#C9A84C] transition-colors leading-tight">{{ tx.description }}</p>
+                   <div class="flex items-center space-x-2 mt-1">
+                      <span class="text-[10px] font-black text-[#6B7280] uppercase tracking-widest">{{ tx.date }}</span>
+                   </div>
+                </div>
+             </div>
 
-           <div class="flex justify-between sm:flex-col sm:items-end items-center sm:text-right border-t border-[#1B4332]/5 sm:border-0 pt-4 sm:pt-0 mt-2 sm:mt-0">
-              <p class="text-lg font-black tracking-tighter" [class]="tx.type === 'deposit' || tx.type === 'profit' || tx.type === 'liquidation' ? 'text-green-600' : 'text-[#0d1a0f]'">
-                 {{ tx.type === 'withdrawal' || tx.type === 'investment' ? '-' : '+' }}₦{{ tx.amount | number }}
-              </p>
-              <div class="mt-1">
-                 <app-badge [variant]="getBadgeVariant(tx.status)">{{ tx.status }}</app-badge>
+             <div class="flex justify-between sm:flex-col sm:items-end items-center sm:text-right border-t border-[#1B4332]/5 sm:border-0 pt-4 sm:pt-0 mt-2 sm:mt-0">
+                <p class="text-lg font-black tracking-tighter" [class]="tx.type === 'deposit' || tx.type === 'profit' || tx.type === 'liquidation' ? 'text-green-600' : 'text-[#0d1a0f]'">
+                   {{ tx.type === 'withdrawal' || tx.type === 'investment' ? '-' : '+' }}₦{{ tx.amount | number }}
+                </p>
+                <div class="mt-1">
+                   <app-badge [variant]="getBadgeVariant(tx.status)">{{ tx.status }}</app-badge>
+                </div>
+             </div>
+          </div>
+        }
+        
+        @if(filteredTransactions().length === 0) {
+          <div class="flex flex-col items-center justify-center h-80 opacity-60 text-center animate-in fade-in zoom-in duration-500">
+              <div class="w-24 h-24 bg-[#f8f7f2] rounded-full flex items-center justify-center mb-6 border-2 border-dashed border-[#1B4332]/10">
+                <i class="ri-search-2-line text-4xl text-[#1B4332]/40"></i>
               </div>
-           </div>
-        </div>
-      }
-      
-      @if(filteredTransactions().length === 0) {
-        <div class="flex flex-col items-center justify-center h-80 opacity-60 text-center animate-in fade-in zoom-in duration-500">
-            <div class="w-24 h-24 bg-[#f8f7f2] rounded-full flex items-center justify-center mb-6 border-2 border-dashed border-[#1B4332]/10">
-              <i class="ri-search-2-line text-4xl text-[#1B4332]/40"></i>
-            </div>
-            <p class="text-lg font-black tracking-tighter text-[#1B4332] uppercase italic">No Matches Found</p>
-            <p class="text-xs font-bold text-[#6B7280] mt-2 max-w-[200px]">Try adjusting your search terms or filters to find what you're looking for.</p>
-        </div>
+              <p class="text-lg font-black tracking-tighter text-[#1B4332] uppercase italic">No Matches Found</p>
+              <p class="text-xs font-bold text-[#6B7280] mt-2 max-w-[200px]">Try adjusting your search terms or filters to find what you're looking for.</p>
+          </div>
+        }
       }
     </div>
 

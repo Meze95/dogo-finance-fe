@@ -155,3 +155,63 @@ body {
   line-clamp: 3;
   overflow: hidden;
 }
+
+/* ============================================
+   PREMIUM MESH GRADIENTS & GLASS
+   ============================================ */
+
+.mesh-gradient-premium {
+  background-color: #1B4332;
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(158, 43%, 21%, 1) 0, transparent 50%), 
+    radial-gradient(at 50% 0%, hsla(43, 55%, 55%, 0.15) 0, transparent 50%), 
+    radial-gradient(at 100% 0%, hsla(158, 43%, 30%, 1) 0, transparent 50%), 
+    radial-gradient(at 0% 100%, hsla(43, 55%, 45%, 0.05) 0, transparent 50%), 
+    radial-gradient(at 100% 100%, hsla(158, 55%, 15%, 1) 0, transparent 50%);
+  position: relative;
+}
+
+.premium-frosting {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.gold-glow {
+  box-shadow: 0 0 25px -5px rgba(201, 168, 76, 0.4);
+}
+
+.gold-glow:hover {
+  box-shadow: 0 0 40px -5px rgba(201, 168, 76, 0.6);
+}
+
+@keyframes pulseGold {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+.animate-pulse-gold {
+  animation: pulseGold 3s infinite ease-in-out;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.shimmer-effect::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.05),
+    transparent
+  );
+  animation: shimmer 3s infinite;
+}

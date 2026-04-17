@@ -1,30 +1,35 @@
 <div class="space-y-10 animate-fade-in relative">
   
   <!-- DASHBOARD TOP HEADER: Privacy & Compliance Settings -->
-  <div class="flex flex-col md:flex-row items-center justify-between gap-6 px-4 bg-white/40 p-6 rounded-[32px] border border-[#1B4332]/5 backdrop-blur-sm shadow-sm mb-12">
-     <div class="flex items-center space-x-4">
-        <label class="relative inline-flex items-center cursor-pointer group">
-           <input type="checkbox" [checked]="hideBalances()" (change)="hideBalances.set(!hideBalances())" class="sr-only peer">
-           <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#1B4332]"></div>
-           <span class="ml-3 text-xs font-black uppercase tracking-widest text-[#1B4332] opacity-60 group-hover:opacity-100 transition-opacity whitespace-nowrap">Hide Balances</span>
-        </label>
-        
-        <div class="h-6 w-[1px] bg-[#1B4332]/10 hidden md:block"></div>
+  <div class="flex flex-col md:flex-row items-center justify-between gap-6 px-10 py-8 bg-white/60 rounded-[40px] border border-[#1B4332]/5 backdrop-blur-xl shadow-sm mb-12 relative overflow-hidden group">
+      <div class="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-[#C9A84C]/20 to-transparent"></div>
+      
+      <div class="flex items-center space-x-8 relative z-10">
+         <label class="relative inline-flex items-center cursor-pointer group/toggle">
+            <input type="checkbox" [checked]="hideBalances()" (change)="hideBalances.set(!hideBalances())" class="sr-only peer">
+            <div class="w-14 h-8 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:shadow-md after:rounded-full after:h-6 after:w-6 after:transition-all duration-300 peer-checked:bg-[#1B4332]"></div>
+            <span class="ml-4 text-[10px] font-black uppercase tracking-[0.2em] text-[#1B4332] opacity-40 group-hover/toggle:opacity-100 transition-opacity whitespace-nowrap">Privacy Mode</span>
+         </label>
+         
+         <div class="h-8 w-[1px] bg-[#1B4332]/10 hidden md:block"></div>
 
-        <div class="flex items-center space-x-2">
-           <div class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.3)] animate-pulse"></div>
-           <span class="text-[10px] font-black uppercase tracking-widest text-[#1B4332] whitespace-nowrap">Account 100% Shariah Audited</span>
-        </div>
-     </div>
+         <div class="flex items-center space-x-3">
+            <div class="flex items-center justify-center w-8 h-8 rounded-full bg-green-50">
+               <i class="ri-shield-star-line text-[#1B4332]"></i>
+            </div>
+            <span class="text-[10px] font-black uppercase tracking-[0.15em] text-[#1B4332] whitespace-nowrap opacity-70">100% Shariah Audited</span>
+         </div>
+      </div>
 
-     <div class="flex space-x-3">
-        <button (click)="openTransactionModal('fund')" class="px-6 h-10 rounded-xl bg-[#1B4332] text-white text-[10px] font-black uppercase tracking-widest hover:bg-[#2D6A4F] transition-all flex items-center shadow-lg shadow-[#1B4332]/20">
-           <i class="ri-add-fill text-lg mr-2"></i> Fund Account
-        </button>
-        <button (click)="openTransactionModal('withdraw')" class="px-6 h-10 rounded-xl bg-white border border-[#1B4332]/10 text-[#1B4332] text-[10px] font-black uppercase tracking-widest hover:bg-[#f8f7f2] transition-all flex items-center">
-           <i class="ri-upload-2-fill text-lg mr-2"></i> Withdraw
-        </button>
-     </div>
+       <div class="hidden md:flex items-center space-x-4 relative z-10">
+          <div class="flex -space-x-2">
+             <div class="w-8 h-8 rounded-full border-2 border-white bg-slate-100 flex items-center justify-center text-[10px] font-bold text-[#1B4332]">M</div>
+          </div>
+          <div class="flex flex-col">
+             <span class="text-[11px] font-black text-[#1B4332] uppercase italic">Premium Member</span>
+             <span class="text-[9px] font-bold text-[#C9A84C] uppercase tracking-widest">Since {{ user()?.createdDate | date:'MMM yyyy' }}</span>
+          </div>
+       </div>
   </div>
 
   <!-- Main Dashboard Grid -->
@@ -33,7 +38,70 @@
     <!-- Main Content Column -->
     <div class="space-y-8">
       
-      <!-- Stats Row -->
+      <!-- Most Beautiful Wallet Card Ever (V2 Premium - Compact) -->
+      <div class="relative group mesh-gradient-premium rounded-[42px] p-6 md:p-8 text-white shadow-2xl shadow-[#1B4332]/40 overflow-hidden border border-white/5 mb-10 transition-all duration-700">
+         <!-- Enhanced Depth Elements -->
+         <div class="absolute -top-1/4 -left-1/4 w-[500px] h-[500px] bg-[#C9A84C]/5 blur-[120px] rounded-full anim-float pointer-events-none"></div>
+         <div class="absolute -bottom-1/4 -right-1/4 w-[400px] h-[400px] bg-[#40916C]/20 blur-[100px] rounded-full anim-float delay-300 pointer-events-none"></div>
+         <div class="absolute inset-0 dogo-pattern opacity-[0.03]"></div>
+
+         <div class="relative z-10 flex flex-col xl:flex-row items-center justify-between gap-6 xl:gap-8">
+            <!-- Left: Hero Balance -->
+            <div class="flex items-center gap-5 shrink-0">
+               <div class="hidden lg:flex w-16 h-16 rounded-[24px] premium-frosting items-center justify-center text-3xl text-[#C9A84C] relative overflow-hidden shrink-0">
+                  <div class="absolute inset-0 bg-white/5 animate-pulse-gold opacity-20"></div>
+                  <i class="ri-wallet-3-line relative z-10"></i>
+               </div>
+               
+               <div class="space-y-0.5">
+                  <div class="flex items-center gap-2 mb-1">
+                     <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full premium-frosting border-white/5">
+                        <div class="w-1 h-1 rounded-full bg-green-500 animate-pulse"></div>
+                        <span class="text-[7px] font-black text-green-400 uppercase tracking-widest">Secured</span>
+                     </div>
+                     <button (click)="hideBalances.set(!hideBalances())" class="p-1 rounded-full hover:bg-white/10 transition-colors">
+                        <i [class]="hideBalances() ? 'ri-eye-off-line' : 'ri-eye-line'" class="text-[10px] text-[#C9A84C]"></i>
+                     </button>
+                  </div>
+                  
+                  <div class="flex items-baseline gap-2">
+                     <span class="text-xl font-bold text-[#C9A84C]">₦</span>
+                     <h2 class="text-4xl md:text-5xl font-black tracking-tight leading-none text-white">
+                        {{ hideBalances() ? '••••••••' : (availableNaira() | number:'1.0-0') }}
+                     </h2>
+                     <span class="text-xs font-bold text-white/20">NGN</span>
+                  </div>
+               </div>
+            </div>
+
+            <!-- Middle: High-End Stats -->
+            <div class="flex items-center gap-3 shrink-0">
+               <div class="min-w-[110px] px-4 py-3 rounded-[24px] premium-frosting flex flex-col items-center justify-center relative overflow-hidden">
+                  <span class="text-[8px] font-bold uppercase tracking-widest text-[#C9A84C] mb-1 opacity-60">Portfolio</span>
+                  <span class="text-sm font-black text-white whitespace-nowrap">{{ hideBalances() ? '••••' : '₦' + (totalPortfolioValue() | number) }}</span>
+               </div>
+               
+               <div class="min-w-[110px] px-4 py-3 rounded-[24px] premium-frosting flex flex-col items-center justify-center relative overflow-hidden">
+                  <span class="text-[8px] font-bold uppercase tracking-widest text-green-400 mb-1 opacity-60">Assets</span>
+                  <span class="text-sm font-black text-white whitespace-nowrap">{{ hideBalances() ? '••••' : '₦' + (totalActiveInvestment() | number) }}</span>
+               </div>
+            </div>
+
+            <!-- Right: Primary Actions -->
+            <div class="flex items-center gap-3 w-full sm:w-auto xl:ml-auto">
+               <button (click)="openTransactionModal('fund')" class="flex-grow sm:flex-none h-14 md:h-16 px-6 md:px-10 rounded-[20px] bg-gradient-to-br from-[#C9A84C] to-[#9a7a2b] text-[#1B4332] text-[11px] font-black uppercase tracking-widest transition-all gold-glow shimmer-effect relative overflow-hidden hover:scale-105 active:scale-95 flex items-center justify-center">
+                  <i class="ri-add-circle-fill text-lg mr-2"></i> Fund
+               </button>
+                <button (click)="openTransactionModal('withdraw')" class="flex-grow sm:flex-none h-14 md:h-16 px-6 md:px-10 rounded-[20px] premium-frosting text-white text-[11px] font-black uppercase tracking-widest hover:bg-white/10 transition-all hover:scale-105 active:scale-95 flex items-center justify-center border border-white/5 whitespace-nowrap">
+                   <i class="ri-arrow-up-circle-fill text-lg mr-2 text-[#C9A84C]"></i> Withdraw
+                </button>
+             </div>
+          </div>
+       </div>
+    </div>
+
+      <!-- Stats Row (Commented Out as requested) -->
+      <!-- 
       <div class="grid md:grid-cols-3 gap-6">
         <div class="bg-[#1B4332] rounded-[40px] p-8 text-white relative shadow-2xl shadow-[#1B4332]/20 group border border-white/10 overflow-hidden">
            <div class="absolute inset-0 dogo-pattern opacity-[0.05]"></div>
@@ -42,14 +110,10 @@
               <h2 class="text-4xl font-black tracking-tighter mb-4 leading-none">
                 {{ hideBalances() ? '••••••••' : '₦' + (totalPortfolioValue() | number) }}
               </h2>
-              <!-- <div class="flex items-center text-xs font-bold text-green-400">
-                <i class="ri-arrow-right-up-line"></i> {{ portfolioGrowth() | number:'1.1-1' }}% vs Last Quarter
-              </div> -->
            </div>
            <div class="absolute bottom-6 right-8 text-white/5 text-7xl"><i class="ri-pie-chart-2-fill"></i></div>
         </div>
 
-        <!-- Active Investment -->
         <div class="bg-white rounded-[40px] p-8 border border-[#1B4332]/5 shadow-sm group hover:shadow-xl transition-all relative overflow-hidden">
            <span class="text-[9px] font-black uppercase tracking-[0.3em] text-[#1B4332]/40 block mb-6 px-1">Active Running Investment</span>
            <h2 class="text-4xl font-black tracking-tighter mb-4 leading-none text-[#1B4332]">
@@ -59,7 +123,6 @@
            <div class="absolute bottom-6 right-8 text-[#1B4332]/5 text-6xl group-hover:scale-110 transition-transform"><i class="ri-medal-fill"></i></div>
         </div>
 
-        <!-- Quick Status/Points -->
         <div class="bg-[#C9A84C] rounded-[40px] p-8 text-[#1B4332] shadow-2xl shadow-[#C9A84C]/10 border border-[#f0d98b] relative overflow-hidden group">
            <div class="absolute inset-x-0 bottom-0 h-1/2 bg-white/20 -skew-y-6 translate-y-8 pointer-events-none"></div>
            <div class="relative z-10 h-full flex flex-col justify-between">
@@ -69,29 +132,36 @@
                     {{ hideBalances() ? '••••••' : '₦' + (availableNaira() | number) }}
                  </h2>
               </div>
-              <!-- <button class="mt-4 text-[10px] font-black uppercase tracking-widest underline decoration-2 underline-offset-4 hover:decoration-[#1B4332]">View Wallet History</button> -->
            </div>
         </div>
       </div>
+      -->
 
 @if (nextSteps().length > 0) {
-        <h3 class="text-xl font-black text-[#0d1a0f] uppercase tracking-tighter italic mb-4">Todo List</h3>
+        <h3 class="text-xl font-black text-[#0d1a0f] uppercase tracking-[-0.03em] italic mb-6 flex items-center gap-3">
+          <span class="w-8 h-[2px] bg-[#C9A84C]"></span>
+          Your Action Plan
+        </h3>
         
-        <!-- Action Card Grid (Inspired by Piggyvest Next Steps) -->
         <div class="overflow-x-auto pb-10 mb-2 custom-scrollbar-h relative z-20">
-        <div class="flex gap-6 p-1">
+        <div class="flex gap-8 p-1">
           @for(step of nextSteps(); track step.title) {
-            <div (click)="openModal(step)" class="flex-shrink-0 w-full md:w-[325px] group bg-white px-6 py-5 rounded-[32px] border border-[#1B4332]/5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer relative overflow-hidden">
-               <h4 class="font-black text-sm text-[#0d1a0f] mb-1 translate-y-1">{{ step.title }}</h4>
-               <p class="text-xs font-medium text-[#6B7280] mb-8 translate-y-1">{{ step.desc }}</p>
+            <div (click)="openModal(step)" class="flex-shrink-0 w-full md:w-[350px] group bg-white px-8 py-7 rounded-[40px] border border-[#1B4332]/5 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 cursor-pointer relative overflow-hidden">
+               <!-- Decorative corner -->
+               <div class="absolute -top-6 -right-6 w-20 h-20 bg-[#f8f7f2] rounded-full group-hover:bg-[#1B4332] transition-colors duration-500"></div>
                
-               <div class="flex items-center justify-between mt-auto">
-                 <button class="text-[10px] font-black uppercase tracking-[0.2em] text-[#C9A84C] flex items-center group-hover:text-[#1B4332]">
-                    {{ step.action }} <i class="ri-arrow-right-line ml-1 transition-transform group-hover:translate-x-1"></i>
-                 </button>
+               <div class="relative z-10">
+                 <h4 class="font-black text-base text-[#0d1a0f] mb-2">{{ step.title }}</h4>
+                 <p class="text-xs font-medium text-[#6B7280] mb-10 leading-relaxed">{{ step.desc }}</p>
                  
-                 <div class="w-12 h-12 bg-[#f8f7f2] rounded-2xl flex items-center justify-center text-2xl text-[#1B4332] group-hover:bg-[#1B4332] group-hover:text-white transition-all shadow-sm">
-                   <i [class]="step.icon"></i>
+                 <div class="flex items-center justify-between mt-auto">
+                   <button class="text-[11px] font-black uppercase tracking-[0.2em] text-[#C9A84C] flex items-center group-hover:text-[#1B4332] transition-colors">
+                      {{ step.action }} <i class="ri-arrow-right-line ml-2 transition-transform group-hover:translate-x-2"></i>
+                   </button>
+                   
+                   <div class="w-14 h-14 bg-[#f8f7f2] rounded-2xl flex items-center justify-center text-3xl text-[#1B4332] group-hover:bg-[#1B4332] group-hover:text-white transition-all duration-500 shadow-sm group-hover:rotate-12">
+                     <i [class]="step.icon"></i>
+                   </div>
                  </div>
                </div>
             </div>
@@ -103,38 +173,48 @@
 
       <!-- Recommended for you Section -->
       @if (suggestedPortfolios().length > 0) {
-        <div class="space-y-6">
-          <div class="flex items-center justify-between px-2">
-              <h3 class="text-xl font-black text-[#0d1a0f] uppercase tracking-tighter italic">Recommended for you</h3>
-              <button routerLink="/client/portfolios" class="text-[10px] font-black text-[#C9A84C] uppercase tracking-widest hover:text-[#1B4332] transition-colors">See all portfolios</button>
+        <div class="space-y-8 mt-12">
+          <div class="flex items-center justify-between px-4">
+              <div class="flex flex-col gap-1">
+                <h3 class="text-2xl font-black text-[#0d1a0f] uppercase tracking-[-0.03em] italic">Recommended Strategy</h3>
+                <p class="text-[10px] font-bold text-[#C9A84C] uppercase tracking-widest">Hand-picked for your risk profile</p>
+              </div>
+              <button routerLink="/client/portfolios" class="text-[11px] font-black text-[#1B4332] uppercase tracking-widest hover:text-[#C9A84C] transition-colors flex items-center gap-2">
+                Browse All <i class="ri-arrow-right-line"></i>
+              </button>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               @for(p of suggestedPortfolios(); track p.portfolioId) {
-                  <div class="bg-white rounded-[40px] p-8 border border-[#1B4332]/5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all group flex flex-col h-full">
-                      <div class="flex justify-between items-start mb-6">
-                          <div class="w-12 h-12 rounded-2xl bg-[#f8f7f2] flex items-center justify-center text-[#C9A84C] transition-colors group-hover:bg-[#C9A84C] group-hover:text-white">
-                              <i class="ri-pie-chart-line text-2xl"></i>
+                  <div class="group bg-white rounded-[48px] p-10 border border-[#1B4332]/5 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 flex flex-col h-full relative overflow-hidden">
+                      <div class="absolute -top-12 -left-12 w-32 h-32 bg-[#f8f7f2] rounded-full group-hover:bg-[#1B4332]/5 transition-colors"></div>
+                      
+                      <div class="relative z-10 flex justify-between items-start mb-8">
+                          <div class="w-16 h-16 rounded-[24px] bg-[#f8f7f2] flex items-center justify-center text-[#C9A84C] transition-all duration-500 group-hover:bg-[#1B4332] group-hover:text-white group-hover:rotate-6">
+                              <i class="ri-pie-chart-line text-3xl"></i>
                           </div>
-                          <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border border-[#1B4332]/5">
+                          <span class="px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border border-[#1B4332]/10 bg-white shadow-sm">
                               {{ p.riskLevel }} Risk
                           </span>
                       </div>
-                      <h4 class="text-lg font-black text-[#0d1a0f] tracking-tight mb-2">{{ p.name }}</h4>
                       
-                      <div class="mb-4">
-                          <span class="text-[10px] font-black uppercase tracking-widest text-green-600 bg-green-50 px-2 py-1 rounded-md">
-                              {{ p.expectedAnnualReturn }}% Average Return
-                          </span>
+                      <div class="relative z-10 mb-2">
+                        <h4 class="text-xl font-black text-[#0d1a0f] tracking-tight mb-3 group-hover:text-[#1B4332] transition-colors">{{ p.name }}</h4>
+                        <div class="inline-flex items-center gap-2 text-green-600 bg-green-50 px-3 py-1 rounded-lg">
+                            <i class="ri-line-chart-line text-xs"></i>
+                            <span class="text-[11px] font-black uppercase tracking-widest">
+                                {{ p.expectedAnnualReturn }}% Est. ROI
+                            </span>
+                        </div>
                       </div>
 
-                      <p class="text-xs font-medium text-slate-400 line-clamp-2 italic mb-8">"{{ p.description }}"</p>
+                      <p class="relative z-10 text-xs font-medium text-slate-400 line-clamp-2 italic mb-10 mt-4 leading-relaxed">"{{ p.description }}"</p>
                       
-                      <div class="mt-auto grid grid-cols-2 gap-3">
-                          <button (click)="viewDetail(p)" class="w-full py-3 bg-[#f8f7f2] hover:bg-slate-100 text-[#1B4332] rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all">
-                              Explore
+                      <div class="relative z-10 mt-auto grid grid-cols-2 gap-4">
+                          <button (click)="viewDetail(p)" class="w-full py-4 bg-[#f8f7f2] hover:bg-slate-100 text-[#1B4332] rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all">
+                              Analyze
                           </button>
-                          <button (click)="openInvest(p)" class="w-full py-3 bg-[#1B4332] hover:bg-[#2D6A4F] text-white rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all shadow-lg shadow-[#1B4332]/10">
+                          <button (click)="openInvest(p)" class="w-full py-4 bg-[#1B4332] hover:bg-[#2D6A4F] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl shadow-[#1B4332]/10">
                               Invest
                           </button>
                       </div>
@@ -146,40 +226,54 @@
 
       
       <!-- Portfolio Breakdown Table (Recent Transactions) -->
-      <div class="bg-white p-10 rounded-[50px] border border-[#1B4332]/5 shadow-sm">
-        <div class="flex items-center justify-between mb-10">
-           <h3 class="text-xl font-black text-[#0d1a0f] uppercase tracking-tighter italic">Recent Transactions</h3>
-           <button routerLink="/client/transactions" class="px-6 py-3 bg-[#f8f7f2] hover:bg-[#1B4332] hover:text-white text-[#1B4332] text-[10px] font-black uppercase tracking-widest rounded-xl transition-all flex items-center shadow-sm">
-              View All <i class="ri-arrow-right-line ml-2"></i>
+      <div class="bg-white p-12 rounded-[56px] border border-[#1B4332]/5 shadow-sm relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-[#f8f7f2] blur-[100px] rounded-full -mr-32 -mt-32 opacity-50"></div>
+        
+        <div class="relative z-10 flex items-center justify-between mb-12">
+           <div class="flex flex-col gap-1">
+             <h3 class="text-2xl font-black text-[#0d1a0f] uppercase tracking-[-0.03em] italic">Recent Activity</h3>
+             <p class="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest">Tracking your financial growth</p>
+           </div>
+           <button routerLink="/client/transactions" class="group px-8 py-4 bg-[#f8f7f2] hover:bg-[#1B4332] hover:text-white text-[#1B4332] text-[11px] font-black uppercase tracking-widest rounded-2xl transition-all flex items-center shadow-sm">
+              View History <i class="ri-arrow-right-up-line ml-2 group-hover:rotate-45 transition-transform"></i>
            </button>
         </div>
 
-        <div class="space-y-4">
+        <div class="relative z-10 space-y-6">
            @for(tx of recentTransactions().slice(0, 5); track tx.id) {
-             <div class="flex items-center justify-between p-6 bg-[#f8f7f2] rounded-[32px] border border-[#1B4332]/5 hover:bg-white hover:shadow-lg transition-all">
-                <div class="flex items-center space-x-5">
-                   <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-white" [class]="getIconBgColor(tx.type)">
-                      <i [class]="getIconForTypeSingle(tx.type)" class="text-xl"></i>
+             <div class="flex items-center justify-between p-8 bg-[#f8f7f2] rounded-[40px] border border-transparent hover:border-[#1B4332]/5 hover:bg-white hover:shadow-2xl hover:scale-[1.01] transition-all duration-500 group">
+                <div class="flex items-center space-x-6">
+                   <div class="w-16 h-16 rounded-[24px] flex items-center justify-center text-white shadow-lg group-hover:rotate-6 transition-transform" [class]="getIconBgColor(tx.type)">
+                      <i [class]="getIconForTypeSingle(tx.type)" class="text-2xl"></i>
                    </div>
-                   <div>
-                      <p class="font-black text-[#0d1a0f] text-sm">{{ tx.description }}</p>
-                      <p class="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest">{{ tx.date }}</p>
+                   <div class="space-y-1">
+                      <p class="font-black text-[#0d1a0f] text-base">{{ tx.description }}</p>
+                      <p class="text-[11px] font-bold text-[#6B7280] uppercase tracking-widest opacity-60">{{ tx.date }}</p>
                    </div>
                 </div>
-                <div class="text-right">
-                   <p class="text-sm font-black" [class]="tx.type === 'deposit' || tx.type === 'profit' ? 'text-green-600' : 'text-[#0d1a0f]'">
+                <div class="text-right space-y-2">
+                   <p class="text-lg font-black" [class]="tx.type === 'deposit' || tx.type === 'profit' ? 'text-green-600' : 'text-[#0d1a0f]'">
                       {{ tx.type === 'deposit' || tx.type === 'profit' ? '+' : '-' }}₦{{ tx.amount | number }}
                    </p>
-                   <p class="text-[10px] font-black uppercase tracking-widest mt-0.5 opacity-40">
-                      {{ tx.status }}
-                   </p>
+                   <span class="inline-block px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border border-[#1B4332]/5 bg-white/50">
+                      {{ tx.status || 'Completed' }}
+                   </span>
                 </div>
              </div>
+           } @empty {
+             <div class="py-20 text-center bg-[#f8f7f2] rounded-[40px] border-2 border-dashed border-[#1B4332]/10">
+               <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center text-3xl text-[#1B4332]/20 mx-auto mb-6 shadow-sm">
+                 <i class="ri-history-line"></i>
+               </div>
+               <h4 class="text-xl font-black text-[#0d1a0f] uppercase italic">No transactions yet</h4>
+               <p class="text-xs font-bold text-[#6B7280] uppercase tracking-widest mt-2">Your financial journey starts here.</p>
+               <button (click)="openTransactionModal('fund')" class="mt-8 px-8 py-3 bg-[#1B4332] text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-[#2D6A4F] transition-all">
+                 Fund Your Wallet
+               </button>
+             </div>
            }
-        </div>
       </div>
-    </div>
-  </div>
+   </div>
 </div>
 
 <!-- Verification Modal Overlay (Premium Backdrop) -->
@@ -216,7 +310,7 @@
                     placeholder="Enter 6-digit PIN" 
                     maxlength="6"
                     [value]="pinInput()"
-                    (input)="pinInput.set($any($event.target).value.replace(/[^0-9]/g, ''))"
+                    (input)="pinInput.set($any($event.target).value = $any($event.target).value.replace(/[^0-9]/g, ''))"
                     class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-5 text-sm font-bold text-[#0d1a0f] outline-none transition-all placeholder:text-[#1B4332]/20"
                   >
                   <div class="absolute right-6 top-1/2 -translate-y-1/2 text-[#1B4332]/10 group-focus-within:text-[#C9A84C] transition-colors">
@@ -230,7 +324,7 @@
                     placeholder="Confirm 6-digit PIN" 
                     maxlength="6"
                     [value]="confirmPinInput()"
-                    (input)="confirmPinInput.set($any($event.target).value.replace(/[^0-9]/g, ''))"
+                    (input)="confirmPinInput.set($any($event.target).value = $any($event.target).value.replace(/[^0-9]/g, ''))"
                     class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-5 text-sm font-bold text-[#0d1a0f] outline-none transition-all placeholder:text-[#1B4332]/20"
                   >
                   <div class="absolute right-6 top-1/2 -translate-y-1/2 text-[#1B4332]/10 group-focus-within:text-[#C9A84C] transition-colors">
@@ -307,7 +401,7 @@
                   placeholder="Enter 11-digit Number" 
                   maxlength="11"
                   [value]="verificationInput()"
-                  (input)="verificationInput.set($any($event.target).value.replace(/[^0-9]/g, ''))"
+                  (input)="verificationInput.set($any($event.target).value = $any($event.target).value.replace(/[^0-9]/g, ''))"
                   class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-5 text-sm font-bold text-[#0d1a0f] outline-none transition-all placeholder:text-[#1B4332]/20"
                 >
                 <div class="absolute right-6 top-1/2 -translate-y-1/2 text-[#1B4332]/10 group-focus-within:text-[#C9A84C] transition-colors">
@@ -397,13 +491,13 @@
                   <label class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40 ml-4">Enter an Amount *</label>
                   <div class="relative group">
                     <div class="absolute left-6 top-1/2 -translate-y-1/2 text-lg font-black text-[#1B4332]/20 group-focus-within:text-[#1B4332] transition-colors">₦</div>
-                    <input 
-                      type="text" 
-                      placeholder="5,000" 
-                      [value]="transactionAmount()"
-                      (input)="transactionAmount.set($any($event.target).value.replace(/[^0-9]/g, ''))"
-                      class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-12 py-5 text-xl font-black text-[#0d1a0f] outline-none transition-all placeholder:text-[#1B4332]/10"
-                    >
+                      <input 
+                        type="text" 
+                        placeholder="5,000" 
+                        [value]="formatWithCommas(transactionAmount())"
+                        (input)="onAmountInput($event)"
+                        class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-12 py-5 text-xl font-black text-[#0d1a0f] outline-none transition-all placeholder:text-[#1B4332]/10"
+                      >
                   </div>
                </div>
             </div>
@@ -457,7 +551,7 @@
                   placeholder="Enter 11-digit BVN" 
                   maxlength="11"
                   [value]="verificationInput()"
-                  (input)="verificationInput.set($any($event.target).value.replace(/[^0-9]/g, ''))"
+                  (input)="verificationInput.set($any($event.target).value = $any($event.target).value.replace(/[^0-9]/g, ''))"
                   class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-5 text-sm font-bold text-[#0d1a0f] outline-none transition-all placeholder:text-[#1B4332]/20"
                 >
                 <div class="absolute right-6 top-1/2 -translate-y-1/2 text-[#1B4332]/10 group-focus-within:text-[#C9A84C] transition-colors">
@@ -531,7 +625,7 @@
                     <input 
                       type="text" 
                       placeholder="0000 0000 0000 0000" 
-                      maxlength="19"
+                      maxlength="25"
                       [value]="cardNumber()"
                       (input)="onCardNumberInput($event)"
                       class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all"
@@ -540,10 +634,10 @@
                   </div>
                </div>               <div class="grid grid-cols-2 gap-4">
                   <div>
-                    <label class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40 ml-4">Expiry (MM/YY)</label>
+                    <label class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40 ml-4">Expiry Date</label>
                     <input 
                       type="text" 
-                      placeholder="12/26" 
+                      placeholder="MM/YY" 
                       maxlength="5"
                       [value]="expiryDate()"
                       (input)="onExpiryInput($event)"
@@ -553,11 +647,11 @@
                   <div>
                     <label class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40 ml-4">CVV</label>
                     <input 
-                      type="text" 
-                      placeholder="123" 
+                      type="password" 
+                      placeholder="***" 
                       maxlength="3"
                       [value]="cvv()"
-                      (input)="cvv.set($any($event.target).value.replace(/\D/g, ''))"
+                      (input)="cvv.set($any($event.target).value = $any($event.target).value.replace(/[^0-9]/g, ''))"
                       class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all"
                     >
                   </div>
@@ -570,7 +664,7 @@
                   maxlength="4"
                   placeholder="****" 
                   [value]="cardPin()"
-                  (input)="cardPin.set($any($event.target).value.replace(/\D/g, ''))"
+                  (input)="cardPin.set($any($event.target).value = $any($event.target).value.replace(/[^0-9]/g, ''))"
                   class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all"
                 >
               </div>
@@ -586,7 +680,7 @@
             <div *ngSwitchCase="'otp'" class="space-y-6 animate-in slide-in-from-right-4 duration-300">
                <div class="text-center p-6 bg-[#f8f7f2] rounded-[32px] border border-[#1B4332]/5 mb-6">
                  <p class="text-xs font-bold text-[#1B4332]/60 uppercase tracking-widest mb-2">Verification Required</p>
-                 <p class="text-[11px] font-medium text-[#6B7280]">Please enter the OTP sent to your phone/email to authorize this transaction.</p>
+                 <p class="text-[11px] font-medium text-[#6B7280]">{{ otpMessage() || 'Please enter the OTP sent to your phone/email to authorize this transaction.' }}</p>
                </div>
                <div>
                   <label class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40 ml-4 text-center block w-full mb-3">One-Time Password (OTP)</label>
@@ -605,13 +699,13 @@
             <div *ngSwitchCase="'withdraw'" class="space-y-5 animate-in slide-in-from-right-4 duration-300">
                 <div>
                    <label class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40 ml-4">Amount (₦)</label>
-                   <input 
-                     type="text" 
-                     placeholder="Enter Amount" 
-                     [value]="transactionAmount()"
-                     (input)="transactionAmount.set($any($event.target).value.replace(/[^0-9]/g, ''))"
-                     class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all placeholder:text-[#1B4332]/20"
-                   >
+                    <input 
+                      type="text" 
+                      placeholder="Enter Amount" 
+                      [value]="formatWithCommas(transactionAmount())"
+                      (input)="onAmountInput($event)"
+                      class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all placeholder:text-[#1B4332]/20"
+                    >
                 </div>
                 <div>
                    <label class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40 ml-4">Select Receiving Account</label>
@@ -630,7 +724,7 @@
                     maxlength="6"
                     placeholder="6-digit PIN" 
                     [value]="withdrawPin()"
-                    (input)="withdrawPin.set($any($event.target).value.replace(/[^0-9]/g, ''))"
+                    (input)="withdrawPin.set($any($event.target).value = $any($event.target).value.replace(/[^0-9]/g, ''))"
                     class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all placeholder:text-[#1B4332]/20"
                   >
                </div>
@@ -696,8 +790,9 @@
                     <label class="text-[10px] font-black uppercase tracking-widest text-[#C9A84C] ml-1">Investment Amount (₦)</label>
                     <div class="relative group">
                         <div class="absolute left-6 top-1/2 -translate-y-1/2 text-xl font-black text-slate-300 group-focus-within:text-[#1B4332] transition-colors">₦</div>
-                        <input type="number" 
-                               [(ngModel)]="investAmount"
+                        <input type="text" 
+                               [value]="formatWithCommas(investAmount())"
+                               (input)="onAmountInput($event, 'invest')"
                                class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-6 pl-12 pr-6 text-2xl font-black text-[#0d1a0f] outline-none transition-all shadow-sm"
                                placeholder="0.00" />
                     </div>
@@ -706,7 +801,7 @@
 
             <div class="flex flex-col gap-3">
                 <button (click)="confirmInvestment()" 
-                        [disabled]="isInvesting() || investAmount() <= 0"
+                        [disabled]="isInvesting() || !investAmount() || +investAmount() <= 0"
                         class="w-full bg-[#1B4332] disabled:opacity-50 hover:bg-[#2D6A4F] text-white py-5 rounded-[2rem] font-black text-[10px] uppercase tracking-widest shadow-2xl transition-all">
                     @if(isInvesting()) {
                         <i class="ri-loader-4-line animate-spin mr-2"></i> Initializing...

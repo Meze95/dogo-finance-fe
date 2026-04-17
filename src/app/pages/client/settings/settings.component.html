@@ -1,6 +1,7 @@
 <div class="animate-fade-in pb-20 px-4">
   
   <!-- Header with Breadcrumb-style Profile Overview -->
+<!--    
   <div class="flex flex-col md:flex-row items-center justify-between gap-10 mb-16">
      <div class="flex items-center space-x-6">
         <label class="relative cursor-pointer group">
@@ -10,12 +11,10 @@
              } @else {
                 {{ userProfile().avatar }}
              }
-             <!-- Hover Overlay -->
              <div class="absolute inset-0 bg-[#0d1a0f]/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-[2px]">
                 <i class="ri-camera-3-line text-white text-2xl"></i>
              </div>
              @if(isUpdatingAvatar()) {
-               <!-- Updating Avatar Spinner -->
                <div class="absolute inset-0 bg-[#0d1a0f]/60 flex items-center justify-center backdrop-blur-[2px]">
                   <i class="ri-loader-4-line text-white text-2xl animate-spin"></i>
                </div>
@@ -36,7 +35,7 @@
         <app-button variant="primary" size="md">Upgrade to Tier 3</app-button>
      </div>
   </div>
-
+ -->
   <!-- Settings Tabs -->
   <div class="flex space-x-8 mb-10 overflow-x-auto custom-scrollbar whitespace-nowrap border-b border-[#1B4332]/5 pb-1">
       <button (click)="setTab('profile')" 
@@ -96,9 +95,11 @@
                        <p class="font-bold text-[#0d1a0f] p-4 bg-[#f8f7f2] rounded-2xl border border-[#1B4332]/5 shadow-sm">{{ userProfile().phone }}</p>
                     </div>
                  </div>
-                 <div slot="footer-right">
-                    <app-button variant="ghost" size="sm" (click)="startEditProfile()">Update Details</app-button>
-                 </div>
+                 <div footer-right class="pt-10">
+                    <app-button variant="primary" size="md" (click)="startEditProfile()">
+                        <i class="ri-edit-2-line mr-2"></i> Update Details
+                     </app-button>
+                 </div> 
               } @else {
                  <!-- Profile Edit Form -->
                  <div class="grid md:grid-cols-2 gap-8 mt-6 mb-4">
@@ -123,7 +124,7 @@
                               class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all">
                     </div>
                  </div>
-                 <div slot="footer-right" class="flex items-center space-x-3">
+                 <div footer-right class="pt-10 flex items-center space-x-3">
                     <app-button variant="ghost" size="sm" (click)="cancelEditProfile()" [disabled]="isUpdatingProfile()">Cancel</app-button>
                     <app-button variant="primary" size="sm" (click)="saveProfile()" [disabled]="isUpdatingProfile()">
                        {{ isUpdatingProfile() ? 'Saving...' : 'Save Changes' }}
@@ -227,7 +228,7 @@
                                   class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all placeholder:text-[#1B4332]/20" placeholder="10-digit account number">
                         </div>
                     </div>
-                    <div slot="footer-right" class="flex items-center space-x-3 w-full justify-end">
+                    <div footer-right class="pt-10 flex items-center space-x-3 w-full justify-end">
                        <app-button variant="ghost" size="sm" (click)="cancelAddBank()" [disabled]="isSavingBank()">Cancel</app-button>
                        <app-button variant="primary" size="sm" (click)="saveBank()" [disabled]="isSavingBank() || !newBankForm().bankId || newBankForm().accountNumber?.length !== 10">
                           {{ isSavingBank() ? 'Saving...' : 'Add Account' }}
@@ -270,7 +271,7 @@
                           placeholder="Choose Relationship"
                           placeholderIcon="ri-heart-line"
                        ></app-dropdown>
-
+ 
                        <div>
                           <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Email</label>
                           <input type="email" [value]="editKinForm().email" (input)="updateKinField('email', $any($event.target).value)"
@@ -282,7 +283,7 @@
                                  class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all">
                        </div>
                     </div>
-                    <div slot="footer-right" class="flex items-center space-x-3 w-full justify-end">
+                    <div footer-right class="pt-10 flex items-center space-x-3 w-full justify-end">
                        <app-button variant="ghost" size="sm" (click)="cancelEditKin()" [disabled]="isUpdatingKin()">Cancel</app-button>
                        <app-button variant="primary" size="sm" (click)="saveKin()" [disabled]="isUpdatingKin() || !editKinForm().fullName">
                           {{ isUpdatingKin() ? 'Processing...' : (nextOfKin() ? 'Update Settings' : 'Add Next of Kin') }}
@@ -295,11 +296,11 @@
 
         @if(activeTab() === 'security') {
            <div class="space-y-8">
-              <app-card title="Authentication Security" icon="ri-lock-plus-line">
+              <app-card title="Email OTP Verification (2FA)" icon="ri-mail-lock-line">
                  <div class="mt-6 flex items-center justify-between p-6 bg-[#f8f7f2] rounded-[32px] border border-[#1B4332]/5">
                     <div>
-                       <p class="font-black text-sm text-[#0d1a0f]">Two-Factor (2FA)</p>
-                       <p class="text-xs font-medium text-[#6B7280]">Protect your asset withdrawals</p>
+                       <p class="font-black text-sm text-[#0d1a0f]">High-Security Mode</p>
+                       <p class="text-xs font-medium text-[#6B7280]">Add Email OTP to PIN for investments & withdrawals</p>
                     </div>
                     <app-button [variant]="isTwoFactorEnabled() ? 'danger' : 'primary'" size="sm" (click)="toggleTwoFactor()" [disabled]="isUpdatingTwoFactor()">
                        {{ isUpdatingTwoFactor() ? 'Processing...' : (isTwoFactorEnabled() ? 'Disable' : 'Enable') }}
@@ -345,7 +346,7 @@
                           </div>
                        </div>
                     </div>
-                    <div slot="footer-right" class="flex items-center space-x-3 w-full justify-end">
+                    <div footer-right class="pt-10 flex items-center space-x-3 w-full justify-end">
                        <app-button variant="ghost" size="sm" (click)="cancelEditPin()" [disabled]="isUpdatingPin()">Cancel</app-button>
                        <app-button variant="primary" size="sm" (click)="savePin()" [disabled]="isUpdatingPin()">
                           {{ isUpdatingPin() ? 'Saving...' : 'Save PIN' }}
