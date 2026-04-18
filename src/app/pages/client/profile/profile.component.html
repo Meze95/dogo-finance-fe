@@ -1,71 +1,135 @@
-<div class="min-h-screen bg-[#f8f7f2] font-sans p-6 md:p-10 flex flex-col items-center">
-  <div class="w-full max-w-xl bg-white rounded-[40px] shadow-sm p-8 md:p-12 relative">
+<div class="min-h-screen bg-[#f8f7f2] font-sans p-4 md:p-10 flex flex-col items-center animate-fade-in relative overflow-hidden">
+  
+  <!-- Decorative Background Elements -->
+  <div class="absolute -top-40 -right-40 w-96 h-96 bg-[#C9A84C]/5 blur-[120px] rounded-full pointer-events-none"></div>
+  <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-[#1B4332]/5 blur-[120px] rounded-full pointer-events-none"></div>
+  <div class="absolute inset-0 dogo-pattern opacity-[0.02] pointer-events-none"></div>
+
+  <div class="w-full max-w-4xl relative z-10">
     
-    <!-- Header with Back Button -->
-    <div class="flex items-center mb-8">
-      <button (click)="goBack()" class="w-10 h-10 rounded-full bg-[#f8f7f2] flex items-center justify-center text-[#1B4332] hover:bg-[#1B4332] hover:text-white transition-all">
-        <i class="ri-arrow-left-s-line text-2xl"></i>
+    <!-- Top Nav -->
+    <div class="flex items-center justify-between mb-8 px-4">
+      <button (click)="goBack()" class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-[#1B4332] hover:bg-[#1B4332] hover:text-white transition-all shadow-sm border border-[#1B4332]/5">
+        <i class="ri-arrow-left-line text-xl"></i>
       </button>
+      <h1 class="text-xl font-black text-[#0d1a0f] tracking-tight uppercase italic">Profile Settings</h1>
+      <div class="w-12"></div> <!-- Spacer -->
     </div>
 
-    <!-- Title and Notice -->
-    <div class="mb-10">
-      <h1 class="text-3xl font-black text-[#0d1a0f] tracking-tighter mb-4">My Profile</h1>
-      <p class="text-red-500 font-bold text-sm leading-relaxed">
-        For security reasons, only your display picture can be changed in-app
-      </p>
-    </div>
-
-    <!-- Profile Details List -->
-    <div class="space-y-6">
+    <div class="bg-white rounded-[56px] shadow-2xl shadow-[#1B4332]/5 overflow-hidden border border-[#1B4332]/5">
       
-      <!-- User ID -->
-      <div class="flex items-center justify-between py-5 border-b border-[#1B4332]/5">
-        <span class="text-xs font-black uppercase tracking-widest text-slate-400">User ID</span>
-        <span class="font-bold text-[#0d1a0f] text-sm">{{ displayId }}</span>
+      <!-- Premium Header Section -->
+      <div class="h-40 md:h-48 relative overflow-hidden bg-gradient-to-br from-[#1B4332] to-[#0d1a0f]">
+         <div class="absolute inset-0 dogo-pattern opacity-[0.05]"></div>
+         <div class="absolute -bottom-1/2 -right-1/4 w-[400px] h-[400px] bg-[#C9A84C]/10 blur-[100px] rounded-full anim-float"></div>
       </div>
 
-      <!-- Display Picture -->
-      <div class="flex items-center justify-between py-5 border-b border-[#1B4332]/5">
-        <span class="text-xs font-black uppercase tracking-widest text-slate-400">Display Picture</span>
-        <div class="w-16 h-16 rounded-full bg-[#1B4332] flex items-center justify-center text-white text-3xl shadow-sm cursor-pointer hover:opacity-80 transition-opacity">
-          <i class="ri-user-fill"></i>
+      <div class="px-6 md:px-12 pb-16 relative">
+        
+        <!-- Avatar Section -->
+        <div class="flex flex-col items-center -mt-16 md:-mt-20 mb-10">
+          <div class="relative group">
+            <div class="w-32 h-32 md:w-40 md:h-40 rounded-[40px] border-[8px] border-white bg-[#f8f7f2] shadow-2xl overflow-hidden relative group-hover:scale-[1.02] transition-transform duration-500">
+              @if (profilePic()) {
+                <img [src]="profilePic()" class="w-full h-full object-cover">
+              } @else {
+                <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#1B4332]/5 to-[#1B4332]/10">
+                  <span class="text-5xl font-black text-[#1B4332]/40">{{ firstName.charAt(0) }}{{ lastName.charAt(0) }}</span>
+                </div>
+              }
+
+              <!-- Upload Overlay -->
+              <label class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center cursor-pointer backdrop-blur-sm">
+                <input type="file" (change)="onFileSelected($event)" class="hidden" accept="image/*">
+                @if (isUploading()) {
+                  <i class="ri-loader-4-line text-white text-4xl animate-spin"></i>
+                } @else {
+                  <i class="ri-camera-lens-line text-white text-4xl mb-2"></i>
+                  <span class="text-[10px] font-black text-white uppercase tracking-widest">Update Photo</span>
+                }
+              </label>
+            </div>
+            
+            <div class="absolute -bottom-2 -right-2 w-12 h-12 bg-[#C9A84C] text-[#1B4332] rounded-2xl flex items-center justify-center shadow-xl border-4 border-white gold-glow">
+              <i class="ri-vip-diamond-fill text-xl"></i>
+            </div>
+          </div>
+
+          <div class="text-center mt-6">
+            <h2 class="text-3xl font-black text-[#0d1a0f] tracking-tighter">{{ firstName }} {{ lastName }}</h2>
+            <p class="text-[10px] font-black uppercase tracking-[0.3em] text-[#C9A84C] mt-2 flex items-center justify-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+              ID: {{ displayId }}
+            </p>
+          </div>
         </div>
-      </div>
 
-      <!-- Name -->
-      <div class="flex items-center justify-between py-5 border-b border-[#1B4332]/5">
-        <span class="text-xs font-black uppercase tracking-widest text-slate-400">Name</span>
-        <span class="font-bold text-[#0d1a0f] text-sm">{{ firstName }} {{ lastName }}</span>
-      </div>
+        <!-- Info Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-6">
+             <!-- Email Block -->
+             <div class="p-6 bg-[#f8f7f2] rounded-3xl border border-[#1B4332]/5 group hover:bg-[#1B4332] transition-all duration-500 min-w-0">
+               <p class="text-[9px] font-black uppercase tracking-widest text-slate-400 group-hover:text-[#C9A84C] transition-colors mb-2">Email Address</p>
+               <div class="flex items-center gap-3 overflow-hidden">
+                 <i class="ri-mail-line text-lg text-[#1B4332] group-hover:text-white transition-colors shrink-0"></i>
+                 <span class="font-bold text-[#0d1a0f] group-hover:text-white transition-colors break-all text-sm lg:text-base leading-tight">{{ email }}</span>
+               </div>
+             </div>
 
-      <!-- Email -->
-      <div class="flex items-center justify-between py-5 border-b border-[#1B4332]/5">
-        <span class="text-xs font-black uppercase tracking-widest text-slate-400">Email</span>
-        <span class="font-bold text-[#0d1a0f] text-sm">{{ email }}</span>
-      </div>
+             <!-- Phone Block -->
+             <div class="p-6 bg-[#f8f7f2] rounded-3xl border border-[#1B4332]/5 group hover:bg-[#1B4332] transition-all duration-500 min-w-0">
+               <p class="text-[9px] font-black uppercase tracking-widest text-slate-400 group-hover:text-[#C9A84C] transition-colors mb-2">Phone Number</p>
+               <div class="flex items-center gap-3">
+                 <i class="ri-phone-line text-lg text-[#1B4332] group-hover:text-white transition-colors shrink-0"></i>
+                 <span class="font-bold text-[#0d1a0f] group-hover:text-white transition-colors text-sm lg:text-base">{{ phone }}</span>
+               </div>
+             </div>
+          </div>
 
-      <!-- Phone Number -->
-      <div class="flex items-center justify-between py-5 border-b border-[#1B4332]/5">
-        <span class="text-xs font-black uppercase tracking-widest text-slate-400">Phone Number</span>
-        <span class="font-bold text-[#0d1a0f] text-sm">{{ phone }}</span>
-      </div>
+          <div class="space-y-6">
+             <!-- Status Block -->
+             <div class="p-6 bg-[#f8f7f2] rounded-3xl border border-[#1B4332]/5 group hover:bg-[#1B4332] transition-all duration-500 min-w-0">
+               <p class="text-[9px] font-black uppercase tracking-widest text-slate-400 group-hover:text-[#C9A84C] transition-colors mb-2">KYC Status</p>
+               <div class="flex items-center justify-between gap-2">
+                 <div class="flex items-center gap-3 overflow-hidden">
+                   <i class="ri-shield-check-line text-lg text-[#1B4332] group-hover:text-white transition-colors shrink-0"></i>
+                   <span class="font-bold text-[#0d1a0f] group-hover:text-white transition-colors text-sm lg:text-base">Verified</span>
+                 </div>
+                 <div class="w-2 h-2 rounded-full bg-green-500 shadow-lg shadow-green-200 shrink-0"></div>
+               </div>
+             </div>
 
+             <!-- Account Type Block -->
+             <div class="p-6 bg-[#f8f7f2] rounded-3xl border border-[#1B4332]/5 group hover:bg-[#1B4332] transition-all duration-500 min-w-0">
+               <p class="text-[9px] font-black uppercase tracking-widest text-slate-400 group-hover:text-[#C9A84C] transition-colors mb-2">Account Tier</p>
+               <div class="flex items-center gap-3">
+                 <i class="ri-vip-crown-line text-lg text-[#1B4332] group-hover:text-white transition-colors shrink-0"></i>
+                 <span class="font-bold text-[#0d1a0f] group-hover:text-white transition-colors text-sm lg:text-base">Premium Halal</span>
+               </div>
+             </div>
+          </div>
+        </div>
+
+        <!-- Security Notice -->
+        <div class="mt-10 p-6 bg-amber-50 rounded-3xl border border-amber-200/50 flex items-start gap-4">
+          <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 shrink-0">
+             <i class="ri-error-warning-line text-xl"></i>
+          </div>
+          <p class="text-[11px] font-medium text-amber-800 leading-relaxed italic">
+            "For security reasons, your core biological and contact data can only be updated through our support channels with additional verification."
+          </p>
+        </div>
+
+        <div class="mt-10 flex flex-col items-center">
+            <button (click)="cancel()" class="w-full h-16 bg-[#0d1a0f] text-white rounded-3xl text-[11px] font-black uppercase tracking-[0.2em] shadow-2xl shadow-[#1B4332]/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 group">
+              Return to Dashboard <i class="ri-arrow-right-line group-hover:translate-x-2 transition-transform"></i>
+            </button>
+            <p class="mt-8 text-[10px] font-bold text-slate-300 uppercase tracking-widest leading-relaxed text-center">
+               Need help? Contact <span class="text-[#1B4332]">support@dogofinance.com</span>
+            </p>
+        </div>
+
+      </div>
     </div>
-
-    <!-- Actions -->
-    <div class="mt-12">
-      <button (click)="cancel()" class="w-full h-16 bg-[#e63946] text-white rounded-2xl text-[13px] font-black uppercase tracking-widest hover:bg-[#d62828] transition-all shadow-xl shadow-red-500/10">
-        Cancel
-      </button>
-    </div>
-
-    <!-- Footer Support Info -->
-    <div class="mt-12 text-center">
-      <p class="text-[11px] font-bold text-slate-400 balance-text leading-relaxed">
-        To change your account details, please contact support on 0700 933 933 933 or email <span class="text-[#1B4332]">info@dogofinance.com</span>
-      </p>
-    </div>
-
   </div>
 </div>

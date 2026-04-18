@@ -237,6 +237,17 @@ export class ClientDashboardComponent implements OnInit {
                     icon: this.mapTodoIcon(item.icon || item.Icon),
                     action: item.actionText || item.ActionText
                 }));
+
+                // Simulation: Inject Address Verification if not already present
+                if (!mapped.some((s: any) => s.title.includes('Address'))) {
+                  mapped.push({
+                    title: 'Address Verification',
+                    desc: 'Upload a utility bill or bank statement to verify your residential address.',
+                    icon: 'ri-map-pin-user-line',
+                    action: 'VERIFY NOW'
+                  });
+                }
+
                 this.nextSteps.set(mapped);
              }
           }
@@ -250,6 +261,8 @@ export class ClientDashboardComponent implements OnInit {
         case 'security': return 'ri-shield-user-line';
         case 'lock': return 'ri-lock-password-line';
         case 'people': return 'ri-parent-line';
+        case 'address': return 'ri-map-pin-user-line';
+        case 'location': return 'ri-map-pin-user-line';
         default: return 'ri-checkbox-circle-line';
     }
   }
@@ -269,6 +282,18 @@ export class ClientDashboardComponent implements OnInit {
   relationshipTypes = signal<any[]>([]);
   isProcessing = signal(false);
   isSuccess = signal(false);
+
+  // Address Verification State
+  addressDocType = signal('');
+  addressFile = signal<File | null>(null);
+  addressFilePreview = signal<string | null>(null);
+  addressDocOptions = [
+    { value: 'Electricity Bill', label: 'Electricity Bill (PHCN)' },
+    { value: 'Water Bill', label: 'Water Bill' },
+    { value: 'Waste Bill', label: 'Waste Bill (LAWMA)' },
+    { value: 'Bank Statement', label: 'Bank Statement' },
+    { value: 'Tenancy Receipt', label: 'Tenancy Receipt' }
+  ];
 
   // Transaction Modal State
   showTransactionModal = signal(false);
@@ -428,22 +453,47 @@ export class ClientDashboardComponent implements OnInit {
   closeModal() {
     this.showVerificationModal.set(false);
     this.activeVerification.set(null);
+    this.addressFile.set(null);
+    this.addressFilePreview.set(null);
+    this.addressDocType.set('');
+  }
+
+  onAddressFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.addressFile.set(file);
+      const reader = new FileReader();
+      reader.onload = () => this.addressFilePreview.set(reader.result as string);
+      reader.readAsDataURL(file);
+    }
   }
 
   verifyAction() {
     const isPinFlow = this.activeVerification()?.title === 'Create Transaction PIN';
     const isNokFlow = this.activeVerification()?.title === 'Add Next of Kin';
+    const isAddressFlow = this.activeVerification()?.title === 'Address Verification';
     
     if (isPinFlow) {
       if (this.pinInput().length !== 6 || this.pinInput() !== this.confirmPinInput()) return;
     } else if (isNokFlow) {
       if (!this.nokName() || !this.nokEmail() || !this.nokPhone()) return;
+    } else if (isAddressFlow) {
+      if (!this.addressDocType() || !this.addressFile()) return;
     } else {
       if (this.verificationInput().length !== 11) return;
     }
     
+    
     this.isProcessing.set(true);
     
+    if (isAddressFlow) {
+      // Simulation: Address verification upload
+      setTimeout(() => {
+        this.handleSuccessAction();
+      }, 2000);
+      return;
+    }
+
     if (isNokFlow) {
       const customerId = this.user()?.CustomerId || this.user()?.customerId;
       const nokData = {

@@ -25,8 +25,31 @@ export class ProfileComponent implements OnInit {
   // Fake User ID for display as seen in the image
   displayId = '77775b68cb1121';
 
+  profilePic = signal<string | null>(null);
+  isUploading = signal(false);
+
   ngOnInit() {
-    // In a real app, we might fetch full profile details here
+    // Initialize profile pic if available in user object
+    const pic = this.user()?.ProfilePic || this.user()?.profilePic;
+    if (pic) this.profilePic.set(pic);
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.isUploading.set(true);
+      const reader = new FileReader();
+      reader.onload = () => {
+        // Simulation delay
+        setTimeout(() => {
+          this.profilePic.set(reader.result as string);
+          this.isUploading.set(false);
+          // In a real app, you would upload this to the server here:
+          // this.customerService.updateProfilePic(file).subscribe(...)
+        }, 1500);
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   cancel() {

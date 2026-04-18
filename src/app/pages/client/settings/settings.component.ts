@@ -41,8 +41,9 @@ export class SettingsComponent {
 
   // --- Verifications State ---
   verifications = signal([
-    { type: 'BVN', label: 'BVN Verification', status: 'pending', icon: 'ri-bank-card-line' },
-    { type: 'NIN', label: 'NIN Verification', status: 'pending', icon: 'ri-shield-user-line' }
+    { type: 'BVN', label: 'BVN Verification', status: 'verified', icon: 'ri-bank-card-line' },
+    { type: 'NIN', label: 'NIN Verification', status: 'verified', icon: 'ri-shield-user-line' },
+    { type: 'Address', label: 'Address Verification', status: 'not_started', icon: 'ri-map-pin-user-line', reason: '' }
   ]);
   
   showVerificationModal = signal(false);
@@ -50,6 +51,20 @@ export class SettingsComponent {
   verificationInput = signal('');
   isVerifying = signal(false);
   isVerificationSuccess = signal(false);
+
+  // Address Specific
+  addressDocType = signal('');
+  addressFile = signal<File | null>(null);
+  addressFilePreview = signal<string | null>(null);
+  isUploadingAddressDoc = signal(false);
+
+  addressDocOptions: DropdownOption[] = [
+    { label: 'Electricity Bill (PHCN)', value: 'Electricity Bill', icon: 'ri-flashlight-line' },
+    { label: 'Water Bill', value: 'Water Bill', icon: 'ri-drop-line' },
+    { label: 'Waste Bill (LAWMA)', value: 'Waste Bill', icon: 'ri-delete-bin-line' },
+    { label: 'Bank Statement', value: 'Bank Statement', icon: 'ri-bank-line' },
+    { label: 'Tenancy Agreement/Rent Receipt', value: 'Tenancy Receipt', icon: 'ri-home-4-line' }
+  ];
 
   // --- Bank Accounts State ---
   bankAccounts = signal<BankAccount[]>([]);
@@ -155,6 +170,7 @@ export class SettingsComponent {
     switch (status) {
       case 'verified': return 'success';
       case 'pending': return 'warning';
+      case 'rejected': return 'danger';
       default: return 'info';
     }
   }
@@ -245,12 +261,32 @@ export class SettingsComponent {
 
   verifyDocument() {
     const doc = this.activeVerification();
-    if (!doc || this.verificationInput().length !== 11) return;
+    if (!doc) return;
+
+    if (doc.type === 'Address') {
+      if (!this.addressDocType() || !this.addressFile()) return;
+      this.isVerifying.set(true);
+      
+      // Simulate API call for Address Verification
+      setTimeout(() => {
+        this.isVerifying.set(false);
+        this.isVerificationSuccess.set(true);
+        
+        const updated = this.verifications().map(item => 
+          item.type === 'Address' ? { ...item, status: 'pending' } : item
+        );
+        this.verifications.set(updated);
+        
+        setTimeout(() => this.closeVerificationModal(), 2000);
+      }, 2000);
+      return;
+    }
+
+    if (this.verificationInput().length !== 11) return;
 
     this.isVerifying.set(true);
     this.settingsService.verifyIdentityDocument(doc.type as 'BVN' | 'NIN', this.verificationInput()).subscribe({
       next: () => {
-        this.isVerifying.set(true); // Should be false but following logic in file
         this.isVerifying.set(false);
         this.isVerificationSuccess.set(true);
         
@@ -264,6 +300,23 @@ export class SettingsComponent {
       },
       error: () => this.isVerifying.set(false)
     });
+  }
+
+  onAddressFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.addressFile.set(file);
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.addressFilePreview.set(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removeAddressFile() {
+    this.addressFile.set(null);
+    this.addressFilePreview.set(null);
   }
 
   // --- Bank Actions ---

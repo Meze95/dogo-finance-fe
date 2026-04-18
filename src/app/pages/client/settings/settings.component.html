@@ -74,63 +74,68 @@
         @if(activeTab() === 'profile') {
            <app-card title="Personal Information" icon="ri-user-settings-line">
               @if(!isEditingProfile()) {
-                 <div class="grid md:grid-cols-2 gap-8 mt-6">
-                    <div>
-                       <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">First Name</label>
-                       <p class="font-bold text-[#0d1a0f] p-4 bg-[#f8f7f2] rounded-2xl border border-[#1B4332]/5 shadow-sm">{{ userProfile().firstName }}</p>
-                    </div>
-                    <div>
-                       <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Last Name</label>
-                       <p class="font-bold text-[#0d1a0f] p-4 bg-[#f8f7f2] rounded-2xl border border-[#1B4332]/5 shadow-sm">{{ userProfile().lastName }}</p>
-                    </div>
-                    <div class="md:col-span-2">
-                       <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Verified Email</label>
-                       <p class="font-bold text-[#0d1a0f] p-4 bg-[#f8f7f2] rounded-2xl border border-[#1B4332]/5 shadow-sm flex items-center justify-between">
-                          {{ userProfile().email }}
-                          <i class="ri-checkbox-circle-fill text-green-500 text-lg"></i>
-                       </p>
-                    </div>
-                    <div class="md:col-span-2">
-                       <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Phone Number</label>
-                       <p class="font-bold text-[#0d1a0f] p-4 bg-[#f8f7f2] rounded-2xl border border-[#1B4332]/5 shadow-sm">{{ userProfile().phone }}</p>
-                    </div>
-                 </div>
-                 <div footer-right class="pt-10">
+                  <div class="grid md:grid-cols-2 gap-8 mt-6 mb-4">
+                     <div>
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">First Name</label>
+                        <p class="font-bold text-[#0d1a0f] p-4 bg-[#f8f7f2] rounded-2xl border border-[#1B4332]/5 shadow-sm">{{ userProfile().firstName }}</p>
+                     </div>
+                     <div>
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Last Name</label>
+                        <p class="font-bold text-[#0d1a0f] p-4 bg-[#f8f7f2] rounded-2xl border border-[#1B4332]/5 shadow-sm">{{ userProfile().lastName }}</p>
+                     </div>
+                     <div class="md:col-span-2">
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Verified Email</label>
+                        <p class="font-bold text-[#0d1a0f] p-4 bg-[#f8f7f2] rounded-2xl border border-[#1B4332]/5 shadow-sm flex items-center justify-between">
+                           {{ userProfile().email }}
+                           <i class="ri-checkbox-circle-fill text-green-500 text-lg"></i>
+                        </p>
+                     </div>
+                     <div class="md:col-span-2">
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Phone Number</label>
+                        <p class="font-bold text-[#0d1a0f] p-4 bg-[#f8f7f2] rounded-2xl border border-[#1B4332]/5 shadow-sm">{{ userProfile().phone }}</p>
+                     </div>
+                  </div>
+               } @else {
+                  <!-- Profile Edit Form -->
+                  <div class="grid md:grid-cols-2 gap-8 mt-6 mb-4">
+                     <div>
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">First Name</label>
+                        <input type="text" [value]="editProfileForm().firstName" (input)="updateProfileField('firstName', $any($event.target).value)"
+                               class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all">
+                     </div>
+                     <div>
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Last Name</label>
+                        <input type="text" [value]="editProfileForm().lastName" (input)="updateProfileField('lastName', $any($event.target).value)"
+                               class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all">
+                     </div>
+                     <div class="md:col-span-2">
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Email (Cannot be changed)</label>
+                        <input type="email" [value]="editProfileForm().email" disabled
+                               class="w-full bg-gray-100 border-2 border-transparent rounded-2xl px-6 py-4 text-sm font-bold text-gray-400 outline-none cursor-not-allowed">
+                     </div>
+                     <div class="md:col-span-2">
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Phone Number</label>
+                        <input type="text" [value]="editProfileForm().phone" (input)="updateProfileField('phone', $any($event.target).value)"
+                               class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all">
+                     </div>
+                  </div>
+               }
+
+               <!-- Separate control flow for footer to avoid projection warnings -->
+               @if (!isEditingProfile()) {
+                  <div footer-right class="pt-10">
                     <app-button variant="primary" size="md" (click)="startEditProfile()">
                         <i class="ri-edit-2-line mr-2"></i> Update Details
                      </app-button>
-                 </div> 
-              } @else {
-                 <!-- Profile Edit Form -->
-                 <div class="grid md:grid-cols-2 gap-8 mt-6 mb-4">
-                    <div>
-                       <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">First Name</label>
-                       <input type="text" [value]="editProfileForm().firstName" (input)="updateProfileField('firstName', $any($event.target).value)"
-                              class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all">
-                    </div>
-                    <div>
-                       <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Last Name</label>
-                       <input type="text" [value]="editProfileForm().lastName" (input)="updateProfileField('lastName', $any($event.target).value)"
-                              class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all">
-                    </div>
-                    <div class="md:col-span-2">
-                       <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Email (Cannot be changed)</label>
-                       <input type="email" [value]="editProfileForm().email" disabled
-                              class="w-full bg-gray-100 border-2 border-transparent rounded-2xl px-6 py-4 text-sm font-bold text-gray-400 outline-none cursor-not-allowed">
-                    </div>
-                    <div class="md:col-span-2">
-                       <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Phone Number</label>
-                       <input type="text" [value]="editProfileForm().phone" (input)="updateProfileField('phone', $any($event.target).value)"
-                              class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all">
-                    </div>
-                 </div>
-                 <div footer-right class="pt-10 flex items-center space-x-3">
+                  </div> 
+               } @else {
+                  <div footer-right class="pt-10 flex items-center space-x-3">
                     <app-button variant="ghost" size="sm" (click)="cancelEditProfile()" [disabled]="isUpdatingProfile()">Cancel</app-button>
                     <app-button variant="primary" size="sm" (click)="saveProfile()" [disabled]="isUpdatingProfile()">
                        {{ isUpdatingProfile() ? 'Saving...' : 'Save Changes' }}
                     </app-button>
-                 </div>
-              }
+                  </div>
+               }
            </app-card>
         }
 
@@ -139,18 +144,33 @@
               <app-card title="Verification Center" subtitle="Identity status across Nigerian central systems" icon="ri-shield-check-line">
                  <div class="mt-8 space-y-4">
                     @for(v of verifications(); track v.label) {
-                       <div class="flex items-center justify-between p-6 bg-[#f8f7f2] rounded-[32px] border border-[#1B4332]/5 group hover:bg-white hover:shadow-lg transition-all" [class.cursor-pointer]="v.status !== 'verified'">
-                          <div class="flex items-center space-x-5">
-                             <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-[#1B4332] text-2xl shadow-sm group-hover:bg-[#1B4332] group-hover:text-white transition-colors">
-                                <i [class]="v.icon"></i>
+                       <div class="p-6 bg-[#f8f7f2] rounded-[32px] border border-[#1B4332]/5 group hover:bg-white hover:shadow-lg transition-all" [class.cursor-pointer]="v.status !== 'verified'">
+                          <div class="flex items-center justify-between">
+                             <div class="flex items-center space-x-5">
+                                <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-[#1B4332] text-2xl shadow-sm group-hover:bg-[#1B4332] group-hover:text-white transition-colors">
+                                   <i [class]="v.icon"></i>
+                                </div>
+                                <div>
+                                   <span class="font-black text-[#0d1a0f] text-sm block">{{ v.label }}</span>
+                                   @if(v.status === 'pending') {
+                                      <span class="text-[10px] font-bold text-amber-600 uppercase tracking-widest">Awaiting Admin Review</span>
+                                   } @else if(v.status === 'rejected') {
+                                      <span class="text-[10px] font-bold text-red-500 uppercase tracking-widest">Rejected: {{ v.reason }}</span>
+                                   }
+                                </div>
                              </div>
-                             <span class="font-black text-[#0d1a0f] text-sm">{{ v.label }}</span>
+                             <div class="flex items-center space-x-3">
+                                @if(v.status === 'verified') {
+                                   <app-badge [variant]="getBadgeVariant(v.status)">{{ v.status }}</app-badge>
+                                } @else if(v.status === 'pending') {
+                                   <app-badge [variant]="getBadgeVariant(v.status)">Pending</app-badge>
+                                } @else {
+                                   <app-button variant="outline" size="sm" (click)="openVerificationModal(v)">
+                                      {{ v.status === 'rejected' ? 'Re-upload' : 'Verify Now' }}
+                                   </app-button>
+                                }
+                             </div>
                           </div>
-                          @if(v.status === 'verified') {
-                             <app-badge [variant]="getBadgeVariant(v.status)">{{ v.status }}</app-badge>
-                          } @else {
-                             <app-button variant="outline" size="sm" (click)="openVerificationModal(v)">Verify Now</app-button>
-                          }
                        </div>
                     }
                  </div>
@@ -206,8 +226,7 @@
                     <div class="mt-8">
                        <app-button variant="outline" size="sm" class="w-full" (click)="startAddBank()">Add New Bank Account</app-button>
                     </div>
-                 } @else {
-                    <div class="space-y-6 mt-6 mb-8 overflow-visible">
+                     <div class="space-y-6 mt-6 mb-8 overflow-visible">
                         <app-dropdown 
                            label="Select Bank"
                            [options]="bankOptions()"
@@ -227,14 +246,17 @@
                            <input type="text" maxlength="10" [value]="newBankForm().accountNumber" (input)="updateBankField('accountNumber', $any($event.target).value.replace(/[^0-9]/g, ''))"
                                   class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all placeholder:text-[#1B4332]/20" placeholder="10-digit account number">
                         </div>
-                    </div>
-                    <div footer-right class="pt-10 flex items-center space-x-3 w-full justify-end">
-                       <app-button variant="ghost" size="sm" (click)="cancelAddBank()" [disabled]="isSavingBank()">Cancel</app-button>
-                       <app-button variant="primary" size="sm" (click)="saveBank()" [disabled]="isSavingBank() || !newBankForm().bankId || newBankForm().accountNumber?.length !== 10">
-                          {{ isSavingBank() ? 'Saving...' : 'Add Account' }}
-                       </app-button>
-                    </div>
-                 }
+                     </div>
+                  }
+                  
+                  @if (isAddingBank()) {
+                     <div footer-right class="pt-10 flex items-center space-x-3 w-full justify-end">
+                        <app-button variant="ghost" size="sm" (click)="cancelAddBank()" [disabled]="isSavingBank()">Cancel</app-button>
+                        <app-button variant="primary" size="sm" (click)="saveBank()" [disabled]="isSavingBank() || !newBankForm().bankId || newBankForm().accountNumber?.length !== 10">
+                           {{ isSavingBank() ? 'Saving...' : 'Add Account' }}
+                        </app-button>
+                     </div>
+                  }
               </app-card>
            </div>
         }
@@ -283,6 +305,9 @@
                                  class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all">
                        </div>
                     </div>
+                 }
+
+                 @if (isEditingKin()) {
                     <div footer-right class="pt-10 flex items-center space-x-3 w-full justify-end">
                        <app-button variant="ghost" size="sm" (click)="cancelEditKin()" [disabled]="isUpdatingKin()">Cancel</app-button>
                        <app-button variant="primary" size="sm" (click)="saveKin()" [disabled]="isUpdatingKin() || !editKinForm().fullName">
@@ -346,6 +371,9 @@
                           </div>
                        </div>
                     </div>
+                 }
+
+                 @if (isEditingPin()) {
                     <div footer-right class="pt-10 flex items-center space-x-3 w-full justify-end">
                        <app-button variant="ghost" size="sm" (click)="cancelEditPin()" [disabled]="isUpdatingPin()">Cancel</app-button>
                        <app-button variant="primary" size="sm" (click)="savePin()" [disabled]="isUpdatingPin()">
@@ -405,47 +433,115 @@
             </div>
 
             <h3 class="text-2xl font-black text-[#0d1a0f] italic tracking-tighter mb-2">{{ activeVerification()?.label }}</h3>
-            <p class="text-xs font-bold text-[#6B7280] uppercase tracking-widest mb-10">Enter your 11-digit {{ activeVerification()?.type }}</p>
+            
+            @if(activeVerification()?.type === 'Address') {
+              <p class="text-xs font-bold text-[#6B7280] uppercase tracking-widest mb-8">Upload a valid utility bill or document</p>
+              
+              <div class="space-y-6 text-left">
+                <app-dropdown 
+                   label="Document Type"
+                   [options]="addressDocOptions"
+                   [selectedValue]="addressDocType()"
+                   (valueChange)="addressDocType.set($event)"
+                   placeholder="Select Document Type"
+                   placeholderIcon="ri-file-list-3-line"
+                ></app-dropdown>
 
-            <div class="space-y-6">
-              <div class="relative group">
-                <input 
-                  type="text" 
-                  placeholder="Enter 11-digit Number" 
-                  maxlength="11"
-                  [value]="verificationInput()"
-                  (input)="verificationInput.set($any($event.target).value.replace(/[^0-9]/g, ''))"
-                  class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-5 text-sm font-bold text-[#0d1a0f] outline-none transition-all placeholder:text-[#1B4332]/20"
-                >
-                <div class="absolute right-6 top-1/2 -translate-y-1/2 text-[#1B4332]/10 group-focus-within:text-[#C9A84C] transition-colors">
-                  <i [class]="activeVerification()?.icon" class="text-xl"></i>
+                <div class="space-y-2">
+                  <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400">Document Image/PDF</label>
+                  
+                  @if(!addressFile()) {
+                    <label class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-[#1B4332]/10 rounded-[32px] bg-[#f8f7f2] hover:bg-white hover:border-[#C9A84C] transition-all cursor-pointer group">
+                      <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                        <i class="ri-upload-cloud-2-line text-4xl text-[#1B4332]/20 group-hover:text-[#C9A84C] mb-3 transition-colors"></i>
+                        <p class="text-xs font-bold text-[#1B4332]/40 tracking-tight">Click to upload or drag and drop</p>
+                        <p class="text-[10px] text-[#6B7280]/60 mt-1 uppercase font-black">PNG, JPG or PDF (Max 5MB)</p>
+                      </div>
+                      <input type="file" class="hidden" (change)="onAddressFileSelected($event)" accept="image/*,application/pdf" />
+                    </label>
+                  } @else {
+                    <div class="relative w-full h-40 rounded-[32px] overflow-hidden border-2 border-[#1B4332]/5">
+                      @if(addressFilePreview()) {
+                         @if(addressFilePreview()?.startsWith('data:image')) {
+                           <img [src]="addressFilePreview()" class="w-full h-full object-cover">
+                         } @else {
+                           <div class="w-full h-full bg-[#f8f7f2] flex flex-col items-center justify-center text-[#1B4332]">
+                             <i class="ri-file-pdf-2-line text-5xl mb-2"></i>
+                             <span class="text-[10px] font-bold uppercase tracking-widest">{{ addressFile()?.name }}</span>
+                           </div>
+                         }
+                      }
+                      <button (click)="removeAddressFile()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-red-500 text-white flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors">
+                        <i class="ri-delete-bin-line"></i>
+                      </button>
+                    </div>
+                  }
                 </div>
+
+                <button 
+                  (click)="verifyDocument()"
+                  [disabled]="!addressDocType() || !addressFile() || isVerifying()"
+                  class="w-full h-16 bg-[#1B4332] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[#2D6A4F] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl shadow-[#1B4332]/20 flex items-center justify-center relative overflow-hidden"
+                >
+                  @if(isVerifying()) {
+                    <div class="flex items-center space-x-2">
+                       <div class="w-2 h-2 rounded-full bg-[#C9A84C] animate-pulse"></div>
+                       <span>Uploading...</span>
+                    </div>
+                  } @else {
+                    <span>Submit for Verification</span>
+                    <i class="ri-send-plane-fill text-lg ml-2"></i>
+                  }
+                </button>
               </div>
 
-              <button 
-                (click)="verifyDocument()"
-                [disabled]="verificationInput().length !== 11 || isVerifying()"
-                class="w-full h-16 bg-[#1B4332] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[#2D6A4F] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl shadow-[#1B4332]/20 flex items-center justify-center relative overflow-hidden"
-              >
-                @if(isVerifying()) {
-                  <div class="flex items-center space-x-2">
-                    <div class="w-2 h-2 rounded-full bg-[#C9A84C] animate-pulse"></div>
-                    <span>Processing...</span>
+            } @else {
+              <p class="text-xs font-bold text-[#6B7280] uppercase tracking-widest mb-10">Enter your 11-digit {{ activeVerification()?.type }}</p>
+
+              <div class="space-y-6">
+                <div class="relative group">
+                  <input 
+                    type="text" 
+                    placeholder="Enter 11-digit Number" 
+                    maxlength="11"
+                    [value]="verificationInput()"
+                    (input)="verificationInput.set($any($event.target).value.replace(/[^0-9]/g, ''))"
+                    class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-5 text-sm font-bold text-[#0d1a0f] outline-none transition-all placeholder:text-[#1B4332]/20"
+                  >
+                  <div class="absolute right-6 top-1/2 -translate-y-1/2 text-[#1B4332]/10 group-focus-within:text-[#C9A84C] transition-colors">
+                    <i [class]="activeVerification()?.icon" class="text-xl"></i>
                   </div>
-                } @else {
-                  <span>Verify Now</span>
-                  <i class="ri-shield-check-line text-lg ml-2"></i>
-                }
-              </button>
-            </div>
+                </div>
+
+                <button 
+                  (click)="verifyDocument()"
+                  [disabled]="verificationInput().length !== 11 || isVerifying()"
+                  class="w-full h-16 bg-[#1B4332] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[#2D6A4F] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl shadow-[#1B4332]/20 flex items-center justify-center relative overflow-hidden"
+                >
+                  @if(isVerifying()) {
+                    <div class="flex items-center space-x-2">
+                      <div class="w-2 h-2 rounded-full bg-[#C9A84C] animate-pulse"></div>
+                      <span>Processing...</span>
+                    </div>
+                  } @else {
+                    <span>Verify Now</span>
+                    <i class="ri-shield-check-line text-lg ml-2"></i>
+                  }
+                </button>
+              </div>
+            }
           </div>
         } @else {
           <div class="py-6 animate-in zoom-in duration-500 text-center">
             <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-4xl text-green-600 mx-auto mb-6 shadow-pill">
               <i class="ri-checkbox-circle-fill"></i>
             </div>
-            <h4 class="text-xl font-black text-[#1B4332] uppercase italic">Verification Success</h4>
-            <p class="text-xs font-bold text-[#6B7280] mt-2">Your document has been securely verified.</p>
+            <h4 class="text-xl font-black text-[#1B4332] uppercase italic">
+              {{ activeVerification()?.type === 'Address' ? 'Submission Success' : 'Verification Success' }}
+            </h4>
+            <p class="text-xs font-bold text-[#6B7280] mt-2">
+               {{ activeVerification()?.type === 'Address' ? 'Your document has been submitted for review.' : 'Your document has been securely verified.' }}
+            </p>
           </div>
         }
       </div>

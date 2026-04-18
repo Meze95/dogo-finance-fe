@@ -272,11 +272,12 @@
                </button>
              </div>
            }
-      </div>
-   </div>
+         </div>
+    </div>
+  </div>
 </div>
 
-<!-- Verification Modal Overlay (Premium Backdrop) -->
+<!-- Modal Section: Moved outside animated root to fix stacking context -->
 @if (showVerificationModal()) {
   <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-300">
     <div class="absolute inset-0 bg-[#0d1a0f]/80 backdrop-blur-md"></div>
@@ -336,6 +337,47 @@
                   <p class="text-[10px] font-bold text-red-500 uppercase tracking-widest text-center">PINs do not match</p>
                 }
               </div>
+            } @else if (activeVerification()?.title === 'Address Verification') {
+              <!-- ADDRESS VERIFICATION UI -->
+               <div class="text-left space-y-6">
+                  <div class="space-y-4">
+                      <div class="space-y-2">
+                          <label class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40 ml-4">Select Document Type</label>
+                          <app-dropdown
+                            [options]="addressDocOptions"
+                            [selectedValue]="addressDocType()"
+                            (valueChange)="addressDocType.set($event)"
+                            placeholder="Select Document Type"
+                            placeholderIcon="ri-file-list-3-line"
+                          ></app-dropdown>
+                      </div>
+
+                      <div class="space-y-2">
+                          <label class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40 ml-4">Upload Document (Image/PDF)</label>
+                          <div (click)="fileInput.click()" 
+                               class="w-full h-40 bg-[#f8f7f2] border-2 border-dashed border-[#1B4332]/10 rounded-3xl flex flex-col items-center justify-center cursor-pointer hover:border-[#C9A84C]/40 transition-all overflow-hidden relative group">
+                              <input #fileInput type="file" (change)="onAddressFileSelected($event)" class="hidden" accept="image/*,application/pdf">
+                              
+                              @if (addressFilePreview()) {
+                                  <img [src]="addressFilePreview()" class="w-full h-full object-cover">
+                                  <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                      <i class="ri-refresh-line text-white text-3xl"></i>
+                                  </div>
+                              } @else {
+                                  <i class="ri-upload-cloud-2-line text-4xl text-[#1B4332]/20 mb-2"></i>
+                                  <p class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40">Tap to upload</p>
+                              }
+                          </div>
+                          @if (addressFile()) {
+                              <p class="text-[9px] font-bold text-[#C9A84C] mt-2 text-center uppercase tracking-widest">Selected: {{ addressFile()?.name }}</p>
+                          }
+                      </div>
+
+                      <p class="text-[9px] font-medium text-[#6B7280] leading-relaxed text-center px-4 italic">
+                        Supported: Electricity Bills, LAWMA, Bank Statements, or Tenancy Receipts.
+                      </p>
+                  </div>
+               </div>
             } @else if (activeVerification()?.title === 'Add Next of Kin') {
               <!-- NEXT OF KIN FORM -->
               <div class="text-left space-y-6">
@@ -418,7 +460,10 @@
 
             <button 
               (click)="verifyAction()"
-              [disabled]="(activeVerification()?.title === 'Create Transaction PIN' ? (pinInput().length !== 6 || pinInput() !== confirmPinInput()) : activeVerification()?.title === 'Add Next of Kin' ? (!nokName() || !nokEmail() || !nokPhone()) : verificationInput().length !== 11) || isProcessing()"
+              [disabled]="(activeVerification()?.title === 'Create Transaction PIN' ? (pinInput().length !== 6 || pinInput() !== confirmPinInput()) : 
+                           activeVerification()?.title === 'Add Next of Kin' ? (!nokName() || !nokEmail() || !nokPhone()) : 
+                           activeVerification()?.title === 'Address Verification' ? (!addressDocType() || !addressFile()) :
+                           verificationInput().length !== 11) || isProcessing()"
               class="w-full h-16 bg-[#1B4332] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[#2D6A4F] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl shadow-[#1B4332]/20 flex items-center justify-center relative overflow-hidden"
             >
               @if (isProcessing()) {

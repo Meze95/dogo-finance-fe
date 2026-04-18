@@ -80,6 +80,7 @@ export const routes: Routes = [
       { path: 'products', loadComponent: () => import('./pages/admin/products/admin-products').then(m => m.AdminProducts) },
       { path: 'investments', loadComponent: () => import('./pages/admin/investments/investments.component').then(m => m.AdminInvestmentsComponent) },
       { path: 'transactions', loadComponent: () => import('./pages/admin/transactions/transactions.component').then(m => m.AdminTransactionsComponent) },
+      { path: 'verifications', loadComponent: () => import('./pages/admin/verifications/verifications.component').then(m => m.VerificationsComponent) },
       { path: 'withdrawals', loadComponent: () => import('./pages/admin/withdrawals/withdrawals').then(m => m.WithdrawalsComponent) },
       { path: 'settings', loadComponent: () => import('./pages/admin/settings/settings').then(m => m.Settings) },
       { path: 'profile', loadComponent: () => import('./pages/admin/profile/profile').then(m => m.Profile) }
