@@ -9,6 +9,7 @@ import { InvestmentService } from '../../../shared/services/investment.service';
 import { Product } from '../../../shared/models/product.model';
 import { TransactionService } from '../../../shared/services/transaction.service';
 import { DropdownComponent } from '../../../shared/components/ui/dropdown.component';
+import { SettingsService, BankAccount } from '../settings/settings.service';
 
 export interface Transaction {
   id: string;
@@ -40,6 +41,7 @@ export class ClientDashboardComponent implements OnInit {
   private productService = inject(ProductService);
   private investmentService = inject(InvestmentService);
   private transactionService = inject(TransactionService);
+  private settingsService = inject(SettingsService);
   
   constructor() {
     // Reactively load data when user is available
@@ -47,6 +49,7 @@ export class ClientDashboardComponent implements OnInit {
         if (this.user()) {
             this.loadTodoList();
             this.loadDashboardData();
+            this.loadBanks();
         }
     });
   }
@@ -154,6 +157,14 @@ export class ClientDashboardComponent implements OnInit {
           }
         });
     }
+  }
+
+  loadBanks() {
+    this.settingsService.getMyBanks().subscribe({
+      next: (res) => {
+        if (res.data) this.registeredBanks.set(res.data);
+      }
+    });
   }
 
   formatDate(dateStr: string): string {
@@ -266,10 +277,7 @@ export class ClientDashboardComponent implements OnInit {
   withdrawAccountId = signal('');
   withdrawPin = signal('');
 
-  registeredBanks = signal<{id: string, bankName: string, accountNumber: string}[]>([
-    { id: '1', bankName: 'Guaranty Trust Bank', accountNumber: '0123456789' },
-    { id: '2', bankName: 'Zenith Bank', accountNumber: '2123456789' }
-  ]);
+  registeredBanks = signal<BankAccount[]>([]);
 
   // Funding specific states
   fundingStep = signal<'amount' | 'source' | 'card' | 'otp' | 'virtual' | 'bvn' | 'success'>('amount');
@@ -388,12 +396,12 @@ export class ClientDashboardComponent implements OnInit {
     return '';
   });
 
-  registeredBankOptions = computed(() => 
-    this.registeredBanks().map(bank => ({
-      value: bank.id,
+  registeredBankOptions = computed(() => {
+    return this.registeredBanks().map(bank => ({
+      value: (bank.customerBankId || bank.bankId || 0).toString(),
       label: `${bank.bankName} (${bank.accountNumber})`
-    }))
-  );
+    }));
+  });
 
   relationshipTypeOptions = computed(() => 
     this.relationshipTypes().map(type => ({
@@ -516,7 +524,17 @@ export class ClientDashboardComponent implements OnInit {
   openTransactionModal(type: 'fund'|'withdraw') {
     this.transactionType.set(type);
     this.transactionAmount.set('');
-    this.withdrawAccountId.set('');
+    
+    // Pre-select Primary Account for Withdrawals
+    if (type === 'withdraw') {
+        const primary = this.registeredBanks().find(b => b.isDefault);
+        const first = this.registeredBanks()[0];
+        const selectedId = (primary?.customerBankId || primary?.bankId || first?.customerBankId || first?.bankId || '')?.toString();
+        this.withdrawAccountId.set(selectedId);
+    } else {
+        this.withdrawAccountId.set('');
+    }
+    
     this.withdrawPin.set('');
     this.fundingStep.set('amount');
     this.selectedSource.set(null);
@@ -721,28 +739,81 @@ export class ClientDashboardComponent implements OnInit {
         return;
       }
     } else {
-      // Withdrawal logic ... maintains existing
-      const amount = Number(this.transactionAmount());
-      
-      if(!this.withdrawAccountId() || !this.withdrawPin() || amount > this.availableNaira()) {
-        this.isProcessing.set(false); return;
-      }
-      
-      const selectedBank = this.registeredBanks().find(b => b.id === this.withdrawAccountId());
-      const bankName = selectedBank ? selectedBank.bankName : 'Bank Transfer';
+      // Withdrawal logic
+      if (this.isProcessing()) return;
+      this.isProcessing.set(true);
+      this.errorMessage.set('');
 
-      setTimeout(() => {
+      const amount = Number(this.transactionAmount());
+      const customerId = this.user()?.CustomerId || this.user()?.customerId;
+      const is2faEnabled = this.user()?.is2faEnabled || this.user()?.Is2faEnabled;
+
+      if (!this.withdrawAccountId() || !this.withdrawPin()) {
+        this.errorMessage.set('Please fill all fields');
         this.isProcessing.set(false);
-        this.closeTransactionModal();
-        this.loadDashboardData(); // Refresh actual balance from backend
-        
-        // Add to recent transactions statically
-        this.recentTransactions.update(txs => [
-          { id: Math.random().toString(), type: 'withdrawal', amount, status: 'completed', date: 'Just now', description: `Withdraw to ${bankName}` },
-          ...txs
-        ]);
-      }, 1500);
+        return;
+      }
+
+      if (is2faEnabled && this.fundingStep() !== 'otp') {
+        // Step 1: Request OTP
+        this.transactionService.sendWithdrawalOtp(customerId, amount).subscribe({
+          next: (res) => {
+            this.isProcessing.set(false);
+            if (res.success || res.boolean) {
+              this.fundingStep.set('otp');
+              this.otpMessage.set('A verification code has been sent to your email to authorize this withdrawal.');
+            } else {
+              this.errorMessage.set(res.message || 'Failed to send verification code');
+            }
+          },
+          error: (err) => {
+            this.isProcessing.set(false);
+            this.errorMessage.set(err.error?.message || 'Verification error');
+          }
+        });
+      } else {
+        // Step 2: Finalize (either no 2FA or OTP already entered)
+        this.finalizeWithdrawal();
+      }
     }
+  }
+
+  finalizeWithdrawal() {
+    this.isProcessing.set(true);
+    const amount = Number(this.transactionAmount());
+    const customerId = this.user()?.CustomerId || this.user()?.customerId;
+    const selectedBank = this.registeredBanks().find(b => (b.customerBankId || b.bankId || 0).toString() === this.withdrawAccountId());
+
+    const withdrawalData = {
+      customerId,
+      amount,
+      bankCode: selectedBank?.bankCode || '011', // Defaulting for demo safety
+      accountNumber: selectedBank?.accountNumber || '',
+      pin: this.withdrawPin(),
+      narration: `Withdrawal to ${selectedBank?.bankName || 'Bank'}`,
+      otp: this.otpInput()
+    };
+
+    this.transactionService.initiateWithdrawal(withdrawalData).subscribe({
+      next: (res) => {
+        this.isProcessing.set(false);
+        if (res.success || res.boolean) {
+          this.closeTransactionModal();
+          this.loadDashboardData();
+          // Show success stub
+          this.recentTransactions.update(txs => [
+            { id: Math.random().toString(), type: 'withdrawal', amount, status: 'completed', date: 'Just now', description: withdrawalData.narration },
+            ...txs
+          ]);
+        } else {
+          this.errorMessage.set(res.message || 'Withdrawal failed');
+        }
+      },
+      error: (err) => {
+        this.isProcessing.set(false);
+        this.errorMessage.set(err.error?.message || 'Transaction could not be completed');
+      }
+    });
   }
 
   finalizeDeposit() {

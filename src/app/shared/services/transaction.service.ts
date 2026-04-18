@@ -62,4 +62,12 @@ export class TransactionService {
   getHistory(): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(`${this.apiUrl}/history`);
   }
+
+  initiateWithdrawal(data: any): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`${this.apiUrl}/withdraw`, data);
+  }
+
+  sendWithdrawalOtp(customerId: number, amount: number): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`${this.apiUrl}/send-withdrawal-otp`, { customerId, amount });
+  }
 }

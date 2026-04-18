@@ -1,4 +1,4 @@
-import { Component, signal, computed, inject, OnInit } from '@angular/core';
+import { Component, signal, computed, inject, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../shared/services/product.service';
@@ -8,6 +8,7 @@ import { Product, ProductAssetAllocation } from '../../../shared/models/product.
 import { AlertService } from '../../../shared/services/alert.service';
 
 declare var Swal: any;
+declare var TradingView: any;
 
 @Component({
   selector: 'app-client-portfolios',
@@ -16,7 +17,7 @@ declare var Swal: any;
   templateUrl: './portfolios.component.html',
   styleUrl: './portfolios.component.css'
 })
-export class ClientPortfoliosComponent implements OnInit {
+export class ClientPortfoliosComponent implements OnInit, AfterViewInit, OnDestroy {
   private productService = inject(ProductService);
   private investmentService = inject(InvestmentService);
   private alertService = inject(AlertService);
@@ -41,6 +42,111 @@ export class ClientPortfoliosComponent implements OnInit {
 
   ngOnInit() {
     this.productService.getPortfolios();
+  }
+
+  ngAfterViewInit() {
+    this.loadTradingViewWidgets();
+  }
+
+  ngOnDestroy() {
+    // Cleanup if necessary
+  }
+
+  private loadTradingViewWidgets() {
+    this.loadScript('https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js', 'tradingview-ticker-container', {
+      "symbols": [
+        { "proName": "FX_IDC:USDNGN", "title": "USD/NGN" },
+        { "description": "Global Sukuk ETF", "proName": "AMEX:SKUK" },
+        { "description": "MTN Nigeria", "proName": "NSE:MTNN" },
+        { "description": "Dangote Cement", "proName": "NSE:DANGCEM" },
+        { "description": "Gold (Halal)", "proName": "TVC:GOLD" },
+        { "description": "Microsoft (Halal)", "proName": "NASDAQ:MSFT" },
+        { "description": "Tesla (Halal)", "proName": "NASDAQ:TSLA" }
+      ],
+      "showSymbolLogo": true,
+      "colorTheme": "light",
+      "isTransparent": false,
+      "displayMode": "adaptive",
+      "locale": "en"
+    });
+
+    this.loadScript('https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js', 'tradingview-tech-analysis', {
+      "interval": "1m",
+      "width": "100%",
+      "isTransparent": false,
+      "height": "100%",
+      "symbol": "NASDAQ:MSFT",
+      "showIntervalTabs": true,
+      "locale": "en",
+      "colorTheme": "light"
+    });
+
+    this.loadScript('https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js', 'tradingview-market-overview', {
+      "colorTheme": "light",
+      "dateRange": "12M",
+      "showChart": true,
+      "locale": "en",
+      "width": "100%",
+      "height": "100%",
+      "largeChartByThreeColumns": true,
+      "isTransparent": false,
+      "showSymbolLogo": true,
+      "showFloatingTooltip": true,
+      "tabs": [
+        {
+          "title": "Global Halal Giants",
+          "symbols": [
+            { "s": "NASDAQ:AAPL", "d": "Apple Inc." },
+            { "s": "NASDAQ:MSFT", "d": "Microsoft" },
+            { "s": "NASDAQ:GOOGL", "d": "Alphabet" },
+            { "s": "NASDAQ:NVDA", "d": "NVIDIA" },
+            { "s": "NASDAQ:TSLA", "d": "Tesla" },
+            { "s": "NASDAQ:AMZN", "d": "Amazon" },
+            { "s": "NYSE:JNJ", "d": "Johnson & Johnson" },
+            { "s": "NYSE:V", "d": "Visa" }
+          ],
+          "originalTitle": "Global Stocks"
+        },
+        {
+          "title": "Nigerian Halal Sector",
+          "symbols": [
+            { "s": "NSE:MTNN", "d": "MTN Nigeria" },
+            { "s": "NSE:DANGCEM", "d": "Dangote Cement" },
+            { "s": "NSE:BUACEMENT", "d": "BUA Cement" },
+            { "s": "NSE:AIRTELAFRI", "d": "Airtel Africa" },
+            { "s": "NSE:OKOMUOIL", "d": "Okomu Oil" },
+            { "s": "NSE:NESTLE", "d": "Nestle Nigeria" },
+            { "s": "NSE:PRESCO", "d": "Presco Plc" },
+            { "s": "NSE:TOTAL", "d": "TotalEnergies" },
+            { "s": "NSE:SEPLAT", "d": "Seplat Energy" }
+          ],
+          "originalTitle": "Local Stocks"
+        },
+        {
+          "title": "Fixed Income & Sukuk",
+          "symbols": [
+            { "s": "AMEX:SKUK", "d": "Global Sukuk" },
+            { "s": "NASDAQ:HLAL", "d": "Wahed Shariah ETF" },
+            { "s": "NASDAQ:SPRE", "d": "Shariah REITs" },
+            { "s": "TVC:GOLD", "d": "Spot Gold" },
+            { "s": "NASDAQ:SUSA", "d": "iShares Shariah" }
+          ],
+          "originalTitle": "Fixed Income"
+        }
+      ]
+    });
+  }
+
+  private loadScript(src: string, containerId: string, settings: any) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = src;
+    script.async = true;
+    script.innerHTML = JSON.stringify(settings);
+    container.appendChild(script);
   }
 
   viewDetail(portfolio: Product) {

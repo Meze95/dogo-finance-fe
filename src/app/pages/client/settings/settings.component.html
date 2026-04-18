@@ -219,8 +219,8 @@
 
                         <div>
                            <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Account Name (Full Legal Name)</label>
-                           <input type="text" [value]="newBankForm().accountName" (input)="updateBankField('accountName', $any($event.target).value)"
-                                  class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all">
+                           <input type="text" [value]="newBankForm().accountName" readonly
+                                  class="w-full bg-gray-100/50 border-2 border-transparent rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none cursor-default">
                         </div>
                         <div>
                            <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Account Number</label>

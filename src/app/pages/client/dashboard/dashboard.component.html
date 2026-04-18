@@ -753,7 +753,10 @@
           @if (fundingStep() !== 'success' && fundingStep() !== 'virtual' && fundingStep() !== 'bvn') {
             <button 
               (click)="processTransaction()"
-              [disabled]="isProcessing() || !transactionAmount() || (transactionType() === 'fund' && fundingStep() === 'source' && !selectedSource()) || (transactionType() === 'fund' && fundingStep() === 'card' && !isCardValid())"
+              [disabled]="isProcessing() || !transactionAmount() || 
+                         (transactionType() === 'fund' && fundingStep() === 'source' && !selectedSource()) || 
+                         (transactionType() === 'fund' && fundingStep() === 'card' && !isCardValid()) ||
+                         (transactionType() === 'withdraw' && (+transactionAmount() > availableNaira() || !withdrawAccountId() || withdrawPin().length < 4 || (fundingStep() === 'otp' && otpInput().length < 6)))"
               class="w-full h-16 mt-10 bg-[#1B4332] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[#2D6A4F] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl shadow-[#1B4332]/20 flex items-center justify-center relative overflow-hidden"
             >
                @if (isProcessing()) {

@@ -45,6 +45,7 @@ export interface BankAccount {
   bankLogo?: string;
   accountNumber: string;
   accountName: string;
+  bankCode?: string;
   isDefault: boolean;
 }
 

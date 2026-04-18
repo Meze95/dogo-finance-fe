@@ -1,4 +1,7 @@
 <div class="space-y-10 pb-20 overflow-visible">
+  <!-- TradingView Ticker Tape -->
+  <div id="tradingview-ticker-container" class="rounded-xl overflow-hidden shadow-sm border border-[#1B4332]/5 -mx-4 md:-mx-8 lg:-mx-12"></div>
+
   <!-- Header Section -->
   <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
     <div class="space-y-2">
@@ -35,8 +38,33 @@
     </div>
   </div>
 
+  <!-- Market Insights Section -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="lg:col-span-2 bg-white rounded-[40px] p-8 border border-[#1B4332]/5 shadow-sm min-h-[450px] flex flex-col">
+       <div class="flex items-center justify-between mb-6">
+          <h3 class="text-sm font-black text-[#1B4332] uppercase tracking-[0.2em]">Live Market Overview</h3>
+          <span class="flex items-center gap-2 text-[10px] font-bold text-green-600">
+             <span class="w-1.5 h-1.5 rounded-full bg-green-600 animate-pulse"></span>
+             Real-time Data
+          </span>
+       </div>
+       <div id="tradingview-market-overview" class="flex-grow rounded-3xl overflow-hidden"></div>
+    </div>
+
+    <div class="bg-white rounded-[40px] p-8 border border-[#1B4332]/5 shadow-sm min-h-[450px] flex flex-col">
+       <h3 class="text-sm font-black text-[#1B4332] uppercase tracking-[0.2em] mb-6 text-center">Security Analysis</h3>
+       <div id="tradingview-tech-analysis" class="flex-grow rounded-3xl overflow-hidden"></div>
+       <p class="text-[10px] font-medium text-slate-400 text-center mt-4 italic">Technical oscillators analysis for USD/NGN pair</p>
+    </div>
+  </div>
+
+  <!-- Portfolios Grid Header -->
+  <div class="pt-8 border-t border-[#1B4332]/5">
+     <h3 class="text-xs font-black text-[#C9A84C] uppercase tracking-[0.4em] mb-10 text-center">Available Investment Strategies</h3>
+  </div>
+
   <!-- Portfolios Grid -->
-  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
     @for(product of activePortfolios(); track product.portfolioId) {
       <div class="group bg-white rounded-[40px] overflow-hidden border border-[#1B4332]/5 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 flex flex-col h-full">
         <!-- Card Header with Graphic -->
