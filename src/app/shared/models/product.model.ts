@@ -8,6 +8,7 @@ export interface ProductType {
 }
 
 export interface Product {
+
   portfolioId: number;
   name: string;
   code: string;
@@ -18,10 +19,16 @@ export interface Product {
   minTenorInDays?: number;
   maxTenorInDays?: number;
   expectedAnnualReturn?: number;
+  lockInPeriodDays?: number;
+  minHoldingPeriodDays?: number;
+  exitFeePercentage?: number;
+  noticePeriodDays?: number;
+  approvalThresholdAmount?: number;
   createdAt?: Date;
   allocations?: ProductAssetAllocation[];
   portfolioTypeName?: string;
 }
+
 
 export interface AssetType {
   assetTypeId: number;
@@ -64,7 +71,16 @@ export interface UserInvestment {
   growthPercentage: number;
   status: 'active' | 'exited';
   investedAt: string;
+  lastToppedUp?: string;
+  batches?: InvestmentBatch[];
   holdings: InstrumentHolding[];
+  
+  // Liquidation Info
+  lockInPeriodDays?: number;
+  minHoldingPeriodDays?: number;
+  exitFeePercentage?: number;
+  noticePeriodDays?: number;
+  approvalThresholdAmount?: number;
 }
 
 export interface InstrumentHolding {
@@ -86,4 +102,21 @@ export interface ProductAssetAllocation {
   minPercentage: number;
   maxPercentage: number;
   instruments?: InstrumentAllocation[];
+}
+export interface InvestmentStub {
+  label: string;
+  value: number;
+  growth: number;
+  icon: string;
+  color: string;
+}
+
+export interface InvestmentBatch {
+  id: number;
+  date: string;
+  invested: number;
+  units: number;
+  currentValue: number;
+  profit: number;
+  yield: number;
 }

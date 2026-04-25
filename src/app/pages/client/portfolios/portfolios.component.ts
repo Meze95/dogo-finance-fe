@@ -4,6 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../shared/services/product.service';
 import { InvestmentService } from '../../../shared/services/investment.service';
 import { Product, ProductAssetAllocation } from '../../../shared/models/product.model';
+import { AuthService } from '../../../shared/services/auth.service';
+import { TransactionService } from '../../../shared/services/transaction.service';
+import { CustomerService } from '../../../shared/services/customer.service';
 
 import { AlertService } from '../../../shared/services/alert.service';
 
@@ -20,6 +23,9 @@ declare var TradingView: any;
 export class ClientPortfoliosComponent implements OnInit, AfterViewInit, OnDestroy {
   private productService = inject(ProductService);
   private investmentService = inject(InvestmentService);
+  private transactionService = inject(TransactionService);
+  private authService = inject(AuthService);
+  private customerService = inject(CustomerService);
   private alertService = inject(AlertService);
 
   portfolios = this.productService.portfolios;
@@ -37,11 +43,34 @@ export class ClientPortfoliosComponent implements OnInit, AfterViewInit, OnDestr
 
   // Investment State
   showInvestModal = signal(false);
-  investAmount = signal<number>(100000);
-  isProcessing = signal(false);
+  investAmount = signal<string>('100000');
+  investStep = signal<'amount' | 'bvn' | 'pin' | 'otp'>('amount');
+  investPin = signal<string>('');
+  investOtp = signal<string>('');
+  isInvesting = signal(false);
+  investBvn = signal<string>('');
+  otpCountdown = signal(60);
+  canResendOtp = signal(false);
+  private countdownInterval: any;
+  
+  user = this.authService.currentUser;
+  availableNaira = signal(0);
 
   ngOnInit() {
     this.productService.getPortfolios();
+    this.loadWalletBalance();
+  }
+
+  loadWalletBalance() {
+    const customerId = this.user()?.CustomerId || this.user()?.customerId;
+    if (customerId) {
+        this.transactionService.getWallet(customerId).subscribe({
+          next: (res: any) => {
+            const data = res?.data || res?.Data;
+            if (data) this.availableNaira.set(data.balance || data.Balance || 0);
+          }
+        });
+    }
   }
 
   ngAfterViewInit() {
@@ -161,26 +190,167 @@ export class ClientPortfoliosComponent implements OnInit, AfterViewInit, OnDestr
 
   openInvestModal() {
     this.showDetailModal.set(false);
+    this.investStep.set('amount');
+    this.investPin.set('');
+    this.investOtp.set('');
+    this.investBvn.set('');
     this.showInvestModal.set(true);
   }
 
-  confirmInvestment() {
-    if (!this.selectedPortfolio() || this.investAmount() <= 0) return;
+  onAmountInput(event: any) {
+    const val = event.target.value.replace(/[^0-9]/g, '');
+    this.investAmount.set(val);
+  }
 
-    this.isProcessing.set(true);
-    this.investmentService.invest(this.selectedPortfolio()!.portfolioId, this.investAmount()).subscribe({
+  formatWithCommas(value: string | number): string {
+    if (!value) return '';
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  startOtpCountdown() {
+    this.otpCountdown.set(60);
+    this.canResendOtp.set(false);
+    if (this.countdownInterval) clearInterval(this.countdownInterval);
+    
+    this.countdownInterval = setInterval(() => {
+      if (this.otpCountdown() > 0) {
+        this.otpCountdown.update(v => v - 1);
+      } else {
+        this.canResendOtp.set(true);
+        clearInterval(this.countdownInterval);
+      }
+    }, 1000);
+  }
+
+  resendInvestOtp() {
+    if (!this.canResendOtp()) return;
+    
+    const amountNum = Number(this.investAmount().replace(/,/g, ''));
+    const pId = this.selectedPortfolio()?.portfolioId;
+    if (!pId) return;
+
+    this.isInvesting.set(true);
+    this.transactionService.tempInvest(pId, amountNum, this.investPin()).subscribe({
+        next: (res) => {
+            this.isInvesting.set(false);
+            this.startOtpCountdown();
+            Swal.fire({
+                icon: 'success',
+                title: 'New OTP Sent',
+                text: 'A fresh authorization code has been sent to your email.',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        },
+        error: (err) => {
+            this.isInvesting.set(false);
+            Swal.fire({
+                icon: 'error',
+                title: 'Failed to resend',
+                text: err.error?.message || 'Please try again later.',
+                confirmButtonColor: '#1B4332'
+            });
+        }
+    });
+  }
+
+  verifyBvnInvestment() {
+    const customerId = this.user()?.CustomerId || this.user()?.customerId;
+    if (!customerId || !this.investBvn()) return;
+
+    this.isInvesting.set(true);
+    this.customerService.verifyBvn(customerId, this.investBvn()).subscribe({
       next: (res) => {
-        this.isProcessing.set(false);
-        this.closeModal();
-        Swal.fire({
-          icon: 'success',
-          title: 'Investment Successful',
-          text: `You have successfully invested ₦${this.investAmount().toLocaleString()} in ${this.selectedPortfolio()!.name}`,
-          confirmButtonColor: '#1B4332',
-          customClass: { popup: 'rounded-[30px]' }
-        });
+        this.isInvesting.set(false);
+        if (res.success || res.boolean) {
+          this.investStep.set('pin');
+          Swal.fire({
+            icon: 'success',
+            title: 'BVN Verified',
+            text: 'Your BVN has been verified successfully.',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Verification Failed',
+            text: res.message || 'We could not verify your BVN.',
+            confirmButtonColor: '#1B4332'
+          });
+        }
       },
-      error: () => this.isProcessing.set(false)
+      error: (err) => {
+        this.isInvesting.set(false);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: err.error?.message || 'Server error during BVN verification.',
+          confirmButtonColor: '#1B4332'
+        });
+      }
+    });
+  }
+
+  confirmInvestment() {
+    const amountNum = Number(this.investAmount().replace(/,/g, ''));
+    const pId = this.selectedPortfolio()?.portfolioId;
+    if (!pId || amountNum <= 0) return;
+
+    this.isInvesting.set(true);
+    this.transactionService.tempInvest(pId, amountNum, this.investPin(), this.investOtp()).subscribe({
+      next: (res: any) => {
+        this.isInvesting.set(false);
+        if (res.success || res.boolean) {
+          this.closeModal();
+          Swal.fire({
+            icon: 'success',
+            title: 'Investment Successful',
+            text: `You have successfully invested ₦${amountNum.toLocaleString()} in ${this.selectedPortfolio()?.name}`,
+            confirmButtonColor: '#1B4332',
+            customClass: { popup: 'rounded-[30px]' }
+          });
+        } else {
+          if (res.message === 'PIN_REQUIRED') {
+            this.investStep.set('pin');
+          } else if (res.message === 'OTP_REQUIRED') {
+            this.investStep.set('otp');
+            this.startOtpCountdown();
+          } else if (res.message?.includes('BVN')) {
+            this.investStep.set('bvn');
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Investment Failed',
+              text: res.message || 'We could not process your investment.',
+              confirmButtonColor: '#1B4332'
+            });
+          }
+        }
+      },
+      error: (err) => {
+        this.isInvesting.set(false);
+        const msg = err.error?.message;
+        if (msg === 'PIN_REQUIRED') {
+          this.investStep.set('pin');
+        } else if (msg === 'OTP_REQUIRED') {
+          this.investStep.set('otp');
+          this.startOtpCountdown();
+        } else if (msg?.includes('BVN')) {
+          this.investStep.set('bvn');
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: msg || 'An unexpected error occurred.',
+            confirmButtonColor: '#1B4332'
+          });
+        }
+      }
     });
   }
 

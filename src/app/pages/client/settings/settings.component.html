@@ -152,7 +152,7 @@
                                 </div>
                                 <div>
                                    <span class="font-black text-[#0d1a0f] text-sm block">{{ v.label }}</span>
-                                   @if(v.status === 'pending') {
+                                   @if(v.status === 'pending' || v.status === 'review') {
                                       <span class="text-[10px] font-bold text-amber-600 uppercase tracking-widest">Awaiting Admin Review</span>
                                    } @else if(v.status === 'rejected') {
                                       <span class="text-[10px] font-bold text-red-500 uppercase tracking-widest">Rejected: {{ v.reason }}</span>
@@ -162,8 +162,8 @@
                              <div class="flex items-center space-x-3">
                                 @if(v.status === 'verified') {
                                    <app-badge [variant]="getBadgeVariant(v.status)">{{ v.status }}</app-badge>
-                                } @else if(v.status === 'pending') {
-                                   <app-badge [variant]="getBadgeVariant(v.status)">Pending</app-badge>
+                                } @else if(v.status === 'pending' || v.status === 'review') {
+                                   <app-badge [variant]="getBadgeVariant(v.status)">Pending Review</app-badge>
                                 } @else {
                                    <app-button variant="outline" size="sm" (click)="openVerificationModal(v)">
                                       {{ v.status === 'rejected' ? 'Re-upload' : 'Verify Now' }}
@@ -440,7 +440,7 @@
               <div class="space-y-6 text-left">
                 <app-dropdown 
                    label="Document Type"
-                   [options]="addressDocOptions"
+                   [options]="addressDocOptions()"
                    [selectedValue]="addressDocType()"
                    (valueChange)="addressDocType.set($event)"
                    placeholder="Select Document Type"

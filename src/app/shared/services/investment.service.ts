@@ -2,43 +2,87 @@ import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Product, UserInvestment, InstrumentHolding, AssetInstrument, AdminUserInvestment } from '../models/product.model';
 import { ProductService } from './product.service';
-import { Observable, of, delay, tap } from 'rxjs';
+import { Observable, of, delay, tap, map } from 'rxjs';
+import { TransactionService } from './transaction.service';
+import { AuthService } from './auth.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InvestmentService {
+  private http = inject(HttpClient);
   private productService = inject(ProductService);
+  private transactionService = inject(TransactionService);
+  private authService = inject(AuthService);
 
   // State
   userInvestments = signal<UserInvestment[]>([]);
   allInvestments = signal<AdminUserInvestment[]>([]);
+  liquidationRequests = signal<any[]>([]);
 
   constructor() {
     this.productService.getPortfolios(); // Ensure portfolios are loaded
-    this.loadMockInvestments();
+    this.loadRealInvestments();
     this.loadAllAdminInvestments();
+    this.loadLiquidationRequests();
   }
 
-  loadMockInvestments() {
-    // Generate some mock investments based on existing portfolios
-    const portfolios = this.productService.portfolios();
-    if (portfolios.length === 0) return;
+  loadRealInvestments() {
+    const customerId = this.authService.currentUser()?.CustomerId || this.authService.currentUser()?.customerId;
+    if (!customerId) return;
 
-    const mock: UserInvestment[] = [
-      {
-        id: 1,
-        portfolioId: portfolios[0].portfolioId,
-        portfolioName: portfolios[0].name,
-        totalInvested: 1000000,
-        currentValue: 1125000,
-        growthPercentage: 12.5,
-        status: 'active',
-        investedAt: '2026-01-15',
-        holdings: this.generateMockHoldings(portfolios[0], 1000000)
-      }
-    ];
-    this.userInvestments.set(mock);
+    this.transactionService.getActiveInvestments(customerId).subscribe({
+        next: (res: any) => {
+            const data = res?.data || res?.Data || [];
+            if (Array.isArray(data)) {
+                const mapped: UserInvestment[] = data.map((inv: any) => ({
+                    id: inv.portfolioId,
+                    portfolioId: inv.portfolioId,
+                    portfolioName: inv.portfolioName,
+                    totalInvested: inv.investedAmount,
+                    currentValue: inv.currentValue,
+                    growthPercentage: inv.growth,
+                    status: 'active',
+                    investedAt: inv.investedAt || new Date().toISOString(),
+                    lastToppedUp: inv.lastToppedUp,
+                    batches: inv.batches,
+                    holdings: [],
+                    
+                    // New Fields
+                    lockInPeriodDays: inv.lockInPeriodDays,
+                    minHoldingPeriodDays: inv.minHoldingPeriodDays,
+                    exitFeePercentage: inv.exitFeePercentage,
+                    noticePeriodDays: inv.noticePeriodDays,
+                    approvalThresholdAmount: inv.approvalThresholdAmount
+                }));
+                this.userInvestments.set(mapped);
+            }
+        }
+    });
+  }
+
+  getPortfolioHoldings(portfolioId: number): Observable<InstrumentHolding[]> {
+    const customerId = this.authService.currentUser()?.CustomerId || this.authService.currentUser()?.customerId;
+    if (!customerId) return of([]);
+
+    return this.transactionService.getHoldings(customerId).pipe(
+        tap(res => console.log('Holdings Raw:', res)),
+        // The backend might return ALL holdings, we might need to filter by portfolio
+        // but for now let's just return what matches the portfolio instruments if we have that info
+        // Simple mapping:
+        map((res: any) => {
+            const data = res?.data || res?.Data || [];
+            return data.map((h: any) => ({
+                id: h.holdingId || h.HoldingId,
+                instrumentId: h.instrumentId || h.InstrumentId,
+                instrumentName: h.instrumentName || h.InstrumentName || 'Instrument',
+                units: h.units || h.Units || 0,
+                currentPrice: h.currentPrice || h.CurrentPrice || h.nav || 1.0,
+                allocationPercentage: h.percentage || 0
+            }));
+        })
+    );
   }
 
   private generateMockHoldings(portfolio: Product, totalAmount: number): InstrumentHolding[] {
@@ -59,7 +103,7 @@ export class InvestmentService {
             instrumentName: instAlloc.instrumentName || 'Unknown',
             units: instAmount / price,
             purchasePrice: price,
-            currentPrice: price * (1 + (Math.random() * 0.2 - 0.05)), // random growth
+            currentPrice: price * (1 + (Math.random() * 0.2 - 0.05)),
             allocationPercentage: (alloc.targetPercentage * instAlloc.percentage) / 100
           });
         });
@@ -91,17 +135,14 @@ export class InvestmentService {
     );
   }
 
-  exitPortfolio(investmentId: number): Observable<any> {
-    // ... logic remains same, but using renamed models if needed (UserInvestment already renamed fields)
-    return of({ success: true }).pipe(
-      delay(1500),
-      tap(() => {
-        this.userInvestments.update(prev => 
-          prev.map(inv => inv.id === investmentId ? { ...inv, status: 'exited' as const } : inv)
-          .filter(inv => inv.status === 'active')
-        );
-      })
+  sell(portfolioId: number, amount: number, pin?: string, otp?: string): Observable<any> {
+    return this.transactionService.sell(portfolioId, amount, pin, otp).pipe(
+        tap(() => this.loadRealInvestments())
     );
+  }
+
+  exitPortfolio(portfolioId: number, currentAmount: number, pin?: string, otp?: string): Observable<any> {
+    return this.sell(portfolioId, currentAmount, pin, otp);
   }
 
   liquidateEverything(): Observable<any> {
@@ -134,60 +175,43 @@ export class InvestmentService {
   }
 
   loadAllAdminInvestments() {
-    const portfolios = this.productService.portfolios();
-    if (portfolios.length === 0) {
-      setTimeout(() => this.loadAllAdminInvestments(), 500);
-      return;
-    }
-
-    const p0 = portfolios[0];
-    const p1 = portfolios[1] || portfolios[0];
-    const p2 = portfolios[2] || portfolios[0];
-
-    const mock: AdminUserInvestment[] = [
-      {
-        id: 101,
-        portfolioId: p0.portfolioId,
-        portfolioName: p0.name,
-        totalInvested: 2500000,
-        currentValue: 2850000,
-        growthPercentage: 14.0,
-        status: 'active',
-        investedAt: '2026-02-10',
-        holdings: this.generateMockHoldings(p0, 2500000),
-        clientName: 'Zubair Al-Farooq',
-        clientEmail: 'zubair@example.com',
-        clientInitials: 'ZF'
+    this.http.get<any>(`${environment.apiUrl}/Admin/portfolios/active`).subscribe({
+      next: (res) => {
+        const data = res?.data || res?.Data || [];
+        if (Array.isArray(data)) {
+          this.allInvestments.set(data);
+        }
       },
-      {
-        id: 102,
-        portfolioId: p1.portfolioId,
-        portfolioName: p1.name,
-        totalInvested: 5000000,
-        currentValue: 5300000,
-        growthPercentage: 6.0,
-        status: 'active',
-        investedAt: '2026-03-01',
-        holdings: this.generateMockHoldings(p1, 5000000),
-        clientName: 'Halima Ibrahim',
-        clientEmail: 'halima@example.com',
-        clientInitials: 'HI'
-      },
-      {
-        id: 103,
-        portfolioId: p2.portfolioId,
-        portfolioName: p2.name,
-        totalInvested: 1200000,
-        currentValue: 1250000,
-        growthPercentage: 4.1,
-        status: 'active',
-        investedAt: '2026-03-15',
-        holdings: this.generateMockHoldings(p2, 1200000),
-        clientName: 'Abubakar Sadiq',
-        clientEmail: 'sadiq@example.com',
-        clientInitials: 'AS'
+      error: (err) => {
+        console.error('Failed to load admin portfolios:', err);
       }
-    ];
-    this.allInvestments.set(mock);
+    });
+  }
+
+  loadLiquidationRequests() {
+    this.http.get<any>(`${environment.apiUrl}/Admin/liquidations`).subscribe({
+      next: (res) => {
+        const data = res?.data || res?.Data || [];
+        if (Array.isArray(data)) {
+          this.liquidationRequests.set(data);
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load liquidation requests:', err);
+      }
+    });
+  }
+
+  reviewLiquidation(requestId: number, approved: boolean, adminNotes: string): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/Admin/liquidations/review`, {
+      requestId,
+      approved,
+      adminNotes
+    }).pipe(
+      tap(() => {
+        this.loadLiquidationRequests();
+        this.loadAllAdminInvestments();
+      })
+    );
   }
 }

@@ -70,7 +70,10 @@
           <label class="block text-xs font-black uppercase tracking-widest text-slate-500 mb-2">Session Timeout (Mins)</label>
           <div class="relative">
             <i class="ri-timer-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
-            <input type="number" [(ngModel)]="sessionTimeout" class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-3 pl-12 pr-4 text-slate-800 font-bold outline-none transition-all" />
+            <input type="number" 
+                   [ngModel]="sessionTimeout()" 
+                   (ngModelChange)="sessionTimeout.set($event)"
+                   class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-3 pl-12 pr-4 text-slate-800 font-bold outline-none transition-all" />
           </div>
         </div>
 
@@ -78,7 +81,10 @@
           <label class="block text-xs font-black uppercase tracking-widest text-slate-500 mb-2">Max Login Attempts</label>
           <div class="relative">
             <i class="ri-error-warning-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
-            <input type="number" [(ngModel)]="maxLoginAttempts" class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-3 pl-12 pr-4 text-slate-800 font-bold outline-none transition-all" />
+            <input type="number" 
+                   [ngModel]="maxLoginAttempts()" 
+                   (ngModelChange)="maxLoginAttempts.set($event)"
+                   class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-3 pl-12 pr-4 text-slate-800 font-bold outline-none transition-all" />
           </div>
         </div>
       </div>
@@ -101,7 +107,10 @@
           <label class="block text-xs font-black uppercase tracking-widest text-slate-500 mb-2">Min. Automated Withdrawal (NGN)</label>
           <div class="relative">
             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-black">₦</span>
-            <input type="number" [(ngModel)]="minimumWithdrawal" class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-3 pl-10 pr-4 text-slate-800 font-black outline-none transition-all" />
+            <input type="number" 
+                   [ngModel]="withdrawalAutoThreshold()" 
+                   (ngModelChange)="withdrawalAutoThreshold.set($event)"
+                   class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-3 pl-10 pr-4 text-slate-800 font-black outline-none transition-all" />
           </div>
           <p class="text-[10px] font-bold text-slate-400 mt-2 tracking-wide">Payments below this threshold are executed automatically via Payout APIs without Admin consent.</p>
         </div>

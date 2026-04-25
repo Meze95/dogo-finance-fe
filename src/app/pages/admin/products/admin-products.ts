@@ -152,10 +152,25 @@ export class AdminProducts {
 
   openAddModal() {
     this.selectedProduct.set(null);
-    this.formData.set({ name: '', code: '', portfolioTypeId: this.portfolioTypes()[0]?.portfolioTypeId || 0, riskLevel: 'Low', description: '', isActive: true, minTenorInDays: 0, maxTenorInDays: 0 });
+    this.formData.set({ 
+      name: '', 
+      code: '', 
+      portfolioTypeId: this.portfolioTypes()[0]?.portfolioTypeId || 0, 
+      riskLevel: 'Low', 
+      description: '', 
+      isActive: true, 
+      minTenorInDays: 0, 
+      maxTenorInDays: 0,
+      lockInPeriodDays: 0,
+      minHoldingPeriodDays: 0,
+      exitFeePercentage: 0,
+      noticePeriodDays: 0,
+      approvalThresholdAmount: 1000000
+    });
     this.allocations.set([]);
     this.isModalOpen.set(true);
   }
+
 
   editPortfolio(portfolio: Product) {
     this.selectedProduct.set(portfolio);

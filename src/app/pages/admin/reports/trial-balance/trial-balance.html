@@ -1,0 +1,113 @@
+<div class="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+
+  <!-- Header Section -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div class="space-y-1">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl bg-[#C9A84C] flex items-center justify-center shadow-lg shadow-[#C9A84C]/20">
+          <i class="ri-scales-3-line text-[#1B4332] text-2xl"></i>
+        </div>
+        <h1 class="text-3xl font-black text-[#0d1a0f] tracking-tight uppercase">Trial Balance</h1>
+      </div>
+      <p class="text-sm font-medium text-[#1B4332]/60 ml-1">Comprehensive overview of all General Ledger account balances</p>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <button (click)="fetchData()" class="h-12 px-6 rounded-2xl bg-white border border-[#1B4332]/10 text-[#1B4332] font-bold hover:shadow-lg transition-all flex items-center gap-2 group">
+        <i class="ri-refresh-line" [class.animate-spin]="isLoading()"></i>
+        Refresh
+      </button>
+      <button *ngIf="reportData().length === 0" (click)="onSeedAccounts()" class="h-12 px-6 rounded-2xl bg-[#0d1a0f] text-[#C9A84C] font-bold hover:shadow-xl transition-all shadow-lg shadow-[#0d1a0f]/20 uppercase tracking-widest text-xs">
+        Setup Chart of Accounts
+      </button>
+    </div>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="bg-white p-6 rounded-3xl border border-[#1B4332]/5 shadow-sm">
+      <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Total Debits</p>
+      <p class="text-2xl font-black text-[#1B4332]">₦{{ totalDebit() | number:'1.2-2' }}</p>
+    </div>
+    <div class="bg-white p-6 rounded-3xl border border-[#1B4332]/5 shadow-sm">
+      <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Total Credits</p>
+      <p class="text-2xl font-black text-[#1B4332]">₦{{ totalCredit() | number:'1.2-2' }}</p>
+    </div>
+    <div class="bg-white p-6 rounded-3xl border border-[#1B4332]/5 shadow-sm" [class.border-red-100]="totalDebit() !== totalCredit()" [class.border-green-100]="totalDebit() === totalCredit() && totalDebit() > 0">
+      <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Status</p>
+      <p class="text-lg font-black" [class.text-green-600]="totalDebit() === totalCredit()" [class.text-red-600]="totalDebit() !== totalCredit()">
+        {{ totalDebit() === totalCredit() ? 'BALANCED' : 'OUT OF BALANCE' }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Table Section -->
+  <div class="bg-white rounded-[2.5rem] border border-[#1B4332]/5 shadow-2xl shadow-[#1B4332]/5 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-[#0d1a0f] text-[#C9A84C]">
+            <th class="px-8 py-6 text-[11px] font-black uppercase tracking-[0.2em]">Account Code</th>
+            <th class="px-8 py-6 text-[11px] font-black uppercase tracking-[0.2em]">Account Name</th>
+            <th class="px-8 py-6 text-[11px] font-black uppercase tracking-[0.2em]">Type</th>
+            <th class="px-8 py-6 text-[11px] font-black uppercase tracking-[0.2em] text-right">Debit (₦)</th>
+            <th class="px-8 py-6 text-[11px] font-black uppercase tracking-[0.2em] text-right">Credit (₦)</th>
+            <th class="px-8 py-6 text-[11px] font-black uppercase tracking-[0.2em] text-right">Balance (₦)</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-[#1B4332]/5">
+          <tr *ngFor="let item of reportData()" class="hover:bg-[#f8f7f2]/50 transition-colors group">
+            <td class="px-8 py-5">
+              <span class="text-sm font-black text-[#0d1a0f]">{{ item.accountCode }}</span>
+            </td>
+            <td class="px-8 py-5">
+              <div class="flex flex-col">
+                <span class="text-sm font-bold text-[#1B4332]">{{ item.accountName }}</span>
+              </div>
+            </td>
+            <td class="px-8 py-5">
+                <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter"
+                      [ngClass]="{
+                        'bg-blue-50 text-blue-600': item.accountType === 'Asset',
+                        'bg-purple-50 text-purple-600': item.accountType === 'Liability',
+                        'bg-orange-50 text-orange-600': item.accountType === 'Revenue',
+                        'bg-red-50 text-red-600': item.accountType === 'Expense',
+                        'bg-green-50 text-green-600': item.accountType === 'Equity'
+                      }">
+                    {{ item.accountType }}
+                </span>
+            </td>
+            <td class="px-8 py-5 text-right font-mono text-sm text-slate-600">
+               {{ item.totalDebit > 0 ? (item.totalDebit | number:'1.2-2') : '-' }}
+            </td>
+            <td class="px-8 py-5 text-right font-mono text-sm text-slate-600">
+               {{ item.totalCredit > 0 ? (item.totalCredit | number:'1.2-2') : '-' }}
+            </td>
+            <td class="px-8 py-5 text-right">
+              <span class="text-sm font-black text-[#1B4332]">₦{{ item.balance | number:'1.2-2' }}</span>
+            </td>
+          </tr>
+
+          <tr *ngIf="reportData().length === 0 && !isLoading()" class="h-64">
+            <td colspan="6" class="text-center">
+              <div class="flex flex-col items-center justify-center space-y-4">
+                <div class="w-16 h-16 rounded-full bg-[#1B4332]/5 flex items-center justify-center">
+                   <i class="ri-inbox-line text-3xl text-slate-300"></i>
+                </div>
+                <p class="text-slate-400 font-bold tracking-tight">No accounting data found. Use the setup button to begin.</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot *ngIf="reportData().length > 0" class="bg-[#f8f7f2]/50 border-t-2 border-[#0d1a0f]/5">
+            <tr>
+                <td colspan="3" class="px-8 py-6 text-sm font-black uppercase text-[#0d1a0f]">Totals</td>
+                <td class="px-8 py-6 text-right font-black text-[#1B4332]">₦{{ totalDebit() | number:'1.2-2' }}</td>
+                <td class="px-8 py-6 text-right font-black text-[#1B4332]">₦{{ totalCredit() | number:'1.2-2' }}</td>
+                <td class="px-8 py-6"></td>
+            </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>

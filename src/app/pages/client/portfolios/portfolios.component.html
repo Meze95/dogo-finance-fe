@@ -193,6 +193,52 @@
             <button class="text-[9px] font-black uppercase tracking-widest text-[#C9A84C] underline decoration-2 underline-offset-4">Disclaimer</button>
         </div>
 
+        <!-- Exit Policy Disclosure for Strategy Details -->
+        <div class="grid grid-cols-2 gap-6 p-10 bg-[#f8f7f2]/60 rounded-[40px] border border-[#1B4332]/5 shadow-sm relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-red-50/50 blur-[50px] rounded-full -mr-16 -mt-16 group-hover:bg-red-100/50 transition-colors"></div>
+            <div class="col-span-2 mb-2">
+                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-[#C9A84C]">Liquidation & Exit Terms</span>
+            </div>
+            
+            <div class="space-y-1">
+                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-left">Mandatory Lock-in</p>
+                <div class="flex items-center gap-2">
+                    <i class="ri-lock-fill text-[#1B4332] text-xs"></i>
+                    <p class="text-sm font-black text-[#0d1a0f]">{{ selectedPortfolio()?.lockInPeriodDays || 0 }} Days</p>
+                </div>
+            </div>
+
+            <div class="space-y-1">
+                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-left">Notice Period</p>
+                <div class="flex items-center gap-2">
+                    <i class="ri-timer-flash-fill text-[#1B4332] text-xs"></i>
+                    <p class="text-sm font-black text-[#0d1a0f]">{{ selectedPortfolio()?.noticePeriodDays || 0 }} Days</p>
+                </div>
+            </div>
+
+            <div class="space-y-1 border-t border-[#1B4332]/5 pt-4">
+                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-left">Early Exit Penalty</p>
+                <div class="flex items-center gap-2">
+                    <i class="ri-percent-fill text-red-600 text-xs"></i>
+                    <p class="text-sm font-black text-red-600">{{ selectedPortfolio()?.exitFeePercentage || 0 }}%</p>
+                </div>
+            </div>
+
+            <div class="space-y-1 border-t border-[#1B4332]/5 pt-4">
+                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-left">Penalty Waiver</p>
+                <div class="flex items-center gap-2">
+                    <i class="ri-checkbox-circle-fill text-green-600 text-xs"></i>
+                    <p class="text-sm font-black text-[#0d1a0f]">After {{ selectedPortfolio()?.minHoldingPeriodDays || 0 }} Days</p>
+                </div>
+            </div>
+
+            <div class="col-span-2 mt-4">
+               <p class="text-[10px] font-medium text-slate-400 italic leading-relaxed border-l-2 border-[#C9A84C] pl-4 text-left">
+                  Note: Large liquidations exceeding ₦{{ selectedPortfolio()?.approvalThresholdAmount | number }} will require administrative authorization.
+               </p>
+            </div>
+        </div>
+
         <!-- Allocation Visualization (Mobile Style) -->
         <div class="space-y-8 bg-[#f8f7f2] p-8 rounded-[40px]">
             <div class="flex justify-between items-center mb-6">
@@ -274,34 +320,131 @@
             <p class="text-sm font-medium text-slate-400 mb-8 lowercase">Choose your principal amount for <span class="text-[#1B4332] font-black">{{ selectedPortfolio()?.name }}</span></p>
             
             <div class="space-y-6 text-left mb-10">
-                <div class="space-y-2">
-                    <label class="text-[10px] font-black uppercase tracking-widest text-[#C9A84C] ml-1">Investment Amount (₦)</label>
-                    <div class="relative group">
-                        <div class="absolute left-6 top-1/2 -translate-y-1/2 text-xl font-black text-slate-300 group-focus-within:text-[#1B4332] transition-colors font-jakarta">₦</div>
-                        <input type="number" 
-                               [(ngModel)]="investAmount"
-                               class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-3xl py-6 pl-12 pr-6 text-2xl font-black text-[#0d1a0f] outline-none transition-all shadow-sm"
-                               placeholder="0.00" />
+                @if(investStep() === 'amount') {
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-[#C9A84C] ml-1">Investment Amount (₦)</label>
+                        <div class="relative group">
+                            <div class="absolute left-6 top-1/2 -translate-y-1/2 text-xl font-black text-slate-300 group-focus-within:text-[#1B4332] transition-colors">₦</div>
+                            <input type="text" 
+                                   [value]="formatWithCommas(investAmount())"
+                                   (input)="onAmountInput($event)"
+                                   class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-3xl py-6 pl-12 pr-6 text-2xl font-black text-[#0d1a0f] outline-none transition-all shadow-sm"
+                                   placeholder="0.00" />
+                        </div>
                     </div>
-                </div>
 
-                <!-- Quick Presets -->
-                <div class="grid grid-cols-3 gap-3">
-                    <button (click)="investAmount.set(100000)" class="py-3 rounded-2xl bg-[#f8f7f2] border border-[#1B4332]/5 text-[10px] font-black text-[#1B4332] uppercase hover:bg-white hover:border-[#C9A84C] transition-all">₦100k</button>
-                    <button (click)="investAmount.set(500000)" class="py-3 rounded-2xl bg-[#f8f7f2] border border-[#1B4332]/5 text-[10px] font-black text-[#1B4332] uppercase hover:bg-white hover:border-[#C9A84C] transition-all">₦500k</button>
-                    <button (click)="investAmount.set(1000000)" class="py-3 rounded-2xl bg-[#f8f7f2] border border-[#1B4332]/5 text-[10px] font-black text-[#1B4332] uppercase hover:bg-white hover:border-[#C9A84C] transition-all">₦1M</button>
-                </div>
-            </div>
+                    <!-- Liquidation Rules Disclosure -->
+                    <div class="mt-8 p-6 bg-[#f8f7f2]/80 border border-[#1B4332]/5 rounded-[30px] space-y-4 text-left">
+                        <div class="flex items-center gap-2 mb-2">
+                           <i class="ri-information-fill text-[#C9A84C]"></i>
+                           <span class="text-[9px] font-black uppercase tracking-widest text-[#1B4332]">Liquidation Policy</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                           <div class="space-y-1">
+                              <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Lock-in</p>
+                              <p class="text-[11px] font-black text-[#0d1a0f]">{{ selectedPortfolio()?.lockInPeriodDays || 0 }} Days</p>
+                           </div>
+                           <div class="space-y-1">
+                              <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Notice Period</p>
+                              <p class="text-[11px] font-black text-[#0d1a0f]">{{ selectedPortfolio()?.noticePeriodDays || 0 }} Days</p>
+                           </div>
+                           <div class="space-y-1">
+                              <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Min Holding</p>
+                              <p class="text-[11px] font-black text-[#0d1a0f]">{{ selectedPortfolio()?.minHoldingPeriodDays || 0 }} Days</p>
+                           </div>
+                           <div class="space-y-1">
+                              <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Exit Fee</p>
+                              <p class="text-[11px] font-black text-red-600">{{ selectedPortfolio()?.exitFeePercentage || 0 }}%</p>
+                           </div>
+                        </div>
+                        
+                        @if (selectedPortfolio()?.exitFeePercentage) {
+                           <p class="text-[9px] font-medium text-slate-400 italic leading-relaxed pt-2 border-t border-[#1B4332]/5">
+                             * An exit fee of {{ selectedPortfolio()?.exitFeePercentage }}% applies if you liquidate before {{ selectedPortfolio()?.minHoldingPeriodDays }} days.
+                           </p>
+                        }
+                    </div>
 
-            <button (click)="confirmInvestment()" 
-                    [disabled]="isProcessing() || investAmount() <= 0"
-                    class="w-full bg-[#1B4332] disabled:opacity-50 hover:bg-[#2D6A4F] text-white py-5 rounded-[2rem] font-black text-sm uppercase tracking-[0.2em] shadow-2xl transition-all">
-                @if(isProcessing()) {
-                    <i class="ri-loader-4-line animate-spin mr-2"></i> Initializing...
-                } @else {
-                    Confirm Investment
+                    <!-- Quick Presets -->
+                    <div class="grid grid-cols-3 gap-3">
+                        <button (click)="investAmount.set('100000')" class="py-3 rounded-2xl bg-[#f8f7f2] border border-[#1B4332]/5 text-[10px] font-black text-[#1B4332] uppercase hover:bg-white hover:border-[#C9A84C] transition-all">₦100k</button>
+                        <button (click)="investAmount.set('500000')" class="py-3 rounded-2xl bg-[#f8f7f2] border border-[#1B4332]/5 text-[10px] font-black text-[#1B4332] uppercase hover:bg-white hover:border-[#C9A84C] transition-all">₦500k</button>
+                        <button (click)="investAmount.set('1000000')" class="py-3 rounded-2xl bg-[#f8f7f2] border border-[#1B4332]/5 text-[10px] font-black text-[#1B4332] uppercase hover:bg-white hover:border-[#C9A84C] transition-all">₦1M</button>
+                    </div>  
+                }  
+     
+                @if(investStep() === 'bvn') {
+                    <div class="space-y-2 text-center">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-[#C9A84C]">Verify BVN</label>
+                        <p class="text-[10px] text-slate-400 mb-2 lowercase">You need to verify your BVN before you can invest.</p>
+                        <div class="relative group">
+                             <input type="text" 
+                                   maxlength="11"
+                                   [value]="investBvn()"
+                                   (input)="investBvn.set($any($event.target).value)"
+                                   class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-5 text-center text-xl font-black tracking-widest outline-none transition-all"
+                                   placeholder="Enter 11-digit BVN" />
+                        </div>
+                    </div>
                 }
-            </button>
+
+                @if(investStep() === 'pin') {
+                    <div class="space-y-2 text-center">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-[#C9A84C]">Enter Transaction PIN</label>
+                        <p class="text-[10px] text-slate-400 mb-2">Authorize this investment of ₦{{ formatWithCommas(investAmount()) }}</p>
+                        <div class="flex justify-center gap-2">
+                            <input type="password" 
+                                   maxlength="6"
+                                   [value]="investPin()"
+                                   (input)="investPin.set($any($event.target).value)"
+                                   class="w-48 bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 text-center text-2xl font-black tracking-[0.5em] outline-none transition-all"
+                                   placeholder="******" />
+                        </div>
+                    </div>
+                }
+
+                @if(investStep() === 'otp') {
+                    <div class="space-y-2 text-center">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-[#C9A84C]">Verify Email OTP</label>
+                        <p class="text-[10px] text-slate-400 mb-2">A code has been sent to your email to authorize this transaction.</p>
+                        <div class="flex justify-center gap-2 mb-4">
+                            <input type="text" 
+                                   maxlength="6"
+                                   [value]="investOtp()"
+                                   (input)="investOtp.set($any($event.target).value)"
+                                   class="w-48 bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 text-center text-2xl font-black tracking-[0.2em] outline-none transition-all"
+                                   placeholder="000000" />
+                        </div>
+                        <div class="text-[10px] font-black">
+                            @if(!canResendOtp()) {
+                                <span class="text-slate-400 uppercase tracking-widest">Resend code in <span class="text-[#1B4332]">{{ otpCountdown() }}s</span></span>
+                            } @else {
+                                <button (click)="resendInvestOtp()" class="text-[#1B4332] hover:text-[#C9A84C] uppercase tracking-widest transition-colors">Resend Code</button>
+                            }
+                        </div>
+                    </div>
+                }
+            </div> 
+
+            <div class="flex flex-col gap-3">
+                @if(investStep() === 'amount' && investAmount() && +investAmount().replace(/,/g, '') > availableNaira()) {
+                    <div class="p-4 bg-red-50 text-red-600 rounded-2xl text-[10px] font-black uppercase tracking-widest text-center animate-fade-in border border-red-100 italic">
+                        <i class="ri-error-warning-line mr-1"></i> Insufficient Wallet Balance
+                    </div>
+                }
+
+                <button (click)="investStep() === 'bvn' ? verifyBvnInvestment() : confirmInvestment()" 
+                        [disabled]="isInvesting() || !investAmount() || (+investAmount().replace(/,/g, '') <= 0) || (+investAmount().replace(/,/g, '') > availableNaira()) || (investStep() === 'bvn' && investBvn().length < 11) || (investStep() === 'pin' && investPin().length < 6) || (investStep() === 'otp' && investOtp().length < 6)"
+                        class="w-full bg-[#1B4332] disabled:opacity-50 hover:bg-[#2D6A4F] text-white py-5 rounded-[2rem] font-black text-sm uppercase tracking-widest shadow-2xl transition-all">
+                    @if(isInvesting()) {
+                        <i class="ri-loader-4-line animate-spin mr-2"></i> @if(investStep() === 'amount' ) { Initializing... } @else if(investStep() === 'bvn') { Verifying BVN... } @else { Authorizing... }
+                    } @else {
+                        @if(investStep() === 'amount') { Proceed } @else if(investStep() === 'bvn') { Verify & Continue } @else { Confirm Investment }
+                    }
+                </button>
+                <button (click)="closeModal()" class="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-red-500 transition-colors py-2">Maybe Later</button>
+            </div>
         </div>
     </div>
 }

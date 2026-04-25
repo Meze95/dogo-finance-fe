@@ -6,8 +6,12 @@ import { AuthService } from '../../../shared/services/auth.service';
 import { CustomerService } from '../../../shared/services/customer.service';
 import { ProductService } from '../../../shared/services/product.service';
 import { InvestmentService } from '../../../shared/services/investment.service';
-import { Product } from '../../../shared/models/product.model';
+import { InvestmentStub, Product } from '../../../shared/models/product.model';
 import { TransactionService } from '../../../shared/services/transaction.service';
+import { timeout, catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+
+declare var Swal: any;
 import { DropdownComponent } from '../../../shared/components/ui/dropdown.component';
 import { SettingsService, BankAccount } from '../settings/settings.service';
 
@@ -15,17 +19,9 @@ export interface Transaction {
   id: string;
   type: 'deposit' | 'withdrawal' | 'profit' | 'investment';
   amount: number;
-  status: 'completed' | 'pending';
+  status: 'completed' | 'pending' | 'failed';
   date: string;
   description: string;
-}
-
-export interface InvestmentStub {
-  label: string;
-  value: number;
-  growth: number;
-  icon: string;
-  color: string;
 }
 
 @Component({
@@ -63,7 +59,14 @@ export class ClientDashboardComponent implements OnInit {
   showDetailModal = signal(false);
   selectedPortfolio = signal<Product | null>(null);
   investAmount = signal<string>('');
+  investStep = signal<'amount' | 'bvn' | 'pin' | 'otp'>('amount');
+  investPin = signal<string>('');
+  investOtp = signal<string>('');
   isInvesting = signal(false);
+  investBvn = signal<string>('');
+  otpCountdown = signal(60);
+  canResendOtp = signal(false);
+  private countdownInterval: any;
   
   userName = computed(() => {
     const u = this.user();
@@ -72,7 +75,8 @@ export class ClientDashboardComponent implements OnInit {
 
   availableNaira = signal(0);
   actualInvestedValue = signal(0);
-  portfolioGrowth = signal(12.5); // Placeholder for growth percentage
+  portfolioGrowth = signal(0);
+  totalProfit = signal(0);
   hideBalances = signal(false); // New Privacy Signal
 
   totalActiveInvestment = computed(() => {
@@ -92,10 +96,10 @@ export class ClientDashboardComponent implements OnInit {
     this.loadRelationshipTypes();
     // loadDashboardData is now triggered by the effect in constructor
     
-    // Auto-refresh balance every 30 seconds for "real-time" feel
+    // Auto-refresh balance every 5 minutes for performance optimization
     const intervalId = setInterval(() => {
       this.loadDashboardData();
-    }, 30000);
+    }, 300000); 
     
     // Cleanup on destroy logic would be good, but for now we'll just set it
   }
@@ -118,14 +122,29 @@ export class ClientDashboardComponent implements OnInit {
 
             const isArray = Array.isArray(data);
             if (isArray) {
-                const mapped = data.map((tx: any) => ({
-                    id: (tx.transactionId || tx.TransactionId || tx.id || tx.Id || Math.random())?.toString(),
-                    type: ((tx.transactionType === 2 || tx.TransactionType === 2 || String(tx.narration || tx.Narration || '').toLowerCase().includes('withdraw')) ? 'withdrawal' : 'deposit') as 'deposit' | 'withdrawal' | 'profit' | 'investment',
-                    amount: tx.amount || tx.Amount || tx.value || tx.Value || 0,
-                    status: (tx.status === 1 || tx.Status === 1 || String(tx.status || '').toLowerCase() === 'success' || String(tx.status || '').toLowerCase() === 'completed') ? 'completed' : 'pending' as 'completed' | 'pending',
-                    date: this.formatDate(tx.createdAt || tx.CreatedAt || tx.date || tx.Date || tx.transactionDate || tx.TransactionDate),
-                    description: tx.narration || tx.Narration || tx.description || tx.Description || (tx.transactionType === 1 ? 'Deposit' : 'Withdrawal')
-                }));
+                const mapped = data.map((tx: any) => {
+                    const rawType = tx.type || tx.Type || tx.transactionType || tx.TransactionType;
+                    const rawStatus = tx.status || tx.Status;
+                    
+                    let mappedType: 'deposit' | 'withdrawal' | 'profit' | 'investment' = 'deposit';
+                    if (rawType === 'withdrawal' || rawType === 2) mappedType = 'withdrawal';
+                    else if (rawType === 'investment' || rawType === 4 || rawType === 'BUY') mappedType = 'investment';
+                    else if (rawType === 'profit' || rawType === 3) mappedType = 'profit';
+
+                    let mappedStatus: 'completed' | 'pending' | 'failed' = 'pending';
+                    const statusStr = String(rawStatus || '').toLowerCase();
+                    if (rawStatus === 1 || statusStr === 'success' || statusStr === 'completed') mappedStatus = 'completed';
+                    else if (statusStr === 'failed' || statusStr === 'rejected' || rawStatus === 2) mappedStatus = 'failed';
+
+                    return {
+                        id: (tx.transactionId || tx.TransactionId || tx.id || tx.Id || Math.random())?.toString(),
+                        type: mappedType,
+                        amount: tx.amount || tx.Amount || tx.value || tx.Value || 0,
+                        status: mappedStatus,
+                        date: this.formatDate(tx.createdAt || tx.CreatedAt || tx.date || tx.Date || tx.transactionDate || tx.TransactionDate),
+                        description: tx.narration || tx.Narration || tx.description || tx.Description || (mappedType === 'deposit' ? 'Deposit' : 'Withdrawal')
+                    };
+                });
                 this.recentTransactions.set(mapped);
             }
         },
@@ -140,6 +159,7 @@ export class ClientDashboardComponent implements OnInit {
             if (isSuccess && data) {
                 this.actualInvestedValue.set(data.currentValue || data.CurrentValue || 0);
                 this.portfolioGrowth.set(data.returnPercentage || data.ReturnPercentage || 0);
+                this.totalProfit.set(data.profit || data.Profit || 0);
             }
         }
     });
@@ -155,6 +175,22 @@ export class ClientDashboardComponent implements OnInit {
               this.availableNaira.set(data.balance || data.Balance || 0);
             }
           }
+        });
+
+        this.transactionService.getActiveInvestments(customerId).subscribe({
+            next: (res: any) => {
+                const data = res?.data || res?.Data || [];
+                if (Array.isArray(data)) {
+                    const mapped = data.map((inv: any) => ({
+                        label: inv.portfolioName || 'Investment',
+                        value: inv.currentValue || 0,
+                        growth: inv.growth || 0,
+                        icon: 'ri-pie-chart-2-fill',
+                        color: inv.riskLevel === 'High' ? 'bg-red-600' : inv.riskLevel === 'Medium' ? 'bg-orange-500' : 'bg-[#1B4332]'
+                    }));
+                    this.activeInvestments.set(mapped);
+                }
+            }
         });
     }
   }
@@ -185,13 +221,6 @@ export class ClientDashboardComponent implements OnInit {
     }
   }
 
-  openInvest(portfolio: Product) {
-    this.showDetailModal.set(false);
-    this.selectedPortfolio.set(portfolio);
-    this.showInvestModal.set(true);
-    this.investAmount.set('');
-  }
-
   viewDetail(portfolio: Product) {
     this.selectedPortfolio.set(portfolio);
     this.showDetailModal.set(true);
@@ -202,18 +231,215 @@ export class ClientDashboardComponent implements OnInit {
     return colors[index % colors.length];
   }
 
+  openInvest(portfolio: Product) {
+    this.showDetailModal.set(false);
+    this.selectedPortfolio.set(portfolio);
+    this.investAmount.set('');
+    this.investStep.set('amount');
+    this.investPin.set('');
+    this.investOtp.set('');
+    this.investBvn.set('');
+    this.showInvestModal.set(true);
+  }
+
+  verifyBvnInvestment() {
+    const customerId = this.user()?.CustomerId || this.user()?.customerId;
+    if (!customerId || !this.investBvn()) return;
+
+    this.isInvesting.set(true);
+    this.customerService.verifyBvn(customerId, this.investBvn()).subscribe({
+      next: (res) => {
+        this.isInvesting.set(false);
+        if (res.success || res.boolean) {
+          // Success! Now move to PIN step
+          this.investStep.set('pin');
+          Swal.fire({
+            icon: 'success',
+            title: 'BVN Verified',
+            text: 'Your BVN has been verified successfully. Please continue with your investment.',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Verification Failed',
+            text: res.message || 'We could not verify your BVN.',
+            confirmButtonColor: '#1B4332'
+          });
+        }
+      },
+      error: (err) => {
+        this.isInvesting.set(false);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: err.error?.message || 'Server error during BVN verification.',
+          confirmButtonColor: '#1B4332'
+        });
+      }
+    });
+  }
+
+  startOtpCountdown() {
+    this.otpCountdown.set(60);
+    this.canResendOtp.set(false);
+    if (this.countdownInterval) clearInterval(this.countdownInterval);
+    
+    this.countdownInterval = setInterval(() => {
+      if (this.otpCountdown() > 0) {
+        this.otpCountdown.update(v => v - 1);
+      } else {
+        this.canResendOtp.set(true);
+        clearInterval(this.countdownInterval);
+      }
+    }, 1000);
+  }
+
+  resendInvestOtp() {
+    if (!this.canResendOtp()) return;
+    
+    const pId = this.selectedPortfolio()?.portfolioId;
+    if (!pId) return;
+
+    const amountNum = Number(this.investAmount().replace(/,/g, ''));
+    this.isInvesting.set(true);
+    this.transactionService.tempInvest(pId, amountNum, this.investPin()).subscribe({
+        next: (res) => {
+            this.isInvesting.set(false);
+            this.startOtpCountdown();
+            Swal.fire({
+                icon: 'success',
+                title: 'New OTP Sent',
+                text: 'A fresh authorization code has been sent to your email.',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        },
+        error: (err) => {
+            this.isInvesting.set(false);
+            Swal.fire({
+                icon: 'error',
+                title: 'Failed to resend',
+                text: err.error?.message || 'Please try again later.',
+                confirmButtonColor: '#1B4332'
+            });
+        }
+    });
+  }
+
+  resendWithdrawalOtp() {
+    if (!this.canResendOtp()) return;
+    
+    const currentUser = this.user();
+    const customerId = currentUser?.CustomerId || currentUser?.customerId || currentUser?.id || currentUser?.Id;
+    const amount = Number(this.transactionAmount().replace(/,/g, ''));
+    const pin = this.withdrawPin();
+
+    if (!customerId || !amount) return;
+
+    this.isProcessing.set(true);
+    this.transactionService.sendWithdrawalOtp(Number(customerId), amount).subscribe({
+        next: (res) => {
+            this.isProcessing.set(false);
+            this.startOtpCountdown();
+            Swal.fire({
+                icon: 'success',
+                title: 'New OTP Sent',
+                text: 'A fresh authorization code has been sent to your email.',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        },
+        error: (err) => {
+            this.isProcessing.set(false);
+            this.errorMessage.set(err.error?.message || 'Failed to resend OTP');
+            Swal.fire({
+                icon: 'error',
+                title: 'Failed to resend',
+                text: err.error?.message || 'Please try again later.',
+                confirmButtonColor: '#1B4332'
+            });
+        }
+    });
+  }
+
   confirmInvestment() {
     if (!this.selectedPortfolio() || !this.investAmount()) return;
+    
+    // Check BVN verification status first
+    const u = this.user();
+    // Assuming backend returns Bvnverified or similar in user profile or we can check via AuthService
+    // For this context, we'll assume the backend will return 403 if not verified
+    
     this.isInvesting.set(true);
-    this.investmentService.invest(this.selectedPortfolio()!.portfolioId, Number(this.investAmount())).subscribe({
-      next: () => {
+    const amount = Number(this.investAmount().replace(/,/g, ''));
+    
+    this.transactionService.tempInvest(this.selectedPortfolio()!.portfolioId, amount, this.investPin(), this.investOtp()).subscribe({
+      next: (res: any) => {
         this.isInvesting.set(false);
-        this.showInvestModal.set(false);
-        this.showDetailModal.set(false);
-        // Refresh local balance stub for demo
-        this.availableNaira.update(v => v + 50000); 
+        if (res.success || res.boolean) {
+          this.showInvestModal.set(false);
+          this.showDetailModal.set(false);
+          
+          Swal.fire({
+            icon: 'success',
+            title: 'Investment Successful',
+            text: `You have successfully invested ₦${amount.toLocaleString()} in ${this.selectedPortfolio()?.name}`,
+            confirmButtonColor: '#1B4332',
+            background: '#f8f7f2',
+            customClass: { popup: 'rounded-[30px]' }
+          });
+          
+          // Refresh data
+          this.loadDashboardData();
+        } else {
+          // Check for security requirements
+          if (res.message === 'PIN_REQUIRED') {
+            this.investStep.set('pin');
+          } else if (res.message === 'OTP_REQUIRED') {
+            this.investStep.set('otp');
+            this.startOtpCountdown();
+          } else if (res.message?.includes('BVN')) {
+            this.investStep.set('bvn');
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Investment Failed',
+              text: res.message || 'We could not process your investment.',
+              confirmButtonColor: '#1B4332',
+              background: '#f8f7f2'
+            });
+          }
+        }
       },
-      error: () => this.isInvesting.set(false)
+      error: (err) => {
+        this.isInvesting.set(false);
+        const msg = err.error?.message;
+        if (msg === 'PIN_REQUIRED') {
+          this.investStep.set('pin');
+        } else if (msg === 'OTP_REQUIRED') {
+          this.investStep.set('otp');
+          this.startOtpCountdown();
+        } else if (msg?.includes('BVN')) {
+          this.investStep.set('bvn');
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Investment Error',
+            text: msg || 'An error occurred during investment.',
+            confirmButtonColor: '#1B4332',
+            background: '#f8f7f2',
+            customClass: { popup: 'rounded-[30px]' }
+          });
+        }
+      }
     });
   }
 
@@ -237,16 +463,6 @@ export class ClientDashboardComponent implements OnInit {
                     icon: this.mapTodoIcon(item.icon || item.Icon),
                     action: item.actionText || item.ActionText
                 }));
-
-                // Simulation: Inject Address Verification if not already present
-                if (!mapped.some((s: any) => s.title.includes('Address'))) {
-                  mapped.push({
-                    title: 'Address Verification',
-                    desc: 'Upload a utility bill or bank statement to verify your residential address.',
-                    icon: 'ri-map-pin-user-line',
-                    action: 'VERIFY NOW'
-                  });
-                }
 
                 this.nextSteps.set(mapped);
              }
@@ -298,14 +514,14 @@ export class ClientDashboardComponent implements OnInit {
   // Transaction Modal State
   showTransactionModal = signal(false);
   transactionType = signal<'fund'|'withdraw'>('fund');
-  transactionAmount = signal('');
-  withdrawAccountId = signal('');
-  withdrawPin = signal('');
+  transactionAmount = signal<string>('');
+  withdrawAccountId = signal<string>('');
+  withdrawPin = signal<string>('');
 
   registeredBanks = signal<BankAccount[]>([]);
 
   // Funding specific states
-  fundingStep = signal<'amount' | 'source' | 'card' | 'otp' | 'virtual' | 'bvn' | 'success'>('amount');
+  fundingStep = signal<'amount' | 'source' | 'card' | 'otp' | 'pin' | 'virtual' | 'bvn' | 'success'>('amount');
   otpMessage = signal('');
   selectedSource = signal<'card' | 'virtual' | null>(null);
   cardNumber = signal('');
@@ -690,11 +906,17 @@ export class ClientDashboardComponent implements OnInit {
   }
 
   processTransaction() {
-    if(!this.transactionAmount()) return;
+    if(!this.transactionAmount()) {
+        this.errorMessage.set('Please enter an amount to proceed');
+        return;
+    }
     
-    this.isProcessing.set(true);
-    const amount = Number(this.transactionAmount());
-    const customerId = this.user()?.CustomerId || this.user()?.customerId;
+    // Reset error state
+    this.errorMessage.set('');
+    
+    const amount = Number(this.transactionAmount().toString().replace(/[^0-9]/g, ''));
+    const customerId = this.user()?.CustomerId || this.user()?.customerId || this.user()?.id || this.user()?.Id || this.user()?.userId || this.user()?.UserId;
+    
     
     if (this.transactionType() === 'fund') {
       if (this.fundingStep() === 'amount') {
@@ -724,6 +946,7 @@ export class ClientDashboardComponent implements OnInit {
       }
 
       if (this.fundingStep() === 'card') {
+        this.isProcessing.set(true);
         // Step 1: Initiate Deposit
         this.transactionService.initiateDeposit(customerId, amount).subscribe({
           next: (res) => {
@@ -773,6 +996,7 @@ export class ClientDashboardComponent implements OnInit {
       }
 
       if (this.fundingStep() === 'otp') {
+        this.isProcessing.set(true);
         this.transactionService.authorizeDeposit({
           reference: this.currentReference(),
           id: this.currentChargeId(),
@@ -790,80 +1014,168 @@ export class ClientDashboardComponent implements OnInit {
       }
     } else {
       // Withdrawal logic
-      if (this.isProcessing()) return;
-      this.isProcessing.set(true);
-      this.errorMessage.set('');
+      try {
+        this.errorMessage.set('');
 
-      const amount = Number(this.transactionAmount());
-      const customerId = this.user()?.CustomerId || this.user()?.customerId;
-      const is2faEnabled = this.user()?.is2faEnabled || this.user()?.Is2faEnabled;
+        const currentUser = this.user();
+        const is2faEnabled = currentUser?.is2faEnabled || currentUser?.Is2faEnabled || false;
+        const customerId = currentUser?.CustomerId || currentUser?.customerId || currentUser?.id || currentUser?.Id;
+        const amount = Number(this.transactionAmount().replace(/,/g, ''));
 
-      if (!this.withdrawAccountId() || !this.withdrawPin()) {
-        this.errorMessage.set('Please fill all fields');
-        this.isProcessing.set(false);
-        return;
-      }
+        if (!amount || amount <= 0) {
+          this.errorMessage.set('Please enter a valid amount');
+          return;
+        }
 
-      if (is2faEnabled && this.fundingStep() !== 'otp') {
-        // Step 1: Request OTP
-        this.transactionService.sendWithdrawalOtp(customerId, amount).subscribe({
-          next: (res) => {
+        if (!customerId) {
+          this.errorMessage.set('Customer profile not found. Please log in again.');
+          return;
+        }
+
+        if (!this.withdrawAccountId()) {
+          this.errorMessage.set('Please select a receiving bank account');
+          return;
+        }
+
+        this.isProcessing.set(true);
+
+        // NEW FLOW: amount -> [otp] -> pin -> finalize
+
+        if (this.fundingStep() === 'amount') {
+          if (is2faEnabled) {
+            console.log('DEBUG: Sending Withdrawal OTP...');
+            this.transactionService.sendWithdrawalOtp(Number(customerId), amount).subscribe({
+              next: (res) => {
+                this.isProcessing.set(false);
+                if (res.success || res.boolean) {
+                  this.fundingStep.set('otp');
+                  this.otpMessage.set('A verification code has been sent to your email.');
+                  this.startOtpCountdown();
+                } else {
+                  this.errorMessage.set(res.message || 'Failed to send OTP');
+                }        
+              },  
+              error: (err) => { 
+                this.isProcessing.set(false);
+                this.errorMessage.set(err.error?.message || 'Error sending OTP');
+              }
+            });
+          } else {
+            this.fundingStep.set('pin');
             this.isProcessing.set(false);
-            if (res.success || res.boolean) {
-              this.fundingStep.set('otp');
-              this.otpMessage.set('A verification code has been sent to your email to authorize this withdrawal.');
-            } else {
-              this.errorMessage.set(res.message || 'Failed to send verification code');
-            }
-          },
-          error: (err) => {
-            this.isProcessing.set(false);
-            this.errorMessage.set(err.error?.message || 'Verification error');
           }
-        });
-      } else {
-        // Step 2: Finalize (either no 2FA or OTP already entered)
-        this.finalizeWithdrawal();
+          return;   
+        }
+
+        if (this.fundingStep() === 'otp') {
+          const otp = this.otpInput();
+          if (!otp || otp.length < 6) {
+            this.errorMessage.set('Please enter the 6-digit OTP sent to your email');
+            this.isProcessing.set(false);
+            return;
+          }
+
+          this.transactionService.validateWithdrawalOtp(Number(customerId), otp).subscribe({
+            next: (res) => {
+              this.isProcessing.set(false);
+              if (res.success || res.boolean) {
+                this.fundingStep.set('pin');
+              } else {
+                this.errorMessage.set(res.message || 'The OTP code you entered is incorrect.');
+              }
+            },
+            error: (err) => {
+              this.isProcessing.set(false);
+              this.errorMessage.set(err.error?.message || 'Failed to verify OTP');
+            }
+          });
+          return;
+        }
+
+        if (this.fundingStep() === 'pin') {
+          if (!this.withdrawPin() || this.withdrawPin().length < 6) {
+            this.errorMessage.set('Please enter your 6-digit transaction PIN');
+            this.isProcessing.set(false);
+            return;
+          }
+          this.finalizeWithdrawal();
+        }
+      } catch (err: any) {
+        console.error('CRITICAL: Withdrawal Process Crashed', err);
+        this.errorMessage.set('An internal error occurred: ' + (err.message || 'Unknown error'));
+        this.isProcessing.set(false);
       }
     }
   }
 
   finalizeWithdrawal() {
-    this.isProcessing.set(true);
-    const amount = Number(this.transactionAmount());
-    const customerId = this.user()?.CustomerId || this.user()?.customerId;
-    const selectedBank = this.registeredBanks().find(b => (b.customerBankId || b.bankId || 0).toString() === this.withdrawAccountId());
+    try {
+      this.isProcessing.set(true);
+      const rawAmount = (this.transactionAmount() || "").toString().replace(/[^0-9]/g, '');
+      const amount = Number(rawAmount);
+      const currentUser = this.user();
+      const customerId = currentUser?.CustomerId || currentUser?.customerId || currentUser?.id || currentUser?.Id;
+      
+      const selectedBank = this.registeredBanks().find(b => {
+          const bId = (b.customerBankId || b.bankId || 0).toString();
+          return bId === this.withdrawAccountId();
+      });
 
-    const withdrawalData = {
-      customerId,
-      amount,
-      bankCode: selectedBank?.bankCode || '011', // Defaulting for demo safety
-      accountNumber: selectedBank?.accountNumber || '',
-      pin: this.withdrawPin(),
-      narration: `Withdrawal to ${selectedBank?.bankName || 'Bank'}`,
-      otp: this.otpInput()
-    };
-
-    this.transactionService.initiateWithdrawal(withdrawalData).subscribe({
-      next: (res) => {
-        this.isProcessing.set(false);
-        if (res.success || res.boolean) {
-          this.closeTransactionModal();
-          this.loadDashboardData();
-          // Show success stub
-          this.recentTransactions.update(txs => [
-            { id: Math.random().toString(), type: 'withdrawal', amount, status: 'completed', date: 'Just now', description: withdrawalData.narration },
-            ...txs
-          ]);
-        } else {
-          this.errorMessage.set(res.message || 'Withdrawal failed');
-        }
-      },
-      error: (err) => {
-        this.isProcessing.set(false);
-        this.errorMessage.set(err.error?.message || 'Transaction could not be completed');
+      if (!selectedBank) {
+          window.alert('ERROR: Bank not selected');
+          console.error('DEBUG: Bank not found for ID', this.withdrawAccountId());
+          this.errorMessage.set('Receiving bank account not found.');
+          this.isProcessing.set(false);
+          return;
       }
-    });
+
+      const withdrawalData = {
+        customerId: Number(customerId),
+        amount: amount,
+        bankCode: selectedBank.bankCode,
+        accountNumber: selectedBank.accountNumber,
+        pin: this.withdrawPin(),
+        narration: `Withdrawal to ${selectedBank.bankName}`,
+        otp: this.otpInput()
+      }; 
+   
+      console.log('DEBUG: finalizeWithdrawal calling Service...', withdrawalData);
+
+      this.transactionService.initiateWithdrawal(withdrawalData).pipe(
+        timeout(60000), 
+        catchError(err => {
+            console.error('Withdrawal Transaction Failed/Timed-out', err);
+            this.isProcessing.set(false);
+            const msg = err.name === 'TimeoutError' ? 'Request timed out. Please try again.' : (err.error?.message || 'Server connection failed');
+            this.errorMessage.set(msg);
+            return throwError(() => err);
+        })
+      ).subscribe({
+        next: (res) => {
+          console.error('DEBUG: Withdrawal Response Received', res);
+          this.isProcessing.set(false);
+          if (res.success || res.boolean) {
+            this.closeTransactionModal();
+            this.loadDashboardData();
+            Swal.fire({
+              title: 'Withdrawal Initialized',
+              text: res.message || 'Your withdrawal is being processed.',
+              icon: 'success',
+              confirmButtonColor: '#1B4332'
+            });
+          } else {
+            this.errorMessage.set(res.message || 'Withdrawal failed');
+          }
+        },
+        error: (err) => {
+          this.isProcessing.set(false);
+        }
+      });
+    } catch (err: any) {
+      console.error('CRITICAL: finalizeWithdrawal Crashed', err);
+      this.errorMessage.set('Internal error: ' + err.message);
+      this.isProcessing.set(false);
+    }
   }
 
   finalizeDeposit() {
@@ -872,10 +1184,6 @@ export class ClientDashboardComponent implements OnInit {
         this.isProcessing.set(false);
         this.fundingStep.set('success');
         this.loadDashboardData(); // Refresh actual balance from backend
-        this.recentTransactions.update(txs => [
-          { id: Math.random().toString(), type: 'deposit', amount: Number(this.transactionAmount()), status: 'completed', date: 'Just now', description: 'Wallet funding (Card)' },
-          ...txs
-        ]);
         setTimeout(() => this.closeTransactionModal(), 3000);
       },
       error: () => {

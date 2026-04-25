@@ -24,6 +24,7 @@ export class AdminLayout {
     { label: 'Clients Hub', icon: 'ri-user-star-line', link: '/admin/clients' },
     { label: 'Plan & Products', icon: 'ri-funds-box-line', link: '/admin/products' },
     { label: 'Investments', icon: 'ri-briefcase-4-fill', link: '/admin/investments' },
+    { label: 'Liquidation Requests', icon: 'ri-exchange-funds-line', link: '/admin/liquidation-requests' },
     { label: 'Verifications', icon: 'ri-shield-check-line', link: '/admin/verifications' },
     { label: 'Withdrawal', icon: 'ri-bank-card-line', link: '/admin/withdrawals' },
     { label: 'System Ledger', icon: 'ri-exchange-box-fill', link: '/admin/transactions' }
@@ -33,6 +34,13 @@ export class AdminLayout {
     { label: 'Role Management', icon: 'ri-shield-keyhole-line', link: '/admin/roles' },
     { label: 'User Hub', icon: 'ri-group-2-line', link: '/admin/users' },
     { label: 'System Config', icon: 'ri-settings-5-line', link: '/admin/settings' },
+    {
+      label: 'Financial Reports',
+      icon: 'ri-file-chart-line',
+      subItems: [
+        { label: 'Trial Balance', link: '/admin/reports/trial-balance' }
+      ]
+    },
     {
       label: 'Account',
       icon: 'ri-user-settings-line',

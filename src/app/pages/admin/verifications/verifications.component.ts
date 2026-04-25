@@ -1,19 +1,26 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CardComponent } from '../../../shared/components/ui/card.component';
 import { ButtonComponent } from '../../../shared/components/ui/button.component';
 import { BadgeComponent } from '../../../shared/components/ui/badge.component';
+import { AdminService } from '../../../shared/services/admin.service';
+
+declare var Swal: any;
 
 interface VerificationRequest {
-  id: string;
-  clientName: string;
-  clientId: string;
-  docType: string;
-  status: 'pending' | 'approved' | 'rejected';
-  date: string;
-  imageUrl: string;
-  rejectionReason?: string;
+  id: number;
+  customerName: string;
+  customerCode: string;
+  documentType: string;
+  status: string;
+  dateSubmitted: string;
+  documentUrl: string;
+  extractedAddress?: string;
+  extractedCity?: string;
+  extractedState?: string;
+  adminNotes?: string;
+  confidenceScore?: number;
 }
 
 @Component({
@@ -24,72 +31,9 @@ interface VerificationRequest {
   styleUrl: './verifications.component.css'
 })
 export class VerificationsComponent {
-  requests = signal<VerificationRequest[]>([
-    {
-      id: 'VR-001',
-      clientName: 'Malik Sherifdeen',
-      clientId: 'CUST-1024',
-      docType: 'Electricity Bill',
-      status: 'pending',
-      date: '2026-04-18 14:30',
-      imageUrl: 'https://images.unsplash.com/photo-1558486012-817176f84c6d?auto=format&fit=crop&w=800&q=80'
-    },
-    {
-      id: 'VR-002',
-      clientName: 'Amina Yusuf',
-      clientId: 'CUST-2051',
-      docType: 'Bank Statement',
-      status: 'pending',
-      date: '2026-04-18 12:15',
-      imageUrl: 'https://images.unsplash.com/photo-1554224155-1696413565d3?auto=format&fit=crop&w=800&q=80'
-    },
-    {
-      id: 'VR-003',
-      clientName: 'Chidi Okoro',
-      clientId: 'CUST-3092',
-      docType: 'Waste Bill (LAWMA)',
-      status: 'approved',
-      date: '2026-04-17 10:00',
-      imageUrl: 'https://images.unsplash.com/photo-1586769852836-bc069f19e1b6?auto=format&fit=crop&w=800&q=80'
-    },
-    {
-      id: 'VR-004',
-      clientName: 'Suleiman Danjuma',
-      clientId: 'CUST-4012',
-      docType: 'Electricity Bill',
-      status: 'pending',
-      date: '2026-04-16 16:45',
-      imageUrl: 'https://images.unsplash.com/photo-1558486012-817176f84c6d?auto=format&fit=crop&w=800&q=80'
-    },
-    {
-      id: 'VR-005',
-      clientName: 'Funke Akindele',
-      clientId: 'CUST-5088',
-      docType: 'Water Bill',
-      status: 'pending',
-      date: '2026-04-16 09:30',
-      imageUrl: 'https://images.unsplash.com/photo-1558486012-817176f84c6d?auto=format&fit=crop&w=800&q=80'
-    },
-    {
-      id: 'VR-006',
-      clientName: 'Ibrahim Babangida',
-      clientId: 'CUST-6021',
-      docType: 'Bank Statement',
-      status: 'rejected',
-      date: '2026-04-15 14:00',
-      imageUrl: 'https://images.unsplash.com/photo-1554224155-1696413565d3?auto=format&fit=crop&w=800&q=80',
-      rejectionReason: 'Document expired'
-    },
-    {
-      id: 'VR-007',
-      clientName: 'Chioma Ajunwa',
-      clientId: 'CUST-7033',
-      docType: 'Tenancy Receipt',
-      status: 'pending',
-      date: '2026-04-15 11:15',
-      imageUrl: 'https://images.unsplash.com/photo-1586769852836-bc069f19e1b6?auto=format&fit=crop&w=800&q=80'
-    }
-  ]);
+  private adminService = inject(AdminService);
+
+  requests = signal<VerificationRequest[]>([]);
 
   selectedRequest = signal<VerificationRequest | null>(null);
   showDetailModal = signal(false);
@@ -98,14 +42,27 @@ export class VerificationsComponent {
 
   activeFilter = signal<'all' | 'pending'>('all');
   currentPage = signal(1);
-  pageSize = signal(5);
+  pageSize = signal(10); // Show more per page in admin
+
+  constructor() {
+    this.loadRequests();
+  }
+
+  loadRequests() {
+    const filterStatus = this.activeFilter() === 'pending' ? 'Pending' : undefined;
+    this.adminService.getAddressVerifications(filterStatus).subscribe({
+      next: (res) => {
+        if (res.data) this.requests.set(res.data);
+      }
+    });
+  }
 
   filteredRequests = computed(() => {
     let list = this.requests();
     
     // Apply status filter
     if (this.activeFilter() === 'pending') {
-      list = list.filter(r => r.status === 'pending');
+      list = list.filter(r => r.status.toLowerCase() === 'pending' || r.status.toLowerCase() === 'review');
     }
     
     return list;
@@ -122,18 +79,19 @@ export class VerificationsComponent {
 
   setFilter(filter: 'all' | 'pending') {
     this.activeFilter.set(filter);
-    this.currentPage.set(1); // Reset to first page on filter change
+    this.currentPage.set(1);
+    this.loadRequests(); // Reload from backend on filter change
   }
 
   nextPage() {
     if (this.currentPage() < this.totalPages()) {
-      this.currentPage.update(p => p + 1);
+      this.currentPage.update((p: number) => p + 1);
     }
   }
 
   prevPage() {
     if (this.currentPage() > 1) {
-      this.currentPage.update(p => p - 1);
+      this.currentPage.update((p: number) => p - 1);
     }
   }
 
@@ -156,34 +114,53 @@ export class VerificationsComponent {
     if (!this.selectedRequest()) return;
     this.isProcessing.set(true);
 
-    setTimeout(() => {
-      const updated = this.requests().map(r => 
-        r.id === this.selectedRequest()?.id ? { ...r, status: 'approved' as const } : r
-      );
-      this.requests.set(updated);
-      this.isProcessing.set(false);
-      this.closeModal();
-    }, 1500);
+    const payload = {
+      verificationId: this.selectedRequest()!.id,
+      approved: true,
+      adminNotes: this.rejectionReason(), // Reusing the notes field
+      correctedAddress: this.selectedRequest()!.extractedAddress,
+      correctedCity: this.selectedRequest()!.extractedCity,
+      correctedState: this.selectedRequest()!.extractedState
+    };
+
+    this.adminService.reviewAddressVerification(payload).subscribe({
+      next: () => {
+        this.isProcessing.set(false);
+        Swal.fire('Approved!', 'Customer address has been updated.', 'success');
+        this.loadRequests();
+        this.closeModal();
+      },
+      error: () => this.isProcessing.set(false)
+    });
   }
 
   rejectRequest() {
     if (!this.selectedRequest() || !this.rejectionReason()) return;
     this.isProcessing.set(true);
 
-    setTimeout(() => {
-      const updated = this.requests().map(r => 
-        r.id === this.selectedRequest()?.id ? { ...r, status: 'rejected' as const, rejectionReason: this.rejectionReason() } : r
-      );
-      this.requests.set(updated);
-      this.isProcessing.set(false);
-      this.closeModal();
-    }, 1500);
+    const payload = {
+      verificationId: this.selectedRequest()!.id,
+      approved: false,
+      adminNotes: this.rejectionReason()
+    };
+
+    this.adminService.reviewAddressVerification(payload).subscribe({
+      next: () => {
+        this.isProcessing.set(false);
+        Swal.fire('Rejected', 'The document has been flagged for re-upload.', 'info');
+        this.loadRequests();
+        this.closeModal();
+      },
+      error: () => this.isProcessing.set(false)
+    });
   }
 
   getBadgeVariant(status: string): any {
-    switch (status) {
+    const s = status.toLowerCase();
+    switch (s) {
       case 'approved': return 'success';
       case 'pending': return 'warning';
+      case 'review': return 'info';
       case 'rejected': return 'danger';
       default: return 'info';
     }

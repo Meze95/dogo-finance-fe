@@ -179,4 +179,16 @@ export class SettingsService {
       })
     );
   }
+
+  getAddressDocTypes(): Observable<ApiResponse<any[]>> {
+    return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}/Customer/address-doc-types`);
+  }
+
+  verifyAddress(formData: FormData): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`${this.apiUrl}/Customer/verify-address`, formData);
+  }
+
+  getVerificationStatuses(): Observable<ApiResponse<any[]>> {
+    return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}/Customer/verifications`);
+  }
 }

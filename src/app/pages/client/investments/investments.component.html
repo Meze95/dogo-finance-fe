@@ -5,13 +5,13 @@
     <div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
       <div class="space-y-2 text-center md:text-left">
         <p class="text-[10px] font-black uppercase tracking-[0.4em] text-[#C9A84C]">Total Portfolio Value</p>
-        <h2 class="text-5xl font-black tracking-tight">₦{{ totalPortfolioValue().toLocaleString() }}</h2>
+        <h2 class="text-5xl font-black tracking-tight">₦{{ totalPortfolioValue() | number:'1.0-0' }}</h2>
         <div class="flex items-center justify-center md:justify-start gap-4 pt-2">
           <span class="inline-flex items-center px-3 py-1 rounded-full bg-white/10 text-[10px] font-black uppercase tracking-widest gap-2">
-            <i class="ri-arrow-right-up-line text-green-400" [class.ri-arrow-right-down-line]="totalGrowth() < 0" [class.text-red-400]="totalGrowth() < 0"></i>
-            {{ totalGrowth() >= 0 ? '+' : '' }}₦{{ totalGrowth().toLocaleString() }} Profit
+            <i class="ri-line-chart-line text-green-400" [class.text-red-400]="totalProfit() < 0"></i>
+            {{ totalProfit() >= 0 ? '+' : '' }}₦{{ totalProfit() | number:'1.0-0' }} Profit
           </span>
-          <span class="text-[10px] font-black uppercase tracking-widest text-white/40">{{ userInvestments().length }} Active Plans</span>
+          <span class="text-[10px] font-black uppercase tracking-widest text-white/40">{{ activePlansCount() }} Active Plans</span>
         </div>
       </div>
       <div class="flex gap-4">
@@ -75,65 +75,250 @@
 <!-- Management Modal -->
 @if(showManageModal() && selectedInvestment()) {
     <div class="fixed inset-0 z-[999] flex items-center justify-center p-4 animate-fade-in">
-        <div class="fixed inset-0 bg-[#0d1a0f]/60 backdrop-blur-md transition-opacity" (click)="closeModal()"></div>
+        <!-- Backdrop: Prevent closing on click outer -->
+        <div class="fixed inset-0 bg-[#0d1a0f]/60 backdrop-blur-md transition-opacity"></div>
         
         <div class="relative bg-white rounded-[40px] shadow-2xl w-full max-w-2xl transform transition-all animate-slide-up flex flex-col max-h-[90vh]">
           <div class="p-8 pb-4 flex items-center justify-between">
-            <h3 class="text-2xl font-black text-[#0d1a0f] tracking-tight">Portfolio Settings</h3>
+            <h3 class="text-2xl font-black text-[#0d1a0f] tracking-tight">Portfolio Breakdown</h3>
             <button (click)="closeModal()" class="text-slate-400 hover:text-red-500 transition-colors">
                 <i class="ri-close-large-line text-xl"></i>
             </button>
-          </div>
+          </div>  
 
-          <div class="p-8 overflow-y-auto custom-scrollbar space-y-8">
-            <!-- Stats -->
-            <div class="grid grid-cols-2 gap-4">
-                <div class="bg-[#f8f7f2] p-6 rounded-3xl space-y-1">
-                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Available Units Value</p>
-                    <p class="text-xl font-black text-[#0d1a0f]">₦{{ selectedInvestment()?.currentValue?.toLocaleString() }}</p>
+          <!-- Unified Scrollable Body -->
+          <div class="flex-grow overflow-y-auto custom-scrollbar p-8 pt-0 space-y-8">
+              <!-- Stats (Always show at top) -->
+              <!-- Stats -->
+              <div class="grid grid-cols-2 gap-4">
+                  <div class="bg-emerald-50/50 p-6 rounded-3xl border border-emerald-100/50 space-y-1">
+                      <p class="text-[10px] font-black text-emerald-900/60 uppercase tracking-widest">Available Units Value</p>
+                      <p class="text-xl font-black text-[#0d1a0f]">₦{{ selectedInvestment()?.currentValue | number:'1.2-2' }}</p>
+                  </div>
+                  <div class="bg-emerald-50/50 p-6 rounded-3xl border border-emerald-100/50 space-y-1">
+                      <p class="text-[10px] font-black text-emerald-900/60 uppercase tracking-widest">Absolute Returns</p>
+                      <p class="text-xl font-black text-emerald-600">
+                         {{ ((selectedInvestment()?.currentValue || 0) - (selectedInvestment()?.totalInvested || 0)) >= 0 ? '+' : '' }}
+                         ₦{{ ((selectedInvestment()?.currentValue || 0) - (selectedInvestment()?.totalInvested || 0)) | number:'1.0-0' }}
+                      </p>
+                  </div>
+              </div>
+ 
+              <!-- Holdings List -->
+              @if (sellStep() === 'amount') {
+                <div class="space-y-4">
+                  <div class="space-y-3">
+                      @for(holding of selectedInvestment()?.holdings; track holding.id) {
+                          <div class="bg-white border border-slate-100 p-5 rounded-3xl flex items-center justify-between group/hold shadow-sm hover:shadow-md transition-all">
+                              <div class="flex items-center gap-4">
+                                  <div class="w-10 h-10 rounded-2xl bg-[#C9A84C]/5 text-[#C9A84C] flex items-center justify-center transition-colors group-hover/hold:bg-[#C9A84C] group-hover/hold:text-white">
+                                      <i class="ri-coin-line"></i>
+                                  </div>
+                                  <div> 
+                                      <p class="text-sm font-black text-[#0d1a0f]">{{ holding.instrumentName }}</p>
+                                      <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ holding.units | number:'1.2-2' }} Units</p>
+                                  </div> 
+                              </div>   
+                              <div class="flex items-center gap-4">
+                                  <div class="text-right mr-4">
+                                      <p class="text-sm font-black text-[#0d1a0f]">₦{{ (holding.units * holding.currentPrice).toLocaleString() }}</p>
+                                       <p class="text-[9px] font-bold text-green-500 uppercase tracking-widest">+4.2%</p>
+                                  </div>  
+                                  <button (click)="selectHoldingForSell(holding)" class="w-8 h-8 rounded-full bg-slate-50 text-slate-400 hover:bg-red-50 hover:text-red-500 transition-all flex items-center justify-center">
+                                      <i class="ri-logout-box-r-line"></i>
+                                  </button>
+                              </div>
+                          </div>
+                      }
+                  </div>
                 </div>
-                <div class="bg-[#f8f7f2] p-6 rounded-3xl space-y-1">
-                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Absolute Returns</p>
-                    <p class="text-xl font-black text-green-600">+₦{{ ((selectedInvestment()?.currentValue || 0) * 0.12).toLocaleString() }}</p>
-                </div>
-            </div>
-
-            <!-- Holdings List -->
-            <div class="space-y-4">
-                <h4 class="text-xs font-black text-[#1B4332] uppercase tracking-[0.3em]">Managed Instruments</h4>
-                <div class="space-y-3">
-                    @for(holding of selectedInvestment()?.holdings; track holding.id) {
-                        <div class="bg-white border border-slate-100 p-5 rounded-3xl flex items-center justify-between group/hold shadow-sm hover:shadow-md transition-all">
-                            <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-2xl bg-[#C9A84C]/5 text-[#C9A84C] flex items-center justify-center transition-colors group-hover/hold:bg-[#C9A84C] group-hover/hold:text-white">
-                                    <i class="ri-coin-line"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-black text-[#0d1a0f]">{{ holding.instrumentName }}</p>
-                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ holding.units | number:'1.2-2' }} Units</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-4">
-                                <div class="text-right mr-4">
-                                    <p class="text-sm font-black text-[#0d1a0f]">₦{{ (holding.units * holding.currentPrice).toLocaleString() }}</p>
-                                    <p class="text-[9px] font-bold text-green-500 uppercase tracking-widest">+4.2%</p>
-                                </div>
-                                <button (click)="selectHoldingForSell(holding)" class="w-8 h-8 rounded-full bg-slate-50 text-slate-400 hover:bg-red-50 hover:text-red-500 transition-all flex items-center justify-center">
-                                    <i class="ri-logout-box-r-line"></i>
-                                </button>
-                            </div>
+              }
+            
+            <!-- Liquidation Form Steps -->
+            <div class="bg-[#f8f7f2] p-8 rounded-[2.5rem] space-y-6">
+                <!-- STEP 1: AMOUNT -->
+                @if (sellStep() === 'amount') {
+                    <div>
+                        <h4 class="text-xs font-black text-[#1B4332] uppercase tracking-[0.3em] mb-4">Partial Liquidation</h4>
+                        <div class="relative">
+                            <span class="absolute left-6 top-1/2 -translate-y-1/2 text-lg font-black text-[#0d1a0f]">₦</span>
+                            <input type="text" 
+                                   [value]="formatWithCommas(sellAmount())"
+                                   (input)="onAmountInput($event)"
+                                   autocomplete="off"
+                                   class="w-full bg-white border-none rounded-2xl py-5 pl-12 pr-6 text-xl font-black text-[#0d1a0f] outline-none shadow-sm placeholder:text-slate-200"
+                                   placeholder="Specify amount to sell" />
                         </div>
-                    }
-                </div>
-            </div>
-          </div>
+                        <div class="flex justify-between mt-3 px-2">
+                            <p class="text-[9px] font-bold text-slate-400 italic">Available: ₦{{ selectedInvestment()?.currentValue?.toLocaleString() }}</p>
+                            <button (click)="sellAmount.set(selectedInvestment()?.currentValue || 0)" class="text-[9px] font-black text-[#C9A84C] uppercase tracking-widest hover:underline">Sell Max</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Real-time Liquidation Breakdown -->
+                    <div class="p-6 bg-white rounded-3xl border border-[#1B4332]/5 space-y-4 shadow-sm">
+                        <div class="flex items-center justify-between">
+                           <span class="text-[9px] font-black uppercase tracking-widest text-slate-400">Exit Terms Breakdown</span>
+                           <span class="px-3 py-1 rounded-full bg-slate-50 text-[8px] font-black uppercase tracking-widest text-[#1B4332]">
+                              Held for {{ daysHeld() }} Days
+                           </span>
+                        </div>
 
-          <!-- Bottom Actions -->
-          <div class="p-8 border-t border-slate-50 flex items-center gap-4 bg-red-50/30">
-            <button (click)="handleExitAll()" class="flex-grow bg-[#1B4332] hover:bg-[#2D6A4F] text-white py-5 rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-[#1B4332]/20 transition-all flex items-center justify-center gap-3">
-                <i class="ri-logout-box-r-line text-lg"></i>
-                Sell All Instruments in this Portfolio
-            </button>
+                        <div class="space-y-2">
+                           <div class="flex justify-between items-center text-[11px]">
+                              <span class="font-bold text-slate-500 uppercase tracking-tighter">Initially Funded</span>
+                              <span class="font-black text-[#0d1a0f]">{{ selectedInvestment()?.investedAt | date:'dd MMM yyyy' }}</span>
+                           </div>
+
+                           @if (selectedInvestment()?.lastToppedUp && selectedInvestment()?.lastToppedUp !== selectedInvestment()?.investedAt) {
+                              <div class="flex justify-between items-center text-[11px]">
+                                 <span class="font-bold text-slate-500 uppercase tracking-tighter">Last Top-up</span>
+                                 <span class="font-black text-blue-600">{{ selectedInvestment()?.lastToppedUp | date:'dd MMM yyyy' }}</span>
+                              </div>
+                           }
+
+                           <div class="flex justify-between items-center text-[11px]">
+                              <span class="font-bold text-slate-500 uppercase tracking-tighter">Exit Fee ({{ selectedInvestment()?.exitFeePercentage }}%)</span>
+                              @if (isExitFeeApplicable()) {
+                                 <span class="font-black text-red-600">₦{{ calculatedExitFee() | number:'1.2-2' }}</span>
+                              } @else {
+                                 <span class="font-black text-green-600 uppercase tracking-widest text-[9px]">Waived</span>
+                              }
+                           </div>
+
+                           <div class="flex justify-between items-center text-[11px]">
+                              <span class="font-bold text-slate-500 uppercase tracking-tighter">Notice Period</span>
+                              <span class="font-black text-[#0d1a0f]">{{ selectedInvestment()?.noticePeriodDays || 0 }} Days</span>
+                           </div>
+
+                           <div class="pt-3 border-t border-slate-50 flex justify-between items-center">
+                              <span class="text-[10px] font-black text-[#1B4332] uppercase tracking-[0.2em]">Net Expected Credit</span>
+                              <span class="text-lg font-black text-[#1B4332]">₦{{ netPayable() | number:'1.2-2' }}</span>
+                           </div>
+                        </div>
+
+                        @if (isExitFeeApplicable()) {
+                           <p class="text-[9px] font-medium text-slate-400 italic leading-relaxed border-t border-slate-50 pt-3">
+                              * Early exit penalty applies as you've held for less than the {{ selectedInvestment()?.minHoldingPeriodDays }} day minimum.
+                           </p>
+                        }
+
+                        <!-- Investment Tranches/Batches -->
+                        @if (selectedInvestment()?.batches && selectedInvestment()?.batches!.length > 0) {
+                           <div class="mt-6">
+                              <h5 class="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-3 flex items-center gap-2">
+                                 <span class="w-1 h-1 bg-red-500 rounded-full"></span>
+                                 Performance Breakdown
+                              </h5>
+                              <div class="space-y-2 max-h-[150px] overflow-y-auto pr-2 custom-scrollbar">
+                                 @for (batch of selectedInvestment()?.batches; track batch.id) {
+                                    <div class="bg-slate-50/50 border border-slate-100 rounded-lg p-3 hover:bg-white transition-all duration-300">
+                                       <div class="flex justify-between items-start mb-1">
+                                          <div>
+                                             <div class="text-[10px] font-bold text-slate-400 uppercase leading-none mb-1">{{ batch.date | date:'dd MMM yyyy' }}</div>
+                                             <div class="text-[12px] font-black text-[#0d1a0f]">₦{{ batch.invested | number:'1.2-2' }}</div>
+                                          </div>
+                                          <div class="text-right">
+                                             <div class="text-[10px] font-bold text-slate-400 uppercase leading-none mb-1">Yield</div>
+                                             <div [class]="batch.profit >= 0 ? 'text-emerald-600' : 'text-red-500'" class="text-[11px] font-black">
+                                                {{ batch.profit >= 0 ? '+' : '' }}{{ batch.yield | number:'1.1-2' }}%
+                                             </div>
+                                          </div>
+                                       </div>
+                                       <div class="flex justify-between items-center pt-2 border-t border-slate-100/50 mt-1">
+                                          <span class="text-[9px] font-bold text-slate-400 uppercase">Current Value</span>
+                                          <span class="text-[11px] font-black text-[#0d1a0f]">₦{{ batch.currentValue | number:'1.2-2' }}</span>
+                                       </div>
+                                    </div>
+                                 }
+                              </div>
+                           </div>
+                        }
+                    </div>
+                    
+                    <button (click)="confirmPortfolioSell()"
+                            [disabled]="isProcessing() || sellAmount() <= 0 || sellAmount() > (selectedInvestment()?.currentValue || 0)"
+                            class="w-full bg-white hover:bg-slate-50 text-[#1B4332] py-5 rounded-[2rem] font-black text-[10px] uppercase tracking-[0.2em] border border-[#1B4332]/10 transition-all flex items-center justify-center gap-3 disabled:opacity-30 disabled:cursor-not-allowed disabled:bg-slate-100/50">
+                        <i class="ri-hand-coin-line text-lg"></i>
+                        Confirm Amount to Sell
+                    </button>
+                    @if (sellAmount() > (selectedInvestment()?.currentValue || 0)) {
+                        <p class="text-[9px] font-black text-red-500 uppercase tracking-widest text-center mt-2 animate-pulse">
+                            <i class="ri-error-warning-line mr-1"></i> Amount exceeds available value
+                        </p>
+                    }
+                }
+
+                <!-- STEP 2: PIN -->
+                @if (sellStep() === 'pin') {
+                    <div class="text-center">
+                        <h4 class="text-xs font-black text-[#1B4332] uppercase tracking-[0.3em] mb-4">Authorize Transaction</h4>
+                        <p class="text-[10px] font-bold text-slate-400 mb-2">Enter your 6-digit transaction PIN to proceed with selling ₦{{ sellAmount().toLocaleString() }}</p>
+                        
+                        <!-- Inline Error Message -->
+                        @if (sellError()) {
+                            <p class="text-[10px] font-black text-red-500 mb-6 uppercase tracking-wider animate-shake">{{ sellError() }}</p>
+                        } @else {
+                            <div class="mb-6"></div>
+                        }
+                        
+                        <div class="relative max-w-[200px] mx-auto">
+                            <input type="password" 
+                                   autocomplete="new-password"
+                                   maxlength="6"
+                                   id="liq-pin-input"
+                                   name="liq-pin-input"
+                                   [value]="sellPin()"
+                                   (input)="sellPin.set($any($event.target).value)"
+                                   class="w-full bg-white border-none rounded-2xl py-5 text-center text-2xl font-black tracking-[0.5em] text-[#0d1a0f] outline-none shadow-sm"
+                                   placeholder="******" />
+                        </div>
+                        
+                        <div class="flex gap-4 mt-8">
+                            <button (click)="sellStep.set('amount')" class="flex-grow py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest text-slate-400">Back</button>
+                            <button (click)="confirmPortfolioSell()"
+                                    [disabled]="isProcessing() || sellPin().length < 6"
+                                    class="flex-grow bg-[#1B4332] text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all disabled:opacity-30 disabled:cursor-not-allowed">
+                                Verify & Sell
+                            </button>
+                        </div>
+                    </div>
+                }
+
+                <!-- STEP 3: OTP -->
+                @if (sellStep() === 'otp') {
+                    <div class="text-center">
+                        <h4 class="text-xs font-black text-[#1B4332] uppercase tracking-[0.3em] mb-4">Email Verification</h4>
+                        <p class="text-[10px] font-bold text-slate-400 mb-2">We've sent a code to your email. Please enter it below.</p>
+
+                        <!-- Inline Error Message -->
+                        @if (sellError()) {
+                            <p class="text-[10px] font-black text-red-500 mb-6 uppercase tracking-wider animate-shake">{{ sellError() }}</p>
+                        } @else {
+                            <div class="mb-6"></div>
+                        }
+                        
+                        <input type="text" 
+                               autocomplete="one-time-code"
+                               maxlength="6"
+                               id="liq-otp-input"
+                               name="liq-otp-input"
+                               [value]="sellOtp()"
+                               (input)="sellOtp.set($any($event.target).value)"
+                               class="w-full bg-white border-none rounded-2xl py-5 text-center text-2xl font-black tracking-widest text-[#0d1a0f] outline-none shadow-sm"
+                               placeholder="000000" />
+                        
+                        <div class="flex gap-4 mt-8">
+                            <button (click)="sellStep.set('pin')" class="flex-grow py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest text-slate-400">Back</button>
+                            <button (click)="confirmPortfolioSell()"
+                                    [disabled]="isProcessing() || sellOtp().length < 6"
+                                    class="flex-grow bg-[#1B4332] text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all disabled:opacity-30 disabled:cursor-not-allowed">
+                                Withdraw Funds
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
           </div>
         </div>
     </div>
@@ -155,17 +340,18 @@
                     <span>Available Units</span>
                     <span class="text-[#1B4332]">{{ selectedHolding()?.units | number:'1.2-2' }}</span>
                 </div>
-                <input type="number" 
-                       [(ngModel)]="sellUnits"
+                <input type="text" 
+                       [value]="formatWithCommas(sellAmount())"
+                       (input)="onAmountInput($event)"
                        class="w-full bg-white border-none rounded-2xl py-4 px-6 text-xl font-black text-[#0d1a0f] outline-none shadow-sm"
                        placeholder="0.00" />
-                <p class="text-[9px] font-bold text-slate-400 italic">Approx. Value: ₦{{ (sellUnits() * (selectedHolding()?.currentPrice || 0)).toLocaleString() }}</p>
+                <p class="text-[9px] font-bold text-slate-400 italic">Approx. Value: ₦{{ (sellAmount() * (selectedHolding()?.currentPrice || 0)).toLocaleString() }}</p>
             </div>
 
             <div class="flex gap-3">
                 <button (click)="selectedHolding.set(null)" class="flex-grow py-4 rounded-3xl font-black text-[10px] uppercase tracking-widest text-slate-400">Cancel</button>
                 <button (click) = "confirmPartialSell()" 
-                        [disabled]="isProcessing() || sellUnits() <= 0 || sellUnits() > (selectedHolding()?.units || 0)"
+                        [disabled]="isProcessing() || sellAmount() <= 0 || sellAmount() > (selectedHolding()?.units || 0)"
                         class="flex-grow bg-red-500 hover:bg-red-600 text-white py-4 rounded-3xl font-black text-[10px] uppercase tracking-widest shadow-xl transition-all">
                     Confirm Sell
                 </button>
