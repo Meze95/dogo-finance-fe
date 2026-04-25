@@ -8,9 +8,11 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'forgot-password', renderMode: RenderMode.Server },
   { path: 'reset-password',  renderMode: RenderMode.Server },
 
-  // Parameterized routes must be Server-rendered
+  // Parameterized and Secured routes must be Server-rendered
   { path: 'products/:plan', renderMode: RenderMode.Server },
   { path: 'blog/:id',       renderMode: RenderMode.Server },
+  { path: 'admin/**',       renderMode: RenderMode.Server },
+  { path: 'client/**',      renderMode: RenderMode.Server },
 
   // All other routes can be prerendered
   { path: '**', renderMode: RenderMode.Prerender }
