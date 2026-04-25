@@ -40,11 +40,7 @@ export class SettingsComponent {
   profileImage = signal<string | null>(null);
 
   // --- Verifications State ---
-  verifications = signal([
-    { type: 'BVN', label: 'BVN Verification', status: 'verified', icon: 'ri-bank-card-line' },
-    { type: 'NIN', label: 'NIN Verification', status: 'verified', icon: 'ri-shield-user-line' },
-    { type: 'Address', label: 'Address Verification', status: 'not_started', icon: 'ri-map-pin-user-line', reason: '' }
-  ]);
+  verifications = signal<any[]>([]);
   
   showVerificationModal = signal(false);
   activeVerification = signal<any>(null);
@@ -58,13 +54,24 @@ export class SettingsComponent {
   addressFilePreview = signal<string | null>(null);
   isUploadingAddressDoc = signal(false);
 
-  addressDocOptions: DropdownOption[] = [
-    { label: 'Electricity Bill (PHCN)', value: 'Electricity Bill', icon: 'ri-flashlight-line' },
-    { label: 'Water Bill', value: 'Water Bill', icon: 'ri-drop-line' },
-    { label: 'Waste Bill (LAWMA)', value: 'Waste Bill', icon: 'ri-delete-bin-line' },
-    { label: 'Bank Statement', value: 'Bank Statement', icon: 'ri-bank-line' },
-    { label: 'Tenancy Agreement/Rent Receipt', value: 'Tenancy Receipt', icon: 'ri-home-4-line' }
-  ];
+  addressDocTypes = signal<any[]>([]);
+  addressDocOptions = computed<DropdownOption[]>(() => {
+    return this.addressDocTypes().map(type => ({
+      label: type.name,
+      value: type.id, // Using the ID from the database
+      icon: this.getDocIcon(type.name)
+    }));
+  });
+
+  private getDocIcon(name: string): string {
+    const n = name.toLowerCase();
+    if (n.includes('electricity')) return 'ri-flashlight-line';
+    if (n.includes('water')) return 'ri-drop-line';
+    if (n.includes('waste')) return 'ri-delete-bin-line';
+    if (n.includes('bank')) return 'ri-bank-line';
+    if (n.includes('tenancy')) return 'ri-home-4-line';
+    return 'ri-file-list-3-line';
+  }
 
   // --- Bank Accounts State ---
   bankAccounts = signal<BankAccount[]>([]);
@@ -94,6 +101,8 @@ export class SettingsComponent {
         this.loadMyBanks();
         this.loadNextOfKin();
         this.loadRelationshipTypes();
+        this.loadAddressDocTypes();
+        this.loadVerifications();
       }
     });
   }
@@ -127,6 +136,18 @@ export class SettingsComponent {
   loadRelationshipTypes() {
     this.settingsService.getRelationshipTypes().subscribe(res => {
       if (res.data) this.relationships.set(res.data);
+    });
+  }
+
+  loadAddressDocTypes() {
+    this.settingsService.getAddressDocTypes().subscribe(res => {
+      if (res.data) this.addressDocTypes.set(res.data);
+    });
+  }
+
+  loadVerifications() {
+    this.settingsService.getVerificationStatuses().subscribe(res => {
+      if (res.data) this.verifications.set(res.data);
     });
   }
 
@@ -267,18 +288,30 @@ export class SettingsComponent {
       if (!this.addressDocType() || !this.addressFile()) return;
       this.isVerifying.set(true);
       
-      // Simulate API call for Address Verification
-      setTimeout(() => {
-        this.isVerifying.set(false);
-        this.isVerificationSuccess.set(true);
-        
-        const updated = this.verifications().map(item => 
-          item.type === 'Address' ? { ...item, status: 'pending' } : item
-        );
-        this.verifications.set(updated);
-        
-        setTimeout(() => this.closeVerificationModal(), 2000);
-      }, 2000);
+      const formData = new FormData();
+      formData.append('DocTypeId', this.addressDocType()); // This is the ID from the dropdown
+      formData.append('File', this.addressFile()!);
+
+      this.settingsService.verifyAddress(formData).subscribe({
+        next: (res) => {
+          this.isVerifying.set(false);
+          this.isVerificationSuccess.set(true);
+          this.loadVerifications();
+          
+          setTimeout(() => this.closeVerificationModal(), 2000);
+        },
+        error: (err) => {
+          this.isVerifying.set(false);
+          Swal.fire({
+            icon: 'error',
+            title: 'Upload Failed',
+            text: err.error?.message || 'We could not process your document.',
+            confirmButtonColor: '#1B4332',
+            background: '#f8f7f2',
+            customClass: { popup: 'rounded-[30px]' }
+          });
+        }
+      });
       return;
     }
 

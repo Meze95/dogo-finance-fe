@@ -71,7 +71,11 @@ export class ProductService {
       if (res.success) {
         const mappedData = res.data.map((p: any) => ({
           ...p,
-          portfolioId: p.portfolioId // Standardizing casing
+          portfolioId: p.portfolioId,
+          allocations: (p.allocations || []).map((a: any) => ({
+            ...a,
+            assetTypeName: a.assetClassName || a.assetTypeName
+          }))
         }));
         this.portfolios.set(mappedData);
       }
@@ -147,6 +151,11 @@ export class ProductService {
       description: portfolio.description,
       expectedAnnualReturn: portfolio.expectedAnnualReturn || 0,
       isActive: portfolio.isActive,
+      lockInPeriodDays: portfolio.lockInPeriodDays || 0,
+      minHoldingPeriodDays: portfolio.minHoldingPeriodDays || 0,
+      exitFeePercentage: portfolio.exitFeePercentage || 0,
+      noticePeriodDays: portfolio.noticePeriodDays || 0,
+      approvalThresholdAmount: portfolio.approvalThresholdAmount || 0,
       allocations: (portfolio.allocations || []).map(alloc => ({
         id: alloc.id,
         portfolioId: portfolio.portfolioId,

@@ -24,9 +24,9 @@ export class AdminInvestmentsComponent implements OnInit {
   filteredInvestments = computed(() => {
     const search = this.searchTerm().toLowerCase();
     const items = this.allInvestments().filter(inv => 
-      inv.portfolioName.toLowerCase().includes(search) ||
-      inv.clientName.toLowerCase().includes(search) ||
-      inv.clientEmail.toLowerCase().includes(search)
+      (inv.portfolioName || '').toLowerCase().includes(search) ||
+      (inv.clientName || '').toLowerCase().includes(search) ||
+      (inv.clientEmail || '').toLowerCase().includes(search)
     );
 
     const startIndex = (this.currentPage() - 1) * this.pageSize();
@@ -36,9 +36,9 @@ export class AdminInvestmentsComponent implements OnInit {
   totalItems = computed(() => {
     const search = this.searchTerm().toLowerCase();
     return this.allInvestments().filter(inv => 
-      inv.portfolioName.toLowerCase().includes(search) ||
-      inv.clientName.toLowerCase().includes(search) ||
-      inv.clientEmail.toLowerCase().includes(search)
+      (inv.portfolioName || '').toLowerCase().includes(search) ||
+      (inv.clientName || '').toLowerCase().includes(search) ||
+      (inv.clientEmail || '').toLowerCase().includes(search)
     ).length;
   });
 
@@ -49,7 +49,7 @@ export class AdminInvestmentsComponent implements OnInit {
   selectedInvestment = signal<AdminUserInvestment | null>(null);
 
   ngOnInit() {
-    // Service already initializes the data
+    this.investmentService.loadAllAdminInvestments();
   }
 
   updateSearch(event: Event) {

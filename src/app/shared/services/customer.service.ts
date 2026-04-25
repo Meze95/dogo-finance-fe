@@ -37,4 +37,12 @@ export class CustomerService {
   verifyNin(customerId: number | string, nin: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/${customerId}/verify-nin`, { nin });
   }
+
+  getAddressDocTypes(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/address-doc-types`);
+  }
+
+  verifyAddress(formData: FormData): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/verify-address`, formData);
+  }
 }

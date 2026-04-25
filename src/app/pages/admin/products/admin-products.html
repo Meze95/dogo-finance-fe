@@ -335,6 +335,45 @@
         </div>
       </div>
 
+      <!-- Liquidation Policy Section -->
+      <div class="space-y-6" style="overflow: visible;">
+        <h4 class="text-sm font-black text-[#C9A84C] uppercase tracking-widest border-b border-slate-100 pb-2">Liquidation & Exit Policy</h4>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" style="overflow: visible;">
+          <div class="space-y-1">
+            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Lock-in Period (Days)</label>
+            <input type="number" [ngModel]="formData().lockInPeriodDays" (ngModelChange)="updateFormField('lockInPeriodDays', $event)" placeholder="0"
+                   class="w-full bg-[#f8f7f2] border border-[#1B4332]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[#C9A84C] transition-all shadow-sm" />
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Notice Period (Days)</label>
+            <input type="number" [ngModel]="formData().noticePeriodDays" (ngModelChange)="updateFormField('noticePeriodDays', $event)" placeholder="0"
+                   class="w-full bg-[#f8f7f2] border border-[#1B4332]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[#C9A84C] transition-all shadow-sm" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" style="overflow: visible;">
+          <div class="space-y-1">
+            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Min Holding Period (Days)</label>
+            <input type="number" [ngModel]="formData().minHoldingPeriodDays" (ngModelChange)="updateFormField('minHoldingPeriodDays', $event)" placeholder="0"
+                   class="w-full bg-[#f8f7f2] border border-[#1B4332]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[#C9A84C] transition-all shadow-sm" />
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Exit Fee (%)</label>
+            <input type="number" [ngModel]="formData().exitFeePercentage" (ngModelChange)="updateFormField('exitFeePercentage', $event)" placeholder="0.00"
+                   class="w-full bg-[#f8f7f2] border border-[#1B4332]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[#C9A84C] transition-all shadow-sm" />
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Admin Approval Threshold (₦)</label>
+          <input type="number" [ngModel]="formData().approvalThresholdAmount" (ngModelChange)="updateFormField('approvalThresholdAmount', $event)" placeholder="1,000,000"
+                 class="w-full bg-[#f8f7f2] border border-[#1B4332]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[#C9A84C] transition-all shadow-sm" />
+        </div>
+      </div>
+
       <!-- Asset & Instrument Allocation section -->
       <div class="space-y-6" style="overflow: visible;">
         <div class="flex justify-between items-center border-b border-slate-100 pb-2">
@@ -743,6 +782,32 @@
             {{ selectedProduct()?.description }}
          </p>
       </div>
+
+      <div class="mb-10 grid grid-cols-2 gap-6 bg-[#f8f7f2]/40 p-6 rounded-[30px] border border-[#1B4332]/5">
+        <div class="col-span-2 border-b border-slate-100 pb-2 mb-2">
+           <p class="text-[10px] font-black uppercase tracking-widest text-[#C9A84C]">Liquidation Policy</p>
+        </div>
+        <div>
+           <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Lock-in Period</p>
+           <span class="text-sm font-black text-[#0d1a0f]">{{ selectedProduct()?.lockInPeriodDays || 0 }} Days</span>
+        </div>
+        <div>
+           <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Notice Period</p>
+           <span class="text-sm font-black text-[#0d1a0f]">{{ selectedProduct()?.noticePeriodDays || 0 }} Days</span>
+        </div>
+        <div>
+           <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Min Holding Period</p>
+           <span class="text-sm font-black text-[#0d1a0f]">{{ selectedProduct()?.minHoldingPeriodDays || 0 }} Days</span>
+        </div>
+        <div>
+           <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Exit Fee</p>
+           <span class="text-sm font-black text-[#0d1a0f] text-red-600">{{ selectedProduct()?.exitFeePercentage || 0 }}%</span>
+        </div>
+        <div class="col-span-2">
+           <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Admin Approval Threshold</p>
+           <span class="text-sm font-black text-[#0d1a0f]">₦{{ selectedProduct()?.approvalThresholdAmount | number:'1.2-2' }}</span>
+        </div>
+     </div>
 
       <div>
          <p class="text-[10px] font-black uppercase tracking-widest text-[#C9A84C] mb-4">Target Asset Allocation</p>

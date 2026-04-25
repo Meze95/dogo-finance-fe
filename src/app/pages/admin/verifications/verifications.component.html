@@ -41,22 +41,22 @@
               <td class="py-6">
                 <div class="flex items-center space-x-4">
                   <div class="w-10 h-10 rounded-xl bg-[#C9A84C]/10 text-[#C9A84C] flex items-center justify-center font-black text-xs">
-                    {{ req.clientName.charAt(0) }}
+                    {{ (req.customerName || '').charAt(0) }}
                   </div>
                   <div>
-                    <p class="font-black text-sm text-[#0d1a0f]">{{ req.clientName }}</p>
-                    <p class="text-[10px] font-bold text-[#6B7280] uppercase">{{ req.clientId }}</p>
+                    <p class="font-black text-sm text-[#0d1a0f]">{{ req.customerName }}</p>
+                    <p class="text-[10px] font-bold text-[#6B7280] uppercase">{{ req.customerCode }}</p>
                   </div>
                 </div>
               </td>
               <td class="py-6">
                 <div class="flex items-center space-x-2">
                   <i class="ri-file-list-3-line text-[#1B4332]/40"></i>
-                  <span class="text-sm font-bold text-[#0d1a0f]">{{ req.docType }}</span>
+                  <span class="text-sm font-bold text-[#0d1a0f]">{{ req.documentType }}</span>
                 </div>
               </td>
               <td class="py-6">
-                <span class="text-xs font-mono text-[#6B7280]">{{ req.date }}</span>
+                <span class="text-xs font-mono text-[#6B7280]">{{ req.dateSubmitted }}</span>
               </td>
               <td class="py-6">
                 <app-badge [variant]="getBadgeVariant(req.status)">{{ req.status }}</app-badge>
@@ -134,7 +134,7 @@
       <div class="p-8 border-b border-[#1B4332]/5 flex items-center justify-between shrink-0">
         <div>
           <h2 class="text-2xl font-black text-[#0d1a0f] italic tracking-tighter">Review Verification Request</h2>
-          <p class="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest mt-1">Request ID: {{ selectedRequest()?.id }}</p>
+          <p class="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest mt-1">Request ID: #{{ selectedRequest()?.id }}</p>
         </div>
         <button (click)="closeModal()" class="w-12 h-12 rounded-full bg-[#f8f7f2] flex items-center justify-center text-[#1B4332] hover:bg-[#1B4332] hover:text-white transition-all">
           <i class="ri-close-line text-2xl"></i>
@@ -148,7 +148,7 @@
           <div class="space-y-4">
             <h4 class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40">Uploaded Document</h4>
             <div class="relative w-full aspect-[3/4] rounded-[32px] overflow-hidden border-2 border-[#1B4332]/5 shadow-inner bg-[#f8f7f2]">
-              <img [src]="selectedRequest()?.imageUrl" class="w-full h-full object-cover">
+              <img [src]="selectedRequest()?.documentUrl" class="w-full h-full object-cover">
               <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               <button class="absolute bottom-6 right-6 w-12 h-12 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center hover:bg-white/40 transition-all border border-white/20">
                 <i class="ri-zoom-in-line text-2xl"></i>
@@ -161,19 +161,47 @@
             <div class="grid grid-cols-2 gap-6">
               <div class="p-6 bg-[#f8f7f2] rounded-3xl border border-[#1B4332]/5">
                 <p class="text-[10px] font-black uppercase tracking-[0.1em] text-[#1B4332]/40 mb-2">Full Name</p>
-                <p class="font-black text-[#0d1a0f]">{{ selectedRequest()?.clientName }}</p>
+                <p class="font-black text-[#0d1a0f]">{{ selectedRequest()?.customerName }}</p>
               </div>
               <div class="p-6 bg-[#f8f7f2] rounded-3xl border border-[#1B4332]/5">
                 <p class="text-[10px] font-black uppercase tracking-[0.1em] text-[#1B4332]/40 mb-2">Customer ID</p>
-                <p class="font-black text-[#0d1a0f]">{{ selectedRequest()?.clientId }}</p>
+                <p class="font-black text-[#0d1a0f]">{{ selectedRequest()?.customerCode }}</p>
               </div>
               <div class="md:col-span-2 p-6 bg-[#f8f7f2] rounded-3xl border border-[#1B4332]/5">
                 <p class="text-[10px] font-black uppercase tracking-[0.1em] text-[#1B4332]/40 mb-2">Document Type</p>
-                <p class="font-black text-[#0d1a0f]">{{ selectedRequest()?.docType }}</p>
+                <p class="font-black text-[#0d1a0f]">{{ selectedRequest()?.documentType }}</p>
               </div>
             </div>
 
-            @if (selectedRequest()?.status === 'pending') {
+            @if (selectedRequest()?.extractedAddress) {
+              <div class="p-8 bg-[#1B4332]/5 rounded-[32px] border-2 border-dashed border-[#1B4332]/10">
+                <div class="flex items-center space-x-2 mb-6">
+                  <div class="w-8 h-8 rounded-lg bg-[#1B4332] text-white flex items-center justify-center text-xs">
+                    <i class="ri-ai-generate"></i>
+                  </div>
+                  <h4 class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]">System Extracted Address</h4>
+                </div>
+                
+                <div class="space-y-4">
+                  <div>
+                    <p class="text-[9px] font-black uppercase tracking-widest text-[#1B4332]/40 mb-1">STREET ADDRESS</p>
+                    <p class="text-sm font-bold text-[#0d1a0f]">{{ selectedRequest()?.extractedAddress }}</p>
+                  </div>
+                  <div class="grid grid-cols-2 gap-4">
+                    <div>
+                      <p class="text-[9px] font-black uppercase tracking-widest text-[#1B4332]/40 mb-1">CITY</p>
+                      <p class="text-sm font-bold text-[#0d1a0f]">{{ selectedRequest()?.extractedCity }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[9px] font-black uppercase tracking-widest text-[#1B4332]/40 mb-1">STATE</p>
+                      <p class="text-sm font-bold text-[#0d1a0f]">{{ selectedRequest()?.extractedState }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+
+            @if (selectedRequest()?.status?.toLowerCase() === 'pending' || selectedRequest()?.status?.toLowerCase() === 'review') {
               <div class="space-y-6">
                 <h4 class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40">Verification Decision</h4>
                 
@@ -209,11 +237,17 @@
               </div>
             } @else {
               <div class="p-10 bg-[#f8f7f2] rounded-[40px] border border-[#1B4332]/5 text-center">
-                <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 shadow-sm" [class.text-green-500]="selectedRequest()?.status === 'approved'" [class.text-red-500]="selectedRequest()?.status === 'rejected'">
-                  <i [class]="selectedRequest()?.status === 'approved' ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill'"></i>
+                <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 shadow-sm" [class.text-green-500]="selectedRequest()?.status?.toLowerCase() === 'approved'" [class.text-red-500]="selectedRequest()?.status?.toLowerCase() === 'rejected'">
+                  <i [class]="selectedRequest()?.status?.toLowerCase() === 'approved' ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill'"></i>
                 </div>
                 <h4 class="text-xl font-black text-[#0d1a0f] italic tracking-tighter uppercase mb-2">Already {{ selectedRequest()?.status }}</h4>
-                <p class="text-xs font-bold text-[#6B7280]">{{ selectedRequest()?.status === 'approved' ? 'This address has been verified and can no longer be modified.' : 'This request was rejected: ' + selectedRequest()?.rejectionReason }}</p>
+                <p class="text-xs font-bold text-[#6B7280]">{{ selectedRequest()?.status?.toLowerCase() === 'approved' ? 'This address has been verified and can no longer be modified.' : 'This request was processed' }}</p>
+                @if (selectedRequest()?.adminNotes) {
+                  <div class="mt-4 p-4 bg-white/50 rounded-2xl border border-[#1B4332]/5 text-left italic">
+                    <p class="text-[10px] font-bold text-[#1B4332]/40 uppercase mb-1">Admin Notes:</p>
+                    <p class="text-xs text-[#0d1a0f]">{{ selectedRequest()?.adminNotes }}</p>
+                  </div>
+                }
                 
                 <div class="mt-8">
                   <app-button variant="outline" size="sm" (click)="closeModal()">Close Details</app-button>

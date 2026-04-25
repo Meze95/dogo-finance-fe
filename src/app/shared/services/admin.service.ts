@@ -49,4 +49,40 @@ export class AdminService {
   updateAccessRights(roleId: number, accessRightIds: number[]): Observable<any> {
     return this.http.put(`${this.apiUrl}/roles/${roleId}/access-rights`, accessRightIds);
   }
+
+  // --- ADDRESS VERIFICATIONS ---
+  getAddressVerifications(status?: string): Observable<any> {
+    const url = status ? `${this.apiUrl}/address-verifications?status=${status}` : `${this.apiUrl}/address-verifications`;
+    return this.http.get(url);
+  }
+
+  reviewAddressVerification(data: { 
+    verificationId: number, 
+    approved: boolean, 
+    adminNotes?: string,
+    correctedAddress?: string,
+    correctedCity?: string,
+    correctedState?: string
+  }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/address-verifications/review`, data);
+  }
+
+  // --- SETTINGS ---
+  getSettings(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/settings`);
+  }
+
+  updateSettings(settings: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/settings`, settings);
+  }
+
+  // --- WITHDRAWALS ---
+  getWithdrawals(status?: string): Observable<any> {
+    const url = status ? `${this.apiUrl}/withdrawals?status=${status}` : `${this.apiUrl}/withdrawals`;
+    return this.http.get(url);
+  }
+
+  reviewWithdrawalRequest(data: { requestId: number, approved: boolean, adminNotes?: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/withdrawals/review`, data);
+  }
 }

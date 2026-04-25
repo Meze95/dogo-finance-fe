@@ -52,7 +52,7 @@ export class TransactionService {
   }
 
   getPortfolioSummary(): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(`${this.apiUrl}/portfolioSummary`);
+    return this.http.get<ApiResponse>(`${this.apiUrl}/portfolio-summary`);
   }
 
   getHoldings(customerId: number): Observable<ApiResponse> {
@@ -69,5 +69,21 @@ export class TransactionService {
 
   sendWithdrawalOtp(customerId: number, amount: number): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(`${this.apiUrl}/send-withdrawal-otp`, { customerId, amount });
+  }
+
+  validateWithdrawalOtp(customerId: number, otp: string): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`${this.apiUrl}/validate-withdrawal-otp`, { customerId, otp });
+  }
+
+  tempInvest(portfolioId: number, amount: number, pin?: string, otp?: string): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`${this.apiUrl}/temp-invest`, { portfolioId, amount, pin, otp });
+  }
+
+  getActiveInvestments(customerId: number): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.apiUrl}/active-investments/${customerId}`);
+  }
+
+  sell(portfolioId: number, amount: number, pin?: string, otp?: string): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`${this.apiUrl}/sell`, { portfolioId, amount, pin, otp });
   }
 }
