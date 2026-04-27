@@ -161,7 +161,13 @@ export class SettingsService {
   }
 
   addBankAccount(account: Partial<BankAccount>): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(`${this.apiUrl}/Bank/accounts`, account);
+    const payload = {
+      BankId: account.bankId,
+      AccountNumber: account.accountNumber,
+      AccountName: account.accountName,
+      IsDefault: account.isDefault || false
+    };
+    return this.http.post<ApiResponse>(`${this.apiUrl}/Bank/accounts`, payload);
   }
   
   deleteBankAccount(id: number): Observable<ApiResponse> {
