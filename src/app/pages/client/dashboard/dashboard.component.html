@@ -345,7 +345,7 @@
                       <div class="space-y-2">
                           <label class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40 ml-4">Select Document Type</label>
                           <app-dropdown
-                            [options]="addressDocOptions"
+                            [options]="addressDocOptions()"
                             [selectedValue]="addressDocType()"
                             (valueChange)="addressDocType.set($event)"
                             placeholder="Select Document Type"

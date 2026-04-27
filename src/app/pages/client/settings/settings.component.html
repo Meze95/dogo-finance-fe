@@ -226,37 +226,39 @@
                     <div class="mt-8">
                        <app-button variant="outline" size="sm" class="w-full" (click)="startAddBank()">Add New Bank Account</app-button>
                     </div>
-                     <div class="space-y-6 mt-6 mb-8 overflow-visible">
-                        <app-dropdown 
-                           label="Select Bank"
-                           [options]="bankOptions()"
-                           [selectedValue]="newBankForm().bankId"
-                           (valueChange)="updateBankField('bankId', $event)"
-                           placeholder="Choose destination bank"
-                           placeholderIcon="ri-bank-line"
-                        ></app-dropdown>
+                 }
+                 @if (isAddingBank()) {
+                    <div class="space-y-6 mt-10 p-6 bg-[#f8f7f2]/50 rounded-[32px] border border-[#1B4332]/5 animate-in slide-in-from-top-4 duration-300">
+                       <h4 class="text-xs font-black uppercase tracking-widest text-[#1B4332] mb-2">New Bank Details</h4>
 
-                        <div>
-                           <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Account Name (Full Legal Name)</label>
-                           <input type="text" [value]="newBankForm().accountName" readonly
-                                  class="w-full bg-gray-100/50 border-2 border-transparent rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none cursor-default">
-                        </div>
-                        <div>
-                           <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Account Number</label>
-                           <input type="text" maxlength="10" [value]="newBankForm().accountNumber" (input)="updateBankField('accountNumber', $any($event.target).value.replace(/[^0-9]/g, ''))"
-                                  class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all placeholder:text-[#1B4332]/20" placeholder="10-digit account number">
-                        </div>
-                     </div>
-                  }
-                  
-                  @if (isAddingBank()) {
-                     <div footer-right class="pt-10 flex items-center space-x-3 w-full justify-end">
-                        <app-button variant="ghost" size="sm" (click)="cancelAddBank()" [disabled]="isSavingBank()">Cancel</app-button>
-                        <app-button variant="primary" size="sm" (click)="saveBank()" [disabled]="isSavingBank() || !newBankForm().bankId || newBankForm().accountNumber?.length !== 10">
-                           {{ isSavingBank() ? 'Saving...' : 'Add Account' }}
-                        </app-button>
-                     </div>
-                  }
+                       <app-dropdown 
+                          label="Select Bank"
+                          [options]="bankOptions()"
+                          [selectedValue]="newBankForm().bankId"
+                          (valueChange)="updateBankField('bankId', $event)"
+                          placeholder="Choose destination bank"
+                          placeholderIcon="ri-bank-line"
+                       ></app-dropdown>
+
+                       <div>
+                          <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Account Name (Full Legal Name)</label>
+                          <input type="text" [value]="newBankForm().accountName" readonly
+                                 class="w-full bg-gray-100/50 border-2 border-transparent rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none cursor-default">
+                       </div>
+                       <div>
+                          <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Account Number</label>
+                          <input type="text" maxlength="10" [value]="newBankForm().accountNumber" (input)="updateBankField('accountNumber', $any($event.target).value.replace(/[^0-9]/g, ''))"
+                                 class="w-full bg-white border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all placeholder:text-[#1B4332]/20 shadow-sm" placeholder="10-digit account number">
+                       </div>
+
+                       <div class="pt-6 flex items-center space-x-3 w-full justify-end">
+                          <app-button variant="ghost" size="sm" (click)="cancelAddBank()" [disabled]="isSavingBank()">Cancel</app-button>
+                          <app-button variant="primary" size="sm" (click)="saveBank()" [disabled]="isSavingBank() || !newBankForm().bankId || newBankForm().accountNumber?.length !== 10">
+                             {{ isSavingBank() ? 'Saving...' : 'Add Account' }}
+                          </app-button>
+                       </div>
+                    </div>
+                 }
               </app-card>
            </div>
         }

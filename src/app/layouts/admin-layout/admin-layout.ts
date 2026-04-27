@@ -26,8 +26,8 @@ export class AdminLayout {
     { label: 'Investments', icon: 'ri-briefcase-4-fill', link: '/admin/investments' },
     { label: 'Liquidation Requests', icon: 'ri-exchange-funds-line', link: '/admin/liquidation-requests' },
     { label: 'Verifications', icon: 'ri-shield-check-line', link: '/admin/verifications' },
-    { label: 'Withdrawal', icon: 'ri-bank-card-line', link: '/admin/withdrawals' },
-    { label: 'System Ledger', icon: 'ri-exchange-box-fill', link: '/admin/transactions' }
+    { label: 'Withdrawal', icon: 'ri-bank-card-line', link: '/admin/withdrawals' }
+    // { label: 'System Ledger', icon: 'ri-exchange-box-fill', link: '/admin/transactions' }
   ];
 
   managementItems = [

@@ -94,14 +94,13 @@ export class ClientDashboardComponent implements OnInit {
   ngOnInit() {
     this.productService.getPortfolios();
     this.loadRelationshipTypes();
+    this.loadAddressDocTypes();
     // loadDashboardData is now triggered by the effect in constructor
     
     // Auto-refresh balance every 5 minutes for performance optimization
     const intervalId = setInterval(() => {
       this.loadDashboardData();
     }, 300000); 
-    
-    // Cleanup on destroy logic would be good, but for now we'll just set it
   }
 
   loadDashboardData() {
@@ -451,6 +450,20 @@ export class ClientDashboardComponent implements OnInit {
     });
   }
 
+  loadAddressDocTypes() {
+    this.settingsService.getAddressDocTypes().subscribe({
+        next: (res) => {
+            if (res.data) {
+                const options = res.data.map((type: any) => ({
+                    value: type.id.toString(),
+                    label: type.name
+                }));
+                this.addressDocOptions.set(options);
+            }
+        }
+    });
+  }
+
   loadTodoList() {
     const customerId = this.user()?.CustomerId || this.user()?.customerId;
     if (customerId) {
@@ -503,13 +516,7 @@ export class ClientDashboardComponent implements OnInit {
   addressDocType = signal('');
   addressFile = signal<File | null>(null);
   addressFilePreview = signal<string | null>(null);
-  addressDocOptions = [
-    { value: 'Electricity Bill', label: 'Electricity Bill (PHCN)' },
-    { value: 'Water Bill', label: 'Water Bill' },
-    { value: 'Waste Bill', label: 'Waste Bill (LAWMA)' },
-    { value: 'Bank Statement', label: 'Bank Statement' },
-    { value: 'Tenancy Receipt', label: 'Tenancy Receipt' }
-  ];
+  addressDocOptions = signal<any[]>([]);
 
   // Transaction Modal State
   showTransactionModal = signal(false);
@@ -703,10 +710,27 @@ export class ClientDashboardComponent implements OnInit {
     this.isProcessing.set(true);
     
     if (isAddressFlow) {
-      // Simulation: Address verification upload
-      setTimeout(() => {
-        this.handleSuccessAction();
-      }, 2000);
+      if (!this.addressDocType() || !this.addressFile()) return;
+      
+      const formData = new FormData();
+      formData.append('DocTypeId', this.addressDocType());
+      formData.append('File', this.addressFile()!);
+
+      this.settingsService.verifyAddress(formData).subscribe({
+        next: (res) => {
+          this.handleSuccessAction();
+        },
+        error: (err) => {
+          this.isProcessing.set(false);
+          this.errorMessage.set(err.error?.message || 'Failed to upload document');
+          Swal.fire({
+            icon: 'error',
+            title: 'Upload Failed',
+            text: err.error?.message || 'We could not process your document.',
+            confirmButtonColor: '#1B4332'
+          });
+        }
+      });
       return;
     }
 
