@@ -2,11 +2,12 @@ import { Component, signal, OnInit, OnDestroy, inject, Inject, PLATFORM_ID } fro
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../shared/services/auth.service';
+import { AuthLayoutComponent } from '../../../layouts/auth-layout/auth-layout.component';
 
 @Component({
   selector: 'app-verify-email',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, AuthLayoutComponent],
   templateUrl: './verify-email.component.html',
   styleUrl: './verify-email.component.css',
 })

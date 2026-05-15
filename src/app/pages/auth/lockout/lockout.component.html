@@ -1,0 +1,32 @@
+<app-auth-layout
+  sidebarTitle="We've"
+  sidebarHighlight="secured"
+  sidebarSubtext="For your protection and peace of mind, we automatically lock inactive sessions to keep your Halal portfolio safe."
+  sidebarNoticeTitle="Automated Timeouts"
+  sidebarNoticeBody="Bank-level Security Protocol"
+  sidebarNoticeIcon="ri-shield-keyhole-fill"
+  pageTitle="Session Expired"
+  pageSubtext="You've been inactive for a while."
+  backLink="/login"
+  backText="Go to Login">
+
+  <div class="animate-fade-in flex flex-col items-center text-center">
+    <div class="w-24 h-24 bg-[var(--dogo-primary)]/5 border-8 border-white shadow-xl rounded-full flex items-center justify-center mb-8 relative">
+       <div class="absolute inset-0 rounded-full border-2 border-[var(--dogo-secondary)]/30 animate-ping"></div>
+       <i class="ri-lock-password-fill text-5xl text-[var(--dogo-secondary)]"></i>
+    </div>
+    
+    <p class="text-[var(--dogo-muted)] font-medium mb-10 leading-relaxed max-w-sm">
+        For your security, you have been securely logged out of your account.
+    </p>
+    
+    <a routerLink="/login" class="w-full h-16 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] hover:shadow-2xl hover:shadow-[var(--dogo-primary)]/30 hover:-translate-y-1 transition-all uppercase tracking-widest text-[11px] flex items-center justify-center gap-2">
+      Login again <i class="ri-arrow-right-line text-lg"></i>
+    </a>
+    
+    <div class="mt-8">
+       <a routerLink="/" class="text-[10px] uppercase tracking-widest font-black text-slate-400 hover:text-[var(--dogo-primary)] transition-colors">Return to Homepage</a>
+    </div>
+  </div>
+
+</app-auth-layout>

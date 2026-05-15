@@ -1,14 +1,14 @@
 <section class="bg-[#051121] text-white pt-24 pb-20 relative overflow-hidden dogo-pattern">
-  <div class="absolute inset-0 bg-[#0d1a0f] z-0"></div> <!-- Dogo primary dark bg -->
+  <div class="absolute inset-0 bg-[var(--dogo-dark)] z-0"></div> <!-- Dogo primary dark bg -->
   <div class="absolute inset-0 dogo-pattern opacity-[0.06] z-10 pointer-events-none"></div>
 
-  <div class="absolute top-0 right-0 w-[600px] h-[600px] rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 opacity-20 z-10" style="background: radial-gradient(circle, #C9A84C, transparent)"></div>
+  <div class="absolute top-0 right-0 w-[600px] h-[600px] rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 opacity-20 z-10" style="background: radial-gradient(circle, var(--dogo-secondary), transparent)"></div>
   <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-20">
     <div class="flex flex-col lg:flex-row items-center justify-between gap-16">
       <div class="lg:w-1/2">
         <h1 class="text-6xl md:text-[80px] font-black leading-[1] mb-8 tracking-tighter">
           Ways we <br />
-          can <span class="text-[#C9A84C]">help.</span>
+          can <span class="text-[var(--dogo-secondary)]">help.</span>
         </h1>
         <p class="text-xl text-white/60 font-medium max-w-lg leading-relaxed">
           Find answers to your questions about DOGO Finance, or reach out to our dedicated support team for specialized assistance.
@@ -21,34 +21,34 @@
             (input)="updateSearch($event)"
             [value]="searchQuery()"
             placeholder="Search for a question..." 
-            class="w-full h-16 md:h-20 bg-white/5 border-2 border-white/10 rounded-full px-10 text-xl font-medium focus:outline-none focus:border-[#C9A84C] focus:bg-white/10 transition-all placeholder:text-white/40" />
-          <i class="ri-search-line absolute right-8 top-1/2 -translate-y-1/2 text-2xl text-white/40 group-focus-within:text-[#C9A84C] transition-colors"></i>
+            class="w-full h-16 md:h-20 bg-white/5 border-2 border-white/10 rounded-full px-10 text-xl font-medium focus:outline-none focus:border-[var(--dogo-secondary)] focus:bg-white/10 transition-all placeholder:text-white/40" />
+          <i class="ri-search-line absolute right-8 top-1/2 -translate-y-1/2 text-2xl text-white/40 group-focus-within:text-[var(--dogo-secondary)] transition-colors"></i>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="py-24 bg-[#f8f7f2]">
+<section class="py-24 bg-[var(--dogo-cream)]">
   <div class="max-w-4xl mx-auto px-6 md:px-12">
     <div class="space-y-6">
       @for (cat of filteredCategories(); track cat.title) {
         <div class="group">
-          <button (click)="toggleCategory(cat.title)" class="w-full flex items-center justify-between p-8 md:p-10 bg-[#1B4332] text-white rounded-[32px] hover:bg-[#2D6A4F] transition-all shadow-xl shadow-[#1B4332]/20">
-            <span class="text-xl md:text-2xl font-black uppercase tracking-widest text-[#C9A84C] text-left">{{ cat.title }}</span>
-            <i class="ri-arrow-down-s-line text-3xl text-[#C9A84C] transition-transform duration-500" [class.rotate-180]="cat.isOpen"></i>
+          <button (click)="toggleCategory(cat.title)" class="w-full flex items-center justify-between p-8 md:p-10 bg-[var(--dogo-primary)] text-white rounded-[32px] hover:bg-[var(--dogo-primary-soft)] transition-all shadow-xl shadow-[var(--dogo-primary)]/20">
+            <span class="text-xl md:text-2xl font-black uppercase tracking-widest text-[var(--dogo-secondary)] text-left">{{ cat.title }}</span>
+            <i class="ri-arrow-down-s-line text-3xl text-[var(--dogo-secondary)] transition-transform duration-500" [class.rotate-180]="cat.isOpen"></i>
           </button>
 
           <div class="overflow-hidden transition-all duration-500 ease-in-out" [style.max-height]="cat.isOpen ? '2000px' : '0'" [class.mt-4]="cat.isOpen">
             <div class="space-y-4 px-2 md:px-8 pb-4">
               @for (item of cat.questions; track item.q) {
-                <div class="bg-white rounded-3xl border border-[#1B4332]/10 shadow-sm overflow-hidden border-b-2 hover:border-[#C9A84C] transition-colors">
-                  <button (click)="toggleQuestion(cat.title, item.q)" class="w-full flex items-center justify-between p-6 text-left hover:bg-[#e8f5ee]/30 transition-colors">
-                    <span class="font-bold text-[#0d1a0f] pr-4">{{ item.q }}</span>
-                    <i class="ri-add-line text-2xl text-[#1B4332] transition-transform duration-300" [class.rotate-45]="item.isOpen"></i>
+                <div class="bg-white rounded-3xl border border-[var(--dogo-primary)]/10 shadow-sm overflow-hidden border-b-2 hover:border-[var(--dogo-secondary)] transition-colors">
+                  <button (click)="toggleQuestion(cat.title, item.q)" class="w-full flex items-center justify-between p-6 text-left hover:bg-[var(--dogo-cream)]/30 transition-colors">
+                    <span class="font-bold text-[var(--dogo-dark)] pr-4">{{ item.q }}</span>
+                    <i class="ri-add-line text-2xl text-[var(--dogo-primary)] transition-transform duration-300" [class.rotate-45]="item.isOpen"></i>
                   </button>
                   <div class="overflow-hidden transition-all duration-300 ease-in-out" [style.max-height]="item.isOpen ? '500px' : '0'">
-                    <p class="px-6 pb-6 text-[#6B7280] font-medium leading-relaxed border-t border-[#1B4332]/5 pt-4">
+                    <p class="px-6 pb-6 text-[var(--dogo-muted)] font-medium leading-relaxed border-t border-[var(--dogo-primary)]/5 pt-4">
                       {{ item.a }}
                     </p>
                   </div>
@@ -58,21 +58,21 @@
           </div>
         </div>
       } @empty {
-        <div class="text-center py-20 bg-white rounded-[40px] border-2 border-dashed border-[#1B4332]/20">
-           <i class="ri-search-eye-line text-6xl text-[#1B4332]/30 mb-6 block"></i>
-           <h3 class="text-2xl font-black text-[#0d1a0f] mb-2">No matches found</h3>
-           <p class="text-[#6B7280] font-medium">Try searching for something else or contact our support.</p>
+        <div class="text-center py-20 bg-white rounded-[40px] border-2 border-dashed border-[var(--dogo-primary)]/20">
+           <i class="ri-search-eye-line text-6xl text-[var(--dogo-primary)]/30 mb-6 block"></i>
+           <h3 class="text-2xl font-black text-[var(--dogo-dark)] mb-2">No matches found</h3>
+           <p class="text-[var(--dogo-muted)] font-medium">Try searching for something else or contact our support.</p>
         </div>
       }
     </div>
 
     <!-- Contact Support Card -->
-    <div class="mt-24 p-12 rounded-[50px] bg-[#C9A84C] text-[#0d1a0f] text-center relative overflow-hidden shadow-2xl shadow-[#C9A84C]/20 border border-[#f0d98b]">
+    <div class="mt-24 p-12 rounded-[50px] bg-[var(--dogo-secondary)] text-[var(--dogo-dark)] text-center relative overflow-hidden shadow-2xl shadow-[var(--dogo-secondary)]/20 border border-[#f0d98b]">
       <div class="absolute inset-0 dogo-pattern opacity-10 pointer-events-none"></div>
       <div class="relative z-10">
         <h3 class="text-3xl font-black mb-6">Still have questions?</h3>
-        <p class="text-xl text-[#0d1a0f]/70 mb-10 max-w-xl mx-auto font-medium">Our support team is always here to help you via live chat, email, or phone call.</p>
-        <button class="px-10 py-4 bg-[#1B4332] text-white rounded-2xl font-black hover:-translate-y-1 transition-all shadow-xl shadow-[#1B4332]/30">Contact Support</button>
+        <p class="text-xl text-[var(--dogo-dark)]/70 mb-10 max-w-xl mx-auto font-medium">Our support team is always here to help you via live chat, email, or phone call.</p>
+        <button class="px-10 py-4 bg-[var(--dogo-primary)] text-white rounded-2xl font-black hover:-translate-y-1 transition-all shadow-xl shadow-[var(--dogo-primary)]/30">Contact Support</button>
       </div>
     </div>
   </div>
@@ -80,10 +80,12 @@
 
 <!-- Footer links decoration -->
 <div class="bg-white py-12 border-t border-gray-100">
-  <div class="max-w-7xl mx-auto px-6 md:px-12 flex flex-wrap justify-center items-center gap-12 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500 text-[#1B4332]">
+  <div class="max-w-7xl mx-auto px-6 md:px-12 flex flex-wrap justify-center items-center gap-12 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500 text-[var(--dogo-primary)]">
     <span class="text-xl font-black tracking-tighter italic">DOGO Finance Support</span>
-    <span class="text-xl font-black tracking-tighter hover:text-[#C9A84C] cursor-pointer">Community Docs</span>
-    <span class="text-xl font-black tracking-tighter hover:text-[#C9A84C] cursor-pointer">API Reference</span>
-    <span class="text-xl font-black tracking-tighter hover:text-[#C9A84C] cursor-pointer">Privacy Hub</span>
+    <span class="text-xl font-black tracking-tighter hover:text-[var(--dogo-secondary)] cursor-pointer">Community Docs</span>
+    <span class="text-xl font-black tracking-tighter hover:text-[var(--dogo-secondary)] cursor-pointer">API Reference</span>
+    <span class="text-xl font-black tracking-tighter hover:text-[var(--dogo-secondary)] cursor-pointer">Privacy Hub</span>
   </div>
 </div>
+
+

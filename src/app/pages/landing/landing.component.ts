@@ -53,7 +53,7 @@ export class LandingComponent {
       desc: 'You provide capital. We manage it expertly. Profits shared — no Riba, ever.',
       return: 'Up to 18% p.a.',
       icon: 'ri-seedling-fill',
-      color: '#1B4332',
+      color: '#38bdf8', // Sky Blue
       route: '/products/mudarabah'
     },
     {
@@ -62,7 +62,7 @@ export class LandingComponent {
       desc: 'Asset-backed Islamic bonds giving you predictable, Shariah-certified returns in Naira.',
       return: 'From 12% p.a.',
       icon: 'ri-bank-fill',
-      color: '#C9A84C',
+      color: '#fbbf24', // Amber/Gold
       route: '/products/sukuk'
     },
     {
@@ -71,7 +71,7 @@ export class LandingComponent {
       desc: 'Shariah-screened stocks and ETFs. Our AI removes every Haram element automatically.',
       return: 'Market returns',
       icon: 'ri-line-chart-fill',
-      color: '#2D6A4F',
+      color: '#34d399', // Emerald
       route: '/products/halal-equity'
     },
     {
@@ -80,7 +80,7 @@ export class LandingComponent {
       desc: 'Appoint DOGO Finance as your trusted agent. We invest on your behalf with full transparency.',
       return: '13% p.a.',
       icon: 'ri-shield-star-fill',
-      color: '#9a7a2b',
+      color: '#818cf8', // Indigo
       route: '/products/wakala'
     }
   ]);
@@ -115,3 +115,5 @@ export class LandingComponent {
     this.activeTestimonial.set(i);
   }
 }
+
+

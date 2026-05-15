@@ -41,9 +41,9 @@ export class AdminDashboardComponent {
   
   // High-Level KPIs with sparkline data
   kpis = signal<AdminKPI[]>([
-    { label: 'Total AUM (Naira)', value: '₦14.2B', trend: 12.5, icon: 'ri-funds-box-fill', color: 'text-[#C9A84C]', sparkline: [40, 45, 42, 48, 52, 50, 58] },
+    { label: 'Total AUM (Naira)', value: '₦14.2B', trend: 12.5, icon: 'ri-funds-box-fill', color: 'text-[var(--dogo-secondary)]', sparkline: [40, 45, 42, 48, 52, 50, 58] },
     { label: 'Total Verified Users', value: '52,450', trend: 8.2, icon: 'ri-group-2-fill', color: 'text-green-500', sparkline: [30, 32, 35, 34, 38, 40, 42] },
-    { label: 'Net Profit Distributed', value: '₦840M', trend: 15.8, icon: 'ri-medal-fill', color: 'text-[#1B4332]', sparkline: [20, 25, 22, 28, 30, 35, 40] },
+    { label: 'Net Profit Distributed', value: '₦840M', trend: 15.8, icon: 'ri-medal-fill', color: 'text-[var(--dogo-primary)]', sparkline: [20, 25, 22, 28, 30, 35, 40] },
     { label: 'Pending Compliance', value: '18', trend: -2.1, icon: 'ri-shield-user-fill', color: 'text-red-500', sparkline: [50, 45, 48, 40, 35, 30, 28] }
   ]);
 
@@ -65,9 +65,9 @@ export class AdminDashboardComponent {
 
   // Asset Allocation Data
   assetAllocation = signal([
-    { label: 'Real Estate', value: 45, color: 'bg-[#C9A84C]' },
-    { label: 'Agriculture', value: 30, color: 'bg-[#1B4332]' },
-    { label: 'Mobility', value: 15, color: 'bg-[#0d1a0f]' },
+    { label: 'Real Estate', value: 45, color: 'bg-[var(--dogo-secondary)]' },
+    { label: 'Agriculture', value: 30, color: 'bg-[var(--dogo-primary)]' },
+    { label: 'Mobility', value: 15, color: 'bg-[var(--dogo-dark)]' },
     { label: 'Cash/Other', value: 10, color: 'bg-slate-300' }
   ]);
 
@@ -100,3 +100,4 @@ export class AdminDashboardComponent {
     return `M ${points.join(' L ')}`;
   }
 }
+

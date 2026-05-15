@@ -250,7 +250,7 @@ export class ClientPortfoliosComponent implements OnInit, AfterViewInit, OnDestr
                 icon: 'error',
                 title: 'Failed to resend',
                 text: err.error?.message || 'Please try again later.',
-                confirmButtonColor: '#1B4332'
+                confirmButtonColor: 'var(--dogo-primary)'
             });
         }
     });
@@ -280,7 +280,7 @@ export class ClientPortfoliosComponent implements OnInit, AfterViewInit, OnDestr
             icon: 'error',
             title: 'Verification Failed',
             text: res.message || 'We could not verify your BVN.',
-            confirmButtonColor: '#1B4332'
+            confirmButtonColor: 'var(--dogo-primary)'
           });
         }
       },
@@ -290,7 +290,7 @@ export class ClientPortfoliosComponent implements OnInit, AfterViewInit, OnDestr
           icon: 'error',
           title: 'Error',
           text: err.error?.message || 'Server error during BVN verification.',
-          confirmButtonColor: '#1B4332'
+          confirmButtonColor: 'var(--dogo-primary)'
         });
       }
     });
@@ -311,7 +311,7 @@ export class ClientPortfoliosComponent implements OnInit, AfterViewInit, OnDestr
             icon: 'success',
             title: 'Investment Successful',
             text: `You have successfully invested ₦${amountNum.toLocaleString()} in ${this.selectedPortfolio()?.name}`,
-            confirmButtonColor: '#1B4332',
+            confirmButtonColor: 'var(--dogo-primary)',
             customClass: { popup: 'rounded-[30px]' }
           });
         } else {
@@ -327,7 +327,7 @@ export class ClientPortfoliosComponent implements OnInit, AfterViewInit, OnDestr
               icon: 'error',
               title: 'Investment Failed',
               text: res.message || 'We could not process your investment.',
-              confirmButtonColor: '#1B4332'
+              confirmButtonColor: 'var(--dogo-primary)'
             });
           }
         }
@@ -347,7 +347,7 @@ export class ClientPortfoliosComponent implements OnInit, AfterViewInit, OnDestr
             icon: 'error',
             title: 'Error',
             text: msg || 'An unexpected error occurred.',
-            confirmButtonColor: '#1B4332'
+            confirmButtonColor: 'var(--dogo-primary)'
           });
         }
       }
@@ -355,12 +355,14 @@ export class ClientPortfoliosComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   getAssetColor(index: number): string {
-    const colors = ['bg-[#1B4332]', 'bg-[#C9A84C]', 'bg-[#2D6A4F]', 'bg-[#0d1a0f]', 'bg-[#40916c]'];
+    const colors = ['bg-[var(--dogo-primary)]', 'bg-[var(--dogo-secondary)]', 'bg-[var(--dogo-primary-soft)]', 'bg-[var(--dogo-dark)]', 'bg-[var(--dogo-primary)]'];
     return colors[index % colors.length];
   }
 
   getAssetTextColor(index: number): string {
-    const colors = ['text-[#1B4332]', 'text-[#C9A84C]', 'text-[#2D6A4F]', 'text-[#0d1a0f]', 'text-[#40916c]'];
+    const colors = ['text-[var(--dogo-primary)]', 'text-[var(--dogo-secondary)]', 'text-[var(--dogo-primary-soft)]', 'text-[var(--dogo-dark)]', 'text-[var(--dogo-primary)]'];
     return colors[index % colors.length];
   }
 }
+
+

@@ -25,12 +25,12 @@
 }
 
 .custom-scrollbar-h::-webkit-scrollbar-thumb {
-  background: #C9A84C;
+  background: var(--dogo-secondary);
   border-radius: 10px;
 }
 
 .custom-scrollbar-h::-webkit-scrollbar-track {
-  background: #f8f7f2;
+  background: var(--dogo-cream);
 }
 
 .shadow-pill {
@@ -40,3 +40,4 @@
 .rotate-180 {
   transform: rotate(180deg);
 }
+

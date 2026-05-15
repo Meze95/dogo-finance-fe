@@ -5,17 +5,17 @@
   <div class="flex flex-col md:flex-row items-center justify-between gap-10 mb-16">
      <div class="flex items-center space-x-6">
         <label class="relative cursor-pointer group">
-           <div class="w-24 h-24 bg-[#C9A84C] rounded-[32px] flex items-center justify-center font-black text-[#1B4332] text-3xl shadow-2xl shadow-[#C9A84C]/20 border-4 border-white overflow-hidden relative">
+           <div class="w-24 h-24 bg-[var(--dogo-secondary)] rounded-[32px] flex items-center justify-center font-black text-[var(--dogo-primary)] text-3xl shadow-2xl shadow-[var(--dogo-secondary)]/20 border-4 border-white overflow-hidden relative">
              @if(profileImage()) {
                 <img [src]="profileImage()" class="w-full h-full object-cover">
              } @else {
                 {{ userProfile().avatar }}
              }
-             <div class="absolute inset-0 bg-[#0d1a0f]/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-[2px]">
+             <div class="absolute inset-0 bg-[var(--dogo-dark)]/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-[2px]">
                 <i class="ri-camera-3-line text-white text-2xl"></i>
              </div>
              @if(isUpdatingAvatar()) {
-               <div class="absolute inset-0 bg-[#0d1a0f]/60 flex items-center justify-center backdrop-blur-[2px]">
+               <div class="absolute inset-0 bg-[var(--dogo-dark)]/60 flex items-center justify-center backdrop-blur-[2px]">
                   <i class="ri-loader-4-line text-white text-2xl animate-spin"></i>
                </div>
              }
@@ -23,10 +23,10 @@
            <input type="file" class="hidden" (change)="onFileSelected($event)" accept="image/*" [disabled]="isUpdatingAvatar()">
         </label>
         <div>
-           <h1 class="text-3xl font-black text-[#0d1a0f] tracking-tighter">{{ userProfile().firstName }} {{ userProfile().lastName }}</h1>
+           <h1 class="text-3xl font-black text-[var(--dogo-dark)] tracking-tighter">{{ userProfile().firstName }} {{ userProfile().lastName }}</h1>
            <div class="flex items-center space-x-2 mt-1">
               <app-badge variant="gold" [dot]="true">{{ userProfile().tier }}</app-badge>
-              <span class="text-xs font-bold text-[#6B7280]">Invited by: Shuaibu A.</span>
+              <span class="text-xs font-bold text-[var(--dogo-muted)]">Invited by: Shuaibu A.</span>
            </div>
         </div>
      </div>
@@ -37,29 +37,29 @@
   </div>
  -->
   <!-- Settings Tabs -->
-  <div class="flex space-x-8 mb-10 overflow-x-auto custom-scrollbar whitespace-nowrap border-b border-[#1B4332]/5 pb-1">
+  <div class="flex space-x-8 mb-10 overflow-x-auto custom-scrollbar whitespace-nowrap border-b border-[var(--dogo-primary)]/5 pb-1">
       <button (click)="setTab('profile')" 
-              [class]="activeTab() === 'profile' ? 'text-[#1B4332] border-b-2 border-[#1B4332]' : 'text-[#6B7280] hover:text-[#1B4332]'"
+              [class]="activeTab() === 'profile' ? 'text-[var(--dogo-primary)] border-b-2 border-[var(--dogo-primary)]' : 'text-[var(--dogo-muted)] hover:text-[var(--dogo-primary)]'"
               class="pb-4 text-xs font-black uppercase tracking-widest transition-all">
           General Settings
       </button>
       <button (click)="setTab('verification')" 
-              [class]="activeTab() === 'verification' ? 'text-[#1B4332] border-b-2 border-[#1B4332]' : 'text-[#6B7280] hover:text-[#1B4332]'"
+              [class]="activeTab() === 'verification' ? 'text-[var(--dogo-primary)] border-b-2 border-[var(--dogo-primary)]' : 'text-[var(--dogo-muted)] hover:text-[var(--dogo-primary)]'"
               class="pb-4 text-xs font-black uppercase tracking-widest transition-all">
           ID & Verifications
       </button>
       <button (click)="setTab('banks')" 
-              [class]="activeTab() === 'banks' ? 'text-[#1B4332] border-b-2 border-[#1B4332]' : 'text-[#6B7280] hover:text-[#1B4332]'"
+              [class]="activeTab() === 'banks' ? 'text-[var(--dogo-primary)] border-b-2 border-[var(--dogo-primary)]' : 'text-[var(--dogo-muted)] hover:text-[var(--dogo-primary)]'"
               class="pb-4 text-xs font-black uppercase tracking-widest transition-all">
           Banks & Cards
       </button>      
       <button (click)="setTab('wealth')" 
-              [class]="activeTab() === 'wealth' ? 'text-[#1B4332] border-b-2 border-[#1B4332]' : 'text-[#6B7280] hover:text-[#1B4332]'"
+              [class]="activeTab() === 'wealth' ? 'text-[var(--dogo-primary)] border-b-2 border-[var(--dogo-primary)]' : 'text-[var(--dogo-muted)] hover:text-[var(--dogo-primary)]'"
               class="pb-4 text-xs font-black uppercase tracking-widest transition-all">
           Wealth Legacy (KIN)
       </button>
       <button (click)="setTab('security')" 
-              [class]="activeTab() === 'security' ? 'text-[#1B4332] border-b-2 border-[#1B4332]' : 'text-[#6B7280] hover:text-[#1B4332]'"
+              [class]="activeTab() === 'security' ? 'text-[var(--dogo-primary)] border-b-2 border-[var(--dogo-primary)]' : 'text-[var(--dogo-muted)] hover:text-[var(--dogo-primary)]'"
               class="pb-4 text-xs font-black uppercase tracking-widest transition-all">
           Security & Privacy
       </button>
@@ -77,22 +77,22 @@
                   <div class="grid md:grid-cols-2 gap-8 mt-6 mb-4">
                      <div>
                         <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">First Name</label>
-                        <p class="font-bold text-[#0d1a0f] p-4 bg-[#f8f7f2] rounded-2xl border border-[#1B4332]/5 shadow-sm">{{ userProfile().firstName }}</p>
+                        <p class="font-bold text-[var(--dogo-dark)] p-4 bg-[var(--dogo-cream)] rounded-2xl border border-[var(--dogo-primary)]/5 shadow-sm">{{ userProfile().firstName }}</p>
                      </div>
                      <div>
                         <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Last Name</label>
-                        <p class="font-bold text-[#0d1a0f] p-4 bg-[#f8f7f2] rounded-2xl border border-[#1B4332]/5 shadow-sm">{{ userProfile().lastName }}</p>
+                        <p class="font-bold text-[var(--dogo-dark)] p-4 bg-[var(--dogo-cream)] rounded-2xl border border-[var(--dogo-primary)]/5 shadow-sm">{{ userProfile().lastName }}</p>
                      </div>
                      <div class="md:col-span-2">
                         <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Verified Email</label>
-                        <p class="font-bold text-[#0d1a0f] p-4 bg-[#f8f7f2] rounded-2xl border border-[#1B4332]/5 shadow-sm flex items-center justify-between">
+                        <p class="font-bold text-[var(--dogo-dark)] p-4 bg-[var(--dogo-cream)] rounded-2xl border border-[var(--dogo-primary)]/5 shadow-sm flex items-center justify-between">
                            {{ userProfile().email }}
                            <i class="ri-checkbox-circle-fill text-green-500 text-lg"></i>
                         </p>
                      </div>
                      <div class="md:col-span-2">
                         <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Phone Number</label>
-                        <p class="font-bold text-[#0d1a0f] p-4 bg-[#f8f7f2] rounded-2xl border border-[#1B4332]/5 shadow-sm">{{ userProfile().phone }}</p>
+                        <p class="font-bold text-[var(--dogo-dark)] p-4 bg-[var(--dogo-cream)] rounded-2xl border border-[var(--dogo-primary)]/5 shadow-sm">{{ userProfile().phone }}</p>
                      </div>
                   </div>
                } @else {
@@ -101,12 +101,12 @@
                      <div>
                         <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">First Name</label>
                         <input type="text" [value]="editProfileForm().firstName" (input)="updateProfileField('firstName', $any($event.target).value)"
-                               class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all">
+                               class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-4 text-sm font-bold text-[var(--dogo-dark)] outline-none transition-all">
                      </div>
                      <div>
                         <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Last Name</label>
                         <input type="text" [value]="editProfileForm().lastName" (input)="updateProfileField('lastName', $any($event.target).value)"
-                               class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all">
+                               class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-4 text-sm font-bold text-[var(--dogo-dark)] outline-none transition-all">
                      </div>
                      <div class="md:col-span-2">
                         <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Email (Cannot be changed)</label>
@@ -116,7 +116,7 @@
                      <div class="md:col-span-2">
                         <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Phone Number</label>
                         <input type="text" [value]="editProfileForm().phone" (input)="updateProfileField('phone', $any($event.target).value)"
-                               class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all">
+                               class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-4 text-sm font-bold text-[var(--dogo-dark)] outline-none transition-all">
                      </div>
                   </div>
                }
@@ -144,14 +144,14 @@
               <app-card title="Verification Center" subtitle="Identity status across Nigerian central systems" icon="ri-shield-check-line">
                  <div class="mt-8 space-y-4">
                     @for(v of verifications(); track v.label) {
-                       <div class="p-6 bg-[#f8f7f2] rounded-[32px] border border-[#1B4332]/5 group hover:bg-white hover:shadow-lg transition-all" [class.cursor-pointer]="v.status !== 'verified'">
+                       <div class="p-6 bg-[var(--dogo-cream)] rounded-[32px] border border-[var(--dogo-primary)]/5 group hover:bg-white hover:shadow-lg transition-all" [class.cursor-pointer]="v.status !== 'verified'">
                           <div class="flex items-center justify-between">
                              <div class="flex items-center space-x-5">
-                                <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-[#1B4332] text-2xl shadow-sm group-hover:bg-[#1B4332] group-hover:text-white transition-colors">
+                                <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-[var(--dogo-primary)] text-2xl shadow-sm group-hover:bg-[var(--dogo-primary)] group-hover:text-white transition-colors">
                                    <i [class]="v.icon"></i>
                                 </div>
                                 <div>
-                                   <span class="font-black text-[#0d1a0f] text-sm block">{{ v.label }}</span>
+                                   <span class="font-black text-[var(--dogo-dark)] text-sm block">{{ v.label }}</span>
                                    @if(v.status === 'pending' || v.status === 'review') {
                                       <span class="text-[10px] font-bold text-amber-600 uppercase tracking-widest">Awaiting Admin Review</span>
                                    } @else if(v.status === 'rejected') {
@@ -184,30 +184,30 @@
                  @if(!isAddingBank()) {
                     <div class="mt-8 space-y-4">
                         @for(bank of bankAccounts(); track bank.customerBankId) {
-                           <div class="flex items-center justify-between p-3 bg-[#f8f7f2] rounded-2xl border border-[#1B4332]/5 group hover:bg-white hover:shadow-lg transition-all" [class.border-[#C9A84C]]="bank.isDefault">
+                           <div class="flex items-center justify-between p-3 bg-[var(--dogo-cream)] rounded-2xl border border-[var(--dogo-primary)]/5 group hover:bg-white hover:shadow-lg transition-all" [class.border-[var(--dogo-secondary)]]="bank.isDefault">
                               <div class="flex items-center space-x-5">
-                                 <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-[#1B4332] text-2xl shadow-sm">
+                                 <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-[var(--dogo-primary)] text-2xl shadow-sm">
                                     <div class="bank-avatar">
                                        <img #bankLogo [src]="bank.bankLogo" (error)="bankLogo.style.display='none'; fallbackIcon.style.display='flex'" class="w-8 h-8 object-contain">
-                                       <div #fallbackIcon style="display: none;" class="w-8 h-8 items-center justify-center text-[#1B4332] text-xl">
+                                       <div #fallbackIcon style="display: none;" class="w-8 h-8 items-center justify-center text-[var(--dogo-primary)] text-xl">
                                           <i class="ri-bank-line"></i>
                                        </div>
                                     </div>
                                  </div>
                                  <div>
                                     <div class="flex items-center space-x-2">
-                                       <p class="font-black text-[#0d1a0f] text-sm">{{ bank.bankName }}</p>
+                                       <p class="font-black text-[var(--dogo-dark)] text-sm">{{ bank.bankName }}</p>
                                        @if(bank.isDefault) {
                                           <app-badge variant="gold" size="sm">Primary</app-badge>
                                        }
                                     </div>
-                                    <p class="text-xs font-mono text-[#6B7280]">{{ bank.accountNumber }}</p>
-                                    <p class="text-[10px] font-bold text-[#1B4332]/40 uppercase">{{ bank.accountName }}</p>
+                                    <p class="text-xs font-mono text-[var(--dogo-muted)]">{{ bank.accountNumber }}</p>
+                                    <p class="text-[10px] font-bold text-[var(--dogo-primary)]/40 uppercase">{{ bank.accountName }}</p>
                                  </div>
                               </div>
                               <div class="flex items-center space-x-2">
                                  @if(!bank.isDefault) {
-                                    <button (click)="setDefaultBank(bank.customerBankId!)" class="text-[#1B4332] hover:text-[#C9A84C] text-[10px] font-black uppercase tracking-widest px-3 py-2 rounded-xl hover:bg-[#C9A84C]/5 transition-all">
+                                    <button (click)="setDefaultBank(bank.customerBankId!)" class="text-[var(--dogo-primary)] hover:text-[var(--dogo-secondary)] text-[10px] font-black uppercase tracking-widest px-3 py-2 rounded-xl hover:bg-[var(--dogo-secondary)]/5 transition-all">
                                        Make Primary
                                     </button>
                                  }
@@ -219,7 +219,7 @@
                         }
                        @if(bankAccounts().length === 0) {
                           <div class="text-center py-8">
-                             <p class="text-sm font-bold text-[#6B7280]">No bank accounts registered.</p>
+                             <p class="text-sm font-bold text-[var(--dogo-muted)]">No bank accounts registered.</p>
                           </div>
                        }
                     </div>
@@ -228,8 +228,8 @@
                     </div>
                  }
                  @if (isAddingBank()) {
-                    <div class="space-y-6 mt-10 p-6 bg-[#f8f7f2]/50 rounded-[32px] border border-[#1B4332]/5 animate-in slide-in-from-top-4 duration-300">
-                       <h4 class="text-xs font-black uppercase tracking-widest text-[#1B4332] mb-2">New Bank Details</h4>
+                    <div class="space-y-6 mt-10 p-6 bg-[var(--dogo-cream)]/50 rounded-[32px] border border-[var(--dogo-primary)]/5 animate-in slide-in-from-top-4 duration-300">
+                       <h4 class="text-xs font-black uppercase tracking-widest text-[var(--dogo-primary)] mb-2">New Bank Details</h4>
 
                        <app-dropdown 
                           label="Select Bank"
@@ -243,12 +243,12 @@
                        <div>
                           <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Account Name (Full Legal Name)</label>
                           <input type="text" [value]="newBankForm().accountName" readonly
-                                 class="w-full bg-gray-100/50 border-2 border-transparent rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none cursor-default">
+                                 class="w-full bg-gray-100/50 border-2 border-transparent rounded-2xl px-6 py-4 text-sm font-bold text-[var(--dogo-dark)] outline-none cursor-default">
                        </div>
                        <div>
                           <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Account Number</label>
                           <input type="text" maxlength="10" [value]="newBankForm().accountNumber" (input)="updateBankField('accountNumber', $any($event.target).value.replace(/[^0-9]/g, ''))"
-                                 class="w-full bg-white border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all placeholder:text-[#1B4332]/20 shadow-sm" placeholder="10-digit account number">
+                                 class="w-full bg-white border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-4 text-sm font-bold text-[var(--dogo-dark)] outline-none transition-all placeholder:text-[var(--dogo-primary)]/20 shadow-sm" placeholder="10-digit account number">
                        </div>
 
                        <div class="pt-6 flex items-center space-x-3 w-full justify-end">
@@ -270,11 +270,11 @@
                  @if(!isEditingKin()) {
                     <div class="mt-4 mb-8">
                        @if(nextOfKin()) {
-                          <p class="text-sm font-bold text-[#0d1a0f] mb-1">{{ nextOfKin()?.fullName }} ({{ nextOfKin()?.relationship }})</p>
-                          <p class="text-[11px] font-bold text-[#6B7280] uppercase tracking-widest mt-1">{{ nextOfKin()?.email }} &nbsp;&bull;&nbsp; {{ nextOfKin()?.phone }}</p>
-                          <span class="text-[10px] font-black uppercase text-[#C9A84C] tracking-[0.1em] mt-3 block">Set</span>
+                          <p class="text-sm font-bold text-[var(--dogo-dark)] mb-1">{{ nextOfKin()?.fullName }} ({{ nextOfKin()?.relationship }})</p>
+                          <p class="text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest mt-1">{{ nextOfKin()?.email }} &nbsp;&bull;&nbsp; {{ nextOfKin()?.phone }}</p>
+                          <span class="text-[10px] font-black uppercase text-[var(--dogo-secondary)] tracking-[0.1em] mt-3 block">Set</span>
                        } @else {
-                          <p class="text-sm font-bold text-[#0d1a0f] mb-1">Not Set</p>
+                          <p class="text-sm font-bold text-[var(--dogo-dark)] mb-1">Not Set</p>
                           <span class="text-[10px] font-black uppercase text-red-500 tracking-[0.1em] mt-3 block">Pending Action</span>
                        }
                     </div>
@@ -284,7 +284,7 @@
                        <div>
                           <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Full Name</label>
                           <input type="text" [value]="editKinForm().fullName" (input)="updateKinField('fullName', $any($event.target).value)"
-                                 class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all">
+                                 class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-4 text-sm font-bold text-[var(--dogo-dark)] outline-none transition-all">
                        </div>
                        
                        <app-dropdown 
@@ -299,12 +299,12 @@
                        <div>
                           <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Email</label>
                           <input type="email" [value]="editKinForm().email" (input)="updateKinField('email', $any($event.target).value)"
-                                 class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all">
+                                 class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-4 text-sm font-bold text-[var(--dogo-dark)] outline-none transition-all">
                        </div>
                        <div>
                           <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Phone</label>
                           <input type="text" [value]="editKinForm().phone" (input)="updateKinField('phone', $any($event.target).value)"
-                                 class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all">
+                                 class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-4 text-sm font-bold text-[var(--dogo-dark)] outline-none transition-all">
                        </div>
                     </div>
                  }
@@ -324,10 +324,10 @@
         @if(activeTab() === 'security') {
            <div class="space-y-8">
               <app-card title="Email OTP Verification (2FA)" icon="ri-mail-lock-line">
-                 <div class="mt-6 flex items-center justify-between p-6 bg-[#f8f7f2] rounded-[32px] border border-[#1B4332]/5">
+                 <div class="mt-6 flex items-center justify-between p-6 bg-[var(--dogo-cream)] rounded-[32px] border border-[var(--dogo-primary)]/5">
                     <div>
-                       <p class="font-black text-sm text-[#0d1a0f]">High-Security Mode</p>
-                       <p class="text-xs font-medium text-[#6B7280]">Add Email OTP to PIN for investments & withdrawals</p>
+                       <p class="font-black text-sm text-[var(--dogo-dark)]">High-Security Mode</p>
+                       <p class="text-xs font-medium text-[var(--dogo-muted)]">Add Email OTP to PIN for investments & withdrawals</p>
                     </div>
                     <app-button [variant]="isTwoFactorEnabled() ? 'danger' : 'primary'" size="sm" (click)="toggleTwoFactor()" [disabled]="isUpdatingTwoFactor()">
                        {{ isUpdatingTwoFactor() ? 'Processing...' : (isTwoFactorEnabled() ? 'Disable' : 'Enable') }}
@@ -338,10 +338,10 @@
 
               <app-card title="Transaction PIN" icon="ri-shield-keyhole-line">
                  @if(!isEditingPin()) {
-                    <div class="mt-6 flex items-center justify-between p-6 bg-[#f8f7f2] rounded-[32px] border border-[#1B4332]/5">
+                    <div class="mt-6 flex items-center justify-between p-6 bg-[var(--dogo-cream)] rounded-[32px] border border-[var(--dogo-primary)]/5">
                        <div>
-                          <p class="font-black text-sm text-[#0d1a0f]">Transaction PIN</p>
-                          <p class="text-xs font-medium text-[#6B7280]">Required for withdrawals and settings changes</p>
+                          <p class="font-black text-sm text-[var(--dogo-dark)]">Transaction PIN</p>
+                          <p class="text-xs font-medium text-[var(--dogo-muted)]">Required for withdrawals and settings changes</p>
                        </div>
                        <app-badge [variant]="hasPin() ? 'success' : 'warning'">{{ hasPin() ? 'Active' : 'Not Set' }}</app-badge>
                     </div>
@@ -357,19 +357,19 @@
                           <div>
                              <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Current PIN</label>
                              <input type="password" maxlength="6" [value]="pinForm().oldPin" (input)="updatePinField('oldPin', $any($event.target).value)" 
-                                    class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold inline-block font-mono tracking-widest text-[#0d1a0f] outline-none transition-all placeholder:font-sans placeholder:tracking-normal placeholder:text-[#1B4332]/20" placeholder="Enter current PIN">
+                                    class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-4 text-sm font-bold inline-block font-mono tracking-widest text-[var(--dogo-dark)] outline-none transition-all placeholder:font-sans placeholder:tracking-normal placeholder:text-[var(--dogo-primary)]/20" placeholder="Enter current PIN">
                           </div>
                        }
                        <div class="grid md:grid-cols-2 gap-8">
                           <div>
                              <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">New PIN</label>
                              <input type="password" maxlength="6" [value]="pinForm().newPin" (input)="updatePinField('newPin', $any($event.target).value)" 
-                                    class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold inline-block font-mono tracking-widest text-[#0d1a0f] outline-none transition-all placeholder:font-sans placeholder:tracking-normal placeholder:text-[#1B4332]/20" placeholder="6-digit PIN">
+                                    class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-4 text-sm font-bold inline-block font-mono tracking-widest text-[var(--dogo-dark)] outline-none transition-all placeholder:font-sans placeholder:tracking-normal placeholder:text-[var(--dogo-primary)]/20" placeholder="6-digit PIN">
                           </div>
                           <div>
                              <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Confirm New PIN</label>
                              <input type="password" maxlength="6" [value]="pinForm().confirmPin" (input)="updatePinField('confirmPin', $any($event.target).value)" 
-                                    class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-4 text-sm font-bold inline-block font-mono tracking-widest text-[#0d1a0f] outline-none transition-all placeholder:font-sans placeholder:tracking-normal placeholder:text-[#1B4332]/20" placeholder="Repeat PIN">
+                                    class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-4 text-sm font-bold inline-block font-mono tracking-widest text-[var(--dogo-dark)] outline-none transition-all placeholder:font-sans placeholder:tracking-normal placeholder:text-[var(--dogo-primary)]/20" placeholder="Repeat PIN">
                           </div>
                        </div>
                     </div>
@@ -392,10 +392,10 @@
      <!-- Right Column: Context/Mini widgets -->
      <div class="lg:col-span-4 space-y-8">
         
-        <div class="bg-[#1B4332] rounded-[50px] p-10 text-white relative overflow-hidden group">
+        <div class="bg-[var(--dogo-primary)] rounded-[50px] p-10 text-white relative overflow-hidden group">
            <div class="absolute inset-x-0 top-0 h-1/2 bg-white/5 -skew-y-12 -translate-y-8"></div>
            <div class="relative z-10">
-              <i class="ri-sparkling-2-line text-4xl text-[#C9A84C] mb-6"></i>
+              <i class="ri-sparkling-2-line text-4xl text-[var(--dogo-secondary)] mb-6"></i>
               <h4 class="text-xl font-black mb-4 tracking-tighter italic">Tier 3 Awaits!</h4>
               <p class="text-white/60 text-[13px] font-medium leading-relaxed mb-8">Upgrade your profile to Tier 3 to increase your daily Halal investment limit to ₦50 Million and unlock premium Sukuk rates.</p>
               <app-button variant="secondary" class="w-full">Upgrade Now</app-button>
@@ -403,8 +403,8 @@
         </div>
 
         <app-card title="Support Center" variant="flat">
-           <p class="text-xs font-medium text-[#6B7280] leading-relaxed mb-6 italic">Our Shariah Advisory team and Customer Support are active Monday - Friday, 9AM - 5PM.</p>
-           <button class="w-full h-12 rounded-2xl bg-white border border-[#1B4332]/10 flex items-center justify-center space-x-3 text-[#1B4332] font-black uppercase tracking-widest text-[10px] hover:shadow-lg transition-all">
+           <p class="text-xs font-medium text-[var(--dogo-muted)] leading-relaxed mb-6 italic">Our Shariah Advisory team and Customer Support are active Monday - Friday, 9AM - 5PM.</p>
+           <button class="w-full h-12 rounded-2xl bg-white border border-[var(--dogo-primary)]/10 flex items-center justify-center space-x-3 text-[var(--dogo-primary)] font-black uppercase tracking-widest text-[10px] hover:shadow-lg transition-all">
               <i class="ri-customer-service-2-line text-lg"></i>
               <span>Live Support Chat</span>
            </button>
@@ -418,11 +418,11 @@
 <!-- Verification Modal -->
 @if(showVerificationModal()) {
   <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-300">
-    <div class="absolute inset-0 bg-[#0d1a0f]/80 backdrop-blur-md"></div>
+    <div class="absolute inset-0 bg-[var(--dogo-dark)]/80 backdrop-blur-md"></div>
     
     <div class="relative w-full max-w-md bg-white rounded-[40px] shadow-2xl overflow-hidden transform animate-in slide-in-from-bottom-8 duration-500 max-h-[90vh] flex flex-col">
       <div class="p-6 pb-2 flex justify-end shrink-0">
-        <button (click)="closeVerificationModal()" class="w-10 h-10 rounded-full bg-[#f8f7f2] flex items-center justify-center text-[#1B4332] hover:bg-[#1B4332] hover:text-white transition-all">
+        <button (click)="closeVerificationModal()" class="w-10 h-10 rounded-full bg-[var(--dogo-cream)] flex items-center justify-center text-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)] hover:text-white transition-all">
           <i class="ri-close-line text-xl"></i>
         </button>
       </div>
@@ -430,14 +430,14 @@
       <div class="p-10 pt-0 overflow-y-auto custom-scrollbar-h flex-grow">
         @if(!isVerificationSuccess()) {
           <div class="text-center">
-            <div class="w-16 h-16 bg-[#f8f7f2] rounded-2xl flex items-center justify-center text-3xl text-[#1B4332] mx-auto mb-6 shrink-0">
+            <div class="w-16 h-16 bg-[var(--dogo-cream)] rounded-2xl flex items-center justify-center text-3xl text-[var(--dogo-primary)] mx-auto mb-6 shrink-0">
               <i [class]="activeVerification()?.icon"></i>
             </div>
 
-            <h3 class="text-2xl font-black text-[#0d1a0f] italic tracking-tighter mb-2">{{ activeVerification()?.label }}</h3>
+            <h3 class="text-2xl font-black text-[var(--dogo-dark)] italic tracking-tighter mb-2">{{ activeVerification()?.label }}</h3>
             
             @if(activeVerification()?.type === 'Address') {
-              <p class="text-xs font-bold text-[#6B7280] uppercase tracking-widest mb-8">Upload a valid utility bill or document</p>
+              <p class="text-xs font-bold text-[var(--dogo-muted)] uppercase tracking-widest mb-8">Upload a valid utility bill or document</p>
               
               <div class="space-y-6 text-left">
                 <app-dropdown 
@@ -453,21 +453,21 @@
                   <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400">Document Image/PDF</label>
                   
                   @if(!addressFile()) {
-                    <label class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-[#1B4332]/10 rounded-[32px] bg-[#f8f7f2] hover:bg-white hover:border-[#C9A84C] transition-all cursor-pointer group">
+                    <label class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-[var(--dogo-primary)]/10 rounded-[32px] bg-[var(--dogo-cream)] hover:bg-white hover:border-[var(--dogo-secondary)] transition-all cursor-pointer group">
                       <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                        <i class="ri-upload-cloud-2-line text-4xl text-[#1B4332]/20 group-hover:text-[#C9A84C] mb-3 transition-colors"></i>
-                        <p class="text-xs font-bold text-[#1B4332]/40 tracking-tight">Click to upload or drag and drop</p>
-                        <p class="text-[10px] text-[#6B7280]/60 mt-1 uppercase font-black">PNG, JPG or PDF (Max 5MB)</p>
+                        <i class="ri-upload-cloud-2-line text-4xl text-[var(--dogo-primary)]/20 group-hover:text-[var(--dogo-secondary)] mb-3 transition-colors"></i>
+                        <p class="text-xs font-bold text-[var(--dogo-primary)]/40 tracking-tight">Click to upload or drag and drop</p>
+                        <p class="text-[10px] text-[var(--dogo-muted)]/60 mt-1 uppercase font-black">PNG, JPG or PDF (Max 5MB)</p>
                       </div>
                       <input type="file" class="hidden" (change)="onAddressFileSelected($event)" accept="image/*,application/pdf" />
                     </label>
                   } @else {
-                    <div class="relative w-full h-40 rounded-[32px] overflow-hidden border-2 border-[#1B4332]/5">
+                    <div class="relative w-full h-40 rounded-[32px] overflow-hidden border-2 border-[var(--dogo-primary)]/5">
                       @if(addressFilePreview()) {
                          @if(addressFilePreview()?.startsWith('data:image')) {
                            <img [src]="addressFilePreview()" class="w-full h-full object-cover">
                          } @else {
-                           <div class="w-full h-full bg-[#f8f7f2] flex flex-col items-center justify-center text-[#1B4332]">
+                           <div class="w-full h-full bg-[var(--dogo-cream)] flex flex-col items-center justify-center text-[var(--dogo-primary)]">
                              <i class="ri-file-pdf-2-line text-5xl mb-2"></i>
                              <span class="text-[10px] font-bold uppercase tracking-widest">{{ addressFile()?.name }}</span>
                            </div>
@@ -483,11 +483,11 @@
                 <button 
                   (click)="verifyDocument()"
                   [disabled]="!addressDocType() || !addressFile() || isVerifying()"
-                  class="w-full h-16 bg-[#1B4332] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[#2D6A4F] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl shadow-[#1B4332]/20 flex items-center justify-center relative overflow-hidden"
+                  class="w-full h-16 bg-[var(--dogo-primary)] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[var(--dogo-primary-soft)] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl shadow-[var(--dogo-primary)]/20 flex items-center justify-center relative overflow-hidden"
                 >
                   @if(isVerifying()) {
                     <div class="flex items-center space-x-2">
-                       <div class="w-2 h-2 rounded-full bg-[#C9A84C] animate-pulse"></div>
+                       <div class="w-2 h-2 rounded-full bg-[var(--dogo-secondary)] animate-pulse"></div>
                        <span>Uploading...</span>
                     </div>
                   } @else {
@@ -498,7 +498,7 @@
               </div>
 
             } @else {
-              <p class="text-xs font-bold text-[#6B7280] uppercase tracking-widest mb-10">Enter your 11-digit {{ activeVerification()?.type }}</p>
+              <p class="text-xs font-bold text-[var(--dogo-muted)] uppercase tracking-widest mb-10">Enter your 11-digit {{ activeVerification()?.type }}</p>
 
               <div class="space-y-6">
                 <div class="relative group">
@@ -508,9 +508,9 @@
                     maxlength="11"
                     [value]="verificationInput()"
                     (input)="verificationInput.set($any($event.target).value.replace(/[^0-9]/g, ''))"
-                    class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl px-6 py-5 text-sm font-bold text-[#0d1a0f] outline-none transition-all placeholder:text-[#1B4332]/20"
+                    class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-5 text-sm font-bold text-[var(--dogo-dark)] outline-none transition-all placeholder:text-[var(--dogo-primary)]/20"
                   >
-                  <div class="absolute right-6 top-1/2 -translate-y-1/2 text-[#1B4332]/10 group-focus-within:text-[#C9A84C] transition-colors">
+                  <div class="absolute right-6 top-1/2 -translate-y-1/2 text-[var(--dogo-primary)]/10 group-focus-within:text-[var(--dogo-secondary)] transition-colors">
                     <i [class]="activeVerification()?.icon" class="text-xl"></i>
                   </div>
                 </div>
@@ -518,11 +518,11 @@
                 <button 
                   (click)="verifyDocument()"
                   [disabled]="verificationInput().length !== 11 || isVerifying()"
-                  class="w-full h-16 bg-[#1B4332] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[#2D6A4F] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl shadow-[#1B4332]/20 flex items-center justify-center relative overflow-hidden"
+                  class="w-full h-16 bg-[var(--dogo-primary)] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[var(--dogo-primary-soft)] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl shadow-[var(--dogo-primary)]/20 flex items-center justify-center relative overflow-hidden"
                 >
                   @if(isVerifying()) {
                     <div class="flex items-center space-x-2">
-                      <div class="w-2 h-2 rounded-full bg-[#C9A84C] animate-pulse"></div>
+                      <div class="w-2 h-2 rounded-full bg-[var(--dogo-secondary)] animate-pulse"></div>
                       <span>Processing...</span>
                     </div>
                   } @else {
@@ -538,10 +538,10 @@
             <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-4xl text-green-600 mx-auto mb-6 shadow-pill">
               <i class="ri-checkbox-circle-fill"></i>
             </div>
-            <h4 class="text-xl font-black text-[#1B4332] uppercase italic">
+            <h4 class="text-xl font-black text-[var(--dogo-primary)] uppercase italic">
               {{ activeVerification()?.type === 'Address' ? 'Submission Success' : 'Verification Success' }}
             </h4>
-            <p class="text-xs font-bold text-[#6B7280] mt-2">
+            <p class="text-xs font-bold text-[var(--dogo-muted)] mt-2">
                {{ activeVerification()?.type === 'Address' ? 'Your document has been submitted for review.' : 'Your document has been securely verified.' }}
             </p>
           </div>
@@ -550,3 +550,5 @@
     </div>
   </div>
 }
+
+

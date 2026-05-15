@@ -28,7 +28,7 @@
 
 /* Background patterns */
 .dogo-pattern {
-    background-image: radial-gradient(#C9A84C 0.5px, transparent 0.5px);
+    background-image: radial-gradient(var(--dogo-secondary) 0.5px, transparent 0.5px);
     background-size: 24px 24px;
 }
 
@@ -61,3 +61,4 @@ svg circle:hover {
         height: 120px;
     }
 }
+

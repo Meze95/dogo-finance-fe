@@ -50,8 +50,8 @@ export class AccessRightComponent implements OnInit {
 
   // Helper styles for permissions
   private styleMap = {
-    view: { check: 'text-[#1B4332] checked:bg-[#1B4332] checked:border-[#1B4332]', text: 'group-hover/checkbox:text-[#1B4332]' },
-    create: { check: 'text-[#C9A84C] checked:bg-[#C9A84C] checked:border-[#C9A84C]', text: 'group-hover/checkbox:text-[#C9A84C]' },
+    view: { check: 'text-[var(--dogo-primary)] checked:bg-[var(--dogo-primary)] checked:border-[var(--dogo-primary)]', text: 'group-hover/checkbox:text-[var(--dogo-primary)]' },
+    create: { check: 'text-[var(--dogo-secondary)] checked:bg-[var(--dogo-secondary)] checked:border-[var(--dogo-secondary)]', text: 'group-hover/checkbox:text-[var(--dogo-secondary)]' },
     edit: { check: 'text-blue-500 checked:bg-blue-500 checked:border-blue-500', text: 'group-hover/checkbox:text-blue-500' },
     delete: { check: 'text-red-500 checked:bg-red-500 checked:border-red-500', text: 'group-hover/checkbox:text-red-500' },
     special: { check: 'text-indigo-500 checked:bg-indigo-500 checked:border-indigo-500', text: 'group-hover/checkbox:text-indigo-500' }
@@ -122,3 +122,4 @@ export class AccessRightComponent implements OnInit {
     });
   }
 }
+

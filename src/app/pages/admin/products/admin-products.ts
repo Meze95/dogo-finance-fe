@@ -113,12 +113,12 @@ export class AdminProducts {
       text: `Are you sure you want to proceed with this ${action.toLowerCase()}?`,
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#C9A84C',
+      confirmButtonColor: 'var(--dogo-secondary)',
       cancelButtonColor: '#96a5b1',
       confirmButtonText: 'Yes, proceed!',
       cancelButtonText: 'No, cancel',
-      background: '#f8f7f2',
-      color: '#0d1a0f',
+      background: 'var(--dogo-cream)',
+      color: 'var(--dogo-dark)',
       customClass: { popup: 'rounded-[30px]' }
     }).then((result: any) => {
       if (result.isConfirmed) {
@@ -294,7 +294,7 @@ export class AdminProducts {
   savePortfolio() {
     const validation = this.allocationValidation();
     if (!validation.isValid) {
-      Swal.fire({ icon: 'error', title: 'Validation Failed', text: 'Total allocation must be exactly 100%. Each asset class must also have 100% instrument distribution.', confirmButtonColor: '#C9A84C', background: '#f8f7f2', customClass: { popup: 'rounded-[30px]' } });
+      Swal.fire({ icon: 'error', title: 'Validation Failed', text: 'Total allocation must be exactly 100%. Each asset class must also have 100% instrument distribution.', confirmButtonColor: 'var(--dogo-secondary)', background: 'var(--dogo-cream)', customClass: { popup: 'rounded-[30px]' } });
       return;
     }
 
@@ -382,3 +382,4 @@ export class AdminProducts {
     this.isInstrumentModalOpen.set(false);
   }
 }
+

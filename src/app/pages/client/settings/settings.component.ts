@@ -244,7 +244,7 @@ export class SettingsComponent {
           text: 'Your personal information has been saved.',
           timer: 2000,
           showConfirmButton: false,
-          background: '#f8f7f2',
+          background: 'var(--dogo-cream)',
           customClass: { popup: 'rounded-[30px]' }
         });
       },
@@ -254,8 +254,8 @@ export class SettingsComponent {
           icon: 'error',
           title: 'Update Failed',
           text: err.error?.message || 'We could not update your profile.',
-          confirmButtonColor: '#1B4332',
-          background: '#f8f7f2',
+          confirmButtonColor: 'var(--dogo-primary)',
+          background: 'var(--dogo-cream)',
           customClass: { popup: 'rounded-[30px]' }
         });
       }
@@ -306,8 +306,8 @@ export class SettingsComponent {
             icon: 'error',
             title: 'Upload Failed',
             text: err.error?.message || 'We could not process your document.',
-            confirmButtonColor: '#1B4332',
-            background: '#f8f7f2',
+            confirmButtonColor: 'var(--dogo-primary)',
+            background: 'var(--dogo-cream)',
             customClass: { popup: 'rounded-[30px]' }
           });
         }
@@ -376,8 +376,8 @@ export class SettingsComponent {
           icon: 'success',
           title: 'Account Added',
           text: 'Your bank account has been successfully registered.',
-          confirmButtonColor: '#1B4332',
-          background: '#f8f7f2',
+          confirmButtonColor: 'var(--dogo-primary)',
+          background: 'var(--dogo-cream)',
           customClass: { popup: 'rounded-[30px]' }
         });
       },
@@ -387,8 +387,8 @@ export class SettingsComponent {
           icon: 'error',
           title: 'Failed to Add Bank',
           text: err.error?.message || 'We could not link your bank account at this time.',
-          confirmButtonColor: '#1B4332',
-          background: '#f8f7f2',
+          confirmButtonColor: 'var(--dogo-primary)',
+          background: 'var(--dogo-cream)',
           customClass: { popup: 'rounded-[30px]' }
         });
       }
@@ -402,9 +402,9 @@ export class SettingsComponent {
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
-      cancelButtonColor: '#1B4332',
+      cancelButtonColor: 'var(--dogo-primary)',
       confirmButtonText: 'Yes, Remove It',
-      background: '#f8f7f2',
+      background: 'var(--dogo-cream)',
       customClass: { popup: 'rounded-[30px]' }
     }).then((result: any) => {
       if (result.isConfirmed) {
@@ -417,7 +417,7 @@ export class SettingsComponent {
               text: 'The bank account has been removed.',
               timer: 2000,
               showConfirmButton: false,
-              background: '#f8f7f2',
+              background: 'var(--dogo-cream)',
               customClass: { popup: 'rounded-[30px]' }
             });
           },
@@ -426,8 +426,8 @@ export class SettingsComponent {
               icon: 'error',
               title: 'Error',
               text: 'Could not remove the bank account.',
-              confirmButtonColor: '#1B4332',
-              background: '#f8f7f2',
+              confirmButtonColor: 'var(--dogo-primary)',
+              background: 'var(--dogo-cream)',
               customClass: { popup: 'rounded-[30px]' }
             });
           }
@@ -446,7 +446,7 @@ export class SettingsComponent {
           text: 'This account will now be used for withdrawals.',
           timer: 2000,
           showConfirmButton: false,
-          background: '#f8f7f2',
+          background: 'var(--dogo-cream)',
           customClass: { popup: 'rounded-[30px]' }
         });
       },
@@ -455,8 +455,8 @@ export class SettingsComponent {
           icon: 'error',
           title: 'Error',
           text: 'Could not set default bank.',
-          confirmButtonColor: '#1B4332',
-          background: '#f8f7f2',
+          confirmButtonColor: 'var(--dogo-primary)',
+          background: 'var(--dogo-cream)',
           customClass: { popup: 'rounded-[30px]' }
         });
       }
@@ -511,7 +511,7 @@ export class SettingsComponent {
           text: 'Your Next of Kin details have been updated.',
           timer: 2000,
           showConfirmButton: false,
-          background: '#f8f7f2',
+          background: 'var(--dogo-cream)',
           customClass: { popup: 'rounded-[30px]' }
         });
       },
@@ -521,8 +521,8 @@ export class SettingsComponent {
           icon: 'error',
           title: 'Action Failed',
           text: err.error?.message || 'Could not save Next of Kin details.',
-          confirmButtonColor: '#1B4332',
-          background: '#f8f7f2',
+          confirmButtonColor: 'var(--dogo-primary)',
+          background: 'var(--dogo-cream)',
           customClass: { popup: 'rounded-[30px]' }
         });
       }
@@ -610,7 +610,7 @@ export class SettingsComponent {
           text: 'Your security PIN has been changed successfully.',
           timer: 2000,
           showConfirmButton: false,
-          background: '#f8f7f2',
+          background: 'var(--dogo-cream)',
           customClass: { popup: 'rounded-[30px]' }
         });
       },
@@ -621,11 +621,12 @@ export class SettingsComponent {
           icon: 'error',
           title: 'PIN Update Failed',
           text: err.error?.message || 'Could not change your security PIN.',
-          confirmButtonColor: '#1B4332',
-          background: '#f8f7f2',
+          confirmButtonColor: 'var(--dogo-primary)',
+          background: 'var(--dogo-cream)',
           customClass: { popup: 'rounded-[30px]' }
         });
       }
     });
   }
 }
+

@@ -1,18 +1,18 @@
 <div class="animate-fade-in pb-20 px-4">
   <div class="mb-10 flex flex-col xl:flex-row xl:items-end justify-between gap-6">
     <div>
-      <h1 class="text-3xl font-black text-[#0d1a0f] tracking-tighter italic uppercase">Active Portfolios</h1>
-      <p class="text-[13px] font-medium text-[#6B7280] tracking-wide mt-1">Global oversight of all active investment strategies and client holdings.</p>
+      <h1 class="text-3xl font-black text-[var(--dogo-dark)] tracking-tighter italic uppercase">Active Portfolios</h1>
+      <p class="text-[13px] font-medium text-[var(--dogo-muted)] tracking-wide mt-1">Global oversight of all active investment strategies and client holdings.</p>
     </div>
     
     <div class="flex items-center gap-4">
       <div class="w-full sm:w-80 relative group">
-        <i class="ri-search-2-line absolute left-4 top-1/2 -translate-y-1/2 text-[#1B4332]/40 text-lg group-focus-within:text-[#C9A84C] transition-colors"></i>
+        <i class="ri-search-2-line absolute left-4 top-1/2 -translate-y-1/2 text-[var(--dogo-primary)]/40 text-lg group-focus-within:text-[var(--dogo-secondary)] transition-colors"></i>
         <input 
           type="text" 
           (input)="updateSearch($event)"
           placeholder="Search product, client or email..." 
-          class="w-full h-12 pl-12 pr-4 bg-[#f8f7f2] border border-[#1B4332]/10 rounded-2xl text-sm font-bold text-[#0d1a0f] focus:outline-none focus:border-[#C9A84C] focus:bg-white transition-all shadow-sm focus:shadow-md"
+          class="w-full h-12 pl-12 pr-4 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-2xl text-sm font-bold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:bg-white transition-all shadow-sm focus:shadow-md"
         >
       </div>
     </div>
@@ -20,68 +20,68 @@
 
   <!-- Investment Metrics -->
   <div class="mb-8 grid grid-cols-1 md:grid-cols-4 gap-6">
-    <div class="bg-[#1B4332] p-8 rounded-[36px] border border-[#C9A84C]/20 shadow-2xl relative overflow-hidden group">
+    <div class="bg-[var(--dogo-primary)] p-8 rounded-[36px] border border-[var(--dogo-secondary)]/20 shadow-2xl relative overflow-hidden group">
       <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
-      <p class="text-[10px] font-black text-[#C9A84C] uppercase tracking-[0.3em] mb-2 relative z-10">Total AUM</p>
+      <p class="text-[10px] font-black text-[var(--dogo-secondary)] uppercase tracking-[0.3em] mb-2 relative z-10">Total AUM</p>
       <h3 class="text-3xl font-black text-white tracking-tighter relative z-10">₦{{ totalAUM() | number }}</h3>
     </div>
-    <div class="bg-white p-8 rounded-[36px] border border-[#1B4332]/5 shadow-sm">
-      <p class="text-[10px] font-black text-[#6B7280] uppercase tracking-[0.3em] mb-2">Active Plans</p>
-      <h3 class="text-3xl font-black text-[#0d1a0f] tracking-tighter">{{ allInvestments().length }} Portfolio(s)</h3>
+    <div class="bg-white p-8 rounded-[36px] border border-[var(--dogo-primary)]/5 shadow-sm">
+      <p class="text-[10px] font-black text-[var(--dogo-muted)] uppercase tracking-[0.3em] mb-2">Active Plans</p>
+      <h3 class="text-3xl font-black text-[var(--dogo-dark)] tracking-tighter">{{ allInvestments().length }} Portfolio(s)</h3>
     </div>
-    <div class="bg-white p-8 rounded-[36px] border border-[#1B4332]/5 shadow-sm">
-      <p class="text-[10px] font-black text-[#6B7280] uppercase tracking-[0.3em] mb-2">Average Growth</p>
-      <h3 class="text-3xl font-black text-[#40916C] tracking-tighter">+8.4%</h3>
+    <div class="bg-white p-8 rounded-[36px] border border-[var(--dogo-primary)]/5 shadow-sm">
+      <p class="text-[10px] font-black text-[var(--dogo-muted)] uppercase tracking-[0.3em] mb-2">Average Growth</p>
+      <h3 class="text-3xl font-black text-[var(--dogo-primary)] tracking-tighter">+8.4%</h3>
     </div>
-    <div class="bg-white p-8 rounded-[36px] border border-[#1B4332]/5 shadow-sm">
+    <div class="bg-white p-8 rounded-[36px] border border-[var(--dogo-primary)]/5 shadow-sm">
        <div class="flex items-center gap-3 h-full">
-          <span class="w-1.5 h-12 bg-[#C9A84C] rounded-full shadow-sm"></span>
-          <p class="text-[11px] font-black text-[#1B4332] uppercase tracking-[0.2em]">Strategy Performance Monitor</p>
+          <span class="w-1.5 h-12 bg-[var(--dogo-secondary)] rounded-full shadow-sm"></span>
+          <p class="text-[11px] font-black text-[var(--dogo-primary)] uppercase tracking-[0.2em]">Strategy Performance Monitor</p>
         </div>
     </div>
   </div>
 
   <!-- Main Grid -->
-  <div class="bg-white rounded-[40px] border border-[#1B4332]/5 shadow-sm overflow-hidden">
+  <div class="bg-white rounded-[40px] border border-[var(--dogo-primary)]/5 shadow-sm overflow-hidden">
     <div class="overflow-x-auto">
       <table class="w-full text-left border-collapse">
-        <thead class="bg-[#f8f7f2] border-b border-[#1B4332]/5">
+        <thead class="bg-[var(--dogo-cream)] border-b border-[var(--dogo-primary)]/5">
           <tr>
-            <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40">Client</th>
-            <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40">Investment Plan</th>
-            <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40">Capital Invested</th>
-            <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40">Current Value</th>
-            <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40">Growth</th>
-            <th class="px-8 py-5 text-[10px) font-black uppercase tracking-widest text-[#1B4332]/40 text-center">Actions</th>
+            <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40">Client</th>
+            <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40">Investment Plan</th>
+            <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40">Capital Invested</th>
+            <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40">Current Value</th>
+            <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40">Growth</th>
+            <th class="px-8 py-5 text-[10px) font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 text-center">Actions</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-[#1B4332]/5">
+        <tbody class="divide-y divide-[var(--dogo-primary)]/5">
           @for(inv of filteredInvestments(); track inv.id) {
-            <tr class="hover:bg-[#f8f7f2]/50 transition-colors group">
+            <tr class="hover:bg-[var(--dogo-cream)]/50 transition-colors group">
               <td class="px-8 py-6">
                 <div class="flex items-center gap-4">
-                  <div class="w-10 h-10 rounded-xl bg-[#0d1a0f] text-[#C9A84C] flex items-center justify-center font-black text-xs">
+                  <div class="w-10 h-10 rounded-xl bg-[var(--dogo-dark)] text-[var(--dogo-secondary)] flex items-center justify-center font-black text-xs">
                     {{ inv.clientInitials }}
                   </div>
                   <div>
-                    <h4 class="font-black text-[#0d1a0f] text-sm group-hover:text-[#C9A84C] transition-colors">{{ inv.clientName }}</h4>
-                    <p class="text-[10px] font-bold text-[#6B7280] tracking-tighter uppercase">{{ inv.clientEmail }}</p>
+                    <h4 class="font-black text-[var(--dogo-dark)] text-sm group-hover:text-[var(--dogo-secondary)] transition-colors">{{ inv.clientName }}</h4>
+                    <p class="text-[10px] font-bold text-[var(--dogo-muted)] tracking-tighter uppercase">{{ inv.clientEmail }}</p>
                   </div>
                 </div>
               </td>
               <td class="px-8 py-6">
                 <div class="flex items-center gap-3">
-                   <div class="p-2 bg-[#1B4332]/5 rounded-lg text-[#1B4332]">
+                   <div class="p-2 bg-[var(--dogo-primary)]/5 rounded-lg text-[var(--dogo-primary)]">
                       <i class="ri-funds-box-fill text-xl"></i>
                    </div>
-                   <span class="text-sm font-bold text-[#0d1a0f]">{{ inv.portfolioName }}</span>
+                   <span class="text-sm font-bold text-[var(--dogo-dark)]">{{ inv.portfolioName }}</span>
                 </div>
               </td>
               <td class="px-8 py-6">
-                <span class="text-sm font-black text-[#0d1a0f]">₦{{ inv.totalInvested | number }}</span>
+                <span class="text-sm font-black text-[var(--dogo-dark)]">₦{{ inv.totalInvested | number }}</span>
               </td>
               <td class="px-8 py-6">
-                <span class="text-sm font-black text-[#1B4332]">₦{{ inv.currentValue | number }}</span>
+                <span class="text-sm font-black text-[var(--dogo-primary)]">₦{{ inv.currentValue | number }}</span>
               </td>
               <td class="px-8 py-6">
                 <div class="flex items-center gap-1.5 text-green-600">
@@ -90,7 +90,7 @@
                 </div>
               </td>
               <td class="px-8 py-6 text-center">
-                <button (click)="viewDetails(inv)" class="px-4 py-2 bg-[#f8f7f2] hover:bg-[#1B4332] hover:text-white text-[#1B4332] rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Audit</button>
+                <button (click)="viewDetails(inv)" class="px-4 py-2 bg-[var(--dogo-cream)] hover:bg-[var(--dogo-primary)] hover:text-white text-[var(--dogo-primary)] rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Audit</button>
               </td>
             </tr>
           }
@@ -101,31 +101,31 @@
     <!-- Empty State -->
     @if(filteredInvestments().length === 0) {
       <div class="flex flex-col items-center justify-center py-24 opacity-60 text-center animate-in fade-in zoom-in duration-500">
-          <div class="w-24 h-24 bg-[#f8f7f2] border-2 border-dashed border-[#1B4332]/20 rounded-full flex items-center justify-center mb-6 text-4xl text-[#1B4332]/40">
+          <div class="w-24 h-24 bg-[var(--dogo-cream)] border-2 border-dashed border-[var(--dogo-primary)]/20 rounded-full flex items-center justify-center mb-6 text-4xl text-[var(--dogo-primary)]/40">
             <i class="ri-briefcase-4-line"></i>
           </div>
-          <p class="text-lg font-black tracking-tighter text-[#1B4332] uppercase italic">No Active Portfolios</p>
-          <p class="text-xs font-bold text-[#6B7280] mt-2 max-w-[300px]">We couldn't find any active investments matching your filters at this time.</p>
+          <p class="text-lg font-black tracking-tighter text-[var(--dogo-primary)] uppercase italic">No Active Portfolios</p>
+          <p class="text-xs font-bold text-[var(--dogo-muted)] mt-2 max-w-[300px]">We couldn't find any active investments matching your filters at this time.</p>
       </div>
     }
 
     <!-- Pagination -->
     @if(totalItems() > 0) {
-      <div class="p-8 border-t border-[#1B4332]/5 flex flex-col md:flex-row items-center justify-between gap-6 bg-[#f8f7f2]/20">
+      <div class="p-8 border-t border-[var(--dogo-primary)]/5 flex flex-col md:flex-row items-center justify-between gap-6 bg-[var(--dogo-cream)]/20">
         <div class="flex items-center gap-1.5">
-          <button (click)="setPage(currentPage() - 1)" [disabled]="currentPage() === 1" class="w-10 h-10 rounded-xl bg-white border border-[#1B4332]/10 flex items-center justify-center text-[#1B4332] hover:bg-[#1B4332] hover:text-white disabled:opacity-30 transition-all">
+          <button (click)="setPage(currentPage() - 1)" [disabled]="currentPage() === 1" class="w-10 h-10 rounded-xl bg-white border border-[var(--dogo-primary)]/10 flex items-center justify-center text-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)] hover:text-white disabled:opacity-30 transition-all">
             <i class="ri-arrow-left-s-line"></i>
           </button>
           
           <div class="px-4">
-             <span class="text-[10px] font-black text-[#6B7280] uppercase tracking-widest">Page {{ currentPage() }} of {{ totalPages() }}</span>
+             <span class="text-[10px] font-black text-[var(--dogo-muted)] uppercase tracking-widest">Page {{ currentPage() }} of {{ totalPages() }}</span>
           </div>
 
-          <button (click)="setPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()" class="w-10 h-10 rounded-xl bg-white border border-[#1B4332]/10 flex items-center justify-center text-[#1B4332] hover:bg-[#1B4332] hover:text-white disabled:opacity-30 transition-all">
+          <button (click)="setPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()" class="w-10 h-10 rounded-xl bg-white border border-[var(--dogo-primary)]/10 flex items-center justify-center text-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)] hover:text-white disabled:opacity-30 transition-all">
             <i class="ri-arrow-right-s-line"></i>
           </button>
         </div>
-        <p class="text-[10px] font-black text-[#6B7280] uppercase tracking-[0.2em]">Total Records: {{ totalItems() }}</p>
+        <p class="text-[10px] font-black text-[var(--dogo-muted)] uppercase tracking-[0.2em]">Total Records: {{ totalItems() }}</p>
       </div>
     }
   </div>
@@ -134,49 +134,49 @@
 <!-- Modal Detail (Similar to client view but for admin audit) -->
 @if(selectedInvestment()) {
   <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-300">
-    <div class="absolute inset-0 bg-[#0d1a0f]/80 backdrop-blur-md"></div>
+    <div class="absolute inset-0 bg-[var(--dogo-dark)]/80 backdrop-blur-md"></div>
     <div class="relative w-full max-w-2xl bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-      <div class="p-8 border-b border-[#1B4332]/5 flex justify-between items-center bg-[#f8f7f2]">
+      <div class="p-8 border-b border-[var(--dogo-primary)]/5 flex justify-between items-center bg-[var(--dogo-cream)]">
         <div>
-          <h3 class="text-2xl font-black text-[#0d1a0f] tracking-tighter">Portfolio Audit</h3>
-          <p class="text-[10px] font-black text-[#C9A84C] uppercase tracking-widest mt-1">{{ selectedInvestment()?.clientName }} · {{ selectedInvestment()?.portfolioName }}</p>
+          <h3 class="text-2xl font-black text-[var(--dogo-dark)] tracking-tighter">Portfolio Audit</h3>
+          <p class="text-[10px] font-black text-[var(--dogo-secondary)] uppercase tracking-widest mt-1">{{ selectedInvestment()?.clientName }} · {{ selectedInvestment()?.portfolioName }}</p>
         </div>
-        <button (click)="closeModal()" class="w-12 h-12 rounded-xl bg-white border border-[#1B4332]/10 flex items-center justify-center text-[#1B4332] hover:bg-black hover:text-white transition-all shadow-sm">
+        <button (click)="closeModal()" class="w-12 h-12 rounded-xl bg-white border border-[var(--dogo-primary)]/10 flex items-center justify-center text-[var(--dogo-primary)] hover:bg-black hover:text-white transition-all shadow-sm">
           <i class="ri-close-line text-2xl"></i>
         </button>
       </div>
 
       <div class="p-8 overflow-y-auto custom-scrollbar-h flex-grow">
         <!-- Asset Class / Hierarchical Holding View -->
-        <h4 class="text-[11px] font-black text-[#1B4332]/40 uppercase tracking-[0.2em] mb-6">Instrument Allocation Audit</h4>
+        <h4 class="text-[11px] font-black text-[var(--dogo-primary)]/40 uppercase tracking-[0.2em] mb-6">Instrument Allocation Audit</h4>
         
         <div class="space-y-4">
           @for(hold of selectedInvestment()?.holdings; track hold.id) {
-            <div class="p-5 rounded-[24px] bg-[#f8f7f2] border border-[#1B4332]/5 flex items-center justify-between group hover:bg-white hover:border-[#C9A84C] transition-all">
+            <div class="p-5 rounded-[24px] bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/5 flex items-center justify-between group hover:bg-white hover:border-[var(--dogo-secondary)] transition-all">
                <div class="flex items-center gap-4">
-                  <div class="w-10 h-10 rounded-lg bg-[#1B4332] flex items-center justify-center text-white">
+                  <div class="w-10 h-10 rounded-lg bg-[var(--dogo-primary)] flex items-center justify-center text-white">
                     <i class="ri-line-chart-line"></i>
                   </div>
                   <div>
-                    <h5 class="text-sm font-black text-[#0d1a0f]">{{ hold.instrumentName }}</h5>
-                    <p class="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest mt-0.5">{{ hold.units | number:'1.2-4' }} Units purchased at ₦{{ hold.purchasePrice | number }}</p>
+                    <h5 class="text-sm font-black text-[var(--dogo-dark)]">{{ hold.instrumentName }}</h5>
+                    <p class="text-[10px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest mt-0.5">{{ hold.units | number:'1.2-4' }} Units purchased at ₦{{ hold.purchasePrice | number }}</p>
                   </div>
                </div>
                <div class="text-right">
-                  <p class="text-sm font-black text-[#1B4332]">₦{{ (hold.units * hold.currentPrice) | number }}</p>
+                  <p class="text-sm font-black text-[var(--dogo-primary)]">₦{{ (hold.units * hold.currentPrice) | number }}</p>
                   <p class="text-[10px] font-black text-green-600 uppercase tracking-widest mt-1">Live Profit Tracking</p>
                </div>
             </div>
           }
         </div>
 
-        <div class="mt-10 pt-8 border-t border-[#1B4332]/5 flex justify-between items-center">
+        <div class="mt-10 pt-8 border-t border-[var(--dogo-primary)]/5 flex justify-between items-center">
            <div>
-              <p class="text-[10px] font-black text-[#6B7280] uppercase tracking-widest mb-1">Account Funding Date</p>
-              <p class="text-sm font-black text-[#0d1a0f]">{{ selectedInvestment()?.investedAt }}</p>
+              <p class="text-[10px] font-black text-[var(--dogo-muted)] uppercase tracking-widest mb-1">Account Funding Date</p>
+              <p class="text-sm font-black text-[var(--dogo-dark)]">{{ selectedInvestment()?.investedAt }}</p>
            </div>
            <div>
-              <p class="text-[10px] font-black text-[#6B7280] uppercase tracking-widest mb-1">Status</p>
+              <p class="text-[10px] font-black text-[var(--dogo-muted)] uppercase tracking-widest mb-1">Status</p>
               <app-badge variant="success">Active Plan</app-badge>
            </div>
         </div>
@@ -184,3 +184,5 @@
     </div>
   </div>
 }
+
+

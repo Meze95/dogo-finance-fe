@@ -28,8 +28,8 @@ export class BadgeComponent {
       case 'success': return 'bg-green-50/50 text-green-700 border-green-200/50';
       case 'warning': return 'bg-orange-50/50 text-orange-700 border-orange-200/50';
       case 'error':   return 'bg-red-50/50 text-red-700 border-red-200/50';
-      case 'gold':    return 'bg-[#C9A84C]/10 text-[#C9A84C] border-[#C9A84C]/20';
-      case 'dark':    return 'bg-[#0d1a0f]/5 text-[#0d1a0f] border-[#0d1a0f]/10';
+      case 'gold':    return 'bg-[var(--dogo-secondary)]/10 text-[var(--dogo-secondary)] border-[var(--dogo-secondary)]/20';
+      case 'dark':    return 'bg-[var(--dogo-dark)]/5 text-[var(--dogo-dark)] border-[var(--dogo-dark)]/10';
       default:        return 'bg-blue-50/50 text-blue-700 border-blue-200/50';
     }
   });
@@ -39,9 +39,10 @@ export class BadgeComponent {
       case 'success': return 'bg-green-500';
       case 'warning': return 'bg-orange-500';
       case 'error':   return 'bg-red-500';
-      case 'gold':    return 'bg-[#C9A84C]';
-      case 'dark':    return 'bg-[#0d1a0f]';
+      case 'gold':    return 'bg-[var(--dogo-secondary)]';
+      case 'dark':    return 'bg-[var(--dogo-dark)]';
       default:        return 'bg-blue-500';
     }
   });
 }
+

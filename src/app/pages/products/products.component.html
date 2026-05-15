@@ -9,8 +9,8 @@
       <!-- Text -->
       <div>
         <nav class="flex items-center gap-2 text-sm font-medium mb-8" aria-label="Breadcrumb">
-          <a routerLink="/" class="text-[#6B7280] hover:text-[#1B4332]">Home</a>
-          <i class="ri-arrow-right-s-line text-[#6B7280]"></i>
+          <a routerLink="/" class="text-[var(--dogo-muted)] hover:text-[var(--dogo-primary)]">Home</a>
+          <i class="ri-arrow-right-s-line text-[var(--dogo-muted)]"></i>
           <span class="font-black" [style.color]="p.accentColor">{{ p.name }}</span>
         </nav>
 
@@ -18,10 +18,10 @@
           <i class="ri-verified-badge-fill"></i> {{ p.tagline }}
         </div>
 
-        <h1 class="text-[56px] md:text-[70px] font-black leading-[0.9] tracking-tighter text-[#0d1a0f] mb-8">
+        <h1 class="text-[56px] md:text-[70px] font-black leading-[0.9] tracking-tighter text-[var(--dogo-dark)] mb-8">
           {{ p.headline }}
         </h1>
-        <p class="text-xl text-[#6B7280] font-medium leading-relaxed mb-10 max-w-lg">
+        <p class="text-xl text-[var(--dogo-muted)] font-medium leading-relaxed mb-10 max-w-lg">
           {{ p.subheadline }}
         </p>
 
@@ -32,7 +32,7 @@
       </div>
 
       <!-- Stats card -->
-      <div class="bg-[#0d1a0f] rounded-[50px] p-12 text-white shadow-[0_50px_100px_-20px_rgba(13,26,15,0.5)] relative overflow-hidden">
+      <div class="bg-[var(--dogo-dark)] rounded-[50px] p-12 text-white shadow-[0_50px_100px_-20px_rgba(13,26,15,0.5)] relative overflow-hidden">
         <div class="absolute -top-10 -right-10 w-60 h-60 rounded-full blur-[80px] opacity-20" [style.background]="'radial-gradient(circle, ' + p.accentColor + ', transparent)'"></div>
         <div class="relative z-10">
           <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-10" [style.background]="p.accentColor + '33'">
@@ -54,7 +54,7 @@
           </div>
 
           <div class="mt-8 flex items-center gap-3 bg-white/5 rounded-2xl p-4">
-            <i class="ri-verified-badge-fill text-[#C9A84C] text-xl shrink-0"></i>
+            <i class="ri-verified-badge-fill text-[var(--dogo-secondary)] text-xl shrink-0"></i>
             <p class="text-white/70 text-sm font-medium">Shariah Supervisory Board (SSB) Certified</p>
           </div>
         </div>
@@ -68,7 +68,7 @@
   <div class="max-w-7xl mx-auto px-6 md:px-12">
     <div class="text-center mb-20">
       <div class="halal-badge mx-auto mb-6"><i class="ri-star-fill"></i> Key Features</div>
-      <h2 class="text-4xl md:text-5xl font-black text-[#0d1a0f] tracking-tighter">
+      <h2 class="text-4xl md:text-5xl font-black text-[var(--dogo-dark)] tracking-tighter">
         What makes <span [style.color]="p.accentColor">{{ p.name }}</span> different?
       </h2>
     </div>
@@ -80,8 +80,8 @@
             <i [class]="f.icon + ' text-2xl'" [style.color]="p.accentColor"></i>
           </div>
           <div>
-            <h3 class="text-xl font-black text-[#0d1a0f] mb-3">{{ f.title }}</h3>
-            <p class="text-[#6B7280] font-medium leading-relaxed">{{ f.desc }}</p>
+            <h3 class="text-xl font-black text-[var(--dogo-dark)] mb-3">{{ f.title }}</h3>
+            <p class="text-[var(--dogo-muted)] font-medium leading-relaxed">{{ f.desc }}</p>
           </div>
         </div>
       }
@@ -94,14 +94,14 @@
   <div class="max-w-7xl mx-auto px-6 md:px-12">
     <div class="text-center mb-20">
       <div class="halal-badge mx-auto mb-6"><i class="ri-map-pin-line"></i> How It Works</div>
-      <h2 class="text-4xl md:text-5xl font-black text-[#0d1a0f] tracking-tighter">Start in 4 simple steps.</h2>
+      <h2 class="text-4xl md:text-5xl font-black text-[var(--dogo-dark)] tracking-tighter">Start in 4 simple steps.</h2>
     </div>
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
       @for(s of p.howItWorks; track s.step) {
         <div class="bg-white rounded-[32px] p-8 shadow-lg border border-white relative">
           <div class="text-[64px] font-black leading-none mb-6 opacity-10" [style.color]="p.accentColor">{{ s.step }}</div>
-          <h3 class="text-lg font-black text-[#0d1a0f] mb-4">{{ s.title }}</h3>
-          <p class="text-[#6B7280] font-medium leading-relaxed text-sm">{{ s.desc }}</p>
+          <h3 class="text-lg font-black text-[var(--dogo-dark)] mb-4">{{ s.title }}</h3>
+          <p class="text-[var(--dogo-muted)] font-medium leading-relaxed text-sm">{{ s.desc }}</p>
         </div>
       }
     </div>
@@ -112,16 +112,16 @@
 @if(p.faqs.length > 0) {
   <section class="py-24 bg-white">
     <div class="max-w-3xl mx-auto px-6 md:px-12">
-      <h2 class="text-4xl font-black text-[#0d1a0f] tracking-tighter text-center mb-16">Common Questions</h2>
+      <h2 class="text-4xl font-black text-[var(--dogo-dark)] tracking-tighter text-center mb-16">Common Questions</h2>
       <div class="space-y-4">
         @for(faq of p.faqs; track faq.q; let i = $index) {
           <div class="border border-gray-100 rounded-[24px] overflow-hidden">
             <button (click)="toggleFaq(i)" class="w-full flex items-center justify-between px-8 py-6 text-left hover:bg-gray-50 transition-colors">
-              <span class="font-black text-[#0d1a0f] pr-8">{{ faq.q }}</span>
+              <span class="font-black text-[var(--dogo-dark)] pr-8">{{ faq.q }}</span>
               <i [class]="openFaq() === i ? 'ri-subtract-line' : 'ri-add-line'" class="shrink-0 text-xl" [style.color]="p.accentColor"></i>
             </button>
             @if(openFaq() === i) {
-              <div class="px-8 pb-6 text-[#6B7280] font-medium leading-relaxed border-t border-gray-50">
+              <div class="px-8 pb-6 text-[var(--dogo-muted)] font-medium leading-relaxed border-t border-gray-50">
                 {{ faq.a }}
               </div>
             }
@@ -133,17 +133,17 @@
 }
 
 <!-- ===== OTHER PRODUCTS ===== -->
-<section class="py-24 bg-[#f8f7f2]">
+<section class="py-24 bg-[var(--dogo-cream)]">
   <div class="max-w-7xl mx-auto px-6 md:px-12">
-    <h2 class="text-4xl font-black text-[#0d1a0f] tracking-tighter text-center mb-16">Explore more products</h2>
+    <h2 class="text-4xl font-black text-[var(--dogo-dark)] tracking-tighter text-center mb-16">Explore more products</h2>
     <div class="grid md:grid-cols-3 gap-8">
       @for(op of otherProducts().slice(0, 3); track op.id) {
         <a [routerLink]="['/products', op.id]" class="group bg-white rounded-[32px] p-8 border border-gray-100 hover:border-transparent hover:shadow-xl transition-all">
           <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-6" [style.background]="op.accentLight">
             <i [class]="op.icon + ' text-2xl'" [style.color]="op.accentColor"></i>
           </div>
-          <h3 class="text-xl font-black text-[#0d1a0f] mb-2 group-hover:text-[#1B4332] transition-colors">{{ op.name }}</h3>
-          <p class="text-[#6B7280] font-medium text-sm mb-6">{{ op.tagline }}</p>
+          <h3 class="text-xl font-black text-[var(--dogo-dark)] mb-2 group-hover:text-[var(--dogo-primary)] transition-colors">{{ op.name }}</h3>
+          <p class="text-[var(--dogo-muted)] font-medium text-sm mb-6">{{ op.tagline }}</p>
           <span class="font-black text-sm flex items-center gap-1" [style.color]="op.accentColor">
             {{ op.returnRate }} <i class="ri-arrow-right-line"></i>
           </span>
@@ -153,3 +153,4 @@
   </div>
 </section>
 }
+

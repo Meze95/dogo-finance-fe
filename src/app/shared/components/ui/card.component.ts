@@ -64,26 +64,27 @@ export class CardComponent {
 
   cardClasses = computed(() => {
     switch (this.variant()) {
-      case 'dark': return 'bg-[#1B4332] text-white shadow-2xl shadow-[#1B4332]/20 border border-white/10';
-      case 'gold': return 'bg-[#C9A84C] text-[#1B4332] shadow-2xl shadow-[#C9A84C]/20 border border-[#f0d98b]';
-      case 'flat': return 'bg-[#f8f7f2] border border-[#1B4332]/5 text-[#1B4332]';
-      default:     return 'bg-white border border-[#1B4332]/5 shadow-sm hover:shadow-xl hover:shadow-[#1B4332]/5 text-[#0d1a0f]';
+      case 'dark': return 'bg-[var(--dogo-primary)] text-white shadow-2xl shadow-[var(--dogo-primary)]/20 border border-white/10';
+      case 'gold': return 'bg-[var(--dogo-secondary)] text-[var(--dogo-primary)] shadow-2xl shadow-[var(--dogo-secondary)]/20 border border-[#f0d98b]';
+      case 'flat': return 'bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/5 text-[var(--dogo-primary)]';
+      default:     return 'bg-white border border-[var(--dogo-primary)]/5 shadow-sm hover:shadow-xl hover:shadow-[var(--dogo-primary)]/5 text-[var(--dogo-dark)]';
     }
   });
 
   labelClasses = computed(() => {
     switch (this.variant()) {
-      case 'dark': return 'text-[#C9A84C]';
-      case 'gold': return 'text-[#1B4332]';
-      default:     return 'text-[#1B4332]';
+      case 'dark': return 'text-[var(--dogo-secondary)]';
+      case 'gold': return 'text-[var(--dogo-primary)]';
+      default:     return 'text-[var(--dogo-primary)]';
     }
   });
 
   iconWrapperClasses = computed(() => {
     switch (this.variant()) {
       case 'dark': return 'bg-white/10 text-white';
-      case 'gold': return 'bg-[#1B4332]/10 text-[#1B4332]';
-      default:     return 'bg-[#f8f7f2] text-[#1B4332]';
+      case 'gold': return 'bg-[var(--dogo-primary)]/10 text-[var(--dogo-primary)]';
+      default:     return 'bg-[var(--dogo-cream)] text-[var(--dogo-primary)]';
     }
   });
 }
+

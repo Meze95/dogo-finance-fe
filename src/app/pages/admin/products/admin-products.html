@@ -2,7 +2,7 @@
   <!-- Header -->
   <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
     <div>
-      <h2 class="text-3xl font-black text-[#0d1a0f] tracking-tight">Product Management</h2>
+      <h2 class="text-3xl font-black text-[var(--dogo-dark)] tracking-tight">Product Management</h2>
       <p class="text-gray-500 text-sm mt-1 uppercase tracking-widest font-bold">Configure investment products, types, and asset classes.</p>
     </div>
     <div class="flex items-center gap-3">
@@ -10,30 +10,30 @@
       <div class="relative w-full md:w-64">
         <i class="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
         <input type="text" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" placeholder="Search..." 
-               class="w-full bg-white border border-[#1B4332]/10 focus:border-[#C9A84C] rounded-2xl py-3 pl-11 pr-4 text-slate-800 font-bold placeholder:text-slate-300 outline-none transition-all shadow-sm" />
+               class="w-full bg-white border border-[var(--dogo-primary)]/10 focus:border-[var(--dogo-secondary)] rounded-2xl py-3 pl-11 pr-4 text-slate-800 font-bold placeholder:text-slate-300 outline-none transition-all shadow-sm" />
       </div>
       
       @switch(activeTab()) {
         @case('portfolios') {
-          <button (click)="openAddModal()" class="bg-[#1B4332] hover:bg-[#2D6A4F] text-white px-6 py-3 rounded-2xl font-black shadow-lg transition-all flex items-center gap-2">
+          <button (click)="openAddModal()" class="bg-[var(--dogo-primary)] hover:bg-[var(--dogo-primary-soft)] text-white px-6 py-3 rounded-2xl font-black shadow-lg transition-all flex items-center gap-2">
             <i class="ri-add-line"></i>
             <span>New Portfolio</span>
           </button>
         }
         @case('types') {
-          <button (click)="openAddTypeModal()" class="bg-[#C9A84C] hover:bg-[#9a7a2b] text-white px-6 py-3 rounded-2xl font-black shadow-lg transition-all flex items-center gap-2">
+          <button (click)="openAddTypeModal()" class="bg-[var(--dogo-secondary)] hover:bg-[#9a7a2b] text-white px-6 py-3 rounded-2xl font-black shadow-lg transition-all flex items-center gap-2">
             <i class="ri-add-line"></i>
             <span>New Type</span>
           </button>
         }
         @case('assets') {
-          <button (click)="openAddAssetModal()" class="bg-[#1B4332] hover:bg-[#2D6A4F] text-white px-6 py-3 rounded-2xl font-black shadow-lg transition-all flex items-center gap-2">
+          <button (click)="openAddAssetModal()" class="bg-[var(--dogo-primary)] hover:bg-[var(--dogo-primary-soft)] text-white px-6 py-3 rounded-2xl font-black shadow-lg transition-all flex items-center gap-2">
             <i class="ri-add-line"></i>
             <span>New Asset Class</span>
           </button>
         }
         @case('instruments') {
-          <button (click)="openAddInstrumentModal()" class="bg-[#C9A84C] hover:bg-[#9a7a2b] text-white px-6 py-3 rounded-2xl font-black shadow-lg transition-all flex items-center gap-2">
+          <button (click)="openAddInstrumentModal()" class="bg-[var(--dogo-secondary)] hover:bg-[#9a7a2b] text-white px-6 py-3 rounded-2xl font-black shadow-lg transition-all flex items-center gap-2">
             <i class="ri-add-line"></i>
             <span>New Instrument</span>
           </button>
@@ -43,14 +43,14 @@
   </div>
 
   <!-- Tabs Navigation -->
-  <div class="flex items-center gap-2 bg-white/50 p-1.5 rounded-[24px] border border-[#1B4332]/5 w-fit">
+  <div class="flex items-center gap-2 bg-white/50 p-1.5 rounded-[24px] border border-[var(--dogo-primary)]/5 w-fit">
     <button (click)="activeTab.set('portfolios')" 
-            [ngClass]="activeTab() === 'portfolios' ? 'bg-[#1B4332] text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'"
+            [ngClass]="activeTab() === 'portfolios' ? 'bg-[var(--dogo-primary)] text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'"
             class="px-8 py-3 rounded-[20px] text-xs font-black uppercase tracking-widest transition-all">
       Portfolios
     </button>
     <button (click)="activeTab.set('types')" 
-            [ngClass]="activeTab() === 'types' ? 'bg-[#C9A84C] text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'"
+            [ngClass]="activeTab() === 'types' ? 'bg-[var(--dogo-secondary)] text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'"
             class="px-8 py-3 rounded-[20px] text-xs font-black uppercase tracking-widest transition-all">
       Portfolio Types
     </button>
@@ -60,7 +60,7 @@
       Asset Classes
     </button>
     <button (click)="activeTab.set('instruments')" 
-            [ngClass]="activeTab() === 'instruments' ? 'bg-[#C9A84C] text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'"
+            [ngClass]="activeTab() === 'instruments' ? 'bg-[var(--dogo-secondary)] text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'"
             class="px-8 py-3 rounded-[20px] text-xs font-black uppercase tracking-widest transition-all">
       Instruments
     </button>
@@ -68,36 +68,36 @@
 
   @if(activeTab() === 'portfolios') {
     <!-- Portfolios Table Card -->
-    <div class="bg-white rounded-[40px] p-4 sm:p-8 border border-[#1B4332]/5 shadow-sm overflow-hidden animate-fade-in">
+    <div class="bg-white rounded-[40px] p-4 sm:p-8 border border-[var(--dogo-primary)]/5 shadow-sm overflow-hidden animate-fade-in">
       <div class="overflow-x-auto custom-scrollbar pb-4">
         <table class="w-full text-left border-collapse min-w-[800px]">
           <thead>
             <tr class="border-b-2 border-slate-100">
-              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Portfolio Name</th>
-              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Portfolio Type</th>
-              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Risk Level</th>
-              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Status</th>
-              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C] text-right">Actions</th>
+              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Portfolio Name</th>
+              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Portfolio Type</th>
+              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Risk Level</th>
+              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Status</th>
+              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)] text-right">Actions</th>
             </tr>
           </thead>
           <tbody class="text-sm">
             @for(portfolio of filteredPortfolios(); track portfolio.portfolioId; let i = $index) {
-            <tr class="border-b border-slate-50 hover:bg-[#f8f7f2] transition-colors group">
+            <tr class="border-b border-slate-50 hover:bg-[var(--dogo-cream)] transition-colors group">
               <td class="py-5 px-4">
                 <div class="flex items-center gap-4">
                   <div class="w-10 h-10 rounded-2xl flex items-center justify-center font-black text-xs text-white shadow-sm shrink-0 uppercase
-                              bg-[#1B4332]">
+                              bg-[var(--dogo-primary)]">
                     {{ portfolio.name.charAt(0) }}
                   </div>
                   <div>
-                    <div class="font-black text-[#0d1a0f]">{{ portfolio.name }}</div>
+                    <div class="font-black text-[var(--dogo-dark)]">{{ portfolio.name }}</div>
                     <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">ID: {{ portfolio.portfolioId }} | Code: {{ portfolio.code || 'N/A' }}</div>
                   </div>
                 </div>
               </td>
               <td class="py-5 px-4 font-black text-slate-700 text-xs">
                 <div class="flex items-center gap-3">
-                   <div class="w-8 h-8 rounded-xl bg-white text-[#1B4332]/40 shadow-sm border border-[#1B4332]/5 flex items-center justify-center">
+                   <div class="w-8 h-8 rounded-xl bg-white text-[var(--dogo-primary)]/40 shadow-sm border border-[var(--dogo-primary)]/5 flex items-center justify-center">
                       <i class="ri-folders-line text-base"></i>
                    </div>
                    {{ portfolio.portfolioTypeName || 'N/A' }}
@@ -124,10 +124,10 @@
               </td>
               <td class="py-5 px-4 text-right">
                 <div class="flex items-center justify-end gap-2">
-                  <button (click)="viewPortfolio(portfolio)" class="text-slate-400 hover:text-[#C9A84C] transition-colors p-2 hover:bg-[#C9A84C]/10 rounded-2xl" title="View Details">
+                  <button (click)="viewPortfolio(portfolio)" class="text-slate-400 hover:text-[var(--dogo-secondary)] transition-colors p-2 hover:bg-[var(--dogo-secondary)]/10 rounded-2xl" title="View Details">
                     <i class="ri-eye-line text-lg"></i>
                   </button>
-                  <button (click)="editPortfolio(portfolio)" class="text-slate-400 hover:text-[#1B4332] transition-colors p-2 hover:bg-[#1B4332]/10 rounded-2xl" title="Edit Portfolio">
+                  <button (click)="editPortfolio(portfolio)" class="text-slate-400 hover:text-[var(--dogo-primary)] transition-colors p-2 hover:bg-[var(--dogo-primary)]/10 rounded-2xl" title="Edit Portfolio">
                     <i class="ri-edit-line text-lg"></i>
                   </button>
                   <button (click)="deletePortfolio(portfolio.portfolioId)" class="text-slate-400 hover:text-red-500 transition-colors p-2 hover:bg-red-500/10 rounded-2xl" title="Delete Portfolio">
@@ -156,17 +156,17 @@
     <!-- Product Types List -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
       @for(type of portfolioTypes(); track type.portfolioTypeId) {
-        <div class="bg-white rounded-[32px] p-8 border border-[#1B4332]/5 shadow-sm hover:shadow-md transition-all group">
+        <div class="bg-white rounded-[32px] p-8 border border-[var(--dogo-primary)]/5 shadow-sm hover:shadow-md transition-all group">
           <div class="flex justify-between items-start mb-6">
-            <div class="w-12 h-12 rounded-2xl bg-[#C9A84C]/10 text-[#C9A84C] flex items-center justify-center text-xl">
+            <div class="w-12 h-12 rounded-2xl bg-[var(--dogo-secondary)]/10 text-[var(--dogo-secondary)] flex items-center justify-center text-xl">
                <i class="ri-folders-line"></i>
             </div>
             <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-               <button (click)="editType(type)" class="text-slate-400 hover:text-[#C9A84C] p-1"><i class="ri-edit-line"></i></button>
+               <button (click)="editType(type)" class="text-slate-400 hover:text-[var(--dogo-secondary)] p-1"><i class="ri-edit-line"></i></button>
                <button (click)="deleteType(type.portfolioTypeId)" class="text-slate-400 hover:text-red-500 p-1"><i class="ri-delete-bin-line"></i></button>
             </div>
           </div>
-          <h3 class="text-xl font-black text-[#0d1a0f] mb-1">{{ type.name }}</h3>
+          <h3 class="text-xl font-black text-[var(--dogo-dark)] mb-1">{{ type.name }}</h3>
           <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">CODE: {{ type.code }}</p>
           
           <div class="space-y-3 mt-6">
@@ -186,7 +186,7 @@
     <!-- Asset Classes List -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
        @for(asset of assetTypes(); track asset.assetTypeId) {
-         <div class="bg-white rounded-[32px] p-8 border border-[#1B4332]/5 shadow-sm hover:shadow-md transition-all group">
+         <div class="bg-white rounded-[32px] p-8 border border-[var(--dogo-primary)]/5 shadow-sm hover:shadow-md transition-all group">
             <div class="flex justify-between items-start mb-6">
                <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-600 flex items-center justify-center text-xl">
                   <i class="ri-coin-line"></i>
@@ -196,11 +196,11 @@
                   <button (click)="deleteAsset(asset.assetTypeId)" class="text-slate-400 hover:text-red-500 p-1"><i class="ri-delete-bin-line"></i></button>
                </div>
             </div>
-            <h3 class="text-xl font-black text-[#0d1a0f] mb-1">{{ asset.name }}</h3>
+            <h3 class="text-xl font-black text-[var(--dogo-dark)] mb-1">{{ asset.name }}</h3>
             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6">Asset ID: {{ asset.assetTypeId }}</p>
             
             <div class="flex items-center gap-3">
-               <i class="ri-shield-star-fill text-[#C9A84C]" [class.grayscale]="!asset.isShariahCompliant"></i>
+               <i class="ri-shield-star-fill text-[var(--dogo-secondary)]" [class.grayscale]="!asset.isShariahCompliant"></i>
                <span class="text-xs font-black uppercase tracking-widest text-slate-500">
                   {{ asset.isShariahCompliant ? 'Shariah Compliant' : 'Conventional' }}
                </span>
@@ -210,23 +210,23 @@
     </div>
   } @else if(activeTab() === 'instruments') {
     <!-- Instruments List -->
-    <div class="bg-white rounded-[40px] p-4 sm:p-8 border border-[#1B4332]/5 shadow-sm overflow-hidden animate-fade-in">
+    <div class="bg-white rounded-[40px] p-4 sm:p-8 border border-[var(--dogo-primary)]/5 shadow-sm overflow-hidden animate-fade-in">
       <div class="overflow-x-auto custom-scrollbar pb-4">
         <table class="w-full text-left border-collapse min-w-[800px]">
           <thead>
             <tr class="border-b-2 border-slate-100">
-              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Instrument Name</th>
-              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Instrument Code</th>
-              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">NAV</th>
-              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Price Source</th>
-              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C] text-right">Actions</th>
+              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Instrument Name</th>
+              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Instrument Code</th>
+              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">NAV</th>
+              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Price Source</th>
+              <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)] text-right">Actions</th>
             </tr>
           </thead>
           <tbody class="text-sm">
             @for(inst of productService.instruments(); track inst.id) {
-            <tr class="border-b border-slate-50 hover:bg-[#f8f7f2] transition-colors group">
+            <tr class="border-b border-slate-50 hover:bg-[var(--dogo-cream)] transition-colors group">
               <td class="py-5 px-4">
-                <div class="font-black text-[#0d1a0f]">{{ inst.name }}</div>
+                <div class="font-black text-[var(--dogo-dark)]">{{ inst.name }}</div>
               </td>
               <td class="py-5 px-4">
                 <span class="bg-slate-100 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest text-slate-600">
@@ -234,7 +234,7 @@
                 </span>
               </td>
               <td class="py-5 px-4">
-                <div class="font-black text-[#1B4332]">N{{ inst.unitPrice | number:'1.2-2' }}</div>
+                <div class="font-black text-[var(--dogo-primary)]">N{{ inst.unitPrice | number:'1.2-2' }}</div>
               </td>
               <td class="py-5 px-4">
                 <span class="bg-slate-100 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest text-slate-600">
@@ -243,7 +243,7 @@
               </td>
               <td class="py-5 px-4 text-right">
                 <div class="flex items-center justify-end gap-2">
-                  <button (click)="editInstrument(inst)" class="text-slate-400 hover:text-[#1B4332] p-2 hover:bg-[#1B4332]/10 rounded-2xl">
+                  <button (click)="editInstrument(inst)" class="text-slate-400 hover:text-[var(--dogo-primary)] p-2 hover:bg-[var(--dogo-primary)]/10 rounded-2xl">
                     <i class="ri-edit-line text-lg"></i>
                   </button>
                   <button (click)="deleteInstrument(inst.id)" class="text-slate-400 hover:text-red-500 p-2 hover:bg-red-500/10 rounded-2xl">
@@ -263,16 +263,16 @@
 <!-- Add/Edit Product Modal -->
 @if(isModalOpen()) {
 <div class="fixed inset-0 z-[999] flex items-center justify-center px-4 animate-fade-in" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="overflow: visible;">
-  <div class="fixed inset-0 bg-[#0d1a0f]/60 backdrop-blur-md transition-opacity" (click)="closeModal()"></div>
+  <div class="fixed inset-0 bg-[var(--dogo-dark)]/60 backdrop-blur-md transition-opacity" (click)="closeModal()"></div>
   
   <div class="relative bg-white rounded-[40px] shadow-2xl w-full max-w-6xl transform transition-all animate-slide-up flex flex-col max-h-[90vh] overflow-visible">
     <!-- Modal Header -->
-    <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-[#f8f7f2] rounded-t-[40px] shrink-0">
+    <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-[var(--dogo-cream)] rounded-t-[40px] shrink-0">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-[#C9A84C]/20 text-[#C9A84C] flex items-center justify-center">
+        <div class="w-10 h-10 rounded-2xl bg-[var(--dogo-secondary)]/20 text-[var(--dogo-secondary)] flex items-center justify-center">
             <i class="ri-settings-4-line text-xl"></i>
         </div>
-        <h3 class="text-xl font-black text-[#0d1a0f] tracking-tight" id="modal-title">
+        <h3 class="text-xl font-black text-[var(--dogo-dark)] tracking-tight" id="modal-title">
           {{ selectedProduct() ? 'Edit Portfolio' : 'New Portfolio' }}
         </h3>
       </div>
@@ -285,19 +285,19 @@
     <div class="p-8 overflow-y-auto custom-scrollbar flex flex-col gap-10" style="max-height: 80vh; overflow-x: visible;">
       <!-- General Info Section -->
       <div class="space-y-6" style="overflow: visible;">
-        <h4 class="text-sm font-black text-[#C9A84C] uppercase tracking-widest border-b border-slate-100 pb-2">General Details</h4>
+        <h4 class="text-sm font-black text-[var(--dogo-secondary)] uppercase tracking-widest border-b border-slate-100 pb-2">General Details</h4>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6" style="overflow: visible;">
           <div class="space-y-1">
             <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Portfolio Name</label>
             <input type="text" [ngModel]="formData().name" (ngModelChange)="updateFormField('name', $event)" placeholder="e.g. Shariah Balanced Fund"
-                   class="w-full bg-[#f8f7f2] border border-[#1B4332]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[#C9A84C] transition-all shadow-sm" />
+                   class="w-full bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[var(--dogo-secondary)] transition-all shadow-sm" />
           </div>
 
           <div class="space-y-1">
             <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Portfolio Code</label>
             <input type="text" [ngModel]="formData().code" (ngModelChange)="updateFormField('code', $event)" placeholder="e.g. PRD-001"
-                   class="w-full bg-[#f8f7f2] border border-[#1B4332]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[#C9A84C] transition-all shadow-sm" />
+                   class="w-full bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[var(--dogo-secondary)] transition-all shadow-sm" />
           </div>
 
           <app-dropdown 
@@ -321,9 +321,9 @@
           ></app-dropdown>
 
           <div class="flex flex-col justify-end">
-            <label class="flex items-center justify-between bg-[#f8f7f2] p-[1.125rem] rounded-[1.25rem] cursor-pointer group hover:bg-[#C9A84C]/5 transition-colors border border-transparent hover:border-[#C9A84C]/20">
+            <label class="flex items-center justify-between bg-[var(--dogo-cream)] p-[1.125rem] rounded-[1.25rem] cursor-pointer group hover:bg-[var(--dogo-secondary)]/5 transition-colors border border-transparent hover:border-[var(--dogo-secondary)]/20">
               <span class="text-[10px] font-black text-slate-700 uppercase tracking-widest">Active Status</span>
-              <input type="checkbox" [ngModel]="formData().isActive" (ngModelChange)="updateFormField('isActive', $event)" class="w-6 h-6 rounded-lg border-2 border-[#1B4332]/10 accent-[#C9A84C] cursor-pointer" />
+              <input type="checkbox" [ngModel]="formData().isActive" (ngModelChange)="updateFormField('isActive', $event)" class="w-6 h-6 rounded-lg border-2 border-[var(--dogo-primary)]/10 accent-[var(--dogo-secondary)] cursor-pointer" />
             </label>
           </div>
         </div>
@@ -331,25 +331,25 @@
         <div class="space-y-1">
           <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Description</label>
           <textarea [ngModel]="formData().description" (ngModelChange)="updateFormField('description', $event)" rows="3" placeholder="Briefly describe the product's investment objective..."
-                   class="w-full bg-[#f8f7f2] border border-[#1B4332]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[#C9A84C] transition-all resize-none shadow-sm"></textarea>
+                   class="w-full bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[var(--dogo-secondary)] transition-all resize-none shadow-sm"></textarea>
         </div>
       </div>
 
       <!-- Liquidation Policy Section -->
       <div class="space-y-6" style="overflow: visible;">
-        <h4 class="text-sm font-black text-[#C9A84C] uppercase tracking-widest border-b border-slate-100 pb-2">Liquidation & Exit Policy</h4>
+        <h4 class="text-sm font-black text-[var(--dogo-secondary)] uppercase tracking-widest border-b border-slate-100 pb-2">Liquidation & Exit Policy</h4>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6" style="overflow: visible;">
           <div class="space-y-1">
             <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Lock-in Period (Days)</label>
             <input type="number" [ngModel]="formData().lockInPeriodDays" (ngModelChange)="updateFormField('lockInPeriodDays', $event)" placeholder="0"
-                   class="w-full bg-[#f8f7f2] border border-[#1B4332]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[#C9A84C] transition-all shadow-sm" />
+                   class="w-full bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[var(--dogo-secondary)] transition-all shadow-sm" />
           </div>
 
           <div class="space-y-1">
             <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Notice Period (Days)</label>
             <input type="number" [ngModel]="formData().noticePeriodDays" (ngModelChange)="updateFormField('noticePeriodDays', $event)" placeholder="0"
-                   class="w-full bg-[#f8f7f2] border border-[#1B4332]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[#C9A84C] transition-all shadow-sm" />
+                   class="w-full bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[var(--dogo-secondary)] transition-all shadow-sm" />
           </div>
         </div>
 
@@ -357,28 +357,28 @@
           <div class="space-y-1">
             <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Min Holding Period (Days)</label>
             <input type="number" [ngModel]="formData().minHoldingPeriodDays" (ngModelChange)="updateFormField('minHoldingPeriodDays', $event)" placeholder="0"
-                   class="w-full bg-[#f8f7f2] border border-[#1B4332]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[#C9A84C] transition-all shadow-sm" />
+                   class="w-full bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[var(--dogo-secondary)] transition-all shadow-sm" />
           </div>
 
           <div class="space-y-1">
             <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Exit Fee (%)</label>
             <input type="number" [ngModel]="formData().exitFeePercentage" (ngModelChange)="updateFormField('exitFeePercentage', $event)" placeholder="0.00"
-                   class="w-full bg-[#f8f7f2] border border-[#1B4332]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[#C9A84C] transition-all shadow-sm" />
+                   class="w-full bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[var(--dogo-secondary)] transition-all shadow-sm" />
           </div>
         </div>
 
         <div class="space-y-1">
           <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Admin Approval Threshold (₦)</label>
           <input type="number" [ngModel]="formData().approvalThresholdAmount" (ngModelChange)="updateFormField('approvalThresholdAmount', $event)" placeholder="1,000,000"
-                 class="w-full bg-[#f8f7f2] border border-[#1B4332]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[#C9A84C] transition-all shadow-sm" />
+                 class="w-full bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/5 rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none focus:border-[var(--dogo-secondary)] transition-all shadow-sm" />
         </div>
       </div>
 
       <!-- Asset & Instrument Allocation section -->
       <div class="space-y-6" style="overflow: visible;">
         <div class="flex justify-between items-center border-b border-slate-100 pb-2">
-            <h4 class="text-sm font-black text-[#C9A84C] uppercase tracking-widest ">Asset & Instrument Allocation</h4>
-            <button (click)="addAllocation()" class="text-[10px] font-black text-[#1B4332] uppercase tracking-widest flex items-center gap-1 hover:text-[#C9A84C] transition-colors">
+            <h4 class="text-sm font-black text-[var(--dogo-secondary)] uppercase tracking-widest ">Asset & Instrument Allocation</h4>
+            <button (click)="addAllocation()" class="text-[10px] font-black text-[var(--dogo-primary)] uppercase tracking-widest flex items-center gap-1 hover:text-[var(--dogo-secondary)] transition-colors">
               <i class="ri-add-circle-line text-sm"></i>
               Add Asset Class
             </button>
@@ -386,7 +386,7 @@
         
         <div class="space-y-6" style="overflow: visible;">
           @for(alloc of allocations(); track alloc.id; let i = $index) {
-          <div class="p-6 bg-[#f8f7f2] border rounded-[32px] space-y-6 relative group/item transition-all shadow-sm border-[#1B4332]/5"
+          <div class="p-6 bg-[var(--dogo-cream)] border rounded-[32px] space-y-6 relative group/item transition-all shadow-sm border-[var(--dogo-primary)]/5"
                [ngClass]="{'border-red-500 bg-red-50': allocationValidation().errors[i]?.isDuplicate}"
                style="overflow: visible;">
             
@@ -407,17 +407,17 @@
                    <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1" [class.text-red-500]="allocationValidation().errors[i]?.isOutOfRange">Target %</label>
                    <input type="number" min="0" max="100" [ngModel]="alloc.targetPercentage" (ngModelChange)="updateAllocationValue(i, 'targetPercentage', $event)"
                           [class.border-red-500]="allocationValidation().errors[i]?.isOutOfRange"
-                          class="w-20 bg-white border border-[#1B4332]/10 rounded-xl py-2 px-3 text-xs font-black text-center outline-none focus:border-[#C9A84C]" />
+                          class="w-20 bg-white border border-[var(--dogo-primary)]/10 rounded-xl py-2 px-3 text-xs font-black text-center outline-none focus:border-[var(--dogo-secondary)]" />
                 </div>
                 <div class="flex flex-col items-center">
                    <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Min %</label>
                    <input type="number" min="0" max="100" [ngModel]="alloc.minPercentage" (ngModelChange)="updateAllocationValue(i, 'minPercentage', $event)"
-                          class="w-16 bg-white border border-[#1B4332]/10 rounded-xl py-2 px-2 text-xs font-bold text-center outline-none focus:border-[#C9A84C]" />
+                          class="w-16 bg-white border border-[var(--dogo-primary)]/10 rounded-xl py-2 px-2 text-xs font-bold text-center outline-none focus:border-[var(--dogo-secondary)]" />
                 </div>
                 <div class="flex flex-col items-center">
                    <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Max %</label>
                    <input type="number" min="0" max="100" [ngModel]="alloc.maxPercentage" (ngModelChange)="updateAllocationValue(i, 'maxPercentage', $event)"
-                          class="w-16 bg-white border border-[#1B4332]/10 rounded-xl py-2 px-2 text-xs font-bold text-center outline-none focus:border-[#C9A84C]" />
+                          class="w-16 bg-white border border-[var(--dogo-primary)]/10 rounded-xl py-2 px-2 text-xs font-bold text-center outline-none focus:border-[var(--dogo-secondary)]" />
                 </div>
                 <button (click)="removeAllocation(i)" 
                         class="w-10 h-10 mt-5 flex items-center justify-center text-slate-300 hover:text-red-500 transition-all rounded-full hover:bg-red-50">
@@ -435,7 +435,7 @@
             <!-- Nested Instruments -->
             <div class="bg-white/60 rounded-3xl p-5 space-y-4">
               <div class="flex justify-between items-center">
-                <h5 class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]">Instruments (Distribution of {{ alloc.targetPercentage }}%)</h5>
+                <h5 class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]">Instruments (Distribution of {{ alloc.targetPercentage }}%)</h5>
                 <div class="flex items-center gap-3">
                   @if(allocationValidation().errors[i]?.instrumentsInvalidCharge) {
                     <span class="text-[9px] font-black text-red-500 uppercase tracking-widest flex items-center gap-1 animate-pulse">
@@ -448,7 +448,7 @@
                     </span>
                   }
                   <button (click)="addInstrumentToAllocation(i)" 
-                          class="text-[9px] font-black text-[#C9A84C] uppercase tracking-widest flex items-center gap-1">
+                          class="text-[9px] font-black text-[var(--dogo-secondary)] uppercase tracking-widest flex items-center gap-1">
                     <i class="ri-add-line"></i> Add Instrument
                   </button>
                 </div>
@@ -489,10 +489,10 @@
             </div>
           </div>
           } @empty {
-            <div class="py-10 text-center bg-[#f8f7f2] rounded-[40px] border border-dashed border-slate-200">
+            <div class="py-10 text-center bg-[var(--dogo-cream)] rounded-[40px] border border-dashed border-slate-200">
                <i class="ri-pie-chart-line text-3xl text-slate-300 block mb-2"></i>
                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">No assets allocated yet.</p>
-               <button (click)="addAllocation()" class="mt-4 text-[10px] font-black text-[#1B4332] uppercase tracking-widest underline">Start Allocating Assets</button>
+               <button (click)="addAllocation()" class="mt-4 text-[10px] font-black text-[var(--dogo-primary)] uppercase tracking-widest underline">Start Allocating Assets</button>
             </div>
           }
         </div>
@@ -522,14 +522,14 @@
     </div>
 
     <!-- Modal Footer -->
-    <div class="px-8 py-6 border-t border-slate-100 flex items-center justify-end gap-3 bg-[#f8f7f2] rounded-b-[40px] shrink-0">
+    <div class="px-8 py-6 border-t border-slate-100 flex items-center justify-end gap-3 bg-[var(--dogo-cream)] rounded-b-[40px] shrink-0">
       <button type="button" (click)="closeModal()" class="px-6 py-3 rounded-2xl font-black text-slate-500 hover:text-slate-800 transition-all uppercase tracking-widest text-[10px]">
         Cancel
       </button>
       <button 
         (click)="savePortfolio()" 
         [disabled]="!allocationValidation().isValid"
-        class="bg-[#1B4332] disabled:bg-slate-300 disabled:cursor-not-allowed hover:bg-[#2D6A4F] text-white px-10 py-3 rounded-2xl font-black shadow-lg transition-all flex items-center gap-2">
+        class="bg-[var(--dogo-primary)] disabled:bg-slate-300 disabled:cursor-not-allowed hover:bg-[var(--dogo-primary-soft)] text-white px-10 py-3 rounded-2xl font-black shadow-lg transition-all flex items-center gap-2">
         <i class="ri-save-line"></i>
         <span>Save Portfolio</span>
       </button>
@@ -541,16 +541,16 @@
 <!-- Instrument Modal -->
 @if(isInstrumentModalOpen()) {
 <div class="fixed inset-0 z-[999] flex items-center justify-center px-4 animate-fade-in" role="dialog" aria-modal="true">
-  <div class="fixed inset-0 bg-[#0d1a0f]/60 backdrop-blur-md transition-opacity" (click)="closeModal()"></div>
+  <div class="fixed inset-0 bg-[var(--dogo-dark)]/60 backdrop-blur-md transition-opacity" (click)="closeModal()"></div>
   
   <div class="relative bg-white rounded-[40px] shadow-2xl w-full max-w-md transform transition-all animate-slide-up flex flex-col font-jakarta">
     <!-- Modal Header -->
-    <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-[#f8f7f2] rounded-t-[40px] shrink-0">
+    <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-[var(--dogo-cream)] rounded-t-[40px] shrink-0">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-[#C9A84C]/20 text-[#C9A84C] flex items-center justify-center">
+        <div class="w-10 h-10 rounded-2xl bg-[var(--dogo-secondary)]/20 text-[var(--dogo-secondary)] flex items-center justify-center">
             <i class="ri-bank-line text-xl"></i>
         </div>
-        <h3 class="text-xl font-black text-[#0d1a0f] tracking-tight">
+        <h3 class="text-xl font-black text-[var(--dogo-dark)] tracking-tight">
           {{ selectedInstrument() ? 'Edit Instrument' : 'New Instrument' }}
         </h3>
       </div>
@@ -564,12 +564,12 @@
       <div class="space-y-1">
         <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Instrument Name</label>
         <input type="text" [ngModel]="instrumentFormData().name" (ngModelChange)="instrumentFormData.update(v => ({...v, name: $event}))" placeholder="e.g. Vanguard Total World Stock"
-               class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
+               class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
       </div>
       <div class="space-y-1">
         <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Instrument Code</label>
         <input type="text" [ngModel]="instrumentFormData().code" (ngModelChange)="instrumentFormData.update(v => ({...v, code: $event}))" placeholder="e.g. FGN-2031"
-               class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
+               class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
       </div>
 
       <!-- <app-dropdown 
@@ -585,28 +585,28 @@
         <div class="space-y-1">
           <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Price Date</label>
           <input type="date" [ngModel]="instrumentFormData().priceDate" (ngModelChange)="instrumentFormData.update(v => ({...v, priceDate: $event}))"
-                 class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
+                 class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
         </div>
         <div class="space-y-1">
           <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Price Source</label>
           <input type="text" [ngModel]="instrumentFormData().priceSource" (ngModelChange)="instrumentFormData.update(v => ({...v, priceSource: $event}))" placeholder="e.g. Manual Entry"
-                 class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
+                 class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
         </div>
       </div>
 
       <div class="space-y-1">
         <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">NET ASSET VALUE (N)</label>
         <input type="number" [ngModel]="instrumentFormData().unitPrice" (ngModelChange)="instrumentFormData.update(v => ({...v, unitPrice: $event}))" placeholder="0.00"
-               class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
+               class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
       </div>
     </div>
 
     <!-- Modal Footer -->
-    <div class="px-8 py-6 border-t border-slate-100 flex items-center justify-end gap-3 bg-[#f8f7f2] rounded-b-[40px] shrink-0">
+    <div class="px-8 py-6 border-t border-slate-100 flex items-center justify-end gap-3 bg-[var(--dogo-cream)] rounded-b-[40px] shrink-0">
       <button type="button" (click)="closeModal()" class="px-6 py-2 rounded-2xl font-black text-slate-500 uppercase tracking-widest text-[10px]">
         Cancel
       </button>
-      <button (click)="saveInstrument()" class="bg-[#C9A84C] hover:bg-[#9a7a2b] text-white px-8 py-3.5 rounded-2xl font-black shadow-lg transition-all flex items-center gap-2 text-xs uppercase tracking-widest">
+      <button (click)="saveInstrument()" class="bg-[var(--dogo-secondary)] hover:bg-[#9a7a2b] text-white px-8 py-3.5 rounded-2xl font-black shadow-lg transition-all flex items-center gap-2 text-xs uppercase tracking-widest">
         <i class="ri-save-line"></i>
         <span>Save Instrument</span>
       </button>
@@ -618,16 +618,16 @@
 <!-- Product Type Modal -->
 @if(isTypeModalOpen()) {
 <div class="fixed inset-0 z-[999] flex items-center justify-center px-4 animate-fade-in" role="dialog" aria-modal="true">
-  <div class="fixed inset-0 bg-[#0d1a0f]/60 backdrop-blur-md transition-opacity" (click)="closeModal()"></div>
+  <div class="fixed inset-0 bg-[var(--dogo-dark)]/60 backdrop-blur-md transition-opacity" (click)="closeModal()"></div>
   
   <div class="relative bg-white rounded-[40px] shadow-2xl w-full max-w-md transform transition-all animate-slide-up flex flex-col font-jakarta">
     <!-- Modal Header -->
-    <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-[#f8f7f2] rounded-t-[40px] shrink-0">
+    <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-[var(--dogo-cream)] rounded-t-[40px] shrink-0">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-[#C9A84C]/20 text-[#C9A84C] flex items-center justify-center">
+        <div class="w-10 h-10 rounded-2xl bg-[var(--dogo-secondary)]/20 text-[var(--dogo-secondary)] flex items-center justify-center">
             <i class="ri-folders-line text-xl"></i>
         </div>
-        <h3 class="text-xl font-black text-[#0d1a0f] tracking-tight">
+        <h3 class="text-xl font-black text-[var(--dogo-dark)] tracking-tight">
           {{ selectedType() ? 'Edit Type' : 'New Portfolio Type' }}
         </h3>
       </div>
@@ -641,36 +641,36 @@
       <div class="space-y-1">
         <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Type Name</label>
         <input type="text" [ngModel]="typeFormData().name" (ngModelChange)="updateTypeFormField('name', $event)" placeholder="e.g. Sukuk Fund"
-               class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
+               class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
       </div>
 
       <div class="space-y-1">
         <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Type Code</label>
         <input type="text" [ngModel]="typeFormData().code" (ngModelChange)="updateTypeFormField('code', $event)" placeholder="e.g. SKK-001"
-               class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
+               class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
       </div>
 
       <div class="space-y-4">
-         <p class="text-[10px] font-black uppercase tracking-widest text-[#C9A84C]">Configuration</p>
+         <p class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Configuration</p>
          
-         <label class="flex items-center justify-between bg-[#f8f7f2] p-5 rounded-3xl cursor-pointer group hover:bg-[#C9A84C]/5 transition-colors border border-transparent hover:border-[#C9A84C]/20">
+         <label class="flex items-center justify-between bg-[var(--dogo-cream)] p-5 rounded-3xl cursor-pointer group hover:bg-[var(--dogo-secondary)]/5 transition-colors border border-transparent hover:border-[var(--dogo-secondary)]/20">
             <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Supports Allocation</span>
-            <input type="checkbox" [ngModel]="typeFormData().supportsAllocation" (ngModelChange)="updateTypeFormField('supportsAllocation', $event)" class="w-6 h-6 rounded-lg border-2 border-[#1B4332]/10 accent-[#C9A84C] cursor-pointer" />
+            <input type="checkbox" [ngModel]="typeFormData().supportsAllocation" (ngModelChange)="updateTypeFormField('supportsAllocation', $event)" class="w-6 h-6 rounded-lg border-2 border-[var(--dogo-primary)]/10 accent-[var(--dogo-secondary)] cursor-pointer" />
          </label>
 
-         <!-- <label class="flex items-center justify-between bg-[#f8f7f2] p-5 rounded-3xl cursor-pointer group hover:bg-[#C9A84C]/5 transition-colors border border-transparent hover:border-[#C9A84C]/20">
+         <!-- <label class="flex items-center justify-between bg-[var(--dogo-cream)] p-5 rounded-3xl cursor-pointer group hover:bg-[var(--dogo-secondary)]/5 transition-colors border border-transparent hover:border-[var(--dogo-secondary)]/20">
             <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Supports Profit Sharing</span>
-            <input type="checkbox" [ngModel]="typeFormData().supportsProfitSharing" (ngModelChange)="updateTypeFormField('supportsProfitSharing', $event)" class="w-6 h-6 rounded-lg border-2 border-[#1B4332]/10 accent-[#C9A84C] cursor-pointer" />
+            <input type="checkbox" [ngModel]="typeFormData().supportsProfitSharing" (ngModelChange)="updateTypeFormField('supportsProfitSharing', $event)" class="w-6 h-6 rounded-lg border-2 border-[var(--dogo-primary)]/10 accent-[var(--dogo-secondary)] cursor-pointer" />
          </label> -->
       </div>
     </div>
 
     <!-- Modal Footer -->
-    <div class="px-8 py-6 border-t border-slate-100 flex items-center justify-end gap-3 bg-[#f8f7f2] rounded-b-[40px] shrink-0">
+    <div class="px-8 py-6 border-t border-slate-100 flex items-center justify-end gap-3 bg-[var(--dogo-cream)] rounded-b-[40px] shrink-0">
       <button type="button" (click)="closeModal()" class="px-6 py-2 rounded-2xl font-black text-slate-500 uppercase tracking-widest text-[10px]">
         Cancel
       </button>
-      <button (click)="saveType()" class="bg-[#C9A84C] hover:bg-[#9a7a2b] text-white px-8 py-3.5 rounded-2xl font-black shadow-lg transition-all flex items-center gap-2 text-xs uppercase tracking-widest">
+      <button (click)="saveType()" class="bg-[var(--dogo-secondary)] hover:bg-[#9a7a2b] text-white px-8 py-3.5 rounded-2xl font-black shadow-lg transition-all flex items-center gap-2 text-xs uppercase tracking-widest">
         <i class="ri-save-line"></i>
         <span>Save Type</span>
       </button>
@@ -682,16 +682,16 @@
 <!-- Asset Class Modal -->
 @if(isAssetModalOpen()) {
 <div class="fixed inset-0 z-[999] flex items-center justify-center px-4 animate-fade-in" role="dialog" aria-modal="true">
-  <div class="fixed inset-0 bg-[#0d1a0f]/60 backdrop-blur-md transition-opacity" (click)="closeModal()"></div>
+  <div class="fixed inset-0 bg-[var(--dogo-dark)]/60 backdrop-blur-md transition-opacity" (click)="closeModal()"></div>
   
   <div class="relative bg-white rounded-[40px] shadow-2xl w-full max-w-md transform transition-all animate-slide-up flex flex-col font-jakarta">
     <!-- Modal Header -->
-    <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-[#f8f7f2] rounded-t-[40px] shrink-0">
+    <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-[var(--dogo-cream)] rounded-t-[40px] shrink-0">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-[#1B4332]/20 text-[#1B4332] flex items-center justify-center">
+        <div class="w-10 h-10 rounded-2xl bg-[var(--dogo-primary)]/20 text-[var(--dogo-primary)] flex items-center justify-center">
             <i class="ri-coin-line text-xl"></i>
         </div>
-        <h3 class="text-xl font-black text-[#0d1a0f] tracking-tight">
+        <h3 class="text-xl font-black text-[var(--dogo-dark)] tracking-tight">
           {{ selectedAsset() ? 'Edit Asset Class' : 'New Asset Class' }}
         </h3>
       </div>
@@ -705,34 +705,34 @@
       <div class="space-y-1">
         <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Asset Class Name</label>
         <input type="text" [ngModel]="assetFormData().name" (ngModelChange)="updateAssetFormField('name', $event)" placeholder="e.g. Federal Government Sukuk"
-               class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
+               class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
       </div>
 
       <div class="space-y-1">
         <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Asset Class Code</label>
         <input type="text" [ngModel]="assetFormData().code" (ngModelChange)="updateAssetFormField('code', $event)" placeholder="e.g. ASSET-001"
-               class="w-full bg-[#f8f7f2] border-2 border-transparent focus:border-[#C9A84C] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
+               class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl py-4 px-6 text-slate-800 font-bold outline-none transition-all shadow-sm" />
       </div>
 
       <div class="space-y-4">
-         <p class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]">Compliance & Ethics</p>
+         <p class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]">Compliance & Ethics</p>
          
-         <label class="flex items-center justify-between bg-[#f8f7f2] p-5 rounded-3xl cursor-pointer group hover:bg-[#1B4332]/5 transition-colors border border-transparent hover:border-[#1B4332]/20">
+         <label class="flex items-center justify-between bg-[var(--dogo-cream)] p-5 rounded-3xl cursor-pointer group hover:bg-[var(--dogo-primary)]/5 transition-colors border border-transparent hover:border-[var(--dogo-primary)]/20">
             <div class="flex flex-col">
                <span class="text-xs font-black text-slate-700 uppercase tracking-widest">Shariah Compliant</span>
                <span class="text-[9px] font-bold text-slate-400">Ethical investment standard</span>
             </div>
-            <input type="checkbox" [ngModel]="assetFormData().isShariahCompliant" (ngModelChange)="updateAssetFormField('isShariahCompliant', $event)" class="w-6 h-6 rounded-lg border-2 border-[#1B4332]/10 accent-[#1B4332] cursor-pointer" />
+            <input type="checkbox" [ngModel]="assetFormData().isShariahCompliant" (ngModelChange)="updateAssetFormField('isShariahCompliant', $event)" class="w-6 h-6 rounded-lg border-2 border-[var(--dogo-primary)]/10 accent-[var(--dogo-primary)] cursor-pointer" />
          </label>
       </div>
     </div>
 
     <!-- Modal Footer -->
-    <div class="px-8 py-6 border-t border-slate-100 flex items-center justify-end gap-3 bg-[#f8f7f2] rounded-b-[40px] shrink-0">
+    <div class="px-8 py-6 border-t border-slate-100 flex items-center justify-end gap-3 bg-[var(--dogo-cream)] rounded-b-[40px] shrink-0">
       <button type="button" (click)="closeModal()" class="px-6 py-2 rounded-2xl font-black text-slate-500 uppercase tracking-widest text-[10px]">
         Cancel
       </button>
-      <button (click)="saveAsset()" class="bg-[#1B4332] hover:bg-[#2D6A4F] text-white px-8 py-3.5 rounded-2xl font-black shadow-lg transition-all flex items-center gap-2 text-xs uppercase tracking-widest">
+      <button (click)="saveAsset()" class="bg-[var(--dogo-primary)] hover:bg-[var(--dogo-primary-soft)] text-white px-8 py-3.5 rounded-2xl font-black shadow-lg transition-all flex items-center gap-2 text-xs uppercase tracking-widest">
         <i class="ri-save-line"></i>
         <span>Save Asset Class</span>
       </button>
@@ -744,14 +744,14 @@
 <!-- View Details Modal -->
 @if(isViewModalOpen() && selectedProduct()) {
 <div class="fixed inset-0 z-[999] flex items-center justify-center px-4 animate-fade-in" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-  <div class="fixed inset-0 bg-[#0d1a0f]/60 backdrop-blur-md transition-opacity" (click)="closeModal()"></div>
+  <div class="fixed inset-0 bg-[var(--dogo-dark)]/60 backdrop-blur-md transition-opacity" (click)="closeModal()"></div>
   
   <div class="relative bg-white rounded-[40px] shadow-2xl w-full max-w-2xl transform transition-all animate-slide-up flex flex-col max-h-[90vh]">
     <div class="p-8 overflow-y-auto custom-scrollbar">
       <div class="flex justify-between items-start mb-10">
          <div>
-            <h3 class="text-xs font-black uppercase tracking-[0.3em] text-[#C9A84C] mb-4">Investment Policy Statement</h3>
-            <h1 class="text-4xl font-black text-[#1B4332] tracking-tight leading-none italic capitalize">{{ selectedProduct()?.name }}</h1>
+            <h3 class="text-xs font-black uppercase tracking-[0.3em] text-[var(--dogo-secondary)] mb-4">Investment Policy Statement</h3>
+            <h1 class="text-4xl font-black text-[var(--dogo-primary)] tracking-tight leading-none italic capitalize">{{ selectedProduct()?.name }}</h1>
          </div>
          <button (click)="closeModal()" class="text-slate-400 hover:text-red-500 transition-colors">
             <i class="ri-close-large-line text-2xl"></i>
@@ -761,18 +761,18 @@
        <div class="grid grid-cols-3 gap-6 mb-10 pb-10 border-b border-slate-100">
          <div>
             <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Status</p>
-            <span class="text-sm font-black text-[#0d1a0f] flex items-center gap-2">
+            <span class="text-sm font-black text-[var(--dogo-dark)] flex items-center gap-2">
                <span class="w-2 h-2 rounded-full" [ngClass]="selectedProduct()?.isActive ? 'bg-green-500' : 'bg-slate-300'"></span>
                {{ selectedProduct()?.isActive ? 'Active' : 'Inactive' }}
             </span>
          </div>
          <div>
             <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Risk Level</p>
-            <span class="text-sm font-black text-[#0d1a0f]">{{ selectedProduct()?.riskLevel }} Risk</span>
+            <span class="text-sm font-black text-[var(--dogo-dark)]">{{ selectedProduct()?.riskLevel }} Risk</span>
          </div>
          <div>
             <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Tenor (Days)</p>
-            <span class="text-xl font-black text-[#C9A84C]">{{ selectedProduct()?.minTenorInDays }} - {{ selectedProduct()?.maxTenorInDays }}</span>
+            <span class="text-xl font-black text-[var(--dogo-secondary)]">{{ selectedProduct()?.minTenorInDays }} - {{ selectedProduct()?.maxTenorInDays }}</span>
          </div>
       </div>
 
@@ -783,37 +783,37 @@
          </p>
       </div>
 
-      <div class="mb-10 grid grid-cols-2 gap-6 bg-[#f8f7f2]/40 p-6 rounded-[30px] border border-[#1B4332]/5">
+      <div class="mb-10 grid grid-cols-2 gap-6 bg-[var(--dogo-cream)]/40 p-6 rounded-[30px] border border-[var(--dogo-primary)]/5">
         <div class="col-span-2 border-b border-slate-100 pb-2 mb-2">
-           <p class="text-[10px] font-black uppercase tracking-widest text-[#C9A84C]">Liquidation Policy</p>
+           <p class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Liquidation Policy</p>
         </div>
         <div>
            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Lock-in Period</p>
-           <span class="text-sm font-black text-[#0d1a0f]">{{ selectedProduct()?.lockInPeriodDays || 0 }} Days</span>
+           <span class="text-sm font-black text-[var(--dogo-dark)]">{{ selectedProduct()?.lockInPeriodDays || 0 }} Days</span>
         </div>
         <div>
            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Notice Period</p>
-           <span class="text-sm font-black text-[#0d1a0f]">{{ selectedProduct()?.noticePeriodDays || 0 }} Days</span>
+           <span class="text-sm font-black text-[var(--dogo-dark)]">{{ selectedProduct()?.noticePeriodDays || 0 }} Days</span>
         </div>
         <div>
            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Min Holding Period</p>
-           <span class="text-sm font-black text-[#0d1a0f]">{{ selectedProduct()?.minHoldingPeriodDays || 0 }} Days</span>
+           <span class="text-sm font-black text-[var(--dogo-dark)]">{{ selectedProduct()?.minHoldingPeriodDays || 0 }} Days</span>
         </div>
         <div>
            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Exit Fee</p>
-           <span class="text-sm font-black text-[#0d1a0f] text-red-600">{{ selectedProduct()?.exitFeePercentage || 0 }}%</span>
+           <span class="text-sm font-black text-[var(--dogo-dark)] text-red-600">{{ selectedProduct()?.exitFeePercentage || 0 }}%</span>
         </div>
         <div class="col-span-2">
            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Admin Approval Threshold</p>
-           <span class="text-sm font-black text-[#0d1a0f]">₦{{ selectedProduct()?.approvalThresholdAmount | number:'1.2-2' }}</span>
+           <span class="text-sm font-black text-[var(--dogo-dark)]">₦{{ selectedProduct()?.approvalThresholdAmount | number:'1.2-2' }}</span>
         </div>
      </div>
 
       <div>
-         <p class="text-[10px] font-black uppercase tracking-widest text-[#C9A84C] mb-4">Target Asset Allocation</p>
+         <p class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-secondary)] mb-4">Target Asset Allocation</p>
          <div class="border border-slate-100 rounded-[30px] overflow-hidden">
             <table class="w-full text-left">
-               <thead class="bg-[#f8f7f2]">
+               <thead class="bg-[var(--dogo-cream)]">
                   <tr>
                      <th class="py-4 px-6 text-[10px] font-black uppercase tracking-widest text-slate-500">Asset Class</th>
                      <th class="py-4 px-6 text-[10px] font-black uppercase tracking-widest text-slate-500 text-center">Target</th>
@@ -823,16 +823,16 @@
                <tbody class="text-sm">
                   @for(alloc of selectedProduct()?.allocations; track alloc.id) {
                   <tr class="border-t border-slate-50">
-                     <td class="py-5 px-6 font-black text-[#0d1a0f]">{{ alloc.assetTypeName }}</td>
-                     <td class="py-5 px-6 font-black text-[#1B4332] text-center">{{ alloc.targetPercentage }}%</td>
+                     <td class="py-5 px-6 font-black text-[var(--dogo-dark)]">{{ alloc.assetTypeName }}</td>
+                     <td class="py-5 px-6 font-black text-[var(--dogo-primary)] text-center">{{ alloc.targetPercentage }}%</td>
                      <td class="py-5 px-6 font-bold text-slate-400 text-right">{{ alloc.minPercentage }}% – {{ alloc.maxPercentage }}%</td>
                   </tr>
                   }
                </tbody>
-               <tfoot class="bg-[#f8f7f2]/50 border-t-2 border-slate-100">
+               <tfoot class="bg-[var(--dogo-cream)]/50 border-t-2 border-slate-100">
                   <tr>
-                     <td class="py-4 px-6 text-xs font-black uppercase tracking-widest text-[#1B4332]">Total Allocation</td>
-                     <td class="py-4 px-6 text-xl font-black text-[#1B4332] text-center">100%</td>
+                     <td class="py-4 px-6 text-xs font-black uppercase tracking-widest text-[var(--dogo-primary)]">Total Allocation</td>
+                     <td class="py-4 px-6 text-xl font-black text-[var(--dogo-primary)] text-center">100%</td>
                      <td></td>
                   </tr>
                </tfoot>
@@ -841,7 +841,7 @@
       </div>
 
       <div class="mt-12 flex justify-end">
-          <button (click)="editPortfolio(selectedProduct()!)" class="flex items-center gap-2 bg-[#1B4332] text-white px-8 py-4 rounded-3xl font-black shadow-xl hover:scale-105 transition-transform">
+          <button (click)="editPortfolio(selectedProduct()!)" class="flex items-center gap-2 bg-[var(--dogo-primary)] text-white px-8 py-4 rounded-3xl font-black shadow-xl hover:scale-105 transition-transform">
              <i class="ri-edit-2-line"></i>
              Edit Investment Policy
           </button>
@@ -850,3 +850,5 @@
   </div>
 </div>
 }
+
+

@@ -1,21 +1,21 @@
 <div class="animate-fade-in p-6">
   <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
     <div>
-      <h1 class="text-3xl font-black text-[#0d1a0f] tracking-tighter italic">Address Verifications</h1>
-      <p class="text-sm font-bold text-[#6B7280] uppercase tracking-widest mt-1">Manage and review client address documentation</p>
+      <h1 class="text-3xl font-black text-[var(--dogo-dark)] tracking-tighter italic">Address Verifications</h1>
+      <p class="text-sm font-bold text-[var(--dogo-muted)] uppercase tracking-widest mt-1">Manage and review client address documentation</p>
     </div>
     
     <div class="flex items-center space-x-3">
-        <div class="bg-white rounded-2xl border border-[#1B4332]/5 p-2 flex space-x-1 shadow-sm">
+        <div class="bg-white rounded-2xl border border-[var(--dogo-primary)]/5 p-2 flex space-x-1 shadow-sm">
             <button 
               (click)="setFilter('all')" 
-              [class]="activeFilter() === 'all' ? 'bg-[#1B4332] text-white shadow-lg' : 'text-[#1B4332] hover:bg-[#1B4332]/5'"
+              [class]="activeFilter() === 'all' ? 'bg-[var(--dogo-primary)] text-white shadow-lg' : 'text-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)]/5'"
               class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
               All Requests
             </button>
             <button 
               (click)="setFilter('pending')" 
-              [class]="activeFilter() === 'pending' ? 'bg-[#1B4332] text-white shadow-lg' : 'text-[#1B4332] hover:bg-[#1B4332]/5'"
+              [class]="activeFilter() === 'pending' ? 'bg-[var(--dogo-primary)] text-white shadow-lg' : 'text-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)]/5'"
               class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
               Pending Only
             </button>
@@ -27,36 +27,36 @@
     <div class="overflow-x-auto">
       <table class="w-full text-left border-collapse">
         <thead>
-          <tr class="border-b border-[#1B4332]/5">
-            <th class="pb-6 text-[10px] font-black uppercase tracking-[0.2em] text-[#1B4332]/40">Client Details</th>
-            <th class="pb-6 text-[10px] font-black uppercase tracking-[0.2em] text-[#1B4332]/40">Document Type</th>
-            <th class="pb-6 text-[10px] font-black uppercase tracking-[0.2em] text-[#1B4332]/40">Date Submitted</th>
-            <th class="pb-6 text-[10px] font-black uppercase tracking-[0.2em] text-[#1B4332]/40">Status</th>
-            <th class="pb-6 text-[10px] font-black uppercase tracking-[0.2em] text-[#1B4332]/40 text-right">Actions</th>
+          <tr class="border-b border-[var(--dogo-primary)]/5">
+            <th class="pb-6 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--dogo-primary)]/40">Client Details</th>
+            <th class="pb-6 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--dogo-primary)]/40">Document Type</th>
+            <th class="pb-6 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--dogo-primary)]/40">Date Submitted</th>
+            <th class="pb-6 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--dogo-primary)]/40">Status</th>
+            <th class="pb-6 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--dogo-primary)]/40 text-right">Actions</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-[#1B4332]/5">
+        <tbody class="divide-y divide-[var(--dogo-primary)]/5">
           @for (req of paginatedRequests(); track req.id) {
-            <tr class="group hover:bg-[#f8f7f2]/50 transition-all">
+            <tr class="group hover:bg-[var(--dogo-cream)]/50 transition-all">
               <td class="py-6">
                 <div class="flex items-center space-x-4">
-                  <div class="w-10 h-10 rounded-xl bg-[#C9A84C]/10 text-[#C9A84C] flex items-center justify-center font-black text-xs">
+                  <div class="w-10 h-10 rounded-xl bg-[var(--dogo-secondary)]/10 text-[var(--dogo-secondary)] flex items-center justify-center font-black text-xs">
                     {{ (req.customerName || '').charAt(0) }}
                   </div>
                   <div>
-                    <p class="font-black text-sm text-[#0d1a0f]">{{ req.customerName }}</p>
-                    <p class="text-[10px] font-bold text-[#6B7280] uppercase">{{ req.customerCode }}</p>
+                    <p class="font-black text-sm text-[var(--dogo-dark)]">{{ req.customerName }}</p>
+                    <p class="text-[10px] font-bold text-[var(--dogo-muted)] uppercase">{{ req.customerCode }}</p>
                   </div>
                 </div>
               </td>
               <td class="py-6">
                 <div class="flex items-center space-x-2">
-                  <i class="ri-file-list-3-line text-[#1B4332]/40"></i>
-                  <span class="text-sm font-bold text-[#0d1a0f]">{{ req.documentType }}</span>
+                  <i class="ri-file-list-3-line text-[var(--dogo-primary)]/40"></i>
+                  <span class="text-sm font-bold text-[var(--dogo-dark)]">{{ req.documentType }}</span>
                 </div>
               </td>
               <td class="py-6">
-                <span class="text-xs font-mono text-[#6B7280]">{{ req.dateSubmitted }}</span>
+                <span class="text-xs font-mono text-[var(--dogo-muted)]">{{ req.dateSubmitted }}</span>
               </td>
               <td class="py-6">
                 <app-badge [variant]="getBadgeVariant(req.status)">{{ req.status }}</app-badge>
@@ -72,10 +72,10 @@
             <tr>
               <td colspan="5" class="py-20 text-center">
                 <div class="flex flex-col items-center">
-                  <div class="w-16 h-16 bg-[#f8f7f2] rounded-2xl flex items-center justify-center text-[#1B4332]/20 mb-4">
+                  <div class="w-16 h-16 bg-[var(--dogo-cream)] rounded-2xl flex items-center justify-center text-[var(--dogo-primary)]/20 mb-4">
                     <i class="ri-search-line text-3xl"></i>
                   </div>
-                  <p class="text-sm font-bold text-[#6B7280]">No verification requests found.</p>
+                  <p class="text-sm font-bold text-[var(--dogo-muted)]">No verification requests found.</p>
                 </div>
               </td>
             </tr>
@@ -86,16 +86,16 @@
 
     <!-- Pagination Controls -->
     @if (totalPages() > 1) {
-      <div class="mt-8 flex items-center justify-between pt-8 border-t border-[#1B4332]/5">
-        <p class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40">
-          Showing <span class="text-[#1B4332]">PAGE {{ currentPage() }}</span> OF {{ totalPages() }}
+      <div class="mt-8 flex items-center justify-between pt-8 border-t border-[var(--dogo-primary)]/5">
+        <p class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40">
+          Showing <span class="text-[var(--dogo-primary)]">PAGE {{ currentPage() }}</span> OF {{ totalPages() }}
         </p>
         
         <div class="flex items-center space-x-2">
           <button 
             (click)="prevPage()"
             [disabled]="currentPage() === 1"
-            class="w-10 h-10 rounded-xl bg-[#f8f7f2] flex items-center justify-center text-[#1B4332] hover:bg-[#1B4332] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+            class="w-10 h-10 rounded-xl bg-[var(--dogo-cream)] flex items-center justify-center text-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           >
             <i class="ri-arrow-left-s-line"></i>
           </button>
@@ -104,7 +104,7 @@
             @for (p of pages(); track p) {
               <button 
                 (click)="goToPage(p)"
-                [class]="p === currentPage() ? 'bg-[#1B4332] text-white shadow-md' : 'bg-[#f8f7f2] text-[#1B4332] hover:bg-[#1B4332]/10'"
+                [class]="p === currentPage() ? 'bg-[var(--dogo-primary)] text-white shadow-md' : 'bg-[var(--dogo-cream)] text-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)]/10'"
                 class="w-10 h-10 rounded-xl flex items-center justify-center text-[10px] font-black transition-all"
               >
                 {{ p }}
@@ -115,7 +115,7 @@
           <button 
             (click)="nextPage()"
             [disabled]="currentPage() === totalPages()"
-            class="w-10 h-10 rounded-xl bg-[#f8f7f2] flex items-center justify-center text-[#1B4332] hover:bg-[#1B4332] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+            class="w-10 h-10 rounded-xl bg-[var(--dogo-cream)] flex items-center justify-center text-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           >
             <i class="ri-arrow-right-s-line"></i>
           </button>
@@ -128,15 +128,15 @@
 <!-- Review Modal -->
 @if (showDetailModal()) {
   <div class="fixed inset-0 z-[100] flex items-center justify-center p-4">
-    <div class="absolute inset-0 bg-[#0d1a0f]/80 backdrop-blur-md" (click)="closeModal()"></div>
+    <div class="absolute inset-0 bg-[var(--dogo-dark)]/80 backdrop-blur-md" (click)="closeModal()"></div>
     
     <div class="relative w-full max-w-4xl bg-white rounded-[40px] shadow-2xl overflow-hidden transform animate-in slide-in-from-bottom-8 duration-500 max-h-[90vh] flex flex-col">
-      <div class="p-8 border-b border-[#1B4332]/5 flex items-center justify-between shrink-0">
+      <div class="p-8 border-b border-[var(--dogo-primary)]/5 flex items-center justify-between shrink-0">
         <div>
-          <h2 class="text-2xl font-black text-[#0d1a0f] italic tracking-tighter">Review Verification Request</h2>
-          <p class="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest mt-1">Request ID: #{{ selectedRequest()?.id }}</p>
+          <h2 class="text-2xl font-black text-[var(--dogo-dark)] italic tracking-tighter">Review Verification Request</h2>
+          <p class="text-[10px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest mt-1">Request ID: #{{ selectedRequest()?.id }}</p>
         </div>
-        <button (click)="closeModal()" class="w-12 h-12 rounded-full bg-[#f8f7f2] flex items-center justify-center text-[#1B4332] hover:bg-[#1B4332] hover:text-white transition-all">
+        <button (click)="closeModal()" class="w-12 h-12 rounded-full bg-[var(--dogo-cream)] flex items-center justify-center text-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)] hover:text-white transition-all">
           <i class="ri-close-line text-2xl"></i>
         </button>
       </div>
@@ -146,8 +146,8 @@
           
           <!-- Document Preview -->
           <div class="space-y-4">
-            <h4 class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40">Uploaded Document</h4>
-            <div class="relative w-full aspect-[3/4] rounded-[32px] overflow-hidden border-2 border-[#1B4332]/5 shadow-inner bg-[#f8f7f2]">
+            <h4 class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40">Uploaded Document</h4>
+            <div class="relative w-full aspect-[3/4] rounded-[32px] overflow-hidden border-2 border-[var(--dogo-primary)]/5 shadow-inner bg-[var(--dogo-cream)]">
               <img [src]="selectedRequest()?.documentUrl" class="w-full h-full object-cover">
               <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               <button class="absolute bottom-6 right-6 w-12 h-12 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center hover:bg-white/40 transition-all border border-white/20">
@@ -159,42 +159,42 @@
           <!-- Client Info & Actions -->
           <div class="space-y-10">
             <div class="grid grid-cols-2 gap-6">
-              <div class="p-6 bg-[#f8f7f2] rounded-3xl border border-[#1B4332]/5">
-                <p class="text-[10px] font-black uppercase tracking-[0.1em] text-[#1B4332]/40 mb-2">Full Name</p>
-                <p class="font-black text-[#0d1a0f]">{{ selectedRequest()?.customerName }}</p>
+              <div class="p-6 bg-[var(--dogo-cream)] rounded-3xl border border-[var(--dogo-primary)]/5">
+                <p class="text-[10px] font-black uppercase tracking-[0.1em] text-[var(--dogo-primary)]/40 mb-2">Full Name</p>
+                <p class="font-black text-[var(--dogo-dark)]">{{ selectedRequest()?.customerName }}</p>
               </div>
-              <div class="p-6 bg-[#f8f7f2] rounded-3xl border border-[#1B4332]/5">
-                <p class="text-[10px] font-black uppercase tracking-[0.1em] text-[#1B4332]/40 mb-2">Customer ID</p>
-                <p class="font-black text-[#0d1a0f]">{{ selectedRequest()?.customerCode }}</p>
+              <div class="p-6 bg-[var(--dogo-cream)] rounded-3xl border border-[var(--dogo-primary)]/5">
+                <p class="text-[10px] font-black uppercase tracking-[0.1em] text-[var(--dogo-primary)]/40 mb-2">Customer ID</p>
+                <p class="font-black text-[var(--dogo-dark)]">{{ selectedRequest()?.customerCode }}</p>
               </div>
-              <div class="md:col-span-2 p-6 bg-[#f8f7f2] rounded-3xl border border-[#1B4332]/5">
-                <p class="text-[10px] font-black uppercase tracking-[0.1em] text-[#1B4332]/40 mb-2">Document Type</p>
-                <p class="font-black text-[#0d1a0f]">{{ selectedRequest()?.documentType }}</p>
+              <div class="md:col-span-2 p-6 bg-[var(--dogo-cream)] rounded-3xl border border-[var(--dogo-primary)]/5">
+                <p class="text-[10px] font-black uppercase tracking-[0.1em] text-[var(--dogo-primary)]/40 mb-2">Document Type</p>
+                <p class="font-black text-[var(--dogo-dark)]">{{ selectedRequest()?.documentType }}</p>
               </div>
             </div>
 
             @if (selectedRequest()?.extractedAddress) {
-              <div class="p-8 bg-[#1B4332]/5 rounded-[32px] border-2 border-dashed border-[#1B4332]/10">
+              <div class="p-8 bg-[var(--dogo-primary)]/5 rounded-[32px] border-2 border-dashed border-[var(--dogo-primary)]/10">
                 <div class="flex items-center space-x-2 mb-6">
-                  <div class="w-8 h-8 rounded-lg bg-[#1B4332] text-white flex items-center justify-center text-xs">
+                  <div class="w-8 h-8 rounded-lg bg-[var(--dogo-primary)] text-white flex items-center justify-center text-xs">
                     <i class="ri-ai-generate"></i>
                   </div>
-                  <h4 class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]">System Extracted Address</h4>
+                  <h4 class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]">System Extracted Address</h4>
                 </div>
                 
                 <div class="space-y-4">
                   <div>
-                    <p class="text-[9px] font-black uppercase tracking-widest text-[#1B4332]/40 mb-1">STREET ADDRESS</p>
-                    <p class="text-sm font-bold text-[#0d1a0f]">{{ selectedRequest()?.extractedAddress }}</p>
+                    <p class="text-[9px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 mb-1">STREET ADDRESS</p>
+                    <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ selectedRequest()?.extractedAddress }}</p>
                   </div>
                   <div class="grid grid-cols-2 gap-4">
                     <div>
-                      <p class="text-[9px] font-black uppercase tracking-widest text-[#1B4332]/40 mb-1">CITY</p>
-                      <p class="text-sm font-bold text-[#0d1a0f]">{{ selectedRequest()?.extractedCity }}</p>
+                      <p class="text-[9px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 mb-1">CITY</p>
+                      <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ selectedRequest()?.extractedCity }}</p>
                     </div>
                     <div>
-                      <p class="text-[9px] font-black uppercase tracking-widest text-[#1B4332]/40 mb-1">STATE</p>
-                      <p class="text-sm font-bold text-[#0d1a0f]">{{ selectedRequest()?.extractedState }}</p>
+                      <p class="text-[9px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 mb-1">STATE</p>
+                      <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ selectedRequest()?.extractedState }}</p>
                     </div>
                   </div>
                 </div>
@@ -203,14 +203,14 @@
 
             @if (selectedRequest()?.status?.toLowerCase() === 'pending' || selectedRequest()?.status?.toLowerCase() === 'review') {
               <div class="space-y-6">
-                <h4 class="text-[10px] font-black uppercase tracking-widest text-[#1B4332]/40">Verification Decision</h4>
+                <h4 class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40">Verification Decision</h4>
                 
                 <div>
-                  <label class="block text-[11px] font-bold text-[#6B7280] mb-3">Rejection Reason (Only if rejecting)</label>
+                  <label class="block text-[11px] font-bold text-[var(--dogo-muted)] mb-3">Rejection Reason (Only if rejecting)</label>
                   <textarea 
                     [(ngModel)]="rejectionReason"
                     placeholder="Provide a specific reason for rejection..."
-                    class="w-full h-32 bg-[#f8f7f2] border-2 border-transparent focus:border-red-200 rounded-3xl px-6 py-4 text-sm font-medium text-[#0d1a0f] outline-none transition-all placeholder:text-[#1B4332]/20 resize-none"
+                    class="w-full h-32 bg-[var(--dogo-cream)] border-2 border-transparent focus:border-red-200 rounded-3xl px-6 py-4 text-sm font-medium text-[var(--dogo-dark)] outline-none transition-all placeholder:text-[var(--dogo-primary)]/20 resize-none"
                   ></textarea>
                 </div>
 
@@ -236,16 +236,16 @@
                 </div>
               </div>
             } @else {
-              <div class="p-10 bg-[#f8f7f2] rounded-[40px] border border-[#1B4332]/5 text-center">
+              <div class="p-10 bg-[var(--dogo-cream)] rounded-[40px] border border-[var(--dogo-primary)]/5 text-center">
                 <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 shadow-sm" [class.text-green-500]="selectedRequest()?.status?.toLowerCase() === 'approved'" [class.text-red-500]="selectedRequest()?.status?.toLowerCase() === 'rejected'">
                   <i [class]="selectedRequest()?.status?.toLowerCase() === 'approved' ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill'"></i>
                 </div>
-                <h4 class="text-xl font-black text-[#0d1a0f] italic tracking-tighter uppercase mb-2">Already {{ selectedRequest()?.status }}</h4>
-                <p class="text-xs font-bold text-[#6B7280]">{{ selectedRequest()?.status?.toLowerCase() === 'approved' ? 'This address has been verified and can no longer be modified.' : 'This request was processed' }}</p>
+                <h4 class="text-xl font-black text-[var(--dogo-dark)] italic tracking-tighter uppercase mb-2">Already {{ selectedRequest()?.status }}</h4>
+                <p class="text-xs font-bold text-[var(--dogo-muted)]">{{ selectedRequest()?.status?.toLowerCase() === 'approved' ? 'This address has been verified and can no longer be modified.' : 'This request was processed' }}</p>
                 @if (selectedRequest()?.adminNotes) {
-                  <div class="mt-4 p-4 bg-white/50 rounded-2xl border border-[#1B4332]/5 text-left italic">
-                    <p class="text-[10px] font-bold text-[#1B4332]/40 uppercase mb-1">Admin Notes:</p>
-                    <p class="text-xs text-[#0d1a0f]">{{ selectedRequest()?.adminNotes }}</p>
+                  <div class="mt-4 p-4 bg-white/50 rounded-2xl border border-[var(--dogo-primary)]/5 text-left italic">
+                    <p class="text-[10px] font-bold text-[var(--dogo-primary)]/40 uppercase mb-1">Admin Notes:</p>
+                    <p class="text-xs text-[var(--dogo-dark)]">{{ selectedRequest()?.adminNotes }}</p>
                   </div>
                 }
                 
@@ -261,3 +261,4 @@
     </div>
   </div>
 }
+

@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../shared/services/auth.service';
+import { AuthLayoutComponent } from '../../../layouts/auth-layout/auth-layout.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, AuthLayoutComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
@@ -22,6 +23,7 @@ export class RegisterComponent {
   isSuccess = signal(false);
   errorMessage = signal<string | null>(null);
   genders = signal<any[]>([]);
+  isGenderDropdownOpen = signal(false);
 
   constructor() {
     this.registerForm = this.fb.group({
@@ -57,6 +59,17 @@ export class RegisterComponent {
 
   togglePassword() {
     this.showPassword.set(!this.showPassword());
+  }
+
+  getSelectedGenderName(): string {
+    const id = this.registerForm.get('genderId')?.value;
+    const gender = this.genders().find(g => g.id == id);
+    return gender ? gender.name : 'Select Gender';
+  }
+
+  selectGender(id: any) {
+    this.registerForm.get('genderId')?.setValue(id);
+    this.isGenderDropdownOpen.set(false);
   }
 
   onSubmit() {

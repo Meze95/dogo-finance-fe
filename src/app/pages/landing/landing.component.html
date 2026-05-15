@@ -4,10 +4,10 @@
   ====================================================== -->
 
 <!-- ===== HERO SECTION ===== -->
-<section class="relative bg-[#f8f7f2] dogo-pattern overflow-hidden pt-20 pb-0 lg:pt-28">
+<section class="relative bg-[var(--dogo-cream)] dogo-pattern overflow-hidden pt-20 pb-0 lg:pt-28">
   <!-- Decorative gold orbs -->
-  <div class="absolute top-20 right-20 w-96 h-96 rounded-full blur-[120px] opacity-20" style="background: radial-gradient(circle, #C9A84C, transparent)"></div>
-  <div class="absolute -bottom-20 left-10 w-64 h-64 rounded-full blur-[100px] opacity-10" style="background: radial-gradient(circle, #1B4332, transparent)"></div>
+  <div class="absolute top-20 right-20 w-96 h-96 rounded-full blur-[120px] opacity-20" style="background: radial-gradient(circle, var(--dogo-secondary), transparent)"></div>
+  <div class="absolute -bottom-20 left-10 w-64 h-64 rounded-full blur-[100px] opacity-10" style="background: radial-gradient(circle, var(--dogo-primary), transparent)"></div>
 
   <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
     <div class="grid lg:grid-cols-2 gap-16 items-center">
@@ -20,13 +20,13 @@
           CBN Licensed · SEC Registered · 100% Riba-Free
         </div>
 
-        <h1 class="text-[60px] md:text-[80px] xl:text-[96px] font-black leading-[0.9] tracking-tighter text-[#0d1a0f] mb-8">
+        <h1 class="text-[60px] md:text-[80px] xl:text-[96px] font-black leading-[0.9] tracking-tighter text-[var(--dogo-dark)] mb-8">
           Grow Your <br>
           Wealth. <br>
-          <span class="text-[#1B4332]">The Halal </span><span class="text-[#C9A84C]">Way.</span>
+          <span class="text-[var(--dogo-primary)]">The Halal </span><span class="text-[var(--dogo-secondary)]">Way.</span>
         </h1>
 
-        <p class="text-xl text-[#6B7280] font-medium mb-10 max-w-lg leading-relaxed">
+        <p class="text-xl text-[var(--dogo-muted)] font-medium mb-10 max-w-lg leading-relaxed">
           Nigeria's first fully Shariah-compliant digital investment bank. 
           Earn real returns on Mudarabah, Sukuk, and Halal Equities — 
           all in Naira, all Riba-free.
@@ -34,15 +34,15 @@
 
         <div class="flex flex-wrap gap-4 mb-14">
           @if (!isLoggedIn()) {
-            <button routerLink="/register" class="px-10 py-5 bg-[#1B4332] text-[#C9A84C] font-black rounded-2xl hover:bg-[#2D6A4F] transition-all shadow-xl shadow-[#1B4332]/25 text-lg">
+            <button routerLink="/register" class="px-10 py-5 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] transition-all shadow-xl shadow-[var(--dogo-primary)]/25 text-lg">
               Create Free Account
             </button>
           } @else {
-            <button [routerLink]="dashboardLink()" class="px-10 py-5 bg-[#1B4332] text-[#C9A84C] font-black rounded-2xl hover:bg-[#2D6A4F] transition-all shadow-xl shadow-[#1B4332]/25 text-lg">
+            <button [routerLink]="dashboardLink()" class="px-10 py-5 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] transition-all shadow-xl shadow-[var(--dogo-primary)]/25 text-lg">
               Go to Dashboard
             </button>
           }
-          <a routerLink="/how-it-works" class="px-10 py-5 border-2 border-[#1B4332]/20 text-[#1B4332] font-black rounded-2xl hover:border-[#1B4332] hover:bg-[#e8f5ee] transition-all text-lg flex items-center gap-2">
+          <a routerLink="/how-it-works" class="px-10 py-5 border-2 border-[var(--dogo-primary)]/20 text-[var(--dogo-primary)] font-black rounded-2xl hover:border-[var(--dogo-primary)] hover:bg-[var(--dogo-cream)] transition-all text-lg flex items-center gap-2">
             How It Works <i class="ri-arrow-right-line"></i>
           </a>
         </div>
@@ -50,16 +50,16 @@
         <!-- Social Proof Numbers -->
         <div class="flex flex-wrap gap-8 pb-10">
           <div>
-            <p class="text-3xl font-black text-[#1B4332]">₦10B+</p>
-            <p class="text-[11px] font-bold text-[#6B7280] uppercase tracking-widest">Target AUM Year 1</p>
+            <p class="text-3xl font-black text-[var(--dogo-primary)]">₦10B+</p>
+            <p class="text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest">Target AUM Year 1</p>
           </div>
-          <div class="border-l border-[#1B4332]/10 pl-8">
-            <p class="text-3xl font-black text-[#1B4332]">50K+</p>
-            <p class="text-[11px] font-bold text-[#6B7280] uppercase tracking-widest">Target Users (6 months)</p>
+          <div class="border-l border-[var(--dogo-primary)]/10 pl-8">
+            <p class="text-3xl font-black text-[var(--dogo-primary)]">50K+</p>
+            <p class="text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest">Target Users (6 months)</p>
           </div>
-          <div class="border-l border-[#1B4332]/10 pl-8">
-            <p class="text-3xl font-black text-[#1B4332]">0</p>
-            <p class="text-[11px] font-bold text-[#6B7280] uppercase tracking-widest">Shariah Violations · Ever</p>
+          <div class="border-l border-[var(--dogo-primary)]/10 pl-8">
+            <p class="text-3xl font-black text-[var(--dogo-primary)]">0</p>
+            <p class="text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest">Shariah Violations · Ever</p>
           </div>
         </div>
       </div>
@@ -69,7 +69,7 @@
         <!-- Phone Mockup (using a rich card representation) -->
         <div class="relative anim-float">
           <!-- Main phone card -->
-          <div class="w-[300px] md:w-[340px] bg-[#1B4332] rounded-[48px] shadow-[0_60px_140px_-20px_rgba(27,67,50,0.6)] overflow-hidden border-4 border-white/10 relative">
+          <div class="w-[300px] md:w-[340px] bg-[var(--dogo-primary)] rounded-[48px] shadow-[0_60px_140px_-20px_rgba(3,14,101,0.4)] overflow-hidden border-4 border-white/10 relative">
             <!-- Status bar -->
             <div class="flex justify-between items-center px-8 pt-6 pb-2">
               <span class="text-white/60 text-[11px] font-bold">9:41</span>
@@ -82,7 +82,7 @@
             <div class="px-8 pb-6 border-b border-white/10">
               <p class="text-white/50 text-[12px] font-bold mb-1">TOTAL PORTFOLIO VALUE</p>
               <p class="text-[36px] font-black text-white">₦2,485,000</p>
-              <p class="text-[#C9A84C] font-bold text-sm flex items-center gap-1">
+              <p class="text-[var(--dogo-secondary)] font-bold text-sm flex items-center gap-1">
                 <i class="ri-arrow-up-line"></i> +₦142,300 this month (6.1%)
               </p>
             </div>
@@ -90,8 +90,8 @@
             <div class="px-8 py-6 space-y-4">
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-xl bg-[#C9A84C]/20 flex items-center justify-center">
-                    <i class="ri-seedling-fill text-[#C9A84C]"></i>
+                  <div class="w-9 h-9 rounded-xl bg-[var(--dogo-secondary)]/20 flex items-center justify-center">
+                    <i class="ri-seedling-fill text-[var(--dogo-secondary)]"></i>
                   </div>
                   <div>
                     <p class="text-white font-black text-[13px]">Mudarabah</p>
@@ -102,8 +102,8 @@
               </div>
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-xl bg-[#40916C]/30 flex items-center justify-center">
-                    <i class="ri-bank-fill text-[#40916C]"></i>
+                  <div class="w-9 h-9 rounded-xl bg-[var(--dogo-secondary)]/20 flex items-center justify-center">
+                    <i class="ri-bank-fill text-[var(--dogo-secondary)]"></i>
                   </div>
                   <div>
                     <p class="text-white font-black text-[13px]">Sukuk</p>
@@ -127,7 +127,7 @@
             </div>
             <!-- Bottom nav -->
             <div class="flex justify-around px-6 py-4 bg-white/5 border-t border-white/5">
-              <i class="ri-home-5-fill text-[#C9A84C] text-xl"></i>
+              <i class="ri-home-5-fill text-[var(--dogo-secondary)] text-xl"></i>
               <i class="ri-funds-line text-white/30 text-xl"></i>
               <i class="ri-mosque-line text-white/30 text-xl"></i>
               <i class="ri-user-line text-white/30 text-xl"></i>
@@ -136,18 +136,18 @@
 
           <!-- Floating SSB badge -->
           <div class="absolute -left-20 top-16 bg-white rounded-2xl shadow-2xl p-4 flex items-center gap-3 w-52">
-            <div class="w-10 h-10 bg-[#e8f5ee] rounded-xl flex items-center justify-center shrink-0">
-              <i class="ri-verified-badge-fill text-[#1B4332] text-xl"></i>
+            <div class="w-10 h-10 bg-[var(--dogo-cream)] rounded-xl flex items-center justify-center shrink-0">
+              <i class="ri-verified-badge-fill text-[var(--dogo-primary)] text-xl"></i>
             </div>
             <div>
-              <p class="text-[10px] font-black uppercase tracking-widest text-[#6B7280]">SSB Certified</p>
-              <p class="font-black text-[#0d1a0f] text-[13px]">Shariah Compliant</p>
+              <p class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">SSB Certified</p>
+              <p class="font-black text-[var(--dogo-dark)] text-[13px]">Shariah Compliant</p>
             </div>
           </div>
 
           <!-- Floating profit badge -->
-          <div class="absolute -right-14 bottom-32 bg-[#1B4332] rounded-2xl shadow-xl p-4">
-            <p class="text-[10px] font-black uppercase tracking-widest text-[#C9A84C]/70">Monthly Profit</p>
+          <div class="absolute -right-14 bottom-32 bg-[var(--dogo-primary)] rounded-2xl shadow-xl p-4">
+            <p class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-secondary)]/70">Monthly Profit</p>
             <p class="text-2xl font-black text-white">+₦18,500</p>
           </div>
         </div>
@@ -157,7 +157,7 @@
 
   <!-- Bottom wave -->
   <div class="h-16 bg-white mt-16 relative">
-    <div class="absolute -top-1 left-0 right-0 h-20 bg-[#f8f7f2]" style="clip-path: ellipse(55% 100% at 50% 100%)"></div>
+    <div class="absolute -top-1 left-0 right-0 h-20 bg-[var(--dogo-cream)]" style="clip-path: ellipse(55% 100% at 50% 100%)"></div>
   </div>
 </section>
 
@@ -168,41 +168,41 @@
       <div class="halal-badge mx-auto mb-6">
         <i class="ri-star-fill"></i> Why DOGO Finance?
       </div>
-      <h2 class="text-5xl md:text-6xl font-black text-[#0d1a0f] tracking-tighter leading-tight">
-        Banking that respects <br><span class="text-[#1B4332]">your faith</span> and <span class="text-[#C9A84C]">your future.</span>
+      <h2 class="text-5xl md:text-6xl font-black text-[var(--dogo-dark)] tracking-tighter leading-tight">
+        Banking that respects <br><span class="text-[var(--dogo-primary)]">your faith</span> and <span class="text-[var(--dogo-secondary)]">your future.</span>
       </h2>
     </div>
 
     <div class="grid md:grid-cols-3 gap-10">
       <!-- Pillar 1 -->
-      <div class="group p-10 rounded-[40px] bg-[#f8f7f2] hover:bg-[#1B4332] transition-all duration-500 product-card">
-        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:bg-[#C9A84C]/20 transition-colors">
-          <i class="ri-verified-badge-fill text-[#1B4332] text-3xl group-hover:text-[#C9A84C] transition-colors"></i>
+      <div class="group p-10 rounded-[40px] bg-[var(--dogo-cream)] hover:bg-[var(--dogo-primary)] transition-all duration-500 product-card">
+        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:bg-[var(--dogo-secondary)]/20 transition-colors">
+          <i class="ri-verified-badge-fill text-[var(--dogo-primary)] text-3xl group-hover:text-[var(--dogo-secondary)] transition-colors"></i>
         </div>
-        <h3 class="text-2xl font-black text-[#0d1a0f] mb-4 group-hover:text-white transition-colors">100% Halal-Certified</h3>
-        <p class="text-[#6B7280] font-medium leading-relaxed group-hover:text-white/70 transition-colors">
+        <h3 class="text-2xl font-black text-[var(--dogo-dark)] mb-4 group-hover:text-white transition-colors">100% Halal-Certified</h3>
+        <p class="text-[var(--dogo-muted)] font-medium leading-relaxed group-hover:text-white/70 transition-colors">
           Every product is approved by our Shariah Supervisory Board and reviewed against AAOIFI standards. No hidden interest, no Gharar, no Maysir — guaranteed.
         </p>
       </div>
 
       <!-- Pillar 2 -->
-      <div class="group p-10 rounded-[40px] bg-[#f8f7f2] hover:bg-[#1B4332] transition-all duration-500 product-card">
-        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:bg-[#C9A84C]/20 transition-colors">
-          <i class="ri-nigeria-flag-fill text-[#1B4332] text-3xl group-hover:text-[#C9A84C] transition-colors"></i>
+      <div class="group p-10 rounded-[40px] bg-[var(--dogo-cream)] hover:bg-[var(--dogo-primary)] transition-all duration-500 product-card">
+        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:bg-[var(--dogo-secondary)]/20 transition-colors">
+          <i class="ri-map-pin-user-fill text-[var(--dogo-primary)] text-3xl group-hover:text-[var(--dogo-secondary)] transition-colors"></i>
         </div>
-        <h3 class="text-2xl font-black text-[#0d1a0f] mb-4 group-hover:text-white transition-colors">Built for Nigerians</h3>
-        <p class="text-[#6B7280] font-medium leading-relaxed group-hover:text-white/70 transition-colors">
+        <h3 class="text-2xl font-black text-[var(--dogo-dark)] mb-4 group-hover:text-white transition-colors">Built for Nigerians</h3>
+        <p class="text-[var(--dogo-muted)] font-medium leading-relaxed group-hover:text-white/70 transition-colors">
           All investments are ₦ denominated. Fund your account via Paystack, NIBSS bank transfer, or USSD. Full BVN and NIN verified KYC. Your data stays in Nigeria under NDPR.
         </p>
       </div>
 
       <!-- Pillar 3 -->
-      <div class="group p-10 rounded-[40px] bg-[#f8f7f2] hover:bg-[#1B4332] transition-all duration-500 product-card">
-        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:bg-[#C9A84C]/20 transition-colors">
-          <i class="ri-funds-box-fill text-[#1B4332] text-3xl group-hover:text-[#C9A84C] transition-colors"></i>
+      <div class="group p-10 rounded-[40px] bg-[var(--dogo-cream)] hover:bg-[var(--dogo-primary)] transition-all duration-500 product-card">
+        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:bg-[var(--dogo-secondary)]/20 transition-colors">
+          <i class="ri-funds-box-fill text-[var(--dogo-primary)] text-3xl group-hover:text-[var(--dogo-secondary)] transition-colors"></i>
         </div>
-        <h3 class="text-2xl font-black text-[#0d1a0f] mb-4 group-hover:text-white transition-colors">Real Returns, Real Impact</h3>
-        <p class="text-[#6B7280] font-medium leading-relaxed group-hover:text-white/70 transition-colors">
+        <h3 class="text-2xl font-black text-[var(--dogo-dark)] mb-4 group-hover:text-white transition-colors">Real Returns, Real Impact</h3>
+        <p class="text-[var(--dogo-muted)] font-medium leading-relaxed group-hover:text-white/70 transition-colors">
           Earn competitive profit-sharing returns on Mudarabah, Sukuk and Halal equities — all while your Zakat is automatically calculated and disbursed to CBN-approved charities.
         </p>
       </div>
@@ -211,10 +211,10 @@
 </section>
 
 <!-- ===== PRODUCTS SHOWCASE ===== -->
-<section class="py-24 bg-[#0d1a0f] relative overflow-hidden">
+<section class="py-24 bg-[var(--dogo-dark)] relative overflow-hidden">
   <div class="absolute inset-0 dogo-pattern opacity-[0.06] pointer-events-none"></div>
   <!-- Gold glow -->
-  <div class="absolute top-0 right-0 w-[600px] h-[600px] rounded-full blur-[200px] opacity-10" style="background: radial-gradient(circle, #C9A84C, transparent)"></div>
+  <div class="absolute top-0 right-0 w-[600px] h-[600px] rounded-full blur-[200px] opacity-10" style="background: radial-gradient(circle, var(--dogo-secondary), transparent)"></div>
 
   <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
     <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-20 gap-8">
@@ -222,30 +222,46 @@
         <div class="halal-badge mb-6">
           <i class="ri-price-tag-3-fill"></i> Our Products
         </div>
-        <h2 class="text-5xl md:text-6xl font-black text-white tracking-tighter leading-tight">
-          Invest the <br><span class="text-[#C9A84C]">Halal way.</span>
+        <h2 class="text-5xl md:text-6xl font-black text-white tracking-tighter leading-tight italic">
+          Invest the <br><span class="text-[var(--dogo-secondary)] drop-shadow-[0_0_20px_var(--dogo-secondary)]/30">Halal way.</span>
         </h2>
       </div>
-      <a routerLink="/products/mudarabah" class="flex items-center gap-2 text-[#C9A84C] font-black hover:gap-4 transition-all text-lg shrink-0">
+      <a routerLink="/products/mudarabah" class="flex items-center gap-2 text-[var(--dogo-secondary)] font-black hover:gap-4 transition-all text-lg shrink-0">
         Explore all products <i class="ri-arrow-right-line"></i>
       </a>
     </div>
 
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
       @for(p of products(); track p.id) {
-        <a [routerLink]="p.route" class="group block bg-white/5 border border-white/8 rounded-[32px] p-8 hover:bg-white/10 hover:-translate-y-3 transition-all duration-400">
-          <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-8 transition-colors"
-               [style.background]="p.id === 'sukuk' ? 'rgba(201,168,76,0.15)' : 'rgba(45,106,79,0.3)'">
-            <i [class]="p.icon + ' text-2xl'" [style.color]="p.color === '#C9A84C' ? '#C9A84C' : '#40916C'"></i>
+        <a [routerLink]="p.route" 
+           class="group relative block bg-white/5 border border-white/10 rounded-[32px] p-8 transition-all duration-500 hover:bg-white/[0.08] hover:-translate-y-3 hover:shadow-2xl overflow-hidden shimmer-effect"
+           [style.boxShadow]="'0 20px 40px -20px ' + p.color + '20'">
+          
+          <!-- Background Glow Effect -->
+          <div class="absolute -top-24 -right-24 w-48 h-48 rounded-full blur-[80px] opacity-0 group-hover:opacity-20 transition-opacity duration-700"
+               [style.background]="p.color"></div>
+
+          <!-- Icon Wrapper -->
+          <div class="w-16 h-16 rounded-[22px] flex items-center justify-center mb-10 transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 shadow-xl"
+               [style.background]="'linear-gradient(135deg, ' + p.color + '20, ' + p.color + '05)'"
+               [style.border]="'1px solid ' + p.color + '30'">
+            <i [class]="p.icon + ' text-3xl'" [style.color]="p.color"></i>
           </div>
-          <h3 class="text-xl font-black text-white mb-3">{{ p.name }}</h3>
-          <p class="text-white/50 font-medium leading-relaxed text-sm mb-8">{{ p.desc }}</p>
-          <div class="flex items-center justify-between mt-auto pt-6 border-t border-white/8">
+
+          <div class="relative z-10">
+            <h3 class="text-2xl font-black text-white mb-3 group-hover:text-[var(--dogo-secondary)] transition-colors">{{ p.name }}</h3>
+            <p class="text-white/40 font-medium leading-relaxed text-sm mb-10 group-hover:text-white/60 transition-colors">{{ p.desc }}</p>
+          </div>
+
+          <!-- Footer with Return Info -->
+          <div class="relative z-10 flex items-center justify-between mt-auto pt-6 border-t border-white/5">
             <div>
-              <p class="text-[10px] font-black uppercase tracking-widest text-white/30 mb-1">Returns</p>
-              <p class="font-black text-[#C9A84C]">{{ p.return }}</p>
+              <p class="text-[10px] font-black uppercase tracking-[0.2em] text-white/20 mb-1">Returns</p>
+              <p class="font-black text-white text-lg tracking-tight group-hover:text-[var(--dogo-secondary)] transition-colors">{{ p.return }}</p>
             </div>
-            <i class="ri-arrow-right-up-line text-white/20 group-hover:text-[#C9A84C] transition-colors text-xl"></i>
+            <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[var(--dogo-secondary)] group-hover:text-[var(--dogo-primary)] transition-all duration-500">
+              <i class="ri-arrow-right-up-line text-white/30 group-hover:text-inherit text-xl"></i>
+            </div>
           </div>
         </a>
       }
@@ -260,14 +276,14 @@
       <div class="halal-badge mx-auto mb-6">
         <i class="ri-map-pin-2-fill"></i> From Zero to Halal Wealth
       </div>
-      <h2 class="text-5xl md:text-6xl font-black text-[#0d1a0f] tracking-tighter">
+      <h2 class="text-5xl md:text-6xl font-black text-[var(--dogo-dark)] tracking-tighter">
         4 steps. That's all.
       </h2>
     </div>
 
     <div class="grid md:grid-cols-4 gap-8 relative">
       <!-- Connector line -->
-      <div class="absolute top-10 left-[12%] right-[12%] h-px bg-gradient-to-r from-[#e8f5ee] via-[#1B4332] to-[#e8f5ee] hidden md:block"></div>
+      <div class="absolute top-10 left-[12%] right-[12%] h-px bg-gradient-to-r from-[var(--dogo-cream)] via-[var(--dogo-primary)] to-[var(--dogo-cream)] hidden md:block"></div>
 
       @for(step of [
         { num: '01', icon: 'ri-user-add-line', title: 'Create Your Account', desc: 'Sign up with Google, Apple, or email/phone in under 5 minutes.'},
@@ -276,18 +292,18 @@
         { num: '04', icon: 'ri-funds-box-fill', title: 'Invest & Earn', desc: 'Fund via Paystack or NIBSS. Track your Halal returns live on your dashboard.'}
       ]; track step.num) {
         <div class="flex flex-col items-center text-center relative z-10">
-          <div class="w-20 h-20 rounded-full bg-[#1B4332] flex items-center justify-center mb-6 shadow-xl shadow-[#1B4332]/25 relative">
-            <i [class]="step.icon + ' text-2xl text-[#C9A84C]'"></i>
-            <div class="absolute -top-2 -right-2 w-7 h-7 bg-[#C9A84C] text-[#0d1a0f] text-[10px] font-black rounded-full flex items-center justify-center">{{ step.num }}</div>
+          <div class="w-20 h-20 rounded-full bg-[var(--dogo-primary)] flex items-center justify-center mb-6 shadow-xl shadow-[var(--dogo-primary)]/25 relative">
+            <i [class]="step.icon + ' text-2xl text-white'"></i>
+            <div class="absolute -top-2 -right-2 w-7 h-7 bg-[var(--dogo-secondary)] text-white text-[10px] font-black rounded-full flex items-center justify-center">{{ step.num }}</div>
           </div>
-          <h3 class="text-lg font-black text-[#0d1a0f] mb-3">{{ step.title }}</h3>
-          <p class="text-[#6B7280] font-medium leading-relaxed text-sm">{{ step.desc }}</p>
+          <h3 class="text-lg font-black text-[var(--dogo-dark)] mb-3">{{ step.title }}</h3>
+          <p class="text-[var(--dogo-muted)] font-medium leading-relaxed text-sm">{{ step.desc }}</p>
         </div>
       }
     </div>
 
     <div class="text-center mt-16">
-      <a routerLink="/how-it-works" class="inline-flex items-center gap-2 bg-[#1B4332] text-[#C9A84C] px-10 py-5 rounded-2xl font-black hover:bg-[#2D6A4F] transition-all shadow-xl shadow-[#1B4332]/20 text-lg">
+      <a routerLink="/how-it-works" class="inline-flex items-center gap-2 bg-[var(--dogo-primary)] text-white px-10 py-5 rounded-2xl font-black hover:bg-[var(--dogo-primary-soft)] transition-all shadow-xl shadow-[var(--dogo-primary)]/20 text-lg">
         See Full Journey <i class="ri-arrow-right-line"></i>
       </a>
     </div>
@@ -295,7 +311,7 @@
 </section>
 
 <!-- ===== SHARIAH TRUST SECTION ===== -->
-<section class="py-24 bg-[#f8f7f2] dogo-pattern">
+<section class="py-24 bg-[var(--dogo-cream)] dogo-pattern">
   <div class="max-w-7xl mx-auto px-6 md:px-12">
     <div class="grid lg:grid-cols-2 gap-20 items-center">
       <!-- Left: Content -->
@@ -303,36 +319,36 @@
         <div class="halal-badge mb-8">
           <i class="ri-mosque-fill"></i> Shariah Compliance
         </div>
-        <h2 class="text-5xl font-black text-[#0d1a0f] tracking-tighter leading-tight mb-8">
-          Your Iman.<br>Your Investment.<br><span class="text-[#1B4332]">Fully Protected.</span>
+        <h2 class="text-5xl font-black text-[var(--dogo-dark)] tracking-tighter leading-tight mb-8">
+          Your Iman.<br>Your Investment.<br><span class="text-[var(--dogo-primary)]">Fully Protected.</span>
         </h2>
-        <p class="text-[#6B7280] font-medium leading-relaxed text-lg mb-10">
+        <p class="text-[var(--dogo-muted)] font-medium leading-relaxed text-lg mb-10">
           Every product, every transaction, every line of code at DOGO Finance is built around Shariah compliance — certified by our independent Shariah Supervisory Board (SSB) and reviewed against AAOIFI international standards.
         </p>
 
         <div class="space-y-5 mb-10">
           @for(item of ['Haram sector automated screening (alcohol, Riba, weapons, adult content)', 'AAOIFI standards compliance on all products', 'Quarterly SSB audit reports published publicly', 'Automatic income purification routed to Nigerian Islamic charities']; track item) {
             <div class="flex items-start gap-4">
-              <div class="w-7 h-7 rounded-full bg-[#1B4332] flex items-center justify-center shrink-0 mt-0.5">
-                <i class="ri-check-line text-[#C9A84C] text-sm"></i>
+              <div class="w-7 h-7 rounded-full bg-[var(--dogo-primary)] flex items-center justify-center shrink-0 mt-0.5">
+                <i class="ri-check-line text-[var(--dogo-secondary)] text-sm"></i>
               </div>
               <p class="font-medium text-[#374151]">{{ item }}</p>
             </div>
           }
         </div>
 
-        <a routerLink="/shariah" class="inline-flex items-center gap-2 border-2 border-[#1B4332] text-[#1B4332] px-8 py-4 rounded-2xl font-black hover:bg-[#1B4332] hover:text-[#C9A84C] transition-all">
+        <a routerLink="/shariah" class="inline-flex items-center gap-2 border-2 border-[var(--dogo-primary)] text-[var(--dogo-primary)] px-8 py-4 rounded-2xl font-black hover:bg-[var(--dogo-primary)] hover:text-[var(--dogo-secondary)] transition-all">
           Read Our Shariah Framework <i class="ri-arrow-right-line"></i>
         </a>
       </div>
 
       <!-- Right: SSB card + screening breakdown -->
       <div class="relative">
-        <div class="bg-[#1B4332] rounded-[50px] p-12 text-white relative overflow-hidden shadow-premium">
-          <div class="absolute top-0 right-0 w-72 h-72 rounded-full blur-[80px] opacity-10" style="background: radial-gradient(circle, #C9A84C, transparent)"></div>
+        <div class="bg-[var(--dogo-primary)] rounded-[50px] p-12 text-white relative overflow-hidden shadow-premium">
+          <div class="absolute top-0 right-0 w-72 h-72 rounded-full blur-[80px] opacity-10" style="background: radial-gradient(circle, var(--dogo-secondary), transparent)"></div>
           <div class="relative z-10">
-            <div class="w-16 h-16 rounded-full bg-[#C9A84C]/20 flex items-center justify-center mb-8">
-              <i class="ri-verified-badge-fill text-[#C9A84C] text-3xl"></i>
+            <div class="w-16 h-16 rounded-full bg-[var(--dogo-secondary)]/20 flex items-center justify-center mb-8">
+              <i class="ri-verified-badge-fill text-[var(--dogo-secondary)] text-3xl"></i>
             </div>
             <h3 class="text-3xl font-black mb-4">What We Screen Out</h3>
             <p class="text-white/60 font-medium mb-8">Our AI engine auto-removes all Haram elements from every portfolio, in real-time.</p>
@@ -360,11 +376,11 @@
 <!-- ===== ZAKAT TEASER ===== -->
 <section class="py-24 bg-white">
   <div class="max-w-7xl mx-auto px-6 md:px-12">
-    <div class="bg-gradient-to-br from-[#1B4332] to-[#2D6A4F] rounded-[60px] p-12 md:p-16 lg:p-20 relative overflow-hidden">
+    <div class="bg-gradient-to-br from-[var(--dogo-primary)] to-[var(--dogo-secondary)] rounded-[60px] p-12 md:p-16 lg:p-20 relative overflow-hidden">
       <!-- Pattern -->
       <div class="absolute inset-0 dogo-pattern opacity-10"></div>
       <!-- Gold glow -->
-      <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-[#C9A84C]/20 rounded-full blur-[100px]"></div>
+      <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-[var(--dogo-secondary)]/20 rounded-full blur-[100px]"></div>
 
       <div class="grid lg:grid-cols-2 gap-12 items-center relative z-10">
         <div>
@@ -372,18 +388,18 @@
             <i class="ri-hand-heart-fill"></i> Zakat Made Easy
           </div>
           <h2 class="text-4xl md:text-5xl font-black text-white tracking-tighter leading-tight mb-8">
-            Calculate your Zakat.<br><span class="text-[#C9A84C]">Fulfill your obligation.</span>
+            Calculate your Zakat.<br><span class="text-[var(--dogo-secondary)]">Fulfill your obligation.</span>
           </h2>
           <p class="text-white/70 font-medium leading-relaxed text-lg mb-10">
             Nigeria's most accurate Naira-based Zakat calculator. Built on current gold nisab thresholds. Pay directly to CBN-approved Islamic charities with one tap.
           </p>
-          <a routerLink="/zakat" class="inline-flex items-center gap-3 bg-[#C9A84C] text-[#0d1a0f] px-10 py-5 rounded-2xl font-black hover:bg-[#f0d98b] transition-all shadow-xl shadow-[#C9A84C]/30 text-lg">
+          <a routerLink="/zakat" class="inline-flex items-center gap-3 bg-[var(--dogo-secondary)] text-[var(--dogo-dark)] px-10 py-5 rounded-2xl font-black hover:bg-[var(--dogo-secondary-soft,var(--dogo-secondary))] transition-all shadow-xl shadow-[var(--dogo-secondary)]/30 text-lg">
             <i class="ri-calculator-2-fill text-xl"></i> Calculate My Zakat
           </a>
         </div>
 
         <div class="bg-white/10 backdrop-blur-sm rounded-[40px] p-10 border border-white/10">
-          <p class="text-[11px] font-black uppercase tracking-widest text-[#C9A84C] mb-2">Your Zakat Summary</p>
+          <p class="text-[11px] font-black uppercase tracking-widest text-[var(--dogo-secondary)] mb-2">Your Zakat Summary</p>
           <p class="text-4xl font-black text-white mb-8">₦ — ,— —</p>
           <div class="space-y-4">
             <div class="flex justify-between items-center py-3 border-b border-white/10">
@@ -399,7 +415,7 @@
               <span class="text-white font-black">₦ 0</span>
             </div>
           </div>
-          <button class="w-full mt-8 py-4 bg-[#C9A84C] text-[#0d1a0f] rounded-2xl font-black hover:bg-[#f0d98b] transition-all">
+          <button class="w-full mt-8 py-4 bg-[var(--dogo-secondary)] text-[var(--dogo-dark)] rounded-2xl font-black hover:bg-[var(--dogo-secondary-soft,var(--dogo-secondary))] transition-all">
             Start Calculator <i class="ri-arrow-right-line ml-1"></i>
           </button>
         </div>
@@ -409,29 +425,29 @@
 </section>
 
 <!-- ===== TESTIMONIALS ===== -->
-<section class="py-24 bg-[#f8f7f2]">
+<section class="py-24 bg-[var(--dogo-cream)]">
   <div class="max-w-7xl mx-auto px-6 md:px-12">
     <div class="text-center mb-16">
       <div class="halal-badge mx-auto mb-6">
         <i class="ri-star-smile-fill"></i> Community Stories
       </div>
-      <h2 class="text-5xl font-black text-[#0d1a0f] tracking-tighter">Our members speak for us.</h2>
+      <h2 class="text-5xl font-black text-[var(--dogo-dark)] tracking-tighter">Our members speak for us.</h2>
     </div>
 
     <div class="grid md:grid-cols-3 gap-8">
       @for(t of testimonials(); track t.name; let i = $index) {
-        <div class="bg-white rounded-[36px] p-10 shadow-xl shadow-[#1B4332]/5 border border-[#1B4332]/5 flex flex-col">
+        <div class="bg-white rounded-[36px] p-10 shadow-xl shadow-[var(--dogo-primary)]/5 border border-[var(--dogo-primary)]/5 flex flex-col">
           <div class="flex mb-4">
             @for(s of [1,2,3,4,5]; track s) {
-              <i class="ri-star-fill text-[#C9A84C]"></i>
+              <i class="ri-star-fill text-[var(--dogo-secondary)]"></i>
             }
           </div>
           <p class="text-[#374151] font-medium leading-relaxed mb-8 flex-grow text-lg">"{{ t.text }}"</p>
           <div class="flex items-center gap-4 pt-6 border-t border-gray-50">
             <img [src]="t.avatar" [alt]="t.name" class="w-12 h-12 rounded-full object-cover">
             <div>
-              <p class="font-black text-[#0d1a0f]">{{ t.name }}</p>
-              <p class="text-[11px] font-bold text-[#6B7280]">{{ t.location }} · {{ t.product }}</p>
+              <p class="font-black text-[var(--dogo-dark)]">{{ t.name }}</p>
+              <p class="text-[11px] font-bold text-[var(--dogo-muted)]">{{ t.location }} · {{ t.product }}</p>
             </div>
           </div>
         </div>
@@ -441,39 +457,38 @@
 </section>
 
 <!-- ===== DOWNLOAD CTA ===== -->
-<section class="py-24 bg-white">
-  <div class="max-w-4xl mx-auto px-6 md:px-12 text-center">
+<section class="py-24 bg-[var(--dogo-cream)] relative overflow-hidden">
+  <div class="absolute inset-0 dogo-pattern opacity-[0.03] pointer-events-none"></div>
+  <div class="max-w-4xl mx-auto px-6 md:px-12 text-center relative z-10">
     <!-- Logo icon -->
-    <div class="w-24 h-24 bg-[#1B4332] rounded-[30px] flex items-center justify-center shadow-2xl shadow-[#1B4332]/30 mx-auto mb-10">
-      <svg width="50" height="50" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="23" cy="23" r="20" fill="none" stroke="#C9A84C" stroke-width="1.5" opacity="0.6"/>
-        <path d="M14 12h7c5.5 0 10 4.5 10 11s-4.5 11-10 11h-7V12z" fill="none" stroke="#C9A84C" stroke-width="1.8"/>
-        <path d="M18 17h3c3 0 5.5 2.5 5.5 6s-2.5 6-5.5 6h-3V17z" fill="#C9A84C" opacity="0.85"/>
-      </svg>
+    <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-[0_20px_50px_rgba(3,14,101,0.15)] mx-auto mb-10 border border-[var(--dogo-primary)]/5">
+      <img src="/brand/icon.png" alt="Dogo" class="w-14 h-14 object-contain">
     </div>
 
-    <h2 class="text-5xl md:text-7xl font-black text-[#0d1a0f] tracking-tighter mb-8 leading-tight">
-      Download <span class="text-[#1B4332]">Dogo Finance</span> today.
+    <h2 class="text-5xl md:text-7xl font-black text-[var(--dogo-dark)] tracking-tighter mb-8 leading-tight">
+      Download <span class="text-[var(--dogo-primary)]">Dogo Finance</span> today.
     </h2>
-    <p class="text-xl text-[#6B7280] font-medium mb-14 max-w-xl mx-auto">
+    <p class="text-xl text-[var(--dogo-muted)] font-medium mb-14 max-w-xl mx-auto">
       Free on iOS and Android. Start your Halal wealth journey in minutes.
     </p>
 
     <div class="flex flex-wrap justify-center gap-6">
-      <button class="flex items-center space-x-4 bg-[#1B4332] text-white px-10 py-5 rounded-2xl hover:bg-[#2D6A4F] transition-all shadow-xl shadow-[#1B4332]/25">
-        <i class="ri-apple-fill text-3xl text-[#C9A84C]"></i>
+      <button class="flex items-center space-x-4 bg-[var(--dogo-primary)] text-white px-10 py-5 rounded-2xl hover:bg-[var(--dogo-primary-soft)] transition-all shadow-xl shadow-[var(--dogo-primary)]/25">
+        <i class="ri-apple-fill text-3xl text-white"></i>
         <div class="text-left">
           <p class="text-[10px] uppercase font-bold text-white/60 leading-tight">Download on the</p>
           <p class="text-xl font-black leading-tight">App Store</p>
         </div>
       </button>
-      <button class="flex items-center space-x-4 border-2 border-[#1B4332]/20 text-[#1B4332] px-10 py-5 rounded-2xl hover:bg-[#e8f5ee] transition-all">
-        <i class="ri-google-play-fill text-3xl text-[#1B4332]"></i>
+      <button class="flex items-center space-x-4 border-2 border-[var(--dogo-primary)]/20 text-[var(--dogo-primary)] px-10 py-5 rounded-2xl hover:bg-[var(--dogo-cream)] transition-all">
+        <i class="ri-google-play-fill text-3xl text-[var(--dogo-primary)]"></i>
         <div class="text-left">
-          <p class="text-[10px] uppercase font-bold text-[#1B4332]/60 leading-tight">Get it on</p>
+          <p class="text-[10px] uppercase font-bold text-[var(--dogo-primary)]/60 leading-tight">Get it on</p>
           <p class="text-xl font-black leading-tight">Google Play</p>
         </div>
       </button>
     </div>
   </div>
 </section>
+
+

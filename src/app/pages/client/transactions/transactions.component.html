@@ -1,30 +1,30 @@
 <div class="animate-fade-in pb-20 px-4">
   <div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
     <div>
-      <h1 class="text-3xl font-black text-[#0d1a0f] tracking-tighter italic">Transaction History</h1>
-      <p class="text-[13px] font-medium text-[#6B7280] tracking-wide mt-1">Review all your investments, deposits, and payouts.</p>
+      <h1 class="text-3xl font-black text-[var(--dogo-dark)] tracking-tighter italic">Transaction History</h1>
+      <p class="text-[13px] font-medium text-[var(--dogo-muted)] tracking-wide mt-1">Review all your investments, deposits, and payouts.</p>
     </div>
     
     <div class="flex flex-col sm:flex-row items-center gap-4">
       <!-- Search Input -->
       <div class="w-full sm:w-64 relative group">
-        <i class="ri-search-2-line absolute left-4 top-1/2 -translate-y-1/2 text-[#1B4332]/40 text-lg group-focus-within:text-[#C9A84C] transition-colors"></i>
+        <i class="ri-search-2-line absolute left-4 top-1/2 -translate-y-1/2 text-[var(--dogo-primary)]/40 text-lg group-focus-within:text-[var(--dogo-secondary)] transition-colors"></i>
         <input 
           type="text" 
           [value]="searchTerm()"
           (input)="updateSearch($event)"
           placeholder="Search reference, description..." 
-          class="w-full h-11 pl-12 pr-4 bg-[#f8f7f2] border border-[#1B4332]/10 rounded-2xl text-sm font-bold text-[#0d1a0f] focus:outline-none focus:border-[#C9A84C] focus:bg-white transition-all shadow-sm focus:shadow-md"
+          class="w-full h-11 pl-12 pr-4 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-2xl text-sm font-bold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:bg-white transition-all shadow-sm focus:shadow-md"
         >
       </div>
 
       <!-- Filter Tabs -->
-      <div class="flex space-x-2 bg-[#f8f7f2] border border-[#1B4332]/10 p-1.5 rounded-2xl overflow-x-auto custom-scrollbar-h">
-        <button (click)="setFilter('all')" [class]="activeFilter() === 'all' ? 'bg-[#1B4332] text-white shadow-md' : 'text-[#6B7280] hover:text-[#1B4332] hover:bg-white'" class="px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap">All</button>
-        <button (click)="setFilter('deposit')" [class]="activeFilter() === 'deposit' ? 'bg-[#1B4332] text-white shadow-md' : 'text-[#6B7280] hover:text-[#1B4332] hover:bg-white'" class="px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap">Deposits</button>
-        <button (click)="setFilter('withdrawal')" [class]="activeFilter() === 'withdrawal' ? 'bg-[#1B4332] text-white shadow-md' : 'text-[#6B7280] hover:text-[#1B4332] hover:bg-white'" class="px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap">Withdrawals</button>
-        <button (click)="setFilter('investment')" [class]="activeFilter() === 'investment' ? 'bg-[#1B4332] text-white shadow-md' : 'text-[#6B7280] hover:text-[#1B4332] hover:bg-white'" class="px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap">Investments</button>
-        <button (click)="setFilter('liquidation')" [class]="activeFilter() === 'liquidation' ? 'bg-[#1B4332] text-white shadow-md' : 'text-[#6B7280] hover:text-[#1B4332] hover:bg-white'" class="px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap">Liquidations</button>
+      <div class="flex space-x-2 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 p-1.5 rounded-2xl overflow-x-auto custom-scrollbar-h">
+        <button (click)="setFilter('all')" [class]="activeFilter() === 'all' ? 'bg-[var(--dogo-primary)] text-white shadow-md' : 'text-[var(--dogo-muted)] hover:text-[var(--dogo-primary)] hover:bg-white'" class="px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap">All</button>
+        <button (click)="setFilter('deposit')" [class]="activeFilter() === 'deposit' ? 'bg-[var(--dogo-primary)] text-white shadow-md' : 'text-[var(--dogo-muted)] hover:text-[var(--dogo-primary)] hover:bg-white'" class="px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap">Deposits</button>
+        <button (click)="setFilter('withdrawal')" [class]="activeFilter() === 'withdrawal' ? 'bg-[var(--dogo-primary)] text-white shadow-md' : 'text-[var(--dogo-muted)] hover:text-[var(--dogo-primary)] hover:bg-white'" class="px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap">Withdrawals</button>
+        <button (click)="setFilter('investment')" [class]="activeFilter() === 'investment' ? 'bg-[var(--dogo-primary)] text-white shadow-md' : 'text-[var(--dogo-muted)] hover:text-[var(--dogo-primary)] hover:bg-white'" class="px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap">Investments</button>
+        <button (click)="setFilter('liquidation')" [class]="activeFilter() === 'liquidation' ? 'bg-[var(--dogo-primary)] text-white shadow-md' : 'text-[var(--dogo-muted)] hover:text-[var(--dogo-primary)] hover:bg-white'" class="px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap">Liquidations</button>
       </div>
     </div>
   </div>
@@ -32,37 +32,37 @@
   <!-- Results Count -->
   <div class="mb-6 flex items-center justify-between px-2">
     <div class="flex items-center gap-3">
-      <span class="w-1.5 h-6 bg-[#C9A84C] rounded-full shadow-sm"></span>
-      <p class="text-[11px] font-black text-[#1B4332] uppercase tracking-[0.2em]">Showing {{ filteredTransactions().length }} of {{ allFilteredItems().length }} results</p>
+      <span class="w-1.5 h-6 bg-[var(--dogo-secondary)] rounded-full shadow-sm"></span>
+      <p class="text-[11px] font-black text-[var(--dogo-primary)] uppercase tracking-[0.2em]">Showing {{ filteredTransactions().length }} of {{ allFilteredItems().length }} results</p>
     </div>
   </div>
 
   <!-- Transaction List Grid -->
-  <div class="bg-white rounded-[40px] border border-[#1B4332]/5 shadow-sm p-4 md:p-8">
+  <div class="bg-white rounded-[40px] border border-[var(--dogo-primary)]/5 shadow-sm p-4 md:p-8">
     <div class="space-y-4 min-h-[50vh]">
       @if(isLoading()) {
         <div class="flex flex-col items-center justify-center h-80 animate-in fade-in duration-500">
-           <div class="w-12 h-12 border-4 border-[#1B4332]/10 border-t-[#C9A84C] rounded-full animate-spin"></div>
-           <p class="text-[10px] font-black text-[#6B7280] uppercase tracking-widest mt-4">Fetching Records...</p>
+           <div class="w-12 h-12 border-4 border-[var(--dogo-primary)]/10 border-t-[var(--dogo-secondary)] rounded-full animate-spin"></div>
+           <p class="text-[10px] font-black text-[var(--dogo-muted)] uppercase tracking-widest mt-4">Fetching Records...</p>
         </div>
       } @else {
         @for(tx of filteredTransactions(); track tx.id) {
-          <div (click)="viewDetails(tx)" class="flex flex-col sm:flex-row sm:items-center justify-between p-6 bg-[#f8f7f2] rounded-[32px] border border-[#1B4332]/5 group hover:bg-white hover:shadow-lg transition-all cursor-pointer gap-4">
+          <div (click)="viewDetails(tx)" class="flex flex-col sm:flex-row sm:items-center justify-between p-6 bg-[var(--dogo-cream)] rounded-[32px] border border-[var(--dogo-primary)]/5 group hover:bg-white hover:shadow-lg transition-all cursor-pointer gap-4">
              
              <div class="flex items-center space-x-5">
                 <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shrink-0 group-hover:scale-110 transition-transform" [class]="getIconForType(tx.type)">
                    <i [class]="getIconForType(tx.type).split(' ')[0]"></i>
                 </div>
                 <div>
-                   <p class="font-black text-[#0d1a0f] text-base group-hover:text-[#C9A84C] transition-colors leading-tight">{{ tx.description }}</p>
+                   <p class="font-black text-[var(--dogo-dark)] text-base group-hover:text-[var(--dogo-secondary)] transition-colors leading-tight">{{ tx.description }}</p>
                    <div class="flex items-center space-x-2 mt-1">
-                      <span class="text-[10px] font-black text-[#6B7280] uppercase tracking-widest">{{ tx.date }}</span>
+                      <span class="text-[10px] font-black text-[var(--dogo-muted)] uppercase tracking-widest">{{ tx.date }}</span>
                    </div>
                 </div>
              </div>
 
-             <div class="flex justify-between sm:flex-col sm:items-end items-center sm:text-right border-t border-[#1B4332]/5 sm:border-0 pt-4 sm:pt-0 mt-2 sm:mt-0">
-                <p class="text-lg font-black tracking-tighter" [class]="tx.type === 'deposit' || tx.type === 'profit' || tx.type === 'liquidation' ? 'text-green-600' : 'text-[#0d1a0f]'">
+             <div class="flex justify-between sm:flex-col sm:items-end items-center sm:text-right border-t border-[var(--dogo-primary)]/5 sm:border-0 pt-4 sm:pt-0 mt-2 sm:mt-0">
+                <p class="text-lg font-black tracking-tighter" [class]="tx.type === 'deposit' || tx.type === 'profit' || tx.type === 'liquidation' ? 'text-green-600' : 'text-[var(--dogo-dark)]'">
                    {{ tx.type === 'withdrawal' || tx.type === 'investment' ? '-' : '+' }}₦{{ tx.amount | number }}
                 </p>
                 <div class="mt-1">
@@ -74,11 +74,11 @@
         
         @if(filteredTransactions().length === 0) {
           <div class="flex flex-col items-center justify-center h-80 opacity-60 text-center animate-in fade-in zoom-in duration-500">
-              <div class="w-24 h-24 bg-[#f8f7f2] rounded-full flex items-center justify-center mb-6 border-2 border-dashed border-[#1B4332]/10">
-                <i class="ri-search-2-line text-4xl text-[#1B4332]/40"></i>
+              <div class="w-24 h-24 bg-[var(--dogo-cream)] rounded-full flex items-center justify-center mb-6 border-2 border-dashed border-[var(--dogo-primary)]/10">
+                <i class="ri-search-2-line text-4xl text-[var(--dogo-primary)]/40"></i>
               </div>
-              <p class="text-lg font-black tracking-tighter text-[#1B4332] uppercase italic">No Matches Found</p>
-              <p class="text-xs font-bold text-[#6B7280] mt-2 max-w-[200px]">Try adjusting your search terms or filters to find what you're looking for.</p>
+              <p class="text-lg font-black tracking-tighter text-[var(--dogo-primary)] uppercase italic">No Matches Found</p>
+              <p class="text-xs font-bold text-[var(--dogo-muted)] mt-2 max-w-[200px]">Try adjusting your search terms or filters to find what you're looking for.</p>
           </div>
         }
       }
@@ -86,12 +86,12 @@
 
     <!-- Pagination Controls -->
     @if(allFilteredItems().length > 0) {
-      <div class="mt-12 pt-8 border-t border-[#1B4332]/5 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="mt-12 pt-8 border-t border-[var(--dogo-primary)]/5 flex flex-col sm:flex-row items-center justify-between gap-6">
         <div class="flex items-center gap-1.5">
           <button 
             (click)="setPage(currentPage() - 1)" 
             [disabled]="currentPage() === 1"
-            class="w-10 h-10 rounded-xl bg-[#f8f7f2] border border-[#1B4332]/5 flex items-center justify-center text-[#1B4332] hover:bg-[#1B4332] hover:text-white disabled:opacity-30 disabled:hover:bg-[#f8f7f2] disabled:hover:text-[#1B4332] transition-all"
+            class="w-10 h-10 rounded-xl bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/5 flex items-center justify-center text-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)] hover:text-white disabled:opacity-30 disabled:hover:bg-[var(--dogo-cream)] disabled:hover:text-[var(--dogo-primary)] transition-all"
           >
             <i class="ri-arrow-left-s-line text-lg"></i>
           </button>
@@ -101,13 +101,13 @@
               @if(totalPages() <= 5 || ($index + 1 === 1 || $index + 1 === totalPages() || ($index + 1 >= currentPage() - 1 && $index + 1 <= currentPage() + 1))) {
                 <button 
                   (click)="setPage($index + 1)"
-                  [class]="currentPage() === $index + 1 ? 'bg-[#1B4332] text-white shadow-lg scale-110' : 'bg-white text-[#6B7280] hover:bg-[#C9A84C]/10 hover:text-[#1B4332]'"
-                  class="w-10 h-10 rounded-xl border border-[#1B4332]/5 flex items-center justify-center text-xs font-black transition-all"
+                  [class]="currentPage() === $index + 1 ? 'bg-[var(--dogo-primary)] text-white shadow-lg scale-110' : 'bg-white text-[var(--dogo-muted)] hover:bg-[var(--dogo-secondary)]/10 hover:text-[var(--dogo-primary)]'"
+                  class="w-10 h-10 rounded-xl border border-[var(--dogo-primary)]/5 flex items-center justify-center text-xs font-black transition-all"
                 >
                   {{ $index + 1 }}
                 </button>
               } @else if (($index + 1 === 2 && currentPage() > 3) || ($index + 1 === totalPages() - 1 && currentPage() < totalPages() - 2)) {
-                <span class="w-8 text-center text-[#6B7280] font-bold">...</span>
+                <span class="w-8 text-center text-[var(--dogo-muted)] font-bold">...</span>
               }
             }
           </div>
@@ -115,13 +115,13 @@
           <button 
             (click)="setPage(currentPage() + 1)" 
             [disabled]="currentPage() === totalPages()"
-            class="w-10 h-10 rounded-xl bg-[#f8f7f2] border border-[#1B4332]/5 flex items-center justify-center text-[#1B4332] hover:bg-[#1B4332] hover:text-white disabled:opacity-30 disabled:hover:bg-[#f8f7f2] disabled:hover:text-[#1B4332] transition-all"
+            class="w-10 h-10 rounded-xl bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/5 flex items-center justify-center text-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)] hover:text-white disabled:opacity-30 disabled:hover:bg-[var(--dogo-cream)] disabled:hover:text-[var(--dogo-primary)] transition-all"
           >
             <i class="ri-arrow-right-s-line text-lg"></i>
           </button>
         </div>
 
-        <p class="text-[10px] font-black text-[#6B7280] uppercase tracking-[0.2em]">Page {{ currentPage() }} of {{ totalPages() }}</p>
+        <p class="text-[10px] font-black text-[var(--dogo-muted)] uppercase tracking-[0.2em]">Page {{ currentPage() }} of {{ totalPages() }}</p>
       </div>
     }
   </div>
@@ -130,22 +130,22 @@
 <!-- Transaction Details Modal (Unchanged but ensuring it's still here) -->
 @if(selectedTransaction()) {
   <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-300">
-    <div class="absolute inset-0 bg-[#0d1a0f]/80 backdrop-blur-md"></div>
+    <div class="absolute inset-0 bg-[var(--dogo-dark)]/80 backdrop-blur-md"></div>
     
     <div class="relative w-full max-w-lg bg-white rounded-[40px] shadow-2xl overflow-hidden transform animate-in slide-in-from-bottom-8 duration-500 flex flex-col">
       <div class="p-6 pb-2 flex justify-between items-center z-10 relative">
-        <h4 class="font-black text-sm uppercase tracking-widest text-[#1B4332]/40 ml-4">Transaction Details</h4>
-        <button (click)="closeDetails()" class="w-10 h-10 rounded-full bg-[#f8f7f2] flex items-center justify-center text-[#1B4332] hover:bg-black hover:text-white transition-all shadow-sm">
+        <h4 class="font-black text-sm uppercase tracking-widest text-[var(--dogo-primary)]/40 ml-4">Transaction Details</h4>
+        <button (click)="closeDetails()" class="w-10 h-10 rounded-full bg-[var(--dogo-cream)] flex items-center justify-center text-[var(--dogo-primary)] hover:bg-black hover:text-white transition-all shadow-sm">
           <i class="ri-close-line text-xl"></i>
         </button>
       </div>
 
       <div class="px-8 pb-10 pt-2 overflow-y-auto custom-scrollbar-h">
-         <div class="bg-[#f8f7f2] rounded-[32px] p-8 text-center border border-[#1B4332]/5 mb-8 mt-2 relative overflow-hidden group">
+         <div class="bg-[var(--dogo-cream)] rounded-[32px] p-8 text-center border border-[var(--dogo-primary)]/5 mb-8 mt-2 relative overflow-hidden group">
             <div class="absolute inset-0 translate-y-full group-hover:translate-y-0 transition-transform duration-700 bg-white/50"></div>
             <div class="relative z-10">
-               <span class="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest mb-2 block animate-pulse">Amount</span>
-               <h2 class="text-5xl font-black tracking-tighter text-[#0d1a0f] mb-4">
+               <span class="text-[10px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest mb-2 block animate-pulse">Amount</span>
+               <h2 class="text-5xl font-black tracking-tighter text-[var(--dogo-dark)] mb-4">
                   ₦{{ selectedTransaction()?.amount | number }}
                </h2>
                <app-badge [variant]="getBadgeVariant(selectedTransaction()?.status || '')" class="shadow-sm">
@@ -155,32 +155,32 @@
          </div>
 
          <div class="space-y-4">
-            <div class="flex items-center justify-between pb-3 border-b border-[#1B4332]/5">
-               <span class="text-[11px] font-black text-[#1B4332]/40 uppercase tracking-widest">Type</span>
-               <span class="text-sm font-bold text-[#0d1a0f] capitalize">{{ selectedTransaction()?.type }}</span>
+            <div class="flex items-center justify-between pb-3 border-b border-[var(--dogo-primary)]/5">
+               <span class="text-[11px] font-black text-[var(--dogo-primary)]/40 uppercase tracking-widest">Type</span>
+               <span class="text-sm font-bold text-[var(--dogo-dark)] capitalize">{{ selectedTransaction()?.type }}</span>
             </div>
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-[#1B4332]/5 gap-1">
-               <span class="text-[11px] font-black text-[#1B4332]/40 uppercase tracking-widest shrink-0">Description</span>
-               <span class="text-sm font-bold text-[#0d1a0f] sm:text-right">{{ selectedTransaction()?.description }}</span>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-[var(--dogo-primary)]/5 gap-1">
+               <span class="text-[11px] font-black text-[var(--dogo-primary)]/40 uppercase tracking-widest shrink-0">Description</span>
+               <span class="text-sm font-bold text-[var(--dogo-dark)] sm:text-right">{{ selectedTransaction()?.description }}</span>
             </div>
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-[#1B4332]/5 gap-1">
-               <span class="text-[11px] font-black text-[#1B4332]/40 uppercase tracking-widest shrink-0">Reference ID</span>
-               <span class="text-sm font-bold text-[#C9A84C] sm:text-right cursor-pointer hover:underline">{{ selectedTransaction()?.reference }}</span>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-[var(--dogo-primary)]/5 gap-1">
+               <span class="text-[11px] font-black text-[var(--dogo-primary)]/40 uppercase tracking-widest shrink-0">Reference ID</span>
+               <span class="text-sm font-bold text-[var(--dogo-secondary)] sm:text-right cursor-pointer hover:underline">{{ selectedTransaction()?.reference }}</span>
             </div>
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-[#1B4332]/5 gap-1">
-               <span class="text-[11px] font-black text-[#1B4332]/40 uppercase tracking-widest shrink-0">Date & Time</span>
-               <span class="text-sm font-bold text-[#0d1a0f] sm:text-right">{{ selectedTransaction()?.date }}</span>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-[var(--dogo-primary)]/5 gap-1">
+               <span class="text-[11px] font-black text-[var(--dogo-primary)]/40 uppercase tracking-widest shrink-0">Date & Time</span>
+               <span class="text-sm font-bold text-[var(--dogo-dark)] sm:text-right">{{ selectedTransaction()?.date }}</span>
             </div>
             @if(selectedTransaction()?.paymentMethod) {
-               <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-[#1B4332]/5 gap-1">
-                  <span class="text-[11px] font-black text-[#1B4332]/40 uppercase tracking-widest shrink-0">Payment Method</span>
-                  <span class="text-sm font-bold text-[#0d1a0f] sm:text-right">{{ selectedTransaction()?.paymentMethod }}</span>
+               <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-[var(--dogo-primary)]/5 gap-1">
+                  <span class="text-[11px] font-black text-[var(--dogo-primary)]/40 uppercase tracking-widest shrink-0">Payment Method</span>
+                  <span class="text-sm font-bold text-[var(--dogo-dark)] sm:text-right">{{ selectedTransaction()?.paymentMethod }}</span>
                </div>
             }
             @if(selectedTransaction()?.bankInfo) {
-               <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-[#1B4332]/5 gap-1">
-                  <span class="text-[11px] font-black text-[#1B4332]/40 uppercase tracking-widest shrink-0">Destination Bank</span>
-                  <span class="text-sm font-bold text-[#0d1a0f] sm:text-right">{{ selectedTransaction()?.bankInfo }}</span>
+               <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-[var(--dogo-primary)]/5 gap-1">
+                  <span class="text-[11px] font-black text-[var(--dogo-primary)]/40 uppercase tracking-widest shrink-0">Destination Bank</span>
+                  <span class="text-sm font-bold text-[var(--dogo-dark)] sm:text-right">{{ selectedTransaction()?.bankInfo }}</span>
                </div>
             }
             @if(selectedTransaction()?.notes) {
@@ -191,15 +191,16 @@
             }
          </div>
 
-         <button class="w-full h-14 mt-10 rounded-2xl border border-[#1B4332]/10 bg-white text-[#1B4332] text-[10px] font-black uppercase tracking-widest hover:bg-[#1B4332] hover:text-white hover:shadow-xl transition-all flex items-center justify-center group overflow-hidden relative">
+         <button class="w-full h-14 mt-10 rounded-2xl border border-[var(--dogo-primary)]/10 bg-white text-[var(--dogo-primary)] text-[10px] font-black uppercase tracking-widest hover:bg-[var(--dogo-primary)] hover:text-white hover:shadow-xl transition-all flex items-center justify-center group overflow-hidden relative">
             <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full duration-700 transition-transform pointer-events-none"></div>
             <i class="ri-download-2-line text-lg mr-2 group-hover:-translate-y-1 transition-transform"></i> Download Receipt
          </button>
 
-         <button class="w-full h-12 mt-3 rounded-2xl bg-transparent text-[#6B7280] text-[10px] font-black uppercase tracking-widest hover:text-[#1B4332] hover:bg-[#f8f7f2] transition-colors flex items-center justify-center">
+         <button class="w-full h-12 mt-3 rounded-2xl bg-transparent text-[var(--dogo-muted)] text-[10px] font-black uppercase tracking-widest hover:text-[var(--dogo-primary)] hover:bg-[var(--dogo-cream)] transition-colors flex items-center justify-center">
             Report Issue
          </button>
       </div>
     </div>
   </div>
 }
+

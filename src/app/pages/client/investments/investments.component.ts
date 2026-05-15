@@ -165,7 +165,7 @@ export class ClientInvestmentsComponent implements OnInit {
                 text: `Successfully sold ₦${amountToSell.toLocaleString()} from your portfolio. The funds have been added to your wallet.`,
                 icon: 'success',
                 confirmButtonText: 'Great!',
-                confirmButtonColor: '#1B4332',
+                confirmButtonColor: 'var(--dogo-primary)',
                 customClass: {
                     popup: 'rounded-[2.5rem]',
                     confirmButton: 'rounded-2xl px-10 py-4 font-black uppercase tracking-widest text-[10px]'
@@ -230,9 +230,9 @@ export class ClientInvestmentsComponent implements OnInit {
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
-      cancelButtonColor: '#1B4332',
+      cancelButtonColor: 'var(--dogo-primary)',
       confirmButtonText: 'Yes, Sell Everything',
-      background: '#f8f7f2',
+      background: 'var(--dogo-cream)',
       customClass: { popup: 'rounded-[30px]' }
     }).then((result: any) => {
       if (result.isConfirmed) {
@@ -278,3 +278,4 @@ export class ClientInvestmentsComponent implements OnInit {
     });
   }
 }
+

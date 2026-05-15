@@ -1,13 +1,13 @@
-<section class="pt-32 pb-24 bg-[#f8f7f2] relative overflow-hidden dogo-pattern">
+<section class="pt-32 pb-24 bg-[var(--dogo-cream)] relative overflow-hidden dogo-pattern">
   <div class="max-w-7xl mx-auto px-6 md:px-12 text-center relative z-10">
     <div class="halal-badge mb-8 mx-auto">
       <i class="ri-book-open-line"></i>
       <span>Dogo Finance Knowledge Centre</span>
     </div>
-    <h1 class="text-5xl md:text-[80px] font-black leading-[0.95] mb-8 tracking-tighter text-[#0d1a0f]">
-      Your path to <br><span class="text-[#1B4332]">Halal wealth.</span>
+    <h1 class="text-5xl md:text-[80px] font-black leading-[0.95] mb-8 tracking-tighter text-[var(--dogo-dark)]">
+      Your path to <br><span class="text-[var(--dogo-primary)]">Halal wealth.</span>
     </h1>
-    <p class="text-xl text-[#0d1a0f]/60 mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
+    <p class="text-xl text-[var(--dogo-dark)]/60 mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
       Learn how to save, invest, and grow your wealth with expert insights and Shariah-compliant practical financial advice.
     </p>
 
@@ -16,7 +16,7 @@
       @for(cat of categories; track cat) {
         <button (click)="setCategory(cat)" 
                 class="px-8 py-4 rounded-full font-black text-sm transition-all shadow-lg hover:-translate-y-1"
-                [class]="selectedCategory() === cat ? 'bg-[#1B4332] text-[#C9A84C]' : 'bg-white text-[#1B4332] hover:bg-[#e8f5ee] border border-gray-100'">
+                [class]="selectedCategory() === cat ? 'bg-[var(--dogo-primary)] text-white' : 'bg-white text-[var(--dogo-primary)] hover:bg-[var(--dogo-cream)] border border-gray-100'">
            {{ cat }}
         </button>
       }
@@ -25,28 +25,28 @@
     <!-- Blog Grid -->
     <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-10 text-left">
       @for(post of filteredPosts(); track post.id) {
-        <a [routerLink]="['/blog', post.id]" class="group bg-white rounded-[40px] overflow-hidden shadow-2xl shadow-[#1B4332]/5 border border-gray-100 transition-all hover:-translate-y-4">
+        <a [routerLink]="['/blog', post.id]" class="group bg-white rounded-[40px] overflow-hidden shadow-2xl shadow-[var(--dogo-primary)]/5 border border-gray-100 transition-all hover:-translate-y-4">
           <div class="h-64 overflow-hidden relative">
              <img [src]="post.image" [alt]="post.title" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
              <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-8">
-                <span class="bg-[#C9A84C] text-[#0d1a0f] px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">{{ post.category }}</span>
+                <span class="bg-[var(--dogo-secondary)] text-[var(--dogo-dark)] px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">{{ post.category }}</span>
              </div>
           </div>
           <div class="p-10">
-             <div class="flex items-center space-x-3 mb-4 text-xs font-bold text-[#6B7280] uppercase tracking-widest">
+             <div class="flex items-center space-x-3 mb-4 text-xs font-bold text-[var(--dogo-muted)] uppercase tracking-widest">
                 <span>{{ post.author }}</span>
                 <span>•</span>
                 <span>{{ post.date }}</span>
              </div>
-             <h3 class="text-2xl font-black text-[#0d1a0f] mb-4 leading-tight group-hover:text-[#1B4332] transition-colors">{{ post.title }}</h3>
-             <p class="text-[#6B7280] font-medium mb-8 leading-relaxed line-clamp-3">
+             <h3 class="text-2xl font-black text-[var(--dogo-dark)] mb-4 leading-tight group-hover:text-[var(--dogo-primary)] transition-colors">{{ post.title }}</h3>
+             <p class="text-[var(--dogo-muted)] font-medium mb-8 leading-relaxed line-clamp-3">
                 {{ post.excerpt }}
              </p>
              <div class="flex items-center justify-between pt-8 border-t border-gray-100">
-                <span class="text-sm font-black text-[#1B4332] flex items-center group-hover:translate-x-2 transition-transform">
+                <span class="text-sm font-black text-[var(--dogo-primary)] flex items-center group-hover:translate-x-2 transition-transform">
                    Read Full Article <i class="ri-arrow-right-line ml-2"></i>
                 </span>
-                <span class="text-xs font-bold text-[#6B7280]">{{ post.readTime }}</span>
+                <span class="text-xs font-bold text-[var(--dogo-muted)]">{{ post.readTime }}</span>
              </div>
           </div>
         </a>
@@ -62,28 +62,29 @@
   </div>
 
   <!-- Decorative circles -->
-  <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-[100px] opacity-20" style="background: radial-gradient(circle, #C9A84C, transparent)"></div>
-  <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full blur-[100px] opacity-10" style="background: radial-gradient(circle, #1B4332, transparent)"></div>
+  <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-[100px] opacity-20" style="background: radial-gradient(circle, var(--dogo-secondary), transparent)"></div>
+  <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full blur-[100px] opacity-10" style="background: radial-gradient(circle, var(--dogo-primary), transparent)"></div>
 </section>
 
 <!-- Stats Booster Newsletter -->
-<section class="py-24 bg-[#0d1a0f] text-white overflow-hidden relative">
+<section class="py-24 bg-[var(--dogo-dark)] text-white overflow-hidden relative">
    <div class="absolute inset-0 dogo-pattern opacity-[0.06] pointer-events-none"></div>
-   <div class="absolute top-0 right-0 w-[500px] h-[500px] rounded-full blur-[150px] opacity-10" style="background: radial-gradient(circle, #C9A84C, transparent)"></div>
+   <div class="absolute top-0 right-0 w-[500px] h-[500px] rounded-full blur-[150px] opacity-10" style="background: radial-gradient(circle, var(--dogo-secondary), transparent)"></div>
 
    <div class="max-w-7xl mx-auto px-6 md:px-12 grid md:grid-cols-2 gap-20 items-center relative z-10">
       <div>
-         <h2 class="text-4xl md:text-5xl font-black mb-8 leading-tight tracking-tighter">Stay updated with our weekly <span class="text-[#C9A84C]">finance insights.</span></h2>
+         <h2 class="text-4xl md:text-5xl font-black mb-8 leading-tight tracking-tighter">Stay updated with our weekly <span class="text-[var(--dogo-secondary)]">finance insights.</span></h2>
          <div class="flex flex-col sm:flex-row gap-4 max-w-lg">
-            <input type="email" placeholder="Email address" class="flex-grow bg-white/5 border border-white/10 rounded-2xl px-8 py-5 focus:outline-none focus:border-[#C9A84C] text-white font-medium">
-            <button class="bg-[#C9A84C] text-[#0d1a0f] px-10 py-5 rounded-2xl font-black hover:bg-[#f0d98b] transition-all shadow-xl shadow-[#C9A84C]/20">Subscribe</button>
+            <input type="email" placeholder="Email address" class="flex-grow bg-white/5 border border-white/10 rounded-2xl px-8 py-5 focus:outline-none focus:border-[var(--dogo-secondary)] text-white font-medium">
+            <button class="bg-[var(--dogo-secondary)] text-[var(--dogo-dark)] px-10 py-5 rounded-2xl font-black hover:bg-[#f0d98b] transition-all shadow-xl shadow-[var(--dogo-secondary)]/20">Subscribe</button>
          </div>
          <p class="text-xs text-white/50 mt-6 font-medium">No spam, just quality Halal finance insights once a week. Unsubscribe anytime.</p>
       </div>
       <div class="hidden md:flex justify-end">
-         <div class="w-80 h-80 bg-[#1B4332]/20 rounded-[60px] border border-[#C9A84C]/20 flex items-center justify-center relative anim-float">
-            <i class="ri-mail-send-line text-[150px] text-[#C9A84C]/50"></i>
+         <div class="w-80 h-80 bg-[var(--dogo-primary)]/20 rounded-[60px] border border-[var(--dogo-secondary)]/20 flex items-center justify-center relative anim-float">
+            <i class="ri-mail-send-line text-[150px] text-[var(--dogo-secondary)]/50"></i>
          </div>
       </div>
    </div>
 </section>
+

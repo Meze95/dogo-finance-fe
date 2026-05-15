@@ -2,7 +2,7 @@
   <!-- Header -->
   <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
     <div>
-      <h2 class="text-3xl font-black text-[#0d1a0f] tracking-tight">Withdrawal Requests</h2>
+      <h2 class="text-3xl font-black text-[var(--dogo-dark)] tracking-tight">Withdrawal Requests</h2>
       <p class="text-gray-500 text-sm mt-1 uppercase tracking-widest font-bold">Review and process client withdrawals manually.</p>
     </div>
     <div class="flex items-center gap-3">
@@ -10,7 +10,7 @@
       <div class="relative w-full md:w-64">
         <i class="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
         <input type="text" [ngModel]="searchTerm()" (input)="updateSearch($event)" placeholder="Search requests..." 
-               class="w-full bg-white border border-[#1B4332]/10 focus:border-[#C9A84C] rounded-2xl py-3 pl-11 pr-4 text-slate-800 font-bold placeholder:text-slate-300 outline-none transition-all shadow-sm" />
+               class="w-full bg-white border border-[var(--dogo-primary)]/10 focus:border-[var(--dogo-secondary)] rounded-2xl py-3 pl-11 pr-4 text-slate-800 font-bold placeholder:text-slate-300 outline-none transition-all shadow-sm" />
       </div>
     </div>
   </div>
@@ -19,36 +19,36 @@
   <div class="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-2">
     <button *ngFor="let filter of ['pending', 'all', 'completed', 'rejected']" 
             (click)="setFilter(filter)"
-            [ngClass]="activeFilter() === filter ? 'bg-[#1B4332] text-white shadow-md' : 'bg-white text-slate-500 hover:bg-slate-50 border border-[#1B4332]/10'"
+            [ngClass]="activeFilter() === filter ? 'bg-[var(--dogo-primary)] text-white shadow-md' : 'bg-white text-slate-500 hover:bg-slate-50 border border-[var(--dogo-primary)]/10'"
             class="px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap">
       {{ filter }}
     </button>
   </div>
 
   <!-- Withdrawals Table Card -->
-  <div class="bg-white rounded-[40px] p-4 sm:p-8 border border-[#1B4332]/5 shadow-sm overflow-hidden">
+  <div class="bg-white rounded-[40px] p-4 sm:p-8 border border-[var(--dogo-primary)]/5 shadow-sm overflow-hidden">
     <div class="overflow-x-auto custom-scrollbar pb-4">
       <table class="w-full text-left border-collapse min-w-[800px]">
         <thead>
           <tr class="border-b-2 border-slate-100">
-            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Client Profile</th>
-            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Transaction Details</th>
-            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Amount</th>
-            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Status</th>
-            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C] text-right">Actions</th>
+            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Client Profile</th>
+            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Transaction Details</th>
+            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Amount</th>
+            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Status</th>
+            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)] text-right">Actions</th>
           </tr>
         </thead>
         <tbody class="text-sm">
           @for(w of filteredWithdrawals(); track w.id; let i = $index) {
-          <tr class="border-b border-slate-50 hover:bg-[#f8f7f2] transition-colors group">
+          <tr class="border-b border-slate-50 hover:bg-[var(--dogo-cream)] transition-colors group">
             <td class="py-5 px-4">
               <div class="flex items-center gap-4">
                 <div class="w-10 h-10 rounded-2xl flex items-center justify-center font-black text-xs text-white shadow-sm shrink-0 uppercase
-                            bg-[#1B4332]">
+                            bg-[var(--dogo-primary)]">
                   {{ w.clientInitials }}
                 </div>
                 <div>
-                  <div class="font-black text-[#0d1a0f]">{{ w.clientName }}</div>
+                  <div class="font-black text-[var(--dogo-dark)]">{{ w.clientName }}</div>
                   <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ w.reference }}</div>
                 </div>
               </div>
@@ -59,13 +59,13 @@
               <div class="text-[10px] font-bold text-slate-400 mt-1">{{ w.date }}</div>
             </td>
             <td class="py-5 px-4">
-              <div class="font-black text-lg text-[#0d1a0f]">₦{{ w.amount | number }}</div>
+              <div class="font-black text-lg text-[var(--dogo-dark)]">₦{{ w.amount | number }}</div>
             </td>
             <td class="py-5 px-4">
               <app-badge [variant]="getBadgeVariant(w.status)">{{ w.status | uppercase }}</app-badge>
             </td>
             <td class="py-5 px-4 text-right">
-              <button (click)="viewDetails(w)" class="text-slate-400 hover:text-[#C9A84C] transition-colors p-2 hover:bg-[#C9A84C]/10 rounded-2xl" title="Review">
+              <button (click)="viewDetails(w)" class="text-slate-400 hover:text-[var(--dogo-secondary)] transition-colors p-2 hover:bg-[var(--dogo-secondary)]/10 rounded-2xl" title="Review">
                 <i class="ri-search-eye-line text-lg"></i>
               </button>
             </td>
@@ -94,11 +94,11 @@
       </div>
       <div class="flex items-center gap-2">
         <button [disabled]="currentPage() === 1" (click)="setPage(currentPage() - 1)" 
-                class="w-8 h-8 rounded-xl flex items-center justify-center bg-slate-50 text-slate-500 hover:bg-[#C9A84C] hover:text-white disabled:opacity-50 disabled:hover:bg-slate-50 disabled:hover:text-slate-500 transition-colors">
+                class="w-8 h-8 rounded-xl flex items-center justify-center bg-slate-50 text-slate-500 hover:bg-[var(--dogo-secondary)] hover:text-white disabled:opacity-50 disabled:hover:bg-slate-50 disabled:hover:text-slate-500 transition-colors">
           <i class="ri-arrow-left-s-line"></i>
         </button>
         <button [disabled]="currentPage() === totalPages()" (click)="setPage(currentPage() + 1)"
-                class="w-8 h-8 rounded-xl flex items-center justify-center bg-slate-50 text-slate-500 hover:bg-[#C9A84C] hover:text-white disabled:opacity-50 disabled:hover:bg-slate-50 disabled:hover:text-slate-500 transition-colors">
+                class="w-8 h-8 rounded-xl flex items-center justify-center bg-slate-50 text-slate-500 hover:bg-[var(--dogo-secondary)] hover:text-white disabled:opacity-50 disabled:hover:bg-slate-50 disabled:hover:text-slate-500 transition-colors">
           <i class="ri-arrow-right-s-line"></i>
         </button>
       </div>
@@ -110,16 +110,16 @@
 <!-- View Details / Process Modal -->
 @if(selectedWithdrawal()) {
 <div class="fixed inset-0 z-[999] flex items-center justify-center px-4 animate-fade-in" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-  <div class="fixed inset-0 bg-[#0d1a0f]/60 backdrop-blur-md transition-opacity" (click)="closeDetails()"></div>
+  <div class="fixed inset-0 bg-[var(--dogo-dark)]/60 backdrop-blur-md transition-opacity" (click)="closeDetails()"></div>
   
   <div class="relative bg-white rounded-[40px] shadow-2xl w-full max-w-lg transform transition-all animate-slide-up flex flex-col max-h-[90vh]">
     <!-- Modal Header -->
-    <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-[#f8f7f2] rounded-t-[40px] shrink-0">
+    <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-[var(--dogo-cream)] rounded-t-[40px] shrink-0">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-[#C9A84C]/20 text-[#C9A84C] flex items-center justify-center">
+        <div class="w-10 h-10 rounded-2xl bg-[var(--dogo-secondary)]/20 text-[var(--dogo-secondary)] flex items-center justify-center">
             <i class="ri-bank-card-line text-xl"></i>
         </div>
-        <h3 class="text-xl font-black text-[#0d1a0f] tracking-tight" id="modal-title">
+        <h3 class="text-xl font-black text-[var(--dogo-dark)] tracking-tight" id="modal-title">
           Process Withdrawal
         </h3>
       </div>
@@ -132,7 +132,7 @@
     <div class="p-8 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
       <div class="flex items-center justify-between mb-8 pb-8 border-b border-slate-100">
         <div>
-          <h2 class="text-3xl font-black text-[#0d1a0f]">₦{{ selectedWithdrawal()!.amount | number }}</h2>
+          <h2 class="text-3xl font-black text-[var(--dogo-dark)]">₦{{ selectedWithdrawal()!.amount | number }}</h2>
           <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Requested Amount</p>
         </div>
         <app-badge [variant]="getBadgeVariant(selectedWithdrawal()!.status)">{{ selectedWithdrawal()!.status | uppercase }}</app-badge>
@@ -140,35 +140,35 @@
 
       <div class="space-y-6">
         <div>
-          <p class="text-[10px] font-black uppercase tracking-widest text-[#C9A84C] mb-2">Transfer Details</p>
+          <p class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-secondary)] mb-2">Transfer Details</p>
           <div class="space-y-3">
-             <div class="bg-[#f8f7f2] rounded-2xl p-4">
+             <div class="bg-[var(--dogo-cream)] rounded-2xl p-4">
                 <div class="text-xs font-bold text-slate-500 mb-1">Bank Name</div>
-                <div class="text-sm font-black text-[#0d1a0f]">{{ selectedWithdrawal()!.bankName }}</div>
+                <div class="text-sm font-black text-[var(--dogo-dark)]">{{ selectedWithdrawal()!.bankName }}</div>
              </div>
-             <div class="bg-[#f8f7f2] rounded-2xl p-4">
+             <div class="bg-[var(--dogo-cream)] rounded-2xl p-4">
                 <div class="text-xs font-bold text-slate-500 mb-1">Account Number</div>
-                <div class="text-xl font-black text-[#1B4332] tracking-wider">{{ selectedWithdrawal()!.accountNumber }}</div>
+                <div class="text-xl font-black text-[var(--dogo-primary)] tracking-wider">{{ selectedWithdrawal()!.accountNumber }}</div>
              </div>
-             <div class="bg-[#f8f7f2] rounded-2xl p-4">
+             <div class="bg-[var(--dogo-cream)] rounded-2xl p-4">
                 <div class="text-xs font-bold text-slate-500 mb-1">Account Name</div>
-                <div class="text-sm font-black text-[#0d1a0f]">{{ selectedWithdrawal()!.accountName }}</div>
+                <div class="text-sm font-black text-[var(--dogo-dark)]">{{ selectedWithdrawal()!.accountName }}</div>
              </div>
           </div>
         </div>
 
         <div>
-          <p class="text-[10px] font-black uppercase tracking-widest text-[#C9A84C] mb-2">Request Info</p>
+          <p class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-secondary)] mb-2">Request Info</p>
           <div class="space-y-3">
-             <div class="flex justify-between items-center bg-[#f8f7f2] rounded-2xl p-4">
+             <div class="flex justify-between items-center bg-[var(--dogo-cream)] rounded-2xl p-4">
                 <span class="text-xs font-bold text-slate-500">Client</span>
-                <span class="text-sm font-black text-[#0d1a0f]">{{ selectedWithdrawal()!.clientName }}</span>
+                <span class="text-sm font-black text-[var(--dogo-dark)]">{{ selectedWithdrawal()!.clientName }}</span>
              </div>
-             <div class="flex justify-between items-center bg-[#f8f7f2] rounded-2xl p-4">
+             <div class="flex justify-between items-center bg-[var(--dogo-cream)] rounded-2xl p-4">
                 <span class="text-xs font-bold text-slate-500">Date</span>
-                <span class="text-sm font-black text-[#0d1a0f]">{{ selectedWithdrawal()!.date }}</span>
+                <span class="text-sm font-black text-[var(--dogo-dark)]">{{ selectedWithdrawal()!.date }}</span>
              </div>
-             <div class="flex justify-between items-center bg-[#f8f7f2] rounded-2xl p-4">
+             <div class="flex justify-between items-center bg-[var(--dogo-cream)] rounded-2xl p-4">
                 <span class="text-xs font-bold text-slate-500">Reference ID</span>
                 <span class="text-sm font-black text-slate-600 font-mono">{{ selectedWithdrawal()!.reference }}</span>
              </div>
@@ -192,7 +192,7 @@
             <button (click)="startReject()" class="flex-1 px-6 py-4 rounded-[20px] bg-red-50 text-red-600 font-black tracking-widest uppercase text-sm hover:bg-red-100 transition-all text-center">
               Reject
             </button>
-            <button (click)="approve()" [disabled]="isApproving()" class="flex-[2] flex items-center justify-center gap-2 px-6 py-4 rounded-[20px] bg-[#1B4332] text-white font-black tracking-widest uppercase text-sm hover:bg-[#1B4332]/90 hover:shadow-lg transition-all disabled:opacity-70">
+            <button (click)="approve()" [disabled]="isApproving()" class="flex-[2] flex items-center justify-center gap-2 px-6 py-4 rounded-[20px] bg-[var(--dogo-primary)] text-white font-black tracking-widest uppercase text-sm hover:bg-[var(--dogo-primary)]/90 hover:shadow-lg transition-all disabled:opacity-70">
               @if(isApproving()) {
                 <i class="ri-loader-4-line animate-spin text-xl"></i> Processing...
               } @else {
@@ -204,8 +204,8 @@
         } @else {
           <!-- Reject Confirmation Form -->
           <div class="animate-fade-in">
-            <label class="block text-xs font-black uppercase tracking-widest text-[#0d1a0f] mb-2">Reason for Rejection</label>
-            <textarea [ngModel]="rejectReason()" (ngModelChange)="rejectReason.set($event)" rows="3" placeholder="Explain why this withdrawal is rejected..." class="w-full bg-[#f8f7f2] border border-slate-200 focus:border-red-400 focus:ring-4 focus:ring-red-400/10 rounded-2xl p-4 text-sm font-bold text-[#0d1a0f] outline-none transition-all resize-none"></textarea>
+            <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)] mb-2">Reason for Rejection</label>
+            <textarea [ngModel]="rejectReason()" (ngModelChange)="rejectReason.set($event)" rows="3" placeholder="Explain why this withdrawal is rejected..." class="w-full bg-[var(--dogo-cream)] border border-slate-200 focus:border-red-400 focus:ring-4 focus:ring-red-400/10 rounded-2xl p-4 text-sm font-bold text-[var(--dogo-dark)] outline-none transition-all resize-none"></textarea>
             
             <div class="flex gap-4 mt-6">
               <button (click)="cancelReject()" class="flex-1 px-6 py-4 rounded-[20px] border border-slate-200 text-slate-600 font-black tracking-widest uppercase text-sm hover:bg-slate-50 transition-all text-center">
@@ -223,3 +223,4 @@
   </div>
 </div>
 }
+

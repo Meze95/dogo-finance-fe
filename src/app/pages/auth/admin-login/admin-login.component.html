@@ -1,91 +1,67 @@
-<div class="h-screen w-full flex items-center justify-center bg-[#0d0f11] overflow-hidden relative font-['Inter', sans-serif]">
+<app-auth-layout
+  sidebarTitle="DOGO"
+  sidebarHighlight="STAFF"
+  sidebarSubtext="Internal access terminal for authorized Dogo Finance personnel only. All activities are monitored and audited."
+  sidebarNoticeTitle="Restricted Access"
+  sidebarNoticeBody="Confidential System"
+  sidebarNoticeIcon="ri-shield-user-fill"
+  pageTitle="Staff Login"
+  pageSubtext="Initialize your secure administrative session."
+  backLink="/login"
+  backText="Back to Customer Terminal">
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
     
-    <!-- Animated Nebula Background (Sleek Dark Theme) -->
-    <div class="absolute inset-0 z-0">
-        <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-gradient-to-br from-[#1b4332]/20 to-transparent blur-[150px] animate-pulse"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-gradient-to-br from-[#C9A84C]/10 to-transparent blur-[150px] animate-pulse-slow"></div>
-    </div>
+    @if(errorMessage()) {
+      <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-2xl flex items-center gap-3 animate-shake">
+        <i class="ri-error-warning-fill text-red-500 text-lg"></i>
+        <p class="text-red-700 text-xs font-black uppercase tracking-wider">{{ errorMessage() }}</p>
+      </div>
+    }
 
-    <!-- Glassmorphic Staff Panel -->
-    <div class="w-full max-w-[450px] relative z-20 p-1 bg-gradient-to-b from-white/10 to-white/5 rounded-[40px] shadow-2xl backdrop-blur-2xl animate-fade-in mx-4">
-        <div class="bg-[#0f1115] rounded-[38px] px-10 py-12 flex flex-col items-center">
-            
-            <!-- Branding -->
-            <div class="flex flex-col items-center mb-10">
-                <div class="w-20 h-20 bg-gradient-to-br from-[#1b4332] to-[#04100b] rounded-[24px] flex items-center justify-center shadow-xl shadow-[#1b4332]/30 mb-6 group cursor-default transition-transform hover:scale-105 active:scale-95">
-                    <i class="ri-shield-user-fill text-[#C9A84C] text-4xl"></i>
-                </div>
-                <h1 class="text-3xl font-black text-white tracking-tight uppercase"><span class="text-[#C9A84C]">DOGO</span> STAFF</h1>
-                <p class="text-slate-400 text-xs font-bold uppercase tracking-[0.3em] mt-2">Internal Access Terminal</p>
-            </div>
-
-            <!-- Login Matrix -->
-            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="w-full space-y-6">
-                
-                @if(errorMessage()) {
-                  <div class="bg-red-500/10 border border-red-500/20 px-4 py-3 rounded-2xl flex items-center gap-3 animate-shake">
-                    <i class="ri-error-warning-fill text-red-500 text-lg"></i>
-                    <p class="text-red-500 text-xs font-black uppercase tracking-wider">{{ errorMessage() }}</p>
-                  </div>
-                }
-
-                <!-- Email Input -->
-                <div class="space-y-2">
-                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Staff ID / Email</label>
-                    <div class="relative group">
-                        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                            <i class="ri-mail-fill text-slate-500 group-focus-within:text-[#C9A84C] transition-colors"></i>
-                        </div>
-                        <input type="email" formControlName="email" 
-                               class="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-[#C9A84C]/50 focus:ring-4 focus:ring-[#C9A84C]/10 transition-all"
-                               placeholder="e.g. admin@dogofinance.com" />
-                    </div>
-                </div>
-
-                <!-- Password Input -->
-                <div class="space-y-2">
-                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Security Key / Password</label>
-                    <div class="relative group">
-                        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                            <i class="ri-lock-2-fill text-slate-500 group-focus-within:text-[#C9A84C] transition-colors"></i>
-                        </div>
-                        <input [type]="showPassword() ? 'text' : 'password'" formControlName="password"
-                               class="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-12 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-[#C9A84C]/50 focus:ring-4 focus:ring-[#C9A84C]/10 transition-all font-mono"
-                               placeholder="••••••••••••" />
-                        <button type="button" (click)="togglePassword()" class="absolute inset-y-0 right-0 pr-5 flex items-center text-slate-500 hover:text-white transition-colors">
-                            <i [class]="showPassword() ? 'ri-eye-off-line' : 'ri-eye-line'"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Authentication Trigger -->
-                <button type="submit" [disabled]="loginForm.invalid || isProcessing()"
-                        class="w-full bg-gradient-to-r from-[#1b4332] to-[#0d1a0f] hover:from-[#2a614a] hover:to-[#1b4332] text-[#C9A84C] rounded-2xl py-5 font-black uppercase tracking-[0.2em] text-xs shadow-2xl shadow-[#1b4332]/20 transition-all active:scale-[0.98] disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-3">
-                    @if(isProcessing()) {
-                        <div class="w-4 h-4 border-2 border-[#C9A84C] border-t-transparent rounded-full animate-spin"></div>
-                        <span>Verifying...</span>
-                    } @else {
-                        <span>Initialize Session</span>
-                        <i class="ri-arrow-right-line text-lg"></i>
-                    }
-                </button>
-            </form>
-
-            <div class="mt-12 flex flex-col items-center space-y-4">
-                <a routerLink="/login" class="text-slate-500 hover:text-white transition-colors text-[10px] font-black uppercase tracking-widest flex items-center gap-2 group">
-                    <i class="ri-user-fill text-lg"></i>
-                    <span>Return to Customer Terminal</span>
-                    <i class="ri-arrow-right-s-line transition-transform group-hover:translate-x-1"></i>
-                </a>
-                <div class="h-px w-20 bg-white/5"></div>
-                <p class="text-[9px] text-slate-700 font-bold uppercase tracking-[0.4em]">Confidential Property of Dogo Finance</p>
-            </div>
+    <!-- Email Input -->
+    <div class="space-y-2">
+      <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2 ml-1">Staff ID / Email</label>
+      <div class="relative group">
+        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+          <i class="ri-mail-fill text-gray-400 group-focus-within:text-[var(--dogo-secondary)] transition-colors"></i>
         </div>
+        <input type="email" formControlName="email" 
+               class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl pl-12 pr-5 font-medium text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:ring-4 focus:ring-[var(--dogo-secondary)]/10 transition-all placeholder:text-gray-400"
+               placeholder="admin@dogofinance.com" />
+      </div>
     </div>
 
-    <!-- Security Overlay Bricks -->
-    <div class="absolute bottom-10 left-10 opacity-10 pointer-events-none select-none z-10 hidden xl:block">
-        <p class="text-[60px] leading-none font-black text-white mix-blend-overlay">DOGO</p>
-        <p class="text-[60px] leading-none font-black text-white mix-blend-overlay -mt-5">ADMIN</p>
+    <!-- Password Input -->
+    <div class="space-y-2">
+      <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2 ml-1">Security Key / Password</label>
+      <div class="relative group">
+        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+          <i class="ri-lock-2-fill text-gray-400 group-focus-within:text-[var(--dogo-secondary)] transition-colors"></i>
+        </div>
+        <input [type]="showPassword() ? 'text' : 'password'" formControlName="password"
+               class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl pl-12 pr-12 font-medium text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:ring-4 focus:ring-[var(--dogo-secondary)]/10 transition-all placeholder:text-gray-400"
+               placeholder="••••••••" />
+        <button type="button" (click)="togglePassword()" class="absolute inset-y-0 right-0 pr-5 flex items-center text-gray-400 hover:text-[var(--dogo-primary)] transition-colors">
+          <i [class]="showPassword() ? 'ri-eye-off-line' : 'ri-eye-line'"></i>
+        </button>
+      </div>
     </div>
-</div>
+
+    <!-- Authentication Trigger -->
+    <button type="submit" [disabled]="loginForm.invalid || isProcessing()"
+            class="w-full h-14 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] hover:shadow-xl hover:shadow-[var(--dogo-primary)]/20 transition-all uppercase tracking-widest text-sm mt-8 disabled:opacity-70 flex items-center justify-center gap-2">
+      @if(isProcessing()) {
+        <i class="ri-loader-4-line animate-spin text-lg"></i> Verifying...
+      } @else {
+        Initialize Session
+      }
+    </button>
+  </form>
+
+  <div class="mt-12 text-center">
+    <p class="text-[10px] text-[var(--dogo-muted)] font-bold uppercase tracking-[0.4em]">Confidential Property of Dogo Finance</p>
+  </div>
+
+</app-auth-layout>
+

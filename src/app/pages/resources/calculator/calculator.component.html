@@ -1,63 +1,63 @@
-<section class="pt-32 pb-24 bg-[#f8f7f2] relative overflow-hidden dogo-pattern">
+<section class="pt-32 pb-24 bg-[var(--dogo-cream)] relative overflow-hidden dogo-pattern">
   <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
     <div class="text-center mb-20 animate-fade-in">
       <div class="halal-badge mb-8 mx-auto">
         <i class="ri-calculator-line"></i>
         <span>Halal Profit Estimator</span>
       </div>
-      <h1 class="text-5xl md:text-[80px] font-black leading-[0.95] mb-8 tracking-tighter text-[#0d1a0f]">
-        Watch your <br><span class="text-[#1B4332]">money grow.</span>
+      <h1 class="text-5xl md:text-[80px] font-black leading-[0.95] mb-8 tracking-tighter text-[var(--dogo-dark)]">
+        Watch your <br><span class="text-[var(--dogo-primary)]">money grow.</span>
       </h1>
-      <p class="text-xl text-[#0d1a0f]/60 max-w-2xl mx-auto leading-relaxed font-medium">
+      <p class="text-xl text-[var(--dogo-dark)]/60 max-w-2xl mx-auto leading-relaxed font-medium">
         Use our estimator to see how much your savings could grow over time with the power of Halal profit-sharing.
       </p>
     </div>
 
     <div class="grid lg:grid-cols-2 gap-16 items-start">
       <!-- Inputs Column -->
-      <div class="bg-white rounded-[60px] p-10 md:p-16 shadow-[0_20px_40px_-10px_rgba(27,67,50,0.1)] border border-[#1B4332]/5 flex flex-col gap-12">
+      <div class="bg-white rounded-[60px] p-10 md:p-16 shadow-[0_20px_40px_-10px_rgba(27,67,50,0.1)] border border-[var(--dogo-primary)]/5 flex flex-col gap-12">
         <!-- Initial Amount -->
         <div class="space-y-6">
            <div class="flex items-center justify-between">
-              <label class="text-sm font-black text-[#6B7280] uppercase tracking-widest">Initial Balance</label>
-              <span class="text-2xl font-black text-[#0d1a0f]">₦{{ initialAmount().toLocaleString() }}</span>
+              <label class="text-sm font-black text-[var(--dogo-muted)] uppercase tracking-widest">Initial Balance</label>
+              <span class="text-2xl font-black text-[var(--dogo-dark)]">₦{{ initialAmount().toLocaleString() }}</span>
            </div>
-           <input type="range" [value]="initialAmount()" (input)="updateInitial($event)" min="0" max="10000000" step="10000" class="w-full h-3 bg-[#e8f5ee] rounded-full appearance-none cursor-pointer accent-[#1B4332]">
+           <input type="range" [value]="initialAmount()" (input)="updateInitial($event)" min="0" max="10000000" step="10000" class="w-full h-3 bg-[var(--dogo-cream)] rounded-full appearance-none cursor-pointer accent-[var(--dogo-primary)]">
         </div>
 
         <!-- Monthly Contributions -->
         <div class="space-y-6">
            <div class="flex items-center justify-between">
-              <label class="text-sm font-black text-[#6B7280] uppercase tracking-widest">Monthly Savings</label>
-              <span class="text-2xl font-black text-[#0d1a0f]">₦{{ monthlyAmount().toLocaleString() }}</span>
+              <label class="text-sm font-black text-[var(--dogo-muted)] uppercase tracking-widest">Monthly Savings</label>
+              <span class="text-2xl font-black text-[var(--dogo-dark)]">₦{{ monthlyAmount().toLocaleString() }}</span>
            </div>
-           <input type="range" [value]="monthlyAmount()" (input)="updateMonthly($event)" min="0" max="1000000" step="5000" class="w-full h-3 bg-[#e8f5ee] rounded-full appearance-none cursor-pointer accent-[#1B4332]">
+           <input type="range" [value]="monthlyAmount()" (input)="updateMonthly($event)" min="0" max="1000000" step="5000" class="w-full h-3 bg-[var(--dogo-cream)] rounded-full appearance-none cursor-pointer accent-[var(--dogo-primary)]">
         </div>
 
         <!-- Duration -->
         <div class="space-y-6">
            <div class="flex items-center justify-between">
-              <label class="text-sm font-black text-[#6B7280] uppercase tracking-widest">Duration (Years)</label>
-              <span class="text-2xl font-black text-[#0d1a0f]">{{ durationYears() }} Years</span>
+              <label class="text-sm font-black text-[var(--dogo-muted)] uppercase tracking-widest">Duration (Years)</label>
+              <span class="text-2xl font-black text-[var(--dogo-dark)]">{{ durationYears() }} Years</span>
            </div>
-           <input type="range" [value]="durationYears()" (input)="updateDuration($event)" min="1" max="40" step="1" class="w-full h-3 bg-[#e8f5ee] rounded-full appearance-none cursor-pointer accent-[#1B4332]">
+           <input type="range" [value]="durationYears()" (input)="updateDuration($event)" min="1" max="40" step="1" class="w-full h-3 bg-[var(--dogo-cream)] rounded-full appearance-none cursor-pointer accent-[var(--dogo-primary)]">
         </div>
 
         <!-- Profit Rate -->
         <div class="space-y-6">
            <div class="flex items-center justify-between">
-              <label class="text-sm font-black text-[#6B7280] uppercase tracking-widest">Estimated Annual Profit</label>
-              <span class="text-2xl font-black text-[#0d1a0f]">{{ profitRate() }}% p.a</span>
+              <label class="text-sm font-black text-[var(--dogo-muted)] uppercase tracking-widest">Estimated Annual Profit</label>
+              <span class="text-2xl font-black text-[var(--dogo-dark)]">{{ profitRate() }}% p.a</span>
            </div>
-           <input type="range" [value]="profitRate()" (input)="updateRate($event)" min="1" max="50" step="0.5" class="w-full h-3 bg-[#e8f5ee] rounded-full appearance-none cursor-pointer accent-[#1B4332]">
+           <input type="range" [value]="profitRate()" (input)="updateRate($event)" min="1" max="50" step="0.5" class="w-full h-3 bg-[var(--dogo-cream)] rounded-full appearance-none cursor-pointer accent-[var(--dogo-primary)]">
         </div>
       </div>
 
       <!-- Results Column -->
       <div class="flex flex-col gap-10">
-         <div class="bg-[#1B4332] rounded-[60px] p-12 text-white relative overflow-hidden shadow-[0_40px_80px_-20px_rgba(27,67,50,0.4)]">
+         <div class="bg-[var(--dogo-primary)] rounded-[60px] p-12 text-white relative overflow-hidden shadow-[0_40px_80px_-20px_rgba(27,67,50,0.4)]">
             <div class="relative z-10">
-               <p class="text-xs font-black uppercase tracking-widest text-[#C9A84C] mb-6">Estimated Total Savings</p>
+               <p class="text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)] mb-6">Estimated Total Savings</p>
                <h2 class="text-5xl md:text-7xl font-black mb-10 text-white tracking-tighter">₦{{ results().totalSavings.toLocaleString(undefined, { maximumFractionDigits: 0 }) }}</h2>
                
                <div class="grid grid-cols-2 gap-8 pt-10 border-t border-white/10">
@@ -66,24 +66,26 @@
                      <p class="text-2xl font-black">₦{{ results().totalInvested.toLocaleString() }}</p>
                   </div>
                   <div>
-                     <p class="text-[10px] font-black uppercase text-[#C9A84C]/80 tracking-widest mb-2">Profit Earned</p>
-                     <p class="text-2xl font-black text-[#C9A84C]">₦{{ results().totalProfit.toLocaleString(undefined, { maximumFractionDigits: 0 }) }}</p>
+                     <p class="text-[10px] font-black uppercase text-[var(--dogo-secondary)]/80 tracking-widest mb-2">Profit Earned</p>
+                     <p class="text-2xl font-black text-[var(--dogo-secondary)]">₦{{ results().totalProfit.toLocaleString(undefined, { maximumFractionDigits: 0 }) }}</p>
                   </div>
                </div>
             </div>
             
             <!-- Abstract background shape -->
-            <div class="absolute -right-20 -bottom-20 w-80 h-80 rounded-full blur-[100px] opacity-20" style="background: radial-gradient(circle, #C9A84C, transparent)"></div>
+            <div class="absolute -right-20 -bottom-20 w-80 h-80 rounded-full blur-[100px] opacity-20" style="background: radial-gradient(circle, var(--dogo-secondary), transparent)"></div>
          </div>
 
          <!-- CTA Card -->
-         <div class="bg-white border border-[#1B4332]/10 p-10 rounded-[45px] flex flex-col items-center text-center shadow-xl shadow-[#1B4332]/5">
-            <i class="ri-rocket-fill text-6xl text-[#1B4332] mb-6"></i>
-            <h3 class="text-2xl font-black text-[#0d1a0f] mb-4 tracking-tight">Ready to start building?</h3>
-            <p class="text-[#0d1a0f]/60 font-medium mb-8">Open a DOGO Finance account today and let your money work for you.</p>
-            <button class="bg-[#1B4332] px-12 py-5 rounded-2xl font-black text-[#C9A84C] hover:bg-[#2D6A4F] transition-all shadow-xl shadow-[#1B4332]/20">Create Free Account</button>
+         <div class="bg-white border border-[var(--dogo-primary)]/10 p-10 rounded-[45px] flex flex-col items-center text-center shadow-xl shadow-[var(--dogo-primary)]/5">
+            <i class="ri-rocket-fill text-6xl text-[var(--dogo-primary)] mb-6"></i>
+            <h3 class="text-2xl font-black text-[var(--dogo-dark)] mb-4 tracking-tight">Ready to start building?</h3>
+            <p class="text-[var(--dogo-dark)]/60 font-medium mb-8">Open a DOGO Finance account today and let your money work for you.</p>
+            <button class="bg-[var(--dogo-primary)] px-12 py-5 rounded-2xl font-black text-white hover:bg-[var(--dogo-primary-soft)] transition-all shadow-xl shadow-[var(--dogo-primary)]/20">Create Free Account</button>
          </div>
       </div>
     </div>
   </div>
 </section>
+
+

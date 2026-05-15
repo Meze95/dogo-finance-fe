@@ -3,7 +3,7 @@
 }
 
 .dogo-pattern {
-  background-image: radial-gradient(#1B4332 0.5px, transparent 0.5px);
+  background-image: radial-gradient(var(--dogo-primary) 0.5px, transparent 0.5px);
   background-size: 24px 24px;
 }
 
@@ -35,3 +35,4 @@
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
+

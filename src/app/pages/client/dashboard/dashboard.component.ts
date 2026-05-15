@@ -185,7 +185,7 @@ export class ClientDashboardComponent implements OnInit {
                         value: inv.currentValue || 0,
                         growth: inv.growth || 0,
                         icon: 'ri-pie-chart-2-fill',
-                        color: inv.riskLevel === 'High' ? 'bg-red-600' : inv.riskLevel === 'Medium' ? 'bg-orange-500' : 'bg-[#1B4332]'
+                        color: inv.riskLevel === 'High' ? 'bg-red-600' : inv.riskLevel === 'Medium' ? 'bg-orange-500' : 'bg-[var(--dogo-primary)]'
                     }));
                     this.activeInvestments.set(mapped);
                 }
@@ -226,7 +226,7 @@ export class ClientDashboardComponent implements OnInit {
   }
 
   getAssetColor(index: number): string {
-    const colors = ['bg-[#1B4332]', 'bg-[#C9A84C]', 'bg-[#2D6A4F]', 'bg-[#0d1a0f]', 'bg-[#40916c]'];
+    const colors = ['bg-[var(--dogo-primary)]', 'bg-[var(--dogo-secondary)]', 'bg-[var(--dogo-primary-soft)]', 'bg-[var(--dogo-dark)]', 'bg-[var(--dogo-primary)]'];
     return colors[index % colors.length];
   }
 
@@ -266,7 +266,7 @@ export class ClientDashboardComponent implements OnInit {
             icon: 'error',
             title: 'Verification Failed',
             text: res.message || 'We could not verify your BVN.',
-            confirmButtonColor: '#1B4332'
+            confirmButtonColor: 'var(--dogo-primary)'
           });
         }
       },
@@ -276,7 +276,7 @@ export class ClientDashboardComponent implements OnInit {
           icon: 'error',
           title: 'Error',
           text: err.error?.message || 'Server error during BVN verification.',
-          confirmButtonColor: '#1B4332'
+          confirmButtonColor: 'var(--dogo-primary)'
         });
       }
     });
@@ -325,7 +325,7 @@ export class ClientDashboardComponent implements OnInit {
                 icon: 'error',
                 title: 'Failed to resend',
                 text: err.error?.message || 'Please try again later.',
-                confirmButtonColor: '#1B4332'
+                confirmButtonColor: 'var(--dogo-primary)'
             });
         }
     });
@@ -363,7 +363,7 @@ export class ClientDashboardComponent implements OnInit {
                 icon: 'error',
                 title: 'Failed to resend',
                 text: err.error?.message || 'Please try again later.',
-                confirmButtonColor: '#1B4332'
+                confirmButtonColor: 'var(--dogo-primary)'
             });
         }
     });
@@ -391,8 +391,8 @@ export class ClientDashboardComponent implements OnInit {
             icon: 'success',
             title: 'Investment Successful',
             text: `You have successfully invested ₦${amount.toLocaleString()} in ${this.selectedPortfolio()?.name}`,
-            confirmButtonColor: '#1B4332',
-            background: '#f8f7f2',
+            confirmButtonColor: 'var(--dogo-primary)',
+            background: 'var(--dogo-cream)',
             customClass: { popup: 'rounded-[30px]' }
           });
           
@@ -412,8 +412,8 @@ export class ClientDashboardComponent implements OnInit {
               icon: 'error',
               title: 'Investment Failed',
               text: res.message || 'We could not process your investment.',
-              confirmButtonColor: '#1B4332',
-              background: '#f8f7f2'
+              confirmButtonColor: 'var(--dogo-primary)',
+              background: 'var(--dogo-cream)'
             });
           }
         }
@@ -433,8 +433,8 @@ export class ClientDashboardComponent implements OnInit {
             icon: 'error',
             title: 'Investment Error',
             text: msg || 'An error occurred during investment.',
-            confirmButtonColor: '#1B4332',
-            background: '#f8f7f2',
+            confirmButtonColor: 'var(--dogo-primary)',
+            background: 'var(--dogo-cream)',
             customClass: { popup: 'rounded-[30px]' }
           });
         }
@@ -550,7 +550,7 @@ export class ClientDashboardComponent implements OnInit {
       case 'mastercard': return 'fa-brands fa-cc-mastercard text-orange-500';
       case 'verve': return 'ri-bank-card-fill text-green-600';
       case 'amex': return 'fa-brands fa-cc-amex text-blue-400';
-      default: return 'ri-bank-card-line text-[#1B4332]/20';
+      default: return 'ri-bank-card-line text-[var(--dogo-primary)]/20';
     }
   });
 
@@ -727,7 +727,7 @@ export class ClientDashboardComponent implements OnInit {
             icon: 'error',
             title: 'Upload Failed',
             text: err.error?.message || 'We could not process your document.',
-            confirmButtonColor: '#1B4332'
+            confirmButtonColor: 'var(--dogo-primary)'
           });
         }
       });
@@ -1185,7 +1185,7 @@ export class ClientDashboardComponent implements OnInit {
               title: 'Withdrawal Initialized',
               text: res.message || 'Your withdrawal is being processed.',
               icon: 'success',
-              confirmButtonColor: '#1B4332'
+              confirmButtonColor: 'var(--dogo-primary)'
             });
           } else {
             this.errorMessage.set(res.message || 'Withdrawal failed');
@@ -1226,7 +1226,7 @@ export class ClientDashboardComponent implements OnInit {
     switch (type) {
       case 'deposit': return 'ri-arrow-down-circle-fill text-green-500';
       case 'withdrawal': return 'ri-arrow-up-circle-fill text-red-500';
-      case 'profit': return 'ri-medal-fill text-[#C9A84C]';
+      case 'profit': return 'ri-medal-fill text-[var(--dogo-secondary)]';
       default: return 'ri-briefcase-4-fill text-blue-500';
     }
   }
@@ -1244,7 +1244,7 @@ export class ClientDashboardComponent implements OnInit {
     switch (type) {
       case 'deposit': return 'bg-green-500';
       case 'withdrawal': return 'bg-red-500';
-      case 'profit': return 'bg-[#C9A84C]';
+      case 'profit': return 'bg-[var(--dogo-secondary)]';
       default: return 'bg-blue-500';
     }
   }
@@ -1314,3 +1314,5 @@ export class ClientDashboardComponent implements OnInit {
     input.value = value;
   }
 }
+
+

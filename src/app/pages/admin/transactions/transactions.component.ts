@@ -95,10 +95,10 @@ export class AdminTransactionsComponent {
 
   getIconForType(type: string) {
     switch (type) {
-      case 'deposit':    return 'ri-download-cloud-2-fill text-[#40916C] bg-[#40916C]/10';
+      case 'deposit':    return 'ri-download-cloud-2-fill text-[var(--dogo-primary)] bg-[var(--dogo-primary)]/10';
       case 'withdrawal': return 'ri-upload-cloud-2-fill text-red-500 bg-red-500/10';
-      case 'profit':     return 'ri-sparkling-fill text-[#C9A84C] bg-[#C9A84C]/10';
-      case 'investment': return 'ri-briefcase-4-fill text-[#1B4332] bg-[#1B4332]/10';
+      case 'profit':     return 'ri-sparkling-fill text-[var(--dogo-secondary)] bg-[var(--dogo-secondary)]/10';
+      case 'investment': return 'ri-briefcase-4-fill text-[var(--dogo-primary)] bg-[var(--dogo-primary)]/10';
       case 'liquidation': return 'ri-corner-up-right-double-fill text-blue-600 bg-blue-600/10';
       default:           return 'ri-exchange-funds-fill text-gray-500 bg-gray-500/10';
     }
@@ -114,3 +114,5 @@ export class AdminTransactionsComponent {
     }
   }
 }
+
+

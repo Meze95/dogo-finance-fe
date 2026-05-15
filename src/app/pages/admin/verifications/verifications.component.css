@@ -12,14 +12,15 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-    background: #f8f7f2;
+    background: var(--dogo-cream);
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #1B433220;
+    background: var(--dogo-primary)20;
     border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #1B433240;
+    background: var(--dogo-primary)40;
 }
+

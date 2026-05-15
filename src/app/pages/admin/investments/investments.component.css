@@ -13,10 +13,11 @@
 }
 
 .custom-scrollbar-h::-webkit-scrollbar-track {
-    background: #f8f7f2;
+    background: var(--dogo-cream);
 }
 
 .custom-scrollbar-h::-webkit-scrollbar-thumb {
-    background: #1B4332;
+    background: var(--dogo-primary);
     border-radius: 10px;
 }
+

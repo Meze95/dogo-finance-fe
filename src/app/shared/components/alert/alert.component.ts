@@ -9,13 +9,13 @@ import { AlertService } from '../../services/alert.service';
   template: `
     <div class="fixed top-6 right-6 z-[9999] flex flex-col gap-3 pointer-events-none">
       @for (alert of alertService.alerts(); track alert.id) {
-        <div class="w-80 overflow-hidden bg-[#f8f7f2] border rounded-[20px] shadow-2xl pointer-events-auto transition-all animate-slide-left p-4 flex gap-4 items-start relative border-white/50"
+        <div class="w-80 overflow-hidden bg-[var(--dogo-cream)] border rounded-[20px] shadow-2xl pointer-events-auto transition-all animate-slide-left p-4 flex gap-4 items-start relative border-white/50"
              [ngClass]="{
                'shadow-green-900/10 border-t-green-200': alert.type === 'success',
                'shadow-red-900/10 border-t-red-200': alert.type === 'error',
                'shadow-blue-900/10 border-t-blue-200': alert.type === 'info',
                'shadow-orange-900/10 border-t-orange-200': alert.type === 'warning',
-               'shadow-[#1B4332]/10 border-t-[#C9A84C]': alert.type === 'loading'
+               'shadow-[var(--dogo-primary)]/10 border-t-[var(--dogo-secondary)]': alert.type === 'loading'
              }">
           
           <div class="w-10 h-10 rounded-2xl shrink-0 flex items-center justify-center border bg-white"
@@ -24,7 +24,7 @@ import { AlertService } from '../../services/alert.service';
                  'text-red-500 border-red-100': alert.type === 'error',
                  'text-blue-500 border-blue-100': alert.type === 'info',
                  'text-orange-500 border-orange-100': alert.type === 'warning',
-                 'text-[#C9A84C] border-[#C9A84C]/20': alert.type === 'loading'
+                 'text-[var(--dogo-secondary)] border-[var(--dogo-secondary)]/20': alert.type === 'loading'
                }">
             @if (alert.type === 'success') { <i class="ri-checkbox-circle-fill text-xl"></i> }
             @if (alert.type === 'error') { <i class="ri-error-warning-fill text-xl"></i> }
@@ -36,7 +36,7 @@ import { AlertService } from '../../services/alert.service';
           <div class="flex-grow pt-0.5">
             <h4 class="text-[12px] font-black tracking-widest uppercase mb-1"
                 [ngClass]="{
-                   'text-[#1B4332]': alert.type === 'loading',
+                   'text-[var(--dogo-primary)]': alert.type === 'loading',
                    'text-slate-800': alert.type !== 'loading'
                 }">
                 {{ alert.title }}
@@ -64,3 +64,4 @@ import { AlertService } from '../../services/alert.service';
 export class AlertComponent {
   alertService = inject(AlertService);
 }
+

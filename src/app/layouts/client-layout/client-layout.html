@@ -1,20 +1,20 @@
-<div class="h-screen bg-[#f8f7f2] font-sans flex overflow-hidden">
+<div class="h-screen bg-[var(--dogo-cream)] font-sans flex overflow-hidden">
 
   <!-- Sidebar Overlay (Mobile) -->
   @if(isMobileMenuOpen()) {
-  <div (click)="toggleMobileMenu()" class="fixed inset-0 bg-[#0d1a0f]/60 backdrop-blur-md z-[60] lg:hidden"></div>
+  <div (click)="toggleMobileMenu()" class="fixed inset-0 bg-[var(--dogo-dark)]/60 backdrop-blur-md z-[60] lg:hidden"></div>
   }
 
   <!-- Logout Process Overlay -->
   @if(isLoggingOut()) {
-  <div class="fixed inset-0 bg-[#0d1a0f]/80 backdrop-blur-sm z-[100] flex flex-col items-center justify-center zoom-in">
+  <div class="fixed inset-0 bg-[var(--dogo-dark)]/80 backdrop-blur-sm z-[100] flex flex-col items-center justify-center zoom-in">
     <div
-      class="w-16 h-16 rounded-2xl bg-[#1B4332] border border-[#C9A84C]/30 flex items-center justify-center mb-4 shadow-2xl shadow-[#C9A84C]/20">
-      <i class="ri-logout-circle-r-line text-3xl text-[#C9A84C] animate-pulse"></i>
+      class="w-16 h-16 rounded-2xl bg-[var(--dogo-primary)] border border-[var(--dogo-secondary)]/30 flex items-center justify-center mb-4 shadow-2xl shadow-[var(--dogo-secondary)]/20">
+      <i class="ri-logout-circle-r-line text-3xl text-[var(--dogo-secondary)] animate-pulse"></i>
     </div>
     <h3 class="text-xl font-black text-white tracking-widest uppercase italic">Securely Logging Out</h3>
     <p class="text-sm font-medium text-white/50 mt-2 flex items-center gap-2">
-      <i class="ri-loader-4-line animate-spin text-[#C9A84C]"></i> Committing session logs...
+      <i class="ri-loader-4-line animate-spin text-[var(--dogo-secondary)]"></i> Committing session logs...
     </p>
   </div>
   }
@@ -25,32 +25,32 @@
     [style.minWidth]="isSidebarOpen() ? '18rem' : '5rem'"
     [class.translate-x-0]="isMobileMenuOpen()"
     [class.-translate-x-full]="!isMobileMenuOpen()"
-    class="shrink-0 fixed lg:static inset-y-0 left-0 bg-[#0d1a0f] text-white z-[70] flex flex-col border-r border-[#1B4332]/20 shadow-2xl overflow-hidden lg:translate-x-0"
+    class="shrink-0 fixed lg:static inset-y-0 left-0 bg-[var(--dogo-dark)] text-white z-[70] flex flex-col border-r border-[var(--dogo-primary)]/20 shadow-2xl overflow-hidden lg:translate-x-0"
     style="transition: width 0.4s cubic-bezier(0.19, 1, 0.22, 1), transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);">
 
     <!-- Brand Header -->
-    <div class="h-20 flex items-center px-6 shrink-0 border-b border-white/5 bg-[#1B4332]/20">
+    <div class="h-20 flex items-center px-6 shrink-0 border-b border-white/5 bg-[var(--dogo-primary)]/20">
       <div class="flex items-center space-x-4 overflow-hidden">
         <div
-          class="w-10 h-10 bg-[#C9A84C] rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-[#C9A84C]/20">
-          <i class="ri-shield-check-fill text-[#1B4332] text-2xl"></i>
+          class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-[var(--dogo-primary)]/10 border border-white/10">
+          <img src="/brand/icon.png" alt="Dogo" class="w-7 h-7 object-contain">
         </div>
         <div class="flex flex-col leading-none transition-opacity duration-300" [class.opacity-0]="!isSidebarOpen()">
           <span class="text-xl font-black tracking-tight text-white uppercase italic">DOGO</span>
-          <span class="text-[9px] font-bold text-[#C9A84C] tracking-[0.2em] uppercase mt-0.5 whitespace-nowrap">Halal Finance</span>
+          <span class="text-[9px] font-bold text-[var(--dogo-secondary)] tracking-[0.2em] uppercase mt-0.5 whitespace-nowrap">Halal Finance</span>
         </div>
       </div>
     </div>
 
     <!-- Navigation Area -->
     <div class="flex-grow flex flex-col py-8 overflow-y-auto custom-scrollbar px-3 space-y-2">
-      <p class="px-5 text-[10px] font-black uppercase tracking-[0.3em] text-[#C9A84C] mb-4 transition-opacity shrink-0 whitespace-nowrap"
+      <p class="px-5 text-[10px] font-black uppercase tracking-[0.3em] text-[var(--dogo-secondary)] mb-4 transition-opacity shrink-0 whitespace-nowrap"
         [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">Main System</p>
 
       @for(item of menuItems; track item.label) {
-      <a [routerLink]="item.link" routerLinkActive="bg-[#C9A84C] text-[#1B4332] shadow-xl shadow-[#C9A84C]/20"
+      <a [routerLink]="item.link" routerLinkActive="bg-white/10 text-white shadow-lg border-l-4 border-[var(--dogo-secondary)]"
         (click)="isMobileMenuOpen() ? toggleMobileMenu() : null"
-        class="flex items-center space-x-4 h-12 rounded-2xl transition-all group px-4 hover:bg-[#1B4332]/40 text-white/80 hover:text-[#C9A84C]">
+        class="flex items-center space-x-4 h-12 rounded-2xl transition-all group px-4 hover:bg-[var(--dogo-primary)]/40 text-white/60 hover:text-white border-l-4 border-transparent">
         <div class="w-6 flex justify-center shrink-0">
           <i [class]="item.icon" class="text-2xl transition-transform group-hover:scale-110"></i>
         </div>
@@ -67,7 +67,7 @@
           [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">Management</p>
 
         @for(item of managementItems; track item.label) {
-        <a [routerLink]="item.link" routerLinkActive="bg-white/10 text-[#C9A84C]"
+        <a [routerLink]="item.link" routerLinkActive="bg-white/10 text-[var(--dogo-secondary)]"
           (click)="isMobileMenuOpen() ? toggleMobileMenu() : null"
           class="flex items-center space-x-4 h-12 rounded-2xl transition-all group px-4 hover:bg-white/5 text-white/60 hover:text-white">
           <div class="w-6 flex justify-center shrink-0">
@@ -114,19 +114,19 @@
 
     <!-- CLIENT HEADER -->
     <header
-      class="h-20 shrink-0 bg-white/80 backdrop-blur-md border-b border-[#1B4332]/10 flex items-center justify-between px-4 lg:px-10 z-[40]">
+      class="h-20 shrink-0 bg-white/80 backdrop-blur-md border-b border-[var(--dogo-primary)]/10 flex items-center justify-between px-4 lg:px-10 z-[40]">
 
       <!-- Mobile Toggle -->
       <button (click)="toggleMobileMenu()"
-        class="lg:hidden w-12 h-12 flex items-center justify-center text-[#1B4332] bg-[#1B4332]/5 rounded-xl">
+        class="lg:hidden w-12 h-12 flex items-center justify-center text-[var(--dogo-primary)] bg-[var(--dogo-primary)]/5 rounded-xl">
         <i class="ri-menu-unfold-fill text-2xl"></i>
       </button>
 
       <!-- Welcome Text (Desktop) -->
       <div class="hidden md:block">
-        <h1 class="text-xl font-black text-[#0d1a0f] tracking-tight">Salaam, {{ userName() }} 👋</h1>
-        <p class="text-[11px] font-bold text-[#1B4332]/60 uppercase tracking-widest mt-0.5 flex items-center">
-          <span class="w-2 h-2 rounded-full bg-[#C9A84C] mr-2 shadow-sm animate-pulse"></span> Grow your wealth the halal way
+        <h1 class="text-xl font-black text-[var(--dogo-dark)] tracking-tight">Salaam, {{ userName() }} 👋</h1>
+        <p class="text-[11px] font-bold text-[var(--dogo-primary)]/60 uppercase tracking-widest mt-0.5 flex items-center">
+          <span class="w-2 h-2 rounded-full bg-[var(--dogo-secondary)] mr-2 shadow-sm animate-pulse"></span> Grow your wealth the halal way
         </p>
       </div>
 
@@ -135,30 +135,30 @@
 
         <!-- Search bar (Desktop) -->
         <div
-          class="hidden sm:flex items-center bg-[#f8f7f2] rounded-2xl px-4 py-2 border border-[#1B4332]/5 group focus-within:border-[#C9A84C] transition-all">
-          <i class="ri-search-line text-[#6B7280]"></i>
+          class="hidden sm:flex items-center bg-[var(--dogo-cream)] rounded-2xl px-4 py-2 border border-[var(--dogo-primary)]/5 group focus-within:border-[var(--dogo-secondary)] transition-all">
+          <i class="ri-search-line text-[var(--dogo-muted)]"></i>
           <input type="text" placeholder="Search..."
-            class="bg-transparent border-none focus:outline-none px-3 text-sm font-medium w-24 md:w-48 text-[#0d1a0f]">
+            class="bg-transparent border-none focus:outline-none px-3 text-sm font-medium w-24 md:w-48 text-[var(--dogo-dark)]">
           <span
-            class="hidden xl:block text-[10px] font-black bg-white px-2 py-0.5 border border-[#1B4332]/10 rounded-md text-[#6B7280]">ALT
+            class="hidden xl:block text-[10px] font-black bg-white px-2 py-0.5 border border-[var(--dogo-primary)]/10 rounded-md text-[var(--dogo-muted)]">ALT
             + S</span>
         </div>
 
         <button
-          class="w-10 h-10 rounded-xl bg-white border border-[#1B4332]/10 flex items-center justify-center text-[#1B4332] hover:bg-white hover:shadow-xl transition-all relative group">
-          <i class="ri-notification-3-line text-xl group-hover:text-[#C9A84C]"></i>
+          class="w-10 h-10 rounded-xl bg-white border border-[var(--dogo-primary)]/10 flex items-center justify-center text-[var(--dogo-primary)] hover:bg-white hover:shadow-xl transition-all relative group">
+          <i class="ri-notification-3-line text-xl group-hover:text-[var(--dogo-secondary)]"></i>
         </button>
 
         <!-- Client Profile Pill -->
         <div routerLink="/client/profile"
-          class="flex items-center bg-[#1B4332] p-1.5 rounded-2xl shadow-xl shadow-[#0d1a0f]/10 group cursor-pointer border border-white/10 hover:border-[#C9A84C] transition-all">
+          class="flex items-center bg-white p-1.5 rounded-2xl shadow-sm border border-[var(--dogo-primary)]/5 group cursor-pointer hover:border-[var(--dogo-secondary)] hover:shadow-xl transition-all">
           <div
-            class="w-8 lg:w-9 h-8 lg:h-9 bg-[#C9A84C] rounded-xl flex items-center justify-center font-black text-[#1B4332]">
+            class="w-8 lg:w-9 h-8 lg:h-9 bg-[var(--dogo-cream)] rounded-xl flex items-center justify-center font-black text-[var(--dogo-primary)] group-hover:bg-[var(--dogo-primary)] group-hover:text-white transition-all">
             {{ userInitials() }}
           </div>
           <div class="px-3 hidden md:block">
-            <p class="text-[11px] font-black text-white leading-none uppercase tracking-tighter">{{ userName() }}</p>
-            <!-- <p class="text-[10px] font-bold text-[#C9A84C]/50 leading-none mt-1">₦4.2M Portfolio</p> -->
+            <p class="text-[11px] font-black text-[var(--dogo-dark)] leading-none uppercase tracking-tighter group-hover:text-[var(--dogo-primary)] transition-colors">{{ userName() }}</p>
+            <p class="text-[9px] font-bold text-[var(--dogo-secondary)] leading-none mt-1 uppercase tracking-widest">Active Profile</p>
           </div>
         </div>
       </div>

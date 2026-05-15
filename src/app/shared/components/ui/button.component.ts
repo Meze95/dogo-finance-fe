@@ -49,19 +49,19 @@ export class ButtonComponent {
     // Variant styles
     switch (this.variant()) {
       case 'primary': 
-        base = 'bg-[#1B4332] text-white hover:bg-[#2D6A4F] hover:shadow-xl hover:shadow-[#1B4332]/20';
+        base = 'bg-[var(--dogo-primary)] text-white hover:bg-[var(--dogo-primary-soft)] hover:shadow-xl hover:shadow-[var(--dogo-primary)]/20';
         break;
       case 'secondary':
-        base = 'bg-[#C9A84C] text-[#1B4332] hover:bg-[#f0d98b] hover:shadow-xl hover:shadow-[#C9A84C]/20';
+        base = 'bg-[var(--dogo-secondary)] text-white hover:bg-[var(--dogo-primary-soft)] hover:shadow-xl hover:shadow-[var(--dogo-secondary)]/20';
         break;
       case 'outline':
-        base = 'bg-transparent border-2 border-[#1B4332]/10 text-[#1B4332] hover:border-[#1B4332] hover:bg-[#1B4332]/5';
+        base = 'bg-transparent border-2 border-[var(--dogo-primary)]/10 text-[var(--dogo-primary)] hover:border-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)]/5';
         break;
       case 'danger':
         base = 'bg-red-500 text-white hover:bg-red-600 hover:shadow-xl hover:shadow-red-500/20';
         break;
       case 'ghost':
-        base = 'bg-transparent text-[#6B7280] hover:text-[#1B4332] hover:bg-[#f8f7f2]';
+        base = 'bg-transparent text-[var(--dogo-muted)] hover:text-[var(--dogo-primary)] hover:bg-[var(--dogo-cream)]';
         break;
     }
 
@@ -82,3 +82,5 @@ export class ButtonComponent {
     }
   }
 }
+
+

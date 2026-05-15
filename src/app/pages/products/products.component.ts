@@ -34,8 +34,8 @@ export const PRODUCTS_DATA: Record<string, ProductData> = {
     minInvestment: '₦10,000',
     tenor: '3, 6, or 12 months',
     icon: 'ri-seedling-fill',
-    accentColor: '#1B4332',
-    accentLight: '#e8f5ee',
+    accentColor: '#4CC9F0',
+    accentLight: 'var(--dogo-cream)',
     features: [
       { icon: 'ri-percent-line', title: '70/30 Profit Split', desc: '70% of profits go to you (Rabb-ul-Mal). 30% goes to DOGO Finance (Mudarib) for management. No interest, no fees.' },
       { icon: 'ri-shield-check-line', title: 'SSB Certified Contract', desc: 'Every Mudarabah contract is reviewed by our Shariah Supervisory Board before activation. Full AAOIFI compliance.' },
@@ -64,13 +64,13 @@ export const PRODUCTS_DATA: Record<string, ProductData> = {
     minInvestment: '₦50,000',
     tenor: '1 to 5 years',
     icon: 'ri-bank-fill',
-    accentColor: '#C9A84C',
-    accentLight: '#fffbeb',
+    accentColor: '#F9C74F',
+    accentLight: 'var(--dogo-cream)',
     features: [
       { icon: 'ri-building-4-line', title: 'Asset-Backed', desc: 'Every Sukuk on our platform is backed by real, tangible assets — real estate, infrastructure, commodities. No speculative instruments.' },
       { icon: 'ri-exchange-line', title: 'Primary & Secondary Market', desc: 'Subscribe to newly issued Sukuk or trade existing certificates in our secondary marketplace.' },
       { icon: 'ri-verified-badge-line', title: 'SSB & SEC Approved', desc: 'Every Sukuk listed on Dogo Finance is pre-screened by our SSB and registered with SEC Nigeria.' },
-      { icon: 'ri-money-naira-circle-line', title: 'Naira-Denominated', desc: 'All Sukuk are priced and returned in Nigerian Naira (₦). No FX risk.' }
+      { icon: 'ri-currency-line', title: 'Naira-Denominated', desc: 'All Sukuk are priced and returned in Nigerian Naira (₦). No FX risk.' }
     ],
     howItWorks: [
       { step: '01', title: 'Browse Available Sukuk', desc: 'Navigate to Invest → Sukuk. View all live Sukuk by type, tenor, and projected return.' },
@@ -93,8 +93,8 @@ export const PRODUCTS_DATA: Record<string, ProductData> = {
     minInvestment: '₦25,000',
     tenor: 'Open-ended',
     icon: 'ri-line-chart-fill',
-    accentColor: '#2D6A4F',
-    accentLight: '#d1fae5',
+    accentColor: '#43AA8B',
+    accentLight: 'var(--dogo-cream)',
     features: [
       { icon: 'ri-robot-line', title: 'AI Haram Screening', desc: 'Real-time screening powered by MSCI Islamic Index data. 7 prohibited criteria checked against every stock automatically.' },
       { icon: 'ri-recycle-line', title: 'Automatic Purification', desc: 'If any stock earns marginal impure income, our engine calculates the exact fraction and routes it to charity on your behalf.' },
@@ -122,8 +122,8 @@ export const PRODUCTS_DATA: Record<string, ProductData> = {
     minInvestment: '₦25,000',
     tenor: '6 or 12 months',
     icon: 'ri-shield-star-fill',
-    accentColor: '#9a7a2b',
-    accentLight: '#fef9ee',
+    accentColor: '#480CA8',
+    accentLight: 'var(--dogo-cream)',
     features: [
       { icon: 'ri-handshake-line', title: 'Fixed Agency Fee', desc: 'DOGO Finance earns a fixed Wakalah fee regardless of profit — aligning our interests with yours.' },
       { icon: 'ri-arrow-up-circle-line', title: 'Above-Target Profits', desc: 'Any returns above the agreed target profit rate are credited directly to you — not retained by DOGO Finance.' },
@@ -150,8 +150,8 @@ export const PRODUCTS_DATA: Record<string, ProductData> = {
     minInvestment: '₦100,000',
     tenor: '12 to 36 months',
     icon: 'ri-team-fill',
-    accentColor: '#374151',
-    accentLight: '#f3f4f6',
+    accentColor: '#3A0CA3',
+    accentLight: 'var(--dogo-cream)',
     features: [
       { icon: 'ri-group-line', title: 'True Partnership Structure', desc: 'All partners share in both upside profits and downside losses proportionately — the most equitable Islamic finance contract.' },
       { icon: 'ri-business-line', title: 'Vetted Business Ventures', desc: 'Musharakah funds invest only in Nigerian SMEs and growth businesses that have passed our Shariah and credit screening.' },
@@ -178,8 +178,8 @@ export const PRODUCTS_DATA: Record<string, ProductData> = {
     minInvestment: '₦50,000',
     tenor: '12 to 60 months',
     icon: 'ri-building-2-fill',
-    accentColor: '#7c3aed',
-    accentLight: '#ede9fe',
+    accentColor: '#F72585',
+    accentLight: 'var(--dogo-cream)',
     features: [
       { icon: 'ri-home-gear-line', title: 'Real Asset Backing', desc: 'Every Ijarah instrument is backed by a real, tangible, productive asset that generates lease income.' },
       { icon: 'ri-money-dollar-circle-line', title: 'Stable Lease Income', desc: 'Earn predictable monthly or quarterly lease payments — providing stability that equity cannot always offer.' },
@@ -230,3 +230,5 @@ export class ProductsComponent {
     this.openFaq.set(this.openFaq() === i ? null : i);
   }
 }
+
+

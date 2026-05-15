@@ -2,7 +2,7 @@
   <!-- Header -->
   <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
     <div>
-      <h2 class="text-3xl font-black text-[#0d1a0f] tracking-tight">System Clients</h2>
+      <h2 class="text-3xl font-black text-[var(--dogo-dark)] tracking-tight">System Clients</h2>
       <p class="text-gray-500 text-sm mt-1 uppercase tracking-widest font-bold">Monitor, review, and manage platform clients.</p>
     </div>
     <div class="flex items-center gap-3">
@@ -10,35 +10,35 @@
       <div class="relative w-full md:w-64">
         <i class="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
         <input type="text" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" placeholder="Search clients..." 
-               class="w-full bg-white border border-[#1B4332]/10 focus:border-[#C9A84C] rounded-2xl py-3 pl-11 pr-4 text-slate-800 font-bold placeholder:text-slate-300 outline-none transition-all shadow-sm" />
+               class="w-full bg-white border border-[var(--dogo-primary)]/10 focus:border-[var(--dogo-secondary)] rounded-2xl py-3 pl-11 pr-4 text-slate-800 font-bold placeholder:text-slate-300 outline-none transition-all shadow-sm" />
       </div>
     </div>
   </div>
 
   <!-- Clients Table Card -->
-  <div class="bg-white rounded-[40px] p-4 sm:p-8 border border-[#1B4332]/5 shadow-sm overflow-hidden">
+  <div class="bg-white rounded-[40px] p-4 sm:p-8 border border-[var(--dogo-primary)]/5 shadow-sm overflow-hidden">
     <div class="overflow-x-auto custom-scrollbar pb-4">
       <table class="w-full text-left border-collapse min-w-[800px]">
         <thead>
           <tr class="border-b-2 border-slate-100">
-            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Client Profile</th>
-            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Contact Info</th>
-            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">KYC Level</th>
-            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C]">Status</th>
-            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[#C9A84C] text-right">Actions</th>
+            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Client Profile</th>
+            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Contact Info</th>
+            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">KYC Level</th>
+            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Status</th>
+            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)] text-right">Actions</th>
           </tr>
         </thead>
         <tbody class="text-sm">
           @for(client of filteredClients(); track client.id; let i = $index) {
-          <tr class="border-b border-slate-50 hover:bg-[#f8f7f2] transition-colors group">
+          <tr class="border-b border-slate-50 hover:bg-[var(--dogo-cream)] transition-colors group">
             <td class="py-5 px-4">
               <div class="flex items-center gap-4">
                 <div class="w-10 h-10 rounded-2xl flex items-center justify-center font-black text-xs text-white shadow-sm shrink-0 uppercase
-                            bg-[#1B4332]">
+                            bg-[var(--dogo-primary)]">
                   {{ client.firstName.charAt(0) }}{{ client.lastName.charAt(0) }}
                 </div>
                 <div>
-                  <div class="font-black text-[#0d1a0f]">{{ client.firstName }} {{ client.lastName }}</div>
+                  <div class="font-black text-[var(--dogo-dark)]">{{ client.firstName }} {{ client.lastName }}</div>
                   <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">ID: {{ client.id }}</div>
                 </div>
               </div>
@@ -61,7 +61,7 @@
               </span>
             </td>
             <td class="py-5 px-4 text-right">
-              <button (click)="viewDetails(client)" class="text-slate-400 hover:text-[#C9A84C] transition-colors p-2 hover:bg-[#C9A84C]/10 rounded-2xl" title="View Details">
+              <button (click)="viewDetails(client)" class="text-slate-400 hover:text-[var(--dogo-secondary)] transition-colors p-2 hover:bg-[var(--dogo-secondary)]/10 rounded-2xl" title="View Details">
                 <i class="ri-eye-line text-lg"></i>
               </button>
             </td>
@@ -87,16 +87,16 @@
 <!-- View Details Modal -->
 @if(isModalOpen() && selectedClient()) {
 <div class="fixed inset-0 z-[999] flex items-center justify-center px-4 animate-fade-in" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-  <div class="fixed inset-0 bg-[#0d1a0f]/60 backdrop-blur-md transition-opacity" (click)="closeModal()"></div>
+  <div class="fixed inset-0 bg-[var(--dogo-dark)]/60 backdrop-blur-md transition-opacity" (click)="closeModal()"></div>
   
   <div class="relative bg-white rounded-[40px] shadow-2xl w-full max-w-lg transform transition-all animate-slide-up flex flex-col max-h-[90vh]">
     <!-- Modal Header -->
-    <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-[#f8f7f2] rounded-t-[40px] shrink-0">
+    <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-[var(--dogo-cream)] rounded-t-[40px] shrink-0">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-[#C9A84C]/20 text-[#C9A84C] flex items-center justify-center">
+        <div class="w-10 h-10 rounded-2xl bg-[var(--dogo-secondary)]/20 text-[var(--dogo-secondary)] flex items-center justify-center">
             <i class="ri-profile-line text-xl"></i>
         </div>
-        <h3 class="text-xl font-black text-[#0d1a0f] tracking-tight" id="modal-title">
+        <h3 class="text-xl font-black text-[var(--dogo-dark)] tracking-tight" id="modal-title">
           Client Details
         </h3>
       </div>
@@ -108,11 +108,11 @@
     <!-- Modal Body -->
     <div class="p-8 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
       <div class="flex items-center gap-6 mb-8 pb-8 border-b border-slate-100">
-        <div class="w-20 h-20 rounded-3xl flex items-center justify-center font-black text-2xl text-white shadow-sm shrink-0 uppercase bg-[#1B4332]">
+        <div class="w-20 h-20 rounded-3xl flex items-center justify-center font-black text-2xl text-white shadow-sm shrink-0 uppercase bg-[var(--dogo-primary)]">
           {{ selectedClient()?.firstName?.charAt(0) }}{{ selectedClient()?.lastName?.charAt(0) }}
         </div>
         <div>
-          <h2 class="text-2xl font-black text-[#0d1a0f]">{{ selectedClient()?.firstName }} {{ selectedClient()?.lastName }}</h2>
+          <h2 class="text-2xl font-black text-[var(--dogo-dark)]">{{ selectedClient()?.firstName }} {{ selectedClient()?.lastName }}</h2>
           <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">ID: {{ selectedClient()?.id }}</p>
           <div class="mt-3">
             <span class="inline-flex px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm border"
@@ -130,29 +130,29 @@
       <!-- Account Metrics -->
       <div class="space-y-6">
         <div>
-          <p class="text-[10px] font-black uppercase tracking-widest text-[#C9A84C] mb-2">Contact Information</p>
+          <p class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-secondary)] mb-2">Contact Information</p>
           <div class="space-y-3">
-             <div class="flex justify-between items-center bg-[#f8f7f2] rounded-2xl p-4">
+             <div class="flex justify-between items-center bg-[var(--dogo-cream)] rounded-2xl p-4">
                 <span class="text-xs font-bold text-slate-500">Email Address</span>
-                <span class="text-sm font-black text-[#0d1a0f] truncate max-w-[200px]">{{ selectedClient()?.email }}</span>
+                <span class="text-sm font-black text-[var(--dogo-dark)] truncate max-w-[200px]">{{ selectedClient()?.email }}</span>
              </div>
-             <div class="flex justify-between items-center bg-[#f8f7f2] rounded-2xl p-4">
+             <div class="flex justify-between items-center bg-[var(--dogo-cream)] rounded-2xl p-4">
                 <span class="text-xs font-bold text-slate-500">Phone Number</span>
-                <span class="text-sm font-black text-[#0d1a0f]">{{ selectedClient()?.phone }}</span>
+                <span class="text-sm font-black text-[var(--dogo-dark)]">{{ selectedClient()?.phone }}</span>
              </div>
           </div>
         </div>
 
         <div>
-          <p class="text-[10px] font-black uppercase tracking-widest text-[#C9A84C] mb-2">Account Metrics</p>
+          <p class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-secondary)] mb-2">Account Metrics</p>
           <div class="space-y-3">
-             <div class="flex justify-between items-center bg-[#f8f7f2] rounded-2xl p-4">
+             <div class="flex justify-between items-center bg-[var(--dogo-cream)] rounded-2xl p-4">
                 <span class="text-xs font-bold text-slate-500">Join Date</span>
-                <span class="text-sm font-black text-[#0d1a0f]">{{ selectedClient()?.dateJoined }}</span>
+                <span class="text-sm font-black text-[var(--dogo-dark)]">{{ selectedClient()?.dateJoined }}</span>
              </div>
-             <div class="flex justify-between items-center bg-[#1B4332]/5 rounded-2xl p-4 border border-[#1B4332]/10">
+             <div class="flex justify-between items-center bg-[var(--dogo-primary)]/5 rounded-2xl p-4 border border-[var(--dogo-primary)]/10">
                 <span class="text-xs font-bold text-slate-500">Account Balance</span>
-                <span class="text-lg font-black text-[#1B4332]">₦{{ selectedClient()?.accountBalance | number }}</span>
+                <span class="text-lg font-black text-[var(--dogo-primary)]">₦{{ selectedClient()?.accountBalance | number }}</span>
              </div>
           </div>
         </div>
@@ -162,3 +162,4 @@
   </div>
 </div>
 }
+
