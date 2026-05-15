@@ -9,7 +9,7 @@ import { ApiResponse } from '../models/api-response.model';
 })
 export class ReportingService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/api/Report`;
+  private apiUrl = `${environment.apiUrl}/Report`;
 
   getTrialBalance(): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(`${this.apiUrl}/trial-balance`);
