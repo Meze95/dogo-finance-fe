@@ -73,6 +73,14 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/Auth/reset-password`, data);
   }
 
+  changePassword(data: { OldPassword: string, NewPassword: string, ConfirmPassword: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/Auth/change-password`, data);
+  }
+
+  toggle2fa(status: boolean): Observable<any> {
+    return this.http.post(`${this.apiUrl}/Auth/2fa/toggle?status=${status}`, {});
+  }
+
   setupPin(data: { pin: string, confirmPin: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/Auth/pin/setup`, data);
   }

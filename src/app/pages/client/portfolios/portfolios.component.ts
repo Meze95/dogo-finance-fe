@@ -9,6 +9,7 @@ import { TransactionService } from '../../../shared/services/transaction.service
 import { CustomerService } from '../../../shared/services/customer.service';
 
 import { AlertService } from '../../../shared/services/alert.service';
+import { Router } from '@angular/router';
 
 declare var Swal: any;
 declare var TradingView: any;
@@ -27,6 +28,7 @@ export class ClientPortfoliosComponent implements OnInit, AfterViewInit, OnDestr
   private authService = inject(AuthService);
   private customerService = inject(CustomerService);
   private alertService = inject(AlertService);
+  private router = inject(Router);
 
   portfolios = this.productService.portfolios;
   activeFilter = signal<string>('All');
@@ -352,6 +354,12 @@ export class ClientPortfoliosComponent implements OnInit, AfterViewInit, OnDestr
         }
       }
     });
+  }
+
+  quickFund() {
+    const amount = this.investAmount();
+    this.showInvestModal.set(false);
+    this.router.navigate(['/client/dashboard'], { queryParams: { fundAmount: amount } });
   }
 
   getAssetColor(index: number): string {
