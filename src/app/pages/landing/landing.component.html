@@ -4,7 +4,7 @@
   ====================================================== -->
 
 <!-- ===== HERO SECTION ===== -->
-<section class="relative bg-[var(--dogo-cream)] dogo-pattern overflow-hidden pt-20 pb-0 lg:pt-28">
+<section class="relative bg-[var(--dogo-cream)] dogo-pattern overflow-hidden pt-10 pb-0 lg:pt-14">
   <!-- Decorative gold orbs -->
   <div class="absolute top-20 right-20 w-96 h-96 rounded-full blur-[120px] opacity-20" style="background: radial-gradient(circle, var(--dogo-secondary), transparent)"></div>
   <div class="absolute -bottom-20 left-10 w-64 h-64 rounded-full blur-[100px] opacity-10" style="background: radial-gradient(circle, var(--dogo-primary), transparent)"></div>
@@ -13,11 +13,11 @@
     <div class="grid lg:grid-cols-2 gap-16 items-center">
 
       <!-- Text Content -->
-      <div class="pt-8 lg:pt-0">
+      <div class="pt-4 lg:pt-0">
         <!-- Trust Badge -->
-        <div class="halal-badge mb-8">
+        <div class="halal-badge mb-5">
           <i class="ri-verified-badge-fill text-sm"></i>
-          CBN Licensed · SEC Registered · 100% Riba-Free
+          100% Riba-Free
         </div>
 
         <h1 class="text-[60px] md:text-[80px] xl:text-[96px] font-black leading-[0.9] tracking-tighter text-[var(--dogo-dark)] mb-8">
@@ -34,9 +34,37 @@
 
         <div class="flex flex-wrap gap-4 mb-14">
           @if (!isLoggedIn()) {
-            <button routerLink="/register" class="px-10 py-5 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] transition-all shadow-xl shadow-[var(--dogo-primary)]/25 text-lg">
-              Create Free Account
-            </button>
+            <div class="group relative inline-block">
+              <button class="px-10 py-5 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] transition-all shadow-xl shadow-[var(--dogo-primary)]/25 text-lg flex items-center gap-2 cursor-pointer">
+                <span>Create Free Account</span>
+                <i class="ri-arrow-down-s-line text-xl transition-transform group-hover:rotate-180 duration-300"></i>
+              </button>
+              <div class="absolute top-full left-0 pt-3 hidden group-hover:block z-[100] min-w-[260px]">
+                <div class="bg-white shadow-[0_30px_60px_rgba(3,14,101,0.2)] rounded-3xl p-5 border border-[var(--dogo-primary)]/8 flex flex-col gap-3">
+                  <!-- Individual Account -->
+                  <a routerLink="/register" class="flex items-center space-x-3.5 p-3 rounded-2xl hover:bg-[var(--dogo-cream)] transition-all group/item text-left">
+                    <div class="w-10 h-10 bg-[var(--dogo-cream)] rounded-xl flex items-center justify-center shrink-0">
+                      <i class="ri-user-3-line text-[var(--dogo-primary)] text-xl"></i>
+                    </div>
+                    <div>
+                      <p class="font-black text-[var(--dogo-dark)] text-[14px]">Individual Account</p>
+                      <p class="text-[10px] text-[var(--dogo-muted)] font-bold uppercase tracking-wider">Invest for yourself</p>
+                    </div>
+                  </a>
+                  
+                  <!-- Corporate Account -->
+                  <a routerLink="/register/corporate" class="flex items-center space-x-3.5 p-3 rounded-2xl hover:bg-[var(--dogo-cream)] transition-all group/item text-left">
+                    <div class="w-10 h-10 bg-[var(--dogo-cream)] rounded-xl flex items-center justify-center shrink-0">
+                      <i class="ri-briefcase-line text-[var(--dogo-primary)] text-xl"></i>
+                    </div>
+                    <div>
+                      <p class="font-black text-[var(--dogo-dark)] text-[14px]">Corporate Account</p>
+                      <p class="text-[10px] text-[var(--dogo-secondary)] font-extrabold uppercase tracking-wider">Coming Soon</p>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
           } @else {
             <button [routerLink]="dashboardLink()" class="px-10 py-5 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] transition-all shadow-xl shadow-[var(--dogo-primary)]/25 text-lg">
               Go to Dashboard
@@ -66,90 +94,10 @@
 
       <!-- Hero Visual -->
       <div class="flex justify-center items-end lg:items-end relative">
-        <!-- Phone Mockup (using a rich card representation) -->
+        <!-- Phone Mockup -->
         <div class="relative anim-float">
-          <!-- Main phone card -->
-          <div class="w-[280px] sm:w-[300px] md:w-[340px] bg-[var(--dogo-primary)] rounded-[48px] shadow-[0_60px_140px_-20px_rgba(3,14,101,0.4)] overflow-hidden border-4 border-white/10 relative">
-            <!-- Status bar -->
-            <div class="flex justify-between items-center px-8 pt-6 pb-2">
-              <span class="text-white/60 text-[11px] font-bold">9:41</span>
-              <div class="flex gap-1">
-                <div class="w-3 h-3 rounded-full bg-white/20"></div>
-                <div class="w-3 h-3 rounded-full bg-white/20"></div>
-              </div>
-            </div>
-            <!-- Header -->
-            <div class="px-8 pb-6 border-b border-white/10">
-              <p class="text-white/50 text-[12px] font-bold mb-1">TOTAL PORTFOLIO VALUE</p>
-              <p class="text-[36px] font-black text-white">₦2,485,000</p>
-              <p class="text-[var(--dogo-secondary)] font-bold text-sm flex items-center gap-1">
-                <i class="ri-arrow-up-line"></i> +₦142,300 this month (6.1%)
-              </p>
-            </div>
-            <!-- Products list -->
-            <div class="px-8 py-6 space-y-4">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-xl bg-[var(--dogo-secondary)]/20 flex items-center justify-center">
-                    <i class="ri-seedling-fill text-[var(--dogo-secondary)]"></i>
-                  </div>
-                  <div>
-                    <p class="text-white font-black text-[13px]">Mudarabah</p>
-                    <p class="text-white/40 text-[11px]">18% profit share</p>
-                  </div>
-                </div>
-                <p class="text-white font-black">₦1,200,000</p>
-              </div>
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-xl bg-[var(--dogo-secondary)]/20 flex items-center justify-center">
-                    <i class="ri-bank-fill text-[var(--dogo-secondary)]"></i>
-                  </div>
-                  <div>
-                    <p class="text-white font-black text-[13px]">Sukuk</p>
-                    <p class="text-white/40 text-[11px]">12% return</p>
-                  </div>
-                </div>
-                <p class="text-white font-black">₦785,000</p>
-              </div>
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center">
-                    <i class="ri-line-chart-fill text-white/60"></i>
-                  </div>
-                  <div>
-                    <p class="text-white font-black text-[13px]">Halal Equity</p>
-                    <p class="text-white/40 text-[11px]">NGX screened</p>
-                  </div>
-                </div>
-                <p class="text-white font-black">₦500,000</p>
-              </div>
-            </div>
-            <!-- Bottom nav -->
-            <div class="flex justify-around px-6 py-4 bg-white/5 border-t border-white/5">
-              <i class="ri-home-5-fill text-[var(--dogo-secondary)] text-xl"></i>
-              <i class="ri-funds-line text-white/30 text-xl"></i>
-              <i class="ri-mosque-line text-white/30 text-xl"></i>
-              <i class="ri-user-line text-white/30 text-xl"></i>
-            </div>
-          </div>
-
-          <!-- Floating SSB badge -->
-          <div class="absolute -left-4 sm:-left-10 lg:-left-20 top-10 sm:top-16 bg-white rounded-2xl shadow-2xl p-3 lg:p-4 flex items-center gap-3 w-40 sm:w-44 lg:w-52">
-            <div class="w-10 h-10 bg-[var(--dogo-cream)] rounded-xl flex items-center justify-center shrink-0">
-              <i class="ri-verified-badge-fill text-[var(--dogo-primary)] text-xl"></i>
-            </div>
-            <div>
-              <p class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">SSB Certified</p>
-              <p class="font-black text-[var(--dogo-dark)] text-[11px] sm:text-[13px]">Shariah Compliant</p>
-            </div>
-          </div>
-
-          <!-- Floating profit badge -->
-          <div class="absolute -right-2 sm:-right-8 lg:-right-14 bottom-24 sm:bottom-32 bg-[var(--dogo-primary)] rounded-2xl shadow-xl p-3 lg:p-4">
-            <p class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-secondary)]/70">Monthly Profit</p>
-            <p class="text-xl sm:text-2xl font-black text-white">+₦18,500</p>
-          </div>
+          <!-- Main phone image -->
+          <img src="/images/dogo-app.png" alt="Dogo App Mockup" class="w-[280px] sm:w-[320px] md:w-[360px] lg:w-[380px] h-auto object-contain drop-shadow-[0_45px_90px_rgba(3,14,101,0.35)] select-none">
         </div>
       </div>
     </div>
