@@ -51,8 +51,9 @@ export class LoginComponent {
             // Redirect based on role
             //const user = response.data;
             const role = user.role || user.Role || user.userRole || user.UserRole;
+            const isStaff = String(role).toLowerCase() !== 'customer' && String(role).toLowerCase() !== 'user';
             
-            if (role === UserRole.Admin || role === UserRole.SuperAdmin) {
+            if (isStaff) {
               this.router.navigate(['/admin/dashboard']);
             } else {
               this.router.navigate(['/client/dashboard']);

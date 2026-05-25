@@ -34,8 +34,9 @@ export class AdminLoginComponent implements OnInit {
     // Check if already logged in as staff
     const user = this.authService.currentUser();
     if (user) {
-       const role = user.role || user.Role || user.userRole;
-       if (role === UserRole.Admin || role === UserRole.SuperAdmin) {
+       const role = user.role || user.Role || user.userRole || user.UserRole;
+       const isStaff = String(role).toLowerCase() !== 'customer' && String(role).toLowerCase() !== 'user';
+       if (isStaff) {
           this.router.navigate(['/admin/dashboard']);
        }
     }
@@ -55,9 +56,10 @@ export class AdminLoginComponent implements OnInit {
           this.isProcessing.set(false);
           const user = response.data;
           const role = user.role || user.Role || user.userRole || user.UserRole;
+          const isStaff = String(role).toLowerCase() !== 'customer' && String(role).toLowerCase() !== 'user';
 
-          // STRICT STAFF CHECK: Only Admin/SuperAdmin can login via this page
-          if (role === UserRole.Admin || role === UserRole.SuperAdmin) {
+          // STRICT STAFF CHECK: Only Admin/SuperAdmin/Custom staff can login via this page
+          if (isStaff) {
             this.authService.setCurrentUser(user);
             this.router.navigate(['/admin/dashboard']);
           } else {

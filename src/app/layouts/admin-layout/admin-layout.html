@@ -45,6 +45,7 @@
         [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">Main System</p>
 
       @for(item of menuItems; track item.label) {
+      @if(hasPermission(item.permission)) {
       <a [routerLink]="item.link" routerLinkActive="bg-white/10 text-white shadow-lg border-l-4 border-[var(--dogo-secondary)]"
         (click)="isMobileMenuOpen() ? toggleMobileMenu() : null"
         class="flex items-center space-x-4 h-12 rounded-2xl transition-all group px-4 hover:bg-[var(--dogo-primary)]/40 text-white/60 hover:text-white border-l-4 border-transparent">
@@ -57,6 +58,7 @@
         </span>
       </a>
       }
+      }
 
       <!-- Management Divider -->
       <div class="mt-8 pt-8 border-t border-white/5 space-y-2 shrink-0">
@@ -64,6 +66,7 @@
           [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">Management</p>
 
         @for(item of managementItems; track item.label) {
+        @if(hasPermission(item.permission)) {
         @if(item.subItems) {
         <!-- Accordion item -->
         <div class="flex flex-col w-full">
@@ -90,6 +93,7 @@
             [class.opacity-0]="openMenu() !== item.label || (!isSidebarOpen() && !isMobileMenuOpen())"
             [class.mt-1]="openMenu() === item.label && (isSidebarOpen() || isMobileMenuOpen())">
             @for(sub of item.subItems; track sub.label) {
+            @if(hasPermission(sub.permission)) {
             @if (sub.link === '/admin/logout') {
             <button (click)="handleLogout()" [disabled]="isLoggingOut()"
               class="group w-full text-left h-10 flex items-center text-sm font-medium text-white/50 hover:text-[#ff4d4f] transition-colors relative">
@@ -117,6 +121,7 @@
             </a>
             }
             }
+            }
           </div>
         </div>
         } @else {
@@ -131,6 +136,7 @@
             {{ item.label }}
           </span>
         </a>
+        }
         }
         }
 
@@ -188,11 +194,11 @@
           class="flex items-center bg-white p-1.5 rounded-2xl shadow-sm border border-[var(--dogo-primary)]/5 group cursor-pointer hover:border-[var(--dogo-secondary)] hover:shadow-xl transition-all">
           <div
             class="w-8 lg:w-9 h-8 lg:h-9 bg-[var(--dogo-cream)] rounded-xl flex items-center justify-center font-black text-[var(--dogo-primary)] group-hover:bg-[var(--dogo-primary)] group-hover:text-white transition-all">
-            SA
+            {{ staffProfile().initials }}
           </div>
           <div class="px-3 hidden md:block">
-            <p class="text-[11px] font-black text-[var(--dogo-dark)] leading-none uppercase tracking-tighter group-hover:text-[var(--dogo-primary)] transition-colors">Super Admin</p>
-            <p class="text-[9px] font-bold text-[var(--dogo-secondary)] leading-none mt-1 uppercase tracking-widest">Full Access</p>
+            <p class="text-[11px] font-black text-[var(--dogo-dark)] leading-none uppercase tracking-tighter group-hover:text-[var(--dogo-primary)] transition-colors">{{ staffProfile().fullName }}</p>
+            <p class="text-[9px] font-bold text-[var(--dogo-secondary)] leading-none mt-1 uppercase tracking-widest">{{ staffProfile().roleName }}</p>
           </div>
         </div>
       </div>

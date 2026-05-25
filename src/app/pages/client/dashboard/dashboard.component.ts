@@ -1,6 +1,6 @@
 import { Component, signal, computed, inject, OnInit, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../shared/services/auth.service';
 import { CustomerService } from '../../../shared/services/customer.service';
@@ -38,7 +38,8 @@ export class ClientDashboardComponent implements OnInit {
   private investmentService = inject(InvestmentService);
   private transactionService = inject(TransactionService);
   private settingsService = inject(SettingsService);
-  
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
   constructor() {
     // Reactively load data when user is available
     effect(() => {
@@ -95,8 +96,21 @@ export class ClientDashboardComponent implements OnInit {
     this.productService.getPortfolios();
     this.loadRelationshipTypes();
     this.loadAddressDocTypes();
-    // loadDashboardData is now triggered by the effect in constructor
     
+    this.route.queryParams.subscribe(params => {
+      const fundAmount = params['fundAmount'];
+      if (fundAmount) {
+        this.transactionAmount.set(fundAmount);
+        this.openTransactionModal('fund');
+        
+        // Clean URL parameters
+        this.router.navigate([], {
+          queryParams: { fundAmount: null },
+          queryParamsHandling: 'merge'
+        });
+      }
+    });
+
     // Auto-refresh balance every 5 minutes for performance optimization
     const intervalId = setInterval(() => {
       this.loadDashboardData();
@@ -440,6 +454,13 @@ export class ClientDashboardComponent implements OnInit {
         }
       }
     });
+  }
+
+  quickFund() {
+    const amount = this.investAmount();
+    this.showInvestModal.set(false);
+    this.transactionAmount.set(amount);
+    this.openTransactionModal('fund');
   }
 
   loadRelationshipTypes() {

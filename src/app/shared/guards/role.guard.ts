@@ -54,7 +54,11 @@ export const roleGuard: CanActivateFn = (route, state) => {
     return true;
   }
 
-  if (requiredRoles.some(r => String(r).toLowerCase() === String(userRole).toLowerCase())) {
+  // Treat any role that is NOT Customer or User as an Administrative role
+  const isCustomAdmin = String(userRole).toLowerCase() !== 'customer' && String(userRole).toLowerCase() !== 'user';
+  const isAdminRequired = requiredRoles.some(r => String(r).toLowerCase() === UserRole.Admin.toLowerCase());
+
+  if (requiredRoles.some(r => String(r).toLowerCase() === String(userRole).toLowerCase()) || (isAdminRequired && isCustomAdmin)) {
     
     // 5. Additional check for specific permission (Access Rights) if specified
     const requiredPermission = route.data['permission'] as string;

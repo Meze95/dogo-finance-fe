@@ -1,4 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, OnInit, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
@@ -10,7 +10,7 @@ import { AuthService } from '../../shared/services/auth.service';
   templateUrl: './admin-layout.html',
   styleUrl: './admin-layout.css',
 })
-export class AdminLayout {
+export class AdminLayout implements OnInit {
   isSidebarOpen = signal(true);
   isMobileMenuOpen = signal(false);
   openMenu = signal<string | null>(null);
@@ -19,26 +19,66 @@ export class AdminLayout {
   private router = inject(Router);
   private authService = inject(AuthService);
 
-  menuItems = [
-    { label: 'System Overview', icon: 'ri-dashboard-3-fill', link: '/admin/dashboard' },
-    { label: 'Clients Hub', icon: 'ri-user-star-line', link: '/admin/clients' },
-    { label: 'Plan & Products', icon: 'ri-funds-box-line', link: '/admin/products' },
-    { label: 'Investments', icon: 'ri-briefcase-4-fill', link: '/admin/investments' },
-    { label: 'Liquidation Requests', icon: 'ri-exchange-funds-line', link: '/admin/liquidation-requests' },
-    { label: 'Verifications', icon: 'ri-shield-check-line', link: '/admin/verifications' },
-    { label: 'Withdrawal', icon: 'ri-bank-card-line', link: '/admin/withdrawals' }
+  staffProfile = computed(() => {
+    const user = this.authService.currentUser();
+    if (!user) {
+      return {
+        initials: 'SA',
+        fullName: 'Super Admin',
+        roleName: 'Full Access'
+      };
+    }
+    const fName = user.firstName || user.FirstName || 'Staff';
+    const lName = user.lastName || user.LastName || 'Member';
+    const initials = (fName.charAt(0) + lName.charAt(0)).toUpperCase();
+    const fullName = `${fName} ${lName}`;
+    const roleName = user.role || user.Role || 'Administrator';
+    return {
+      initials,
+      fullName,
+      roleName
+    };
+  });
+
+  ngOnInit() {
+    // Computed handles state reactively now
+  }
+
+  menuItems: Array<{
+    label: string;
+    icon: string;
+    link: string;
+    permission?: string;
+  }> = [
+    { label: 'System Overview', icon: 'ri-dashboard-3-fill', link: '/admin/dashboard', permission: 'ViewDashboard' },
+    { label: 'Clients Hub', icon: 'ri-user-star-line', link: '/admin/clients', permission: 'ViewClients' },
+    { label: 'Plan & Products', icon: 'ri-funds-box-line', link: '/admin/products', permission: 'ViewProducts' },
+    { label: 'Investments', icon: 'ri-briefcase-4-fill', link: '/admin/investments', permission: 'ViewInvestments' },
+    { label: 'Liquidation Requests', icon: 'ri-exchange-funds-line', link: '/admin/liquidation-requests', permission: 'ViewLiquidations' },
+    { label: 'Verifications', icon: 'ri-shield-check-line', link: '/admin/verifications', permission: 'ViewVerifications' },
+    { label: 'Withdrawal', icon: 'ri-bank-card-line', link: '/admin/withdrawals', permission: 'ViewWithdrawals' }
     // { label: 'System Ledger', icon: 'ri-exchange-box-fill', link: '/admin/transactions' }
   ];
 
-  managementItems = [
-    { label: 'Role Management', icon: 'ri-shield-keyhole-line', link: '/admin/roles' },
-    { label: 'User Hub', icon: 'ri-group-2-line', link: '/admin/users' },
-    { label: 'System Config', icon: 'ri-settings-5-line', link: '/admin/settings' },
+  managementItems: Array<{
+    label: string;
+    icon: string;
+    link?: string;
+    permission?: string;
+    subItems?: Array<{
+      label: string;
+      link: string;
+      permission?: string;
+    }>;
+  }> = [
+    { label: 'Role Management', icon: 'ri-shield-keyhole-line', link: '/admin/roles', permission: 'ViewRoles' },
+    { label: 'User Hub', icon: 'ri-group-2-line', link: '/admin/users', permission: 'ViewAdmins' },
+    { label: 'System Config', icon: 'ri-settings-5-line', link: '/admin/settings', permission: 'ViewSettings' },
     {
       label: 'Financial Reports',
       icon: 'ri-file-chart-line',
       subItems: [
-        { label: 'Trial Balance', link: '/admin/reports/trial-balance' }
+        { label: 'Trial Balance', link: '/admin/reports/trial-balance', permission: 'ViewTrialBalance' }
       ]
     },
     {
@@ -50,6 +90,19 @@ export class AdminLayout {
       ]
     }
   ];
+
+  hasPermission(permissionName?: string): boolean {
+    if (!permissionName) return true;
+    const user = this.authService.currentUser();
+    if (!user) return false;
+
+    // SuperAdmin always has full bypass access
+    const role = user.role || user.Role || user.userRole || user.UserRole;
+    if (role?.toLowerCase() === 'superadmin') return true;
+
+    const permissions: string[] = user.permissions || user.Permissions || [];
+    return permissions.some(p => p.toLowerCase() === permissionName.toLowerCase());
+  }
 
   toggleSidebar() {
     this.isSidebarOpen.update(v => !v);

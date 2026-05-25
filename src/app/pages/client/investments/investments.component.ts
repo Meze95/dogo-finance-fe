@@ -79,8 +79,14 @@ export class ClientInvestmentsComponent implements OnInit {
 
   calculatedExitFee = computed(() => {
     const inv = this.selectedInvestment();
-    if (!inv || !this.isExitFeeApplicable()) return 0;
-    return this.sellAmount() * ((inv.exitFeePercentage || 0) / 100);
+    if (!inv || !this.isExitFeeApplicable() || inv.currentValue <= 0) return 0;
+
+    const ratio = this.sellAmount() / inv.currentValue;
+    const capitalPortion = inv.totalInvested * ratio;
+    const profitPortion = this.sellAmount() - capitalPortion;
+
+    if (profitPortion <= 0) return 0;
+    return profitPortion * ((inv.exitFeePercentage || 0) / 100);
   });
 
   netPayable = computed(() => {
