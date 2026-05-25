@@ -1,10 +1,10 @@
 <div class="space-y-10 animate-fade-in relative">
   
   <!-- DASHBOARD TOP HEADER: Privacy & Compliance Settings -->
-  <div class="flex flex-col md:flex-row items-center justify-between gap-6 px-10 py-8 bg-white/60 rounded-[40px] border border-[var(--dogo-primary)]/5 backdrop-blur-xl shadow-sm mb-12 relative overflow-hidden group">
+  <div class="flex flex-col md:flex-row items-center justify-between gap-6 px-6 py-8 md:px-10 md:py-8 bg-white/60 rounded-[40px] border border-[var(--dogo-primary)]/5 backdrop-blur-xl shadow-sm mb-12 relative overflow-hidden group">
       <div class="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-[var(--dogo-secondary)]/20 to-transparent"></div>
       
-      <div class="flex items-center space-x-8 relative z-10">
+      <div class="flex flex-col md:flex-row items-center gap-6 md:gap-8 relative z-10 w-full md:w-auto">
          <label class="relative inline-flex items-center cursor-pointer group/toggle">
             <input type="checkbox" [checked]="hideBalances()" (change)="hideBalances.set(!hideBalances())" class="sr-only peer">
             <div class="w-14 h-8 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:shadow-md after:rounded-full after:h-6 after:w-6 after:transition-all duration-300 peer-checked:bg-[var(--dogo-primary)]"></div>
@@ -12,6 +12,7 @@
          </label>
          
          <div class="h-8 w-[1px] bg-[var(--dogo-primary)]/10 hidden md:block"></div>
+         <div class="h-[1px] w-full bg-[var(--dogo-primary)]/5 md:hidden"></div>
 
          <div class="flex items-center space-x-3">
             <div class="flex items-center justify-center w-8 h-8 rounded-full bg-green-50">
@@ -21,7 +22,9 @@
          </div>
       </div>
 
-       <div class="hidden md:flex items-center space-x-4 relative z-10">
+       <div class="h-[1px] w-full bg-[var(--dogo-primary)]/5 md:hidden"></div>
+
+       <div class="flex items-center space-x-4 relative z-10">
           <div class="flex -space-x-2">
              <div class="w-8 h-8 rounded-full border-2 border-white bg-slate-100 flex items-center justify-center text-[10px] font-bold text-[var(--dogo-primary)]">M</div>
           </div>
@@ -39,13 +42,13 @@
     <div class="space-y-8">
       
       <!-- Most Beautiful Wallet Card Ever (V2 Premium - Compact) -->
-      <div class="relative group mesh-gradient-premium rounded-[42px] p-6 md:p-8 text-white shadow-2xl shadow-[var(--dogo-primary)]/40 overflow-hidden border border-white/5 mb-10 transition-all duration-700">
+      <div class="relative group mesh-gradient-premium rounded-[42px] p-5 md:p-8 text-white shadow-2xl shadow-[var(--dogo-primary)]/40 overflow-hidden border border-white/5 mb-10 transition-all duration-700">
          <!-- Enhanced Depth Elements -->
          <div class="absolute -top-1/4 -left-1/4 w-[500px] h-[500px] bg-[var(--dogo-secondary)]/5 blur-[120px] rounded-full anim-float pointer-events-none"></div>
          <div class="absolute -bottom-1/4 -right-1/4 w-[400px] h-[400px] bg-[var(--dogo-primary)]/20 blur-[100px] rounded-full anim-float delay-300 pointer-events-none"></div>
          <div class="absolute inset-0 dogo-pattern opacity-[0.03]"></div>
 
-         <div class="relative z-10 flex flex-col xl:flex-row items-center justify-between gap-6 xl:gap-8">
+         <div class="relative z-10 flex flex-col xl:flex-row items-center justify-between gap-8">
             <!-- Left: Hero Balance -->
             <div class="flex items-center gap-5 shrink-0">
                <div class="hidden lg:flex w-16 h-16 rounded-[24px] premium-frosting items-center justify-center text-3xl text-white relative overflow-hidden shrink-0">
@@ -75,20 +78,20 @@
             </div>
 
             <!-- Middle: High-End Stats -->
-            <div class="flex items-center gap-3 shrink-0">
-               <div class="min-w-[110px] px-4 py-3 rounded-[24px] premium-frosting flex flex-col items-center justify-center relative overflow-hidden border border-white/5">
+            <div class="flex items-center justify-center gap-3 w-full sm:w-auto shrink-0">
+               <div class="min-w-[90px] sm:min-w-[110px] px-2 sm:px-4 py-3 rounded-[24px] premium-frosting flex flex-col items-center justify-center relative overflow-hidden border border-white/5">
                   <span class="text-[8px] font-bold uppercase tracking-widest text-white/50 mb-1">Portfolio</span>
-                  <span class="text-sm font-black text-white whitespace-nowrap">{{ hideBalances() ? '••••' : '₦' + (totalPortfolioValue() | number) }}</span>
+                  <span class="text-[11px] sm:text-sm font-black text-white whitespace-nowrap">{{ hideBalances() ? '••••' : '₦' + (totalPortfolioValue() | number) }}</span>
                </div>
                
-               <div class="min-w-[110px] px-4 py-3 rounded-[24px] premium-frosting flex flex-col items-center justify-center relative overflow-hidden border border-white/5">
+               <div class="min-w-[90px] sm:min-w-[110px] px-2 sm:px-4 py-3 rounded-[24px] premium-frosting flex flex-col items-center justify-center relative overflow-hidden border border-white/5">
                   <span class="text-[8px] font-bold uppercase tracking-widest text-white/50 mb-1">Assets</span>
-                  <span class="text-sm font-black text-white whitespace-nowrap">{{ hideBalances() ? '••••' : '₦' + (totalActiveInvestment() | number) }}</span>
+                  <span class="text-[11px] sm:text-sm font-black text-white whitespace-nowrap">{{ hideBalances() ? '••••' : '₦' + (totalActiveInvestment() | number) }}</span>
                </div>
             </div>
 
             <!-- Right: Primary Actions -->
-            <div class="flex items-center gap-3 w-full sm:w-auto xl:ml-auto">
+            <div class="flex items-center justify-center gap-3 w-full sm:w-auto xl:ml-auto">
                <button (click)="openTransactionModal('fund')" class="flex-grow sm:flex-none h-14 md:h-16 px-6 md:px-10 rounded-[20px] bg-gradient-to-br from-[var(--dogo-secondary)] to-[var(--dogo-secondary-soft)] text-white text-[11px] font-black uppercase tracking-widest transition-all shadow-xl shadow-[var(--dogo-secondary)]/20 shimmer-effect relative overflow-hidden hover:scale-105 active:scale-95 flex items-center justify-center">
                   <i class="ri-add-circle-fill text-lg mr-2"></i> Fund
                </button>
@@ -146,7 +149,7 @@
         <div class="overflow-x-auto pb-10 mb-2 custom-scrollbar-h relative z-20">
         <div class="flex gap-8 p-1">
           @for(step of nextSteps(); track step.title) {
-            <div (click)="openModal(step)" class="flex-shrink-0 w-full md:w-[350px] group bg-white px-8 py-7 rounded-[40px] border border-[var(--dogo-primary)]/5 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 cursor-pointer relative overflow-hidden">
+            <div (click)="openModal(step)" class="flex-shrink-0 w-[85vw] md:w-[350px] group bg-white px-6 md:px-8 py-7 rounded-[40px] border border-[var(--dogo-primary)]/5 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 cursor-pointer relative overflow-hidden">
                <!-- Decorative corner -->
                <div class="absolute -top-6 -right-6 w-20 h-20 bg-[var(--dogo-cream)] rounded-full group-hover:bg-[var(--dogo-primary)] transition-colors duration-500"></div>
                
@@ -226,7 +229,7 @@
 
       
       <!-- Portfolio Breakdown Table (Recent Transactions) -->
-      <div class="bg-white p-12 rounded-[56px] border border-[var(--dogo-primary)]/5 shadow-sm relative overflow-hidden">
+      <div class="bg-white p-6 md:p-12 rounded-[56px] border border-[var(--dogo-primary)]/5 shadow-sm relative overflow-hidden">
         <div class="absolute top-0 right-0 w-64 h-64 bg-[var(--dogo-cream)] blur-[100px] rounded-full -mr-32 -mt-32 opacity-50"></div>
         
         <div class="relative z-10 flex items-center justify-between mb-12">
@@ -241,7 +244,7 @@
 
         <div class="relative z-10 space-y-6">
            @for(tx of recentTransactions().slice(0, 5); track tx.id) {
-             <div class="flex items-center justify-between p-8 bg-[var(--dogo-cream)] rounded-[40px] border border-transparent hover:border-[var(--dogo-primary)]/5 hover:bg-white hover:shadow-2xl hover:scale-[1.01] transition-all duration-500 group">
+             <div class="flex items-center justify-between p-5 md:p-8 bg-[var(--dogo-cream)] rounded-[40px] border border-transparent hover:border-[var(--dogo-primary)]/5 hover:bg-white hover:shadow-2xl hover:scale-[1.01] transition-all duration-500 group">
                 <div class="flex items-center space-x-6">
                    <div class="w-16 h-16 rounded-[24px] flex items-center justify-center text-white shadow-lg group-hover:rotate-6 transition-transform" [class]="getIconBgColor(tx.type)">
                       <i [class]="getIconForTypeSingle(tx.type)" class="text-2xl"></i>
