@@ -86,4 +86,8 @@ export class TransactionService {
   sell(portfolioId: number, amount: number, pin?: string, otp?: string): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(`${this.apiUrl}/sell`, { portfolioId, amount, pin, otp });
   }
+
+  submitManualFunding(data: { amount: number, reference: string, receiptPath?: string }): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`${this.apiUrl}/manual-funding`, data);
+  }
 }

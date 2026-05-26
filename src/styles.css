@@ -67,6 +67,111 @@ body {
    REUSABLE UTILITY CLASSES
    ============================================ */
 
+
+/* Print Styles */
+.print-only {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+  
+  body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    background-color: white !important;
+    color: black !important;
+  }
+  
+  /* Hide all regular dashboard UI */
+  .no-print,
+  .sidebar,
+  .header,
+  .main-dashboard-ui {
+    display: none !important;
+  }
+  
+  /* Reset margins for print */
+  main, .main-content, .p-4, .p-6, .p-8 {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+  /* Prevent scrolling truncation */
+  div, main, body, html, app-admin-layout {
+    height: auto !important;
+    overflow: visible !important;
+    position: static !important;
+  }
+
+  /* Show and style the print-only document */
+  .print-only {
+    display: block !important;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    color: #000;
+  }
+  
+  .print-header-center {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: bold;
+  }
+  
+  .print-header-title {
+    font-size: 16px;
+    text-transform: uppercase;
+  }
+
+  /* Bank Statement Style Tables */
+  .print-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    page-break-inside: auto;
+  }
+  
+  .print-table tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  .print-table th, .print-table td {
+    border: 1px solid #333;
+    padding: 6px 8px;
+    text-align: left;
+    font-size: 10px;
+  }
+
+  .print-table th {
+    background-color: #e2e8f0 !important; /* Slate 200 */
+    color: #000;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .print-table.summary-table {
+    width: auto;
+    margin-left: auto;
+    margin-top: 0;
+  }
+  .print-table.summary-table th {
+    width: 150px;
+  }
+  .print-table.summary-table td {
+    text-align: right;
+    min-width: 120px;
+  }
+}
+
 /* Brand utility backgrounds & text */
 .bg-dogo-primary  { background-color: var(--dogo-primary); }
 .bg-dogo-secondary { background-color: var(--dogo-secondary); }

@@ -45,4 +45,8 @@ export class CustomerService {
   verifyAddress(formData: FormData): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/verify-address`, formData);
   }
+
+  getCompanyBankDetails(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/company-bank-details`);
+  }
 }

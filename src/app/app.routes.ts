@@ -83,8 +83,12 @@ export const routes: Routes = [
       { path: 'transactions', loadComponent: () => import('./pages/admin/transactions/transactions.component').then(m => m.AdminTransactionsComponent) },
       { path: 'verifications', loadComponent: () => import('./pages/admin/verifications/verifications.component').then(m => m.VerificationsComponent) },
       { path: 'withdrawals', loadComponent: () => import('./pages/admin/withdrawals/withdrawals').then(m => m.WithdrawalsComponent) },
+      { path: 'manual-fund-approval', loadComponent: () => import('./pages/admin/manual-fund-approval/manual-fund-approval').then(m => m.ManualFundApprovalComponent) },
       { path: 'settings', loadComponent: () => import('./pages/admin/settings/settings').then(m => m.Settings) },
       { path: 'profile', loadComponent: () => import('./pages/admin/profile/profile').then(m => m.Profile) },
+      { path: 'reports/client-onboarding', loadComponent: () => import('./pages/admin/reports/client-onboarding/client-onboarding.component').then(m => m.ClientOnboardingComponent) },
+      { path: 'reports/client-activity', loadComponent: () => import('./pages/admin/reports/client-activity/client-activity.component').then(m => m.ClientActivityComponent) },
+      { path: 'reports/client-portfolio', loadComponent: () => import('./pages/admin/reports/client-portfolio/client-portfolio.component').then(m => m.ClientPortfolioComponent) },
       { path: 'reports/trial-balance', loadComponent: () => import('./pages/admin/reports/trial-balance/trial-balance').then(m => m.TrialBalancePage) }
     ]
   },

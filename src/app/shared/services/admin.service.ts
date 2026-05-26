@@ -76,6 +76,14 @@ export class AdminService {
     return this.http.put(`${this.apiUrl}/settings`, settings);
   }
 
+  getCompanyProfile(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/company-profile`);
+  }
+
+  updateCompanyProfile(profile: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/company-profile`, profile);
+  }
+
   // --- WITHDRAWALS ---
   getWithdrawals(status?: string): Observable<any> {
     const url = status ? `${this.apiUrl}/withdrawals?status=${status}` : `${this.apiUrl}/withdrawals`;
@@ -84,5 +92,15 @@ export class AdminService {
 
   reviewWithdrawalRequest(data: { requestId: number, approved: boolean, adminNotes?: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/withdrawals/review`, data);
+  }
+
+  // --- MANUAL FUNDING ---
+  getManualFundingRequests(status?: string): Observable<any> {
+    const url = status ? `${this.apiUrl}/manual-funding?status=${status}` : `${this.apiUrl}/manual-funding`;
+    return this.http.get(url);
+  }
+
+  reviewManualFundingRequest(data: { requestId: number, status: 'Approved' | 'Rejected', adminNotes?: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/manual-funding/review`, data);
   }
 }

@@ -1,0 +1,85 @@
+<div class="space-y-6 animate-fade-in relative z-10 hidden-scrollbar pb-10 no-print">
+  
+  <!-- Form Card (Matches Design Pattern) -->
+  <div class="bg-white rounded-lg shadow-sm border border-slate-200">
+    <!-- Header -->
+    <div class="bg-[var(--dogo-primary)] text-white px-6 py-4 rounded-t-lg flex items-center justify-between no-print">
+      <h2 class="text-lg font-bold">Client Portfolio Report</h2>
+    </div>
+
+    <!-- Filter Form -->
+    <div class="p-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-xs font-bold text-slate-500 mb-2">Portfolio View</label>
+          <input type="text" value="Current Snapshot" disabled class="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 text-slate-500 font-bold focus:outline-none transition-colors text-sm">
+        </div>
+      </div>
+      
+      <div class="mt-6 flex justify-end">
+        <button (click)="generateReport()" [disabled]="isLoading()" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-colors disabled:opacity-50 flex items-center gap-2">
+          <i *ngIf="isLoading()" class="ri-loader-4-line animate-spin"></i>
+          Refresh Report
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Report Data Container -->
+  <div *ngIf="data()" class="space-y-6 animate-fade-in mt-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-[var(--dogo-dark)] text-white rounded-[30px] p-8 shadow-xl">
+        <p class="text-xs font-black uppercase tracking-widest text-slate-400 mb-2">Total Invested (Global)</p>
+        <h3 class="text-4xl md:text-5xl font-black">₦{{ data()?.totalInvestment | number:'1.2-2' }}</h3>
+      </div>
+      <div class="bg-gradient-to-br from-[var(--dogo-primary)] to-[var(--dogo-secondary)] text-white rounded-[30px] p-8 shadow-xl">
+        <p class="text-xs font-black uppercase tracking-widest text-white/70 mb-2">Total Portfolio Value</p>
+        <h3 class="text-4xl md:text-5xl font-black">₦{{ data()?.totalPortfolioValue | number:'1.2-2' }}</h3>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-1 bg-white rounded-[40px] p-6 border border-[var(--dogo-primary)]/5 shadow-sm">
+         <h3 class="text-sm font-black text-[var(--dogo-dark)] uppercase tracking-widest mb-6">Product Spread</h3>
+         <div class="space-y-4">
+           <div *ngFor="let p of data()?.productSpread" class="bg-slate-50 rounded-2xl p-4">
+             <p class="text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">{{ p.productName }}</p>
+             <h4 class="text-xl font-black text-[var(--dogo-dark)] mt-1">₦{{ p.amountInvested | number:'1.2-2' }}</h4>
+           </div>
+           <div *ngIf="data()?.productSpread?.length === 0" class="text-center py-8 text-slate-400 font-bold text-sm">
+              No active investments.
+           </div>
+         </div>
+      </div>
+
+      <div class="lg:col-span-2 bg-white rounded-[40px] p-6 sm:p-8 border border-[var(--dogo-primary)]/5 shadow-sm overflow-hidden">
+         <h3 class="text-sm font-black text-[var(--dogo-dark)] uppercase tracking-widest mb-6">Client Portfolios</h3>
+         <div class="overflow-x-auto custom-scrollbar pt-2">
+           <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="w-full text-left border-collapse min-w-[500px] hover row-border">
+             <thead>
+               <tr class="border-b-2 border-slate-100">
+                 <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Client</th>
+                 <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)] text-right">Total Invested</th>
+                 <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)] text-right">Portfolio Value</th>
+               </tr>
+             </thead>
+             <tbody class="text-sm">
+               <tr *ngFor="let c of data()?.clientPortfolios" class="border-b border-slate-50 hover:bg-[var(--dogo-cream)] transition-colors">
+                 <td class="py-4 px-4">
+                   <div class="font-black text-[var(--dogo-dark)]">{{ c.clientName }}</div>
+                   <div class="text-[10px] font-bold text-slate-400">{{ c.email }}</div>
+                 </td>
+                 <td class="py-4 px-4 text-right font-black text-[var(--dogo-dark)]">₦{{ c.totalInvested | number:'1.2-2' }}</td>
+                 <td class="py-4 px-4 text-right font-black text-[var(--dogo-primary)]">₦{{ c.portfolioValue | number:'1.2-2' }}</td>
+               </tr>
+               <tr *ngIf="data()?.clientPortfolios?.length === 0">
+                  <td colspan="3" class="text-center py-12 text-slate-400 font-bold">No portfolios found.</td>
+               </tr>
+             </tbody>
+           </table>
+         </div>
+      </div>
+    </div>
+  </div>
+
+</div>

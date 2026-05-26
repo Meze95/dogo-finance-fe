@@ -56,9 +56,10 @@ export class AdminLayout implements OnInit {
     { label: 'Investments', icon: 'ri-briefcase-4-fill', link: '/admin/investments', permission: 'ViewInvestments' },
     { label: 'Liquidation Requests', icon: 'ri-exchange-funds-line', link: '/admin/liquidation-requests', permission: 'ViewLiquidations' },
     { label: 'Verifications', icon: 'ri-shield-check-line', link: '/admin/verifications', permission: 'ViewVerifications' },
-    { label: 'Withdrawal', icon: 'ri-bank-card-line', link: '/admin/withdrawals', permission: 'ViewWithdrawals' }
-    // { label: 'System Ledger', icon: 'ri-exchange-box-fill', link: '/admin/transactions' }
-  ];
+    { label: 'Withdrawal', icon: 'ri-bank-card-line', link: '/admin/withdrawals', permission: 'ViewWithdrawals' },
+    { label: 'Manual Fund Approval', icon: 'ri-wallet-3-line', link: '/admin/manual-fund-approval', permission: 'ViewManualFunding' }
+    // { label: 'System Ledger', icon: 'ri-exchange-box-fill', link: '/admin/transactions' } 
+  ]; 
 
   managementItems: Array<{
     label: string;
@@ -75,8 +76,17 @@ export class AdminLayout implements OnInit {
     { label: 'User Hub', icon: 'ri-group-2-line', link: '/admin/users', permission: 'ViewAdmins' },
     { label: 'System Config', icon: 'ri-settings-5-line', link: '/admin/settings', permission: 'ViewSettings' },
     {
-      label: 'Financial Reports',
+      label: 'Customer Reports',
       icon: 'ri-file-chart-line',
+      subItems: [
+        { label: 'Client Onboarding', link: '/admin/reports/client-onboarding', permission: 'ViewReports' },
+        { label: 'Client Activity', link: '/admin/reports/client-activity', permission: 'ViewReports' },
+        { label: 'Client Portfolio', link: '/admin/reports/client-portfolio', permission: 'ViewReports' }
+      ]
+    },
+    {
+      label: 'Financial Reports',
+      icon: 'ri-file-list-3-line',
       subItems: [
         { label: 'Trial Balance', link: '/admin/reports/trial-balance', permission: 'ViewTrialBalance' }
       ]
