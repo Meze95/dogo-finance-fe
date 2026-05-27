@@ -18,26 +18,163 @@
     </div>
   </div>
 
-  <div class="animate-in fade-in zoom-in duration-700 flex flex-col items-center text-center py-8">
-     <div class="w-24 h-24 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-full flex items-center justify-center mb-8 relative">
-        <i class="ri-briefcase-fill text-5xl text-[var(--dogo-primary)] animate-pulse"></i>
-        <div class="absolute -top-2 -right-2 w-8 h-8 bg-[var(--dogo-secondary)] rounded-full flex items-center justify-center border-4 border-white">
-          <i class="ri-time-line text-white font-black text-xs"></i>
+  @if(isSuccess()) {
+    <!-- Success Screen -->
+    <div class="animate-in fade-in zoom-in duration-700 flex flex-col items-center text-center py-8">
+       <div class="w-24 h-24 bg-green-50 border border-green-200 rounded-full flex items-center justify-center mb-8 relative">
+          <i class="ri-mail-send-fill text-5xl text-green-600 animate-pulse"></i>
+          <div class="absolute -top-2 -right-2 w-8 h-8 bg-[var(--dogo-success)] rounded-full flex items-center justify-center border-4 border-white animate-bounce">
+            <i class="ri-check-line text-white font-black text-sm"></i>
+          </div>
+       </div>
+       
+       <h1 class="text-3xl md:text-5xl font-black text-[var(--dogo-dark)] mb-6 tracking-tighter">Registration <br><span class="text-[var(--dogo-primary)]">Successful!</span></h1>
+       
+       <div class="bg-white/40 backdrop-blur-sm border border-[var(--dogo-primary)]/10 p-8 rounded-[32px] mb-12">
+         <p class="text-lg text-[var(--dogo-muted)] font-medium leading-relaxed">
+           Your Shariah-compliant Corporate Account registration request has been submitted. Our compliance team will review your business information and send verification details to your email address shortly.
+         </p>
+       </div>
+       
+       <div class="space-y-4 w-full">
+         <button routerLink="/" class="w-full h-14 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] hover:shadow-xl hover:shadow-[var(--dogo-primary)]/20 transition-all uppercase tracking-widest text-sm flex items-center justify-center gap-2 cursor-pointer">
+           <i class="ri-home-5-line"></i> Back to Home
+         </button>
+       </div>
+    </div>
+  } @else {
+    <!-- Corporate Registration Form -->
+    <form [formGroup]="corporateForm" (ngSubmit)="onSubmit()" class="space-y-6 animate-in fade-in duration-500 py-4">
+      
+      <!-- Error Message -->
+      @if (errorMessage()) {
+        <div class="p-4 bg-red-50 border-l-4 border-red-500 rounded-xl flex items-center gap-3 animate-shake">
+          <i class="ri-error-warning-fill text-red-500 text-xl"></i>
+          <p class="text-red-700 text-sm font-bold">{{ errorMessage() }}</p>
         </div>
-     </div>
-     
-     <h1 class="text-3xl md:text-5xl font-black text-[var(--dogo-dark)] mb-6 tracking-tighter">Corporate Accounts <br><span class="text-[var(--dogo-primary)]">Coming Soon!</span></h1>
-     
-     <div class="bg-white/40 backdrop-blur-sm border border-[var(--dogo-primary)]/10 p-8 rounded-[32px] mb-12">
-       <p class="text-lg text-[var(--dogo-muted)] font-medium leading-relaxed">
-         Our Shariah-compliant Corporate Account registration is currently under development. Build corporate reserves, invest excess liquidity, and grow business assets safely the 100% Halal way.
-       </p>
-     </div>
-     
-     <div class="space-y-4 w-full">
-       <button routerLink="/" class="w-full h-14 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] hover:shadow-xl hover:shadow-[var(--dogo-primary)]/20 transition-all uppercase tracking-widest text-sm flex items-center justify-center gap-2 cursor-pointer">
-         <i class="ri-home-5-line"></i> Back to Home
-       </button>
-     </div>
-  </div>
+      }
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- First Name -->
+        <div>
+          <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">First Name</label>
+          <div class="relative">
+            <input type="text" formControlName="firstName" class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl px-5 pl-12 font-medium text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:ring-4 focus:ring-[var(--dogo-secondary)]/10 transition-all placeholder:text-gray-400" placeholder="Enter first name" />
+            <i class="ri-user-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"></i>
+          </div>
+          @if(corporateForm.get('firstName')?.invalid && corporateForm.get('firstName')?.touched) {
+            <span class="text-red-500 text-xs font-bold mt-2 block">First name is required.</span>
+          }
+        </div>
+
+        <!-- Last Name -->
+        <div>
+          <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Last Name</label>
+          <div class="relative">
+            <input type="text" formControlName="lastName" class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl px-5 pl-12 font-medium text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:ring-4 focus:ring-[var(--dogo-secondary)]/10 transition-all placeholder:text-gray-400" placeholder="Enter last name" />
+            <i class="ri-user-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"></i>
+          </div>
+          @if(corporateForm.get('lastName')?.invalid && corporateForm.get('lastName')?.touched) {
+            <span class="text-red-500 text-xs font-bold mt-2 block">Last name is required.</span>
+          }
+        </div>
+      </div>
+
+      <!-- Business Name -->
+      <div>
+        <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Business Name</label>
+        <div class="relative group">
+          <input type="text" formControlName="businessName" class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl px-5 pl-12 font-medium text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:ring-4 focus:ring-[var(--dogo-secondary)]/10 transition-all placeholder:text-gray-400" placeholder="Enter Business name" />
+          <i class="ri-briefcase-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[var(--dogo-secondary)] transition-colors"></i>
+        </div>
+        @if(corporateForm.get('businessName')?.invalid && corporateForm.get('businessName')?.touched) {
+          <span class="text-red-500 text-xs font-bold mt-2 block">Business name is required.</span>
+        }
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Email Address</label>
+        <div class="relative group">
+          <input type="email" formControlName="email" class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl px-5 pl-12 font-medium text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:ring-4 focus:ring-[var(--dogo-secondary)]/10 transition-all placeholder:text-gray-400" placeholder="Email Address" />
+          <i class="ri-mail-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[var(--dogo-secondary)] transition-colors"></i>
+        </div>
+        @if(corporateForm.get('email')?.invalid && corporateForm.get('email')?.touched) {
+          <span class="text-red-500 text-xs font-bold mt-2 block">Enter a valid email address.</span>
+        }
+      </div>
+
+      <!-- Create Password -->
+      <div>
+        <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Create Password</label>
+        <div class="relative group">
+          <input [type]="showPassword() ? 'text' : 'password'" formControlName="password" class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl px-5 pl-12 pr-16 font-medium text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:ring-4 focus:ring-[var(--dogo-secondary)]/10 transition-all placeholder:text-gray-400" placeholder="Create Password" />
+          <i class="ri-lock-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[var(--dogo-secondary)] transition-colors"></i>
+          <button type="button" (click)="togglePassword()" class="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[var(--dogo-primary)] transition-colors text-xs font-extrabold uppercase tracking-wider cursor-pointer">
+            {{ showPassword() ? 'Hide' : 'Show' }}
+          </button>
+        </div>
+        
+        <!-- Live password checklist chips -->
+        <div class="flex flex-wrap gap-2 mt-3 animate-in fade-in duration-300">
+          <!-- Alphanumeric Characters -->
+          <div [class]="hasAlphanumeric() ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-gray-50 text-gray-400 border border-gray-100'" 
+               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] md:text-xs font-extrabold uppercase tracking-wider transition-all duration-300">
+            <i [class]="hasAlphanumeric() ? 'ri-checkbox-circle-fill text-emerald-500' : 'ri-checkbox-blank-circle-line text-gray-300'"></i>
+            Alphanumeric characters
+          </div>
+
+          <!-- 1 Special Character -->
+          <div [class]="hasSpecialChar() ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-gray-50 text-gray-400 border border-gray-100'" 
+               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] md:text-xs font-extrabold uppercase tracking-wider transition-all duration-300">
+            <i [class]="hasSpecialChar() ? 'ri-checkbox-circle-fill text-emerald-500' : 'ri-checkbox-blank-circle-line text-gray-300'"></i>
+            1 special character
+          </div>
+
+          <!-- At least 8 Characters -->
+          <div [class]="hasMinLength() ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-gray-50 text-gray-400 border border-gray-100'" 
+               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] md:text-xs font-extrabold uppercase tracking-wider transition-all duration-300">
+            <i [class]="hasMinLength() ? 'ri-checkbox-circle-fill text-emerald-500' : 'ri-checkbox-blank-circle-line text-gray-300'"></i>
+            At least 8 characters
+          </div>
+
+          <!-- 1 Uppercase Letter -->
+          <div [class]="hasUppercase() ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-gray-50 text-gray-400 border border-gray-100'" 
+               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] md:text-xs font-extrabold uppercase tracking-wider transition-all duration-300">
+            <i [class]="hasUppercase() ? 'ri-checkbox-circle-fill text-emerald-500' : 'ri-checkbox-blank-circle-line text-gray-300'"></i>
+            1 uppercase letter
+          </div>
+        </div>
+
+        @if(corporateForm.get('password')?.invalid && corporateForm.get('password')?.touched) {
+          <span class="text-red-500 text-xs font-bold mt-2 block">Password does not meet standard Shariah security reserve criteria.</span>
+        }
+      </div>
+
+
+
+      <!-- Terms of Use Checkbox -->
+      <div class="flex items-start space-x-3 cursor-pointer group mt-4">
+        <div class="relative flex items-center mt-0.5">
+          <input type="checkbox" id="agreeToTerms" formControlName="agreeToTerms" class="peer h-6 w-6 appearance-none rounded-lg border-2 border-[var(--dogo-primary)]/10 bg-white checked:bg-[var(--dogo-primary)] checked:border-[var(--dogo-primary)] transition-all cursor-pointer" />
+          <i class="ri-check-line absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"></i>
+        </div>
+        <label for="agreeToTerms" class="text-xs font-bold text-[var(--dogo-dark)] leading-normal cursor-pointer select-none">
+          I agree with Zedcrest Wealth's <a href="#" class="text-[var(--dogo-secondary)] font-extrabold hover:underline">Terms of use</a> and <a href="#" class="text-[var(--dogo-secondary)] font-extrabold hover:underline">Privacy policy</a>.
+        </label>
+      </div>
+      @if(corporateForm.get('agreeToTerms')?.invalid && corporateForm.get('agreeToTerms')?.touched) {
+        <span class="text-red-500 text-xs font-bold block mt-1">You must agree to the Terms of use and Privacy policy.</span>
+      }
+
+      <!-- Submit Button -->
+      <button type="submit" [disabled]="isProcessing()" class="w-full h-14 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] hover:shadow-xl hover:shadow-[var(--dogo-primary)]/20 transition-all uppercase tracking-widest text-sm mt-6 disabled:opacity-70 flex items-center justify-center gap-2 cursor-pointer">
+        @if(isProcessing()) {
+          <i class="ri-loader-4-line animate-spin text-lg"></i> Creating Corporate Account...
+        } @else {
+          Sign Up
+        }
+      </button>
+    </form>
+  }
 </app-auth-layout>

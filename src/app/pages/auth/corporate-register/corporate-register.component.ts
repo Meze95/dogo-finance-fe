@@ -1,13 +1,104 @@
-import { Component } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { AuthLayoutComponent } from '../../../layouts/auth-layout/auth-layout.component';
 
 @Component({
   selector: 'app-corporate-register',
   standalone: true,
-  imports: [CommonModule, RouterModule, AuthLayoutComponent],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, AuthLayoutComponent],
   templateUrl: './corporate-register.component.html',
   styleUrl: './corporate-register.component.css'
 })
-export class CorporateRegisterComponent {}
+export class CorporateRegisterComponent {
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
+
+  corporateForm: FormGroup;
+  showPassword = signal(false);
+  isProcessing = signal(false);
+  isSuccess = signal(false);
+  errorMessage = signal<string | null>(null);
+
+  // Live password requirement check signals
+  hasMinLength = signal(false);
+  hasUppercase = signal(false);
+  hasSpecialChar = signal(false);
+  hasAlphanumeric = signal(false);
+
+  constructor() {
+    this.corporateForm = this.fb.group({
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      businessName: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, this.passwordStrengthValidator.bind(this)]],
+      agreeToTerms: [false, [Validators.requiredTrue]]
+    });
+
+    // Listen to password changes to update requirement signals in real time
+    this.corporateForm.get('password')?.valueChanges.subscribe(val => {
+      const password = val || '';
+      this.hasMinLength.set(password.length >= 8);
+      this.hasUppercase.set(/[A-Z]/.test(password));
+      this.hasSpecialChar.set(/[!@#$%^&*(),.?":{}|<>_]/.test(password));
+      this.hasAlphanumeric.set(/[a-zA-Z]/.test(password) && /[0-9]/.test(password));
+    });
+  }
+
+  // Custom password strength validator
+  passwordStrengthValidator(control: AbstractControl) {
+    const value = control.value || '';
+    const hasMin = value.length >= 8;
+    const hasUpper = /[A-Z]/.test(value);
+    const hasSpecial = /[!@#$%^&*(),.?":{}|<>_]/.test(value);
+    const hasAlphaNum = /[a-zA-Z]/.test(value) && /[0-9]/.test(value);
+
+    if (hasMin && hasUpper && hasSpecial && hasAlphaNum) {
+      return null;
+    }
+    return { strength: true };
+  }
+
+  togglePassword() {
+    this.showPassword.set(!this.showPassword());
+  }
+
+  onSubmit() {
+    if (this.corporateForm.valid) {
+      this.isProcessing.set(true);
+      this.errorMessage.set(null);
+
+      const formData = this.corporateForm.value;
+      
+      // Log the collected form data to the console as requested
+      console.log('--- Corporate Registration Submitted ---');
+      console.log('Payload:', {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        businessName: formData.businessName,
+        email: formData.email,
+        password: '••••••••', // Mask for security in logs but log that it is captured
+        agreedToTerms: formData.agreeToTerms
+      });
+      console.log('Raw Form Values:', formData);
+      console.log('-----------------------------------------');
+
+      // Simulate API interaction
+      setTimeout(() => {
+        this.isProcessing.set(false);
+        this.isSuccess.set(true);
+        // Scroll to top to see success message if any
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 1500);
+    } else {
+      // Mark all controls as touched to trigger validation displays
+      Object.keys(this.corporateForm.controls).forEach(key => {
+        this.corporateForm.get(key)?.markAsTouched();
+      });
+      this.errorMessage.set('Please fill in all required fields and satisfy all password conditions.');
+    }
+  }
+}
+
