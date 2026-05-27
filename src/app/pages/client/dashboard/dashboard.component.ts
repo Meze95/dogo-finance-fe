@@ -205,6 +205,19 @@ export class ClientDashboardComponent implements OnInit {
                 }
             }
         });
+        
+        this.customerService.getCompanyBankDetails().subscribe({
+            next: (res: any) => {
+                const data = res?.data || res?.Data;
+                if (data) {
+                    this.companyBankDetails.set({
+                        bankName: data.bankName || data.BankName || data.BankId?.toString() || 'Company Bank',
+                        accountName: data.companyName || data.CompanyName || 'Dogo Finance',
+                        accountNumber: data.accountNumber || data.AccountNumber || '0000000000'
+                    });
+                }
+            }
+        });
     }
   }
 
@@ -549,9 +562,9 @@ export class ClientDashboardComponent implements OnInit {
   registeredBanks = signal<BankAccount[]>([]);
 
   // Funding specific states
-  fundingStep = signal<'amount' | 'source' | 'card' | 'otp' | 'pin' | 'virtual' | 'bvn' | 'success'>('amount');
+  fundingStep = signal<'amount' | 'source' | 'card' | 'otp' | 'pin' | 'virtual' | 'manual' | 'bvn' | 'success'>('amount');
   otpMessage = signal('');
-  selectedSource = signal<'card' | 'virtual' | null>(null);
+  selectedSource = signal<'card' | 'virtual' | 'manual' | null>(null);
   cardNumber = signal('');
   expiryDate = signal('');
   cvv = signal('');
@@ -560,6 +573,10 @@ export class ClientDashboardComponent implements OnInit {
   currentReference = signal('');
   currentChargeId = signal('');
   errorMessage = signal('');
+
+  companyBankDetails = signal<{bankName: string, accountName: string, accountNumber: string} | null>(null);
+  manualReference = signal('');
+  manualReceiptPath = signal('');
 
   virtualAccounts = signal<{bankName: string, accountName: string, accountNumber: string}[]>([]);
 
@@ -855,6 +872,8 @@ export class ClientDashboardComponent implements OnInit {
     this.cardType.set('');
     this.cardPin.set('');
     this.otpInput.set('');
+    this.manualReference.set('');
+    this.manualReceiptPath.set('');
     this.errorMessage.set('');
     this.showTransactionModal.set(true);
     this.isProcessing.set(false);
@@ -984,6 +1003,9 @@ export class ClientDashboardComponent implements OnInit {
             } else {
                 this.fetchVirtualAccount();
             }
+        } else if (this.selectedSource() === 'manual') {
+            this.fundingStep.set('manual');
+            this.isProcessing.set(false);
         } else {
            this.isProcessing.set(false);
         }
@@ -1151,6 +1173,35 @@ export class ClientDashboardComponent implements OnInit {
         this.isProcessing.set(false);
       }
     }
+  }
+
+  submitManualTransfer() {
+    if (!this.manualReference()) return;
+    this.isProcessing.set(true);
+    const amount = Number(this.transactionAmount().replace(/,/g, ''));
+    
+    this.transactionService.submitManualFunding({
+      amount: amount,
+      reference: this.manualReference(),
+      receiptPath: this.manualReceiptPath()
+    }).subscribe({
+      next: (res) => {
+        this.isProcessing.set(false);
+        this.fundingStep.set('success');
+        this.loadDashboardData();
+        setTimeout(() => this.closeTransactionModal(), 3000);
+      },
+      error: (err) => {
+        this.isProcessing.set(false);
+        this.errorMessage.set(err.error?.message || 'Failed to submit request');
+        Swal.fire({
+          icon: 'error',
+          title: 'Submission Failed',
+          text: err.error?.message || 'Please try again later.',
+          confirmButtonColor: 'var(--dogo-primary)'
+        });
+      }
+    });
   }
 
   finalizeWithdrawal() {

@@ -1,0 +1,217 @@
+<div class="space-y-6 animate-fade-in relative z-10 hidden-scrollbar pb-10">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h2 class="text-3xl font-black text-[var(--dogo-dark)] tracking-tight">Manual Fund Approval</h2>
+      <p class="text-gray-500 text-sm mt-1 uppercase tracking-widest font-bold">Review and process client manual funding requests.</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <!-- Search Bar -->
+      <div class="relative w-full md:w-64">
+        <i class="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+        <input type="text" [ngModel]="searchTerm()" (input)="updateSearch($event)" placeholder="Search reference..." 
+               class="w-full bg-white border border-[var(--dogo-primary)]/10 focus:border-[var(--dogo-secondary)] rounded-2xl py-3 pl-11 pr-4 text-slate-800 font-bold placeholder:text-slate-300 outline-none transition-all shadow-sm" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-2">
+    <button *ngFor="let filter of ['pending', 'all', 'approved', 'rejected']" 
+            (click)="setFilter(filter)"
+            [ngClass]="activeFilter() === filter ? 'bg-[var(--dogo-primary)] text-white shadow-md' : 'bg-white text-slate-500 hover:bg-slate-50 border border-[var(--dogo-primary)]/10'"
+            class="px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap">
+      {{ filter }}
+    </button>
+  </div>
+
+  <!-- Requests Table Card -->
+  <div class="bg-white rounded-[40px] p-4 sm:p-8 border border-[var(--dogo-primary)]/5 shadow-sm overflow-hidden">
+    <div class="overflow-x-auto custom-scrollbar pb-4">
+      <table class="w-full text-left border-collapse min-w-[800px]">
+        <thead>
+          <tr class="border-b-2 border-slate-100">
+            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Client Profile</th>
+            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Transfer Reference</th>
+            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Amount</th>
+            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Status</th>
+            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)] text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="text-sm">
+          @for(r of filteredRequests(); track r.id; let i = $index) {
+          <tr class="border-b border-slate-50 hover:bg-[var(--dogo-cream)] transition-colors group">
+            <td class="py-5 px-4">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-2xl flex items-center justify-center font-black text-xs text-white shadow-sm shrink-0 uppercase bg-[var(--dogo-primary)]">
+                  {{ r.clientInitials }}
+                </div>
+                <div>
+                  <div class="font-black text-[var(--dogo-dark)]">{{ r.clientName }}</div>
+                  <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ r.email }}</div>
+                </div>
+              </div>
+            </td>
+            <td class="py-5 px-4">
+              <div class="font-bold text-slate-700 max-w-[200px] truncate" [title]="r.reference">{{ r.reference }}</div>
+              <div class="text-[10px] font-bold text-slate-400 mt-1">{{ r.date | date:'short' }}</div>
+            </td>
+            <td class="py-5 px-4">
+              <div class="font-black text-lg text-[var(--dogo-dark)]">₦{{ r.amount | number }}</div>
+            </td>
+            <td class="py-5 px-4">
+              <app-badge [variant]="getBadgeVariant(r.status)">{{ r.status | uppercase }}</app-badge>
+            </td>
+            <td class="py-5 px-4 text-right">
+              <button (click)="viewDetails(r)" class="text-slate-400 hover:text-[var(--dogo-secondary)] transition-colors p-2 hover:bg-[var(--dogo-secondary)]/10 rounded-2xl" title="Review">
+                <i class="ri-search-eye-line text-lg"></i>
+              </button>
+            </td>
+          </tr>
+          } @empty {
+            <tr>
+              <td colspan="5" class="py-12 text-center text-slate-400 font-bold">
+                <div class="flex flex-col items-center justify-center gap-3">
+                  <div class="w-16 h-16 rounded-3xl bg-slate-50 flex items-center justify-center text-2xl text-slate-300">
+                    <i class="ri-inbox-archive-line"></i>
+                  </div>
+                  <p>No manual funding requests found.</p>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Pagination -->
+    @if(totalPages() > 1) {
+    <div class="flex items-center justify-between mt-6 pt-4 border-t border-slate-100">
+      <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">
+        Showing page {{ currentPage() }} of {{ totalPages() }}
+      </div>
+      <div class="flex items-center gap-2">
+        <button [disabled]="currentPage() === 1" (click)="setPage(currentPage() - 1)" 
+                class="w-8 h-8 rounded-xl flex items-center justify-center bg-slate-50 text-slate-500 hover:bg-[var(--dogo-secondary)] hover:text-white disabled:opacity-50 disabled:hover:bg-slate-50 disabled:hover:text-slate-500 transition-colors">
+          <i class="ri-arrow-left-s-line"></i>
+        </button>
+        <button [disabled]="currentPage() === totalPages()" (click)="setPage(currentPage() + 1)"
+                class="w-8 h-8 rounded-xl flex items-center justify-center bg-slate-50 text-slate-500 hover:bg-[var(--dogo-secondary)] hover:text-white disabled:opacity-50 disabled:hover:bg-slate-50 disabled:hover:text-slate-500 transition-colors">
+          <i class="ri-arrow-right-s-line"></i>
+        </button>
+      </div>
+    </div>
+    }
+  </div>
+</div>
+
+<!-- View Details / Process Modal -->
+@if(selectedRequest()) {
+<div class="fixed inset-0 z-[999] flex items-center justify-center px-4 animate-fade-in" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <div class="fixed inset-0 bg-[var(--dogo-dark)]/60 backdrop-blur-md transition-opacity" (click)="closeDetails()"></div>
+  
+  <div class="relative bg-white rounded-[40px] shadow-2xl w-full max-w-xl transform transition-all animate-slide-up flex flex-col max-h-[90vh]">
+    <!-- Modal Header -->
+    <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-[var(--dogo-cream)] rounded-t-[40px] shrink-0">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-[var(--dogo-secondary)]/20 text-[var(--dogo-secondary)] flex items-center justify-center">
+            <i class="ri-wallet-3-line text-xl"></i>
+        </div>
+        <h3 class="text-xl font-black text-[var(--dogo-dark)] tracking-tight" id="modal-title">
+          Review Funding
+        </h3>
+      </div>
+      <button type="button" (click)="closeDetails()" class="text-slate-400 hover:text-red-500 transition-colors" [disabled]="isApproving() || (isRejecting() && rejectReason().trim())">
+        <i class="ri-close-large-line text-xl"></i>
+      </button>
+    </div>
+    
+    <!-- Modal Body -->
+    <div class="p-8 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      <div class="flex items-center justify-between mb-8 pb-8 border-b border-slate-100">
+        <div>
+          <h2 class="text-3xl font-black text-[var(--dogo-dark)]">₦{{ selectedRequest()!.amount | number }}</h2>
+          <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Stated Amount</p>
+        </div>
+        <app-badge [variant]="getBadgeVariant(selectedRequest()!.status)">{{ selectedRequest()!.status | uppercase }}</app-badge>
+      </div>
+
+      <div class="space-y-6">
+        <div>
+          <p class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-secondary)] mb-2">Request Info</p>
+          <div class="space-y-3">
+             <div class="flex justify-between items-center bg-[var(--dogo-cream)] rounded-2xl p-4">
+                <span class="text-xs font-bold text-slate-500">Client</span>
+                <span class="text-sm font-black text-[var(--dogo-dark)]">{{ selectedRequest()!.clientName }}</span>
+             </div>
+             <div class="flex justify-between items-center bg-[var(--dogo-cream)] rounded-2xl p-4">
+                <span class="text-xs font-bold text-slate-500">Date</span>
+                <span class="text-sm font-black text-[var(--dogo-dark)]">{{ selectedRequest()!.date | date:'medium' }}</span>
+             </div>
+             <div class="bg-[var(--dogo-cream)] rounded-2xl p-4">
+                <span class="text-xs font-bold text-slate-500 block mb-1">Transfer Reference</span>
+                <span class="text-sm font-black text-[var(--dogo-dark)] font-mono break-all">{{ selectedRequest()!.reference }}</span>
+             </div>
+             @if(selectedRequest()!.receiptPath) {
+             <div class="bg-[var(--dogo-cream)] rounded-2xl p-4">
+                <span class="text-xs font-bold text-slate-500 block mb-1">Receipt Path</span>
+                <a [href]="selectedRequest()!.receiptPath" target="_blank" class="text-sm font-black text-blue-600 hover:underline break-all">
+                  {{ selectedRequest()!.receiptPath }} <i class="ri-external-link-line ml-1"></i>
+                </a>
+             </div>
+             }
+             @if(selectedRequest()!.notes) {
+             <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4">
+                <span class="text-[10px] font-black uppercase tracking-widest text-blue-600 block mb-1">Admin Notes</span>
+                <span class="text-sm font-bold text-blue-900">{{ selectedRequest()!.notes }}</span>
+             </div>
+             }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Footer Actions (only show if pending) -->
+    @if(selectedRequest()!.status === 'pending') {
+      <div class="px-8 py-6 border-t border-slate-100 bg-white rounded-b-[40px] shrink-0">
+        
+        @if(!isRejecting()) {
+          <div class="mb-4 animate-fade-in">
+             <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)] mb-2">Approval Note (Optional)</label>
+             <input type="text" [ngModel]="approveNote()" (ngModelChange)="approveNote.set($event)" placeholder="e.g. Received in GTB Account" class="w-full bg-[var(--dogo-cream)] border border-slate-200 focus:border-[var(--dogo-primary)] focus:ring-4 focus:ring-[var(--dogo-primary)]/10 rounded-2xl p-4 text-sm font-bold text-[var(--dogo-dark)] outline-none transition-all" />
+          </div>
+
+          <div class="flex gap-4">
+            <button (click)="startReject()" class="flex-1 px-6 py-4 rounded-[20px] bg-red-50 text-red-600 font-black tracking-widest uppercase text-sm hover:bg-red-100 transition-all text-center">
+              Reject
+            </button>
+            <button (click)="approve()" [disabled]="isApproving()" class="flex-[2] flex items-center justify-center gap-2 px-6 py-4 rounded-[20px] bg-[var(--dogo-primary)] text-white font-black tracking-widest uppercase text-sm hover:bg-[var(--dogo-primary)]/90 hover:shadow-lg transition-all disabled:opacity-70">
+              @if(isApproving()) {
+                <i class="ri-loader-4-line animate-spin text-xl"></i> Processing...
+              } @else {
+                <i class="ri-check-double-line text-lg"></i> Approve & Credit
+              }
+            </button>
+          </div>
+          <p class="text-[10px] font-bold text-slate-400 text-center mt-4">By approving, the client's Dogo wallet will be credited with ₦{{ selectedRequest()!.amount | number }}.</p>
+        } @else {
+          <!-- Reject Confirmation Form -->
+          <div class="animate-fade-in">
+            <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)] mb-2">Reason for Rejection</label>
+            <textarea [ngModel]="rejectReason()" (ngModelChange)="rejectReason.set($event)" rows="3" placeholder="Explain why this funding request is rejected..." class="w-full bg-[var(--dogo-cream)] border border-slate-200 focus:border-red-400 focus:ring-4 focus:ring-red-400/10 rounded-2xl p-4 text-sm font-bold text-[var(--dogo-dark)] outline-none transition-all resize-none"></textarea>
+            
+            <div class="flex gap-4 mt-6">
+              <button (click)="cancelReject()" class="flex-1 px-6 py-4 rounded-[20px] border border-slate-200 text-slate-600 font-black tracking-widest uppercase text-sm hover:bg-slate-50 transition-all text-center">
+                Cancel
+              </button>
+              <button (click)="confirmReject()" [disabled]="!rejectReason().trim() || isApproving()" class="flex-[2] flex items-center justify-center gap-2 px-6 py-4 rounded-[20px] bg-red-600 text-white font-black tracking-widest uppercase text-sm hover:bg-red-700 hover:shadow-lg transition-all disabled:opacity-50">
+                Confirm Rejection
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
+}

@@ -585,6 +585,21 @@
                     <div class="text-[var(--dogo-secondary)] animate-in zoom-in"><i class="ri-checkbox-circle-fill text-2xl"></i></div>
                   }
                 </div>
+
+                <div (click)="selectedSource.set('manual')" 
+                     [class.border-[var(--dogo-secondary)]]="selectedSource() === 'manual'"
+                     class="group relative bg-[var(--dogo-cream)] rounded-3xl p-6 flex items-center space-x-5 cursor-pointer border-2 border-transparent hover:border-[var(--dogo-secondary)] transition-all">
+                  <div class="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-[var(--dogo-primary)] shadow-sm shrink-0 group-hover:scale-105 transition-transform">
+                    <i class="ri-bank-line text-2xl"></i>
+                  </div>
+                  <div class="flex-grow">
+                    <h4 class="text-sm font-black text-[var(--dogo-dark)] mb-1">Manual Bank Transfer</h4>
+                    <p class="text-[10px] font-medium text-[var(--dogo-muted)] leading-tight">Transfer directly to company account</p>
+                  </div>
+                  @if (selectedSource() === 'manual') {
+                    <div class="text-[var(--dogo-secondary)] animate-in zoom-in"><i class="ri-checkbox-circle-fill text-2xl"></i></div>
+                  }
+                </div>
               </div>
             </div>
 
@@ -664,6 +679,72 @@
 
                <button (click)="closeTransactionModal()" class="w-full h-16 mt-8 bg-[var(--dogo-dark)] text-white rounded-[2rem] text-[10px] font-black uppercase tracking-widest hover:bg-[var(--dogo-primary)] transition-all shadow-xl shadow-black/10">
                  I have made the transfer
+               </button>
+            </div>
+
+            <!-- STEP: MANUAL TRANSFER -->
+            <div *ngSwitchCase="'manual'" class="space-y-6 animate-in slide-in-from-right-4 duration-300">
+               <div class="text-center">
+                  <h4 class="text-xl font-black text-[var(--dogo-dark)] italic tracking-tighter mb-2">Manual Bank Transfer</h4>
+                  <p class="text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest mb-6">Transfer to the company account below and submit reference</p>
+               </div>
+
+               @if (companyBankDetails()) {
+                 <div class="p-6 bg-[var(--dogo-cream)] rounded-[32px] border border-[var(--dogo-primary)]/5 relative group overflow-hidden mb-6">
+                    <div class="absolute inset-y-0 left-0 w-1.5 bg-[var(--dogo-secondary)] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="flex justify-between items-start mb-1">
+                       <p class="text-xs font-black text-[var(--dogo-primary)] uppercase tracking-widest">{{ companyBankDetails()?.bankName }}</p>
+                    </div>
+                    <div class="flex justify-between items-center mt-2">
+                       <div>
+                         <p class="text-sm font-black text-[var(--dogo-dark)]">{{ companyBankDetails()?.accountName }}</p>
+                         <p class="text-base font-black text-[var(--dogo-dark)] tracking-wider mt-1">{{ companyBankDetails()?.accountNumber }}</p>
+                       </div>
+                       <button (click)="copyToClipboard(companyBankDetails()?.accountNumber || '')" class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)] hover:text-white transition-all shadow-sm">
+                          <i class="ri-file-copy-line"></i>
+                       </button>
+                    </div>
+                 </div>
+               } @else {
+                 <div class="p-6 bg-red-50 text-red-600 rounded-2xl text-[11px] uppercase font-black tracking-widest text-center mb-6">
+                    Company bank details not available.
+                 </div>
+               }
+
+               <div>
+                 <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 ml-4 block w-full mb-2">Transfer Reference / Description</label>
+                 <input 
+                   type="text" 
+                   placeholder="e.g. John Doe Funding"
+                   [value]="manualReference()"
+                   (input)="manualReference.set($any($event.target).value)"
+                   class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-4 text-sm font-bold text-[var(--dogo-dark)] outline-none transition-all placeholder:text-[var(--dogo-primary)]/20"
+                 >
+               </div>
+               
+               <div>
+                 <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 ml-4 block w-full mb-2">Payment Receipt URL (Optional)</label>
+                 <input 
+                   type="text" 
+                   placeholder="https://..."
+                   [value]="manualReceiptPath()"
+                   (input)="manualReceiptPath.set($any($event.target).value)"
+                   class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-4 text-sm font-bold text-[var(--dogo-dark)] outline-none transition-all placeholder:text-[var(--dogo-primary)]/20"
+                 >
+               </div>
+
+               <button 
+                 (click)="submitManualTransfer()" 
+                 [disabled]="!manualReference() || isProcessing() || !companyBankDetails()"
+                 class="w-full h-16 mt-4 bg-[var(--dogo-primary)] text-white rounded-[2rem] text-[10px] font-black uppercase tracking-widest hover:bg-[var(--dogo-primary-soft)] transition-all shadow-xl disabled:opacity-50 flex justify-center items-center">
+                 @if (isProcessing()) {
+                    <div class="flex items-center space-x-2">
+                      <div class="w-2 h-2 rounded-full bg-[var(--dogo-secondary)] animate-pulse"></div>
+                      <span>Submitting...</span>
+                    </div>
+                 } @else {
+                    Submit Proof
+                 }
                </button>
             </div>
 
@@ -823,7 +904,7 @@
             </div>
           }
 
-          @if (fundingStep() !== 'success' && fundingStep() !== 'virtual' && fundingStep() !== 'bvn') {
+          @if (fundingStep() !== 'success' && fundingStep() !== 'virtual' && fundingStep() !== 'bvn' && fundingStep() !== 'manual') {
             <button 
               (click)="processTransaction()"
               [disabled]="isProcessing() || 

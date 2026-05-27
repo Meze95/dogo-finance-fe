@@ -1,0 +1,102 @@
+<div class="space-y-6 animate-fade-in relative z-10 hidden-scrollbar pb-10 no-print">
+  
+  <!-- Form Card (Matches Design Pattern) -->
+  <div class="bg-white rounded-lg shadow-sm border border-slate-200">
+    <!-- Header -->
+    <div class="bg-[var(--dogo-primary)] text-white px-6 py-4 rounded-t-lg flex items-center justify-between no-print">
+      <h2 class="text-lg font-bold">Client Onboarding Report</h2>
+    </div>
+
+    <!-- Filter Form -->
+    <div class="p-6 no-print">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-xs font-bold text-slate-500 mb-2">Previous Date (Start Date)</label>
+          <input type="date" [(ngModel)]="startDate" class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:border-[var(--dogo-primary)] transition-colors text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 mb-2">Report Date (End Date)</label>
+          <input type="date" [(ngModel)]="endDate" class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:border-[var(--dogo-primary)] transition-colors text-sm">
+        </div>
+      </div>
+      
+      <div class="mt-6 flex justify-end">
+        <button (click)="generateReport()" [disabled]="isLoading()" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-colors disabled:opacity-50 flex items-center gap-2">
+          <i *ngIf="isLoading()" class="ri-loader-4-line animate-spin"></i>
+          Generate Report
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Report Data Container -->
+  <div *ngIf="data()" class="space-y-6 animate-fade-in mt-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="bg-white rounded-[30px] p-6 border border-[var(--dogo-primary)]/5 shadow-sm">
+        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">New Users</p>
+        <h3 class="text-3xl font-black text-[var(--dogo-dark)]">{{ data()?.totalNewUsers }}</h3>
+      </div>
+      <div class="bg-white rounded-[30px] p-6 border border-[var(--dogo-primary)]/5 shadow-sm">
+        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">KYC Verified</p>
+        <h3 class="text-3xl font-black text-emerald-600">{{ data()?.kycVerified }}</h3>
+      </div>
+      <div class="bg-white rounded-[30px] p-6 border border-[var(--dogo-primary)]/5 shadow-sm">
+        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">KYC Pending</p>
+        <h3 class="text-3xl font-black text-amber-500">{{ data()?.kycPending }}</h3>
+      </div>
+      <div class="bg-white rounded-[30px] p-6 border border-[var(--dogo-primary)]/5 shadow-sm">
+        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">KYC Unverified</p>
+        <h3 class="text-3xl font-black text-red-500">{{ data()?.kycUnverified }}</h3>
+      </div>
+    </div>
+
+    <!-- KYC Distribution Chart -->
+    <div class="bg-white rounded-[30px] p-6 md:p-8 border border-[var(--dogo-primary)]/5 shadow-sm">
+      <h3 class="text-sm font-black text-[var(--dogo-dark)] uppercase tracking-widest mb-6">KYC Status Distribution</h3>
+      <div class="w-full h-8 flex rounded-xl overflow-hidden shadow-inner">
+         <div class="bg-emerald-500 h-full" [style.width.%]="getOnboardingPercents().verified" title="Verified"></div>
+         <div class="bg-amber-400 h-full" [style.width.%]="getOnboardingPercents().pending" title="Pending"></div>
+         <div class="bg-red-400 h-full" [style.width.%]="getOnboardingPercents().unverified" title="Unverified"></div>
+      </div>
+      <div class="flex gap-6 mt-4 text-xs font-bold text-slate-500">
+         <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-emerald-500"></div> Verified ({{ getOnboardingPercents().verified | number:'1.0-1' }}%)</div>
+         <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-amber-400"></div> Pending ({{ getOnboardingPercents().pending | number:'1.0-1' }}%)</div>
+         <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-red-400"></div> Unverified ({{ getOnboardingPercents().unverified | number:'1.0-1' }}%)</div>
+      </div>
+    </div>
+
+    <!-- Recent Signups Table -->
+    <div class="bg-white rounded-[40px] p-6 sm:p-8 border border-[var(--dogo-primary)]/5 shadow-sm">
+       <h3 class="text-sm font-black text-[var(--dogo-dark)] uppercase tracking-widest mb-6">Signups in Range (Top 10)</h3>
+       <div class="overflow-x-auto custom-scrollbar pt-2">
+         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="w-full text-left border-collapse min-w-[600px] hover row-border">
+           <thead>
+             <tr class="border-b-2 border-slate-100">
+               <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Name</th>
+               <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Email</th>
+               <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Joined</th>
+               <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Status</th>
+             </tr>
+           </thead>
+           <tbody class="text-sm">
+             <tr *ngFor="let s of data()?.recentSignups" class="border-b border-slate-50 hover:bg-[var(--dogo-cream)] transition-colors">
+               <td class="py-4 px-4 font-black text-[var(--dogo-dark)]">{{ s.name }}</td>
+               <td class="py-4 px-4 font-bold text-slate-500">{{ s.email }}</td>
+               <td class="py-4 px-4 font-bold text-slate-500">{{ s.dateJoined | date:'mediumDate' }}</td>
+               <td class="py-4 px-4">
+                 <span [ngClass]="{
+                   'bg-emerald-100 text-emerald-700': s.kycStatus === 'Verified',
+                   'bg-amber-100 text-amber-700': s.kycStatus === 'Pending',
+                   'bg-red-100 text-red-700': s.kycStatus === 'Unverified'
+                 }" class="px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-widest">
+                   {{ s.kycStatus }}
+                 </span>
+               </td>
+             </tr>
+           </tbody>
+         </table>
+        </div>
+     </div>
+   </div>
+
+</div>
