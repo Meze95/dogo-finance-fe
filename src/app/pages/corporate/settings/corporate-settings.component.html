@@ -1,0 +1,1275 @@
+<div class="space-y-8 animate-fade-in">
+  <!-- Page Header -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h2 class="text-2xl md:text-3xl font-black text-[var(--dogo-dark)] tracking-tight">Corporate Settings</h2>
+      <p class="text-sm font-medium text-[var(--dogo-muted)]">Configure company profile, compliance documents, corporate bank accounts, and authorized signatories.</p>
+    </div>
+  </div>
+
+  <!-- Settings Navigation Tabs -->
+  <div class="bg-white p-2 rounded-2xl border border-[var(--dogo-primary)]/5 flex gap-2 overflow-x-auto custom-scrollbar shrink-0 shadow-sm">
+    <button (click)="setTab('profile')" [class]="activeTab() === 'profile' ? 'bg-[var(--dogo-primary)] text-white' : 'text-[var(--dogo-muted)] hover:bg-[var(--dogo-cream)] hover:text-[var(--dogo-primary)]'"
+      class="px-5 py-3 rounded-xl font-bold text-xs md:text-sm transition-all whitespace-nowrap flex items-center gap-2 cursor-pointer">
+      <i class="ri-briefcase-line text-lg"></i> Company Profile
+    </button>
+    <button (click)="setTab('verification')" [class]="activeTab() === 'verification' ? 'bg-[var(--dogo-primary)] text-white' : 'text-[var(--dogo-muted)] hover:bg-[var(--dogo-cream)] hover:text-[var(--dogo-primary)]'"
+      class="px-5 py-3 rounded-xl font-bold text-xs md:text-sm transition-all whitespace-nowrap flex items-center gap-2 cursor-pointer">
+      <i class="ri-shield-check-line text-lg"></i> Compliance & KYC
+    </button>
+    <button (click)="setTab('banks')" [class]="activeTab() === 'banks' ? 'bg-[var(--dogo-primary)] text-white' : 'text-[var(--dogo-muted)] hover:bg-[var(--dogo-cream)] hover:text-[var(--dogo-primary)]'"
+      class="px-5 py-3 rounded-xl font-bold text-xs md:text-sm transition-all whitespace-nowrap flex items-center gap-2 cursor-pointer">
+      <i class="ri-bank-line text-lg"></i> Settlement Accounts
+    </button>
+    <button (click)="setTab('signatories')" [class]="activeTab() === 'signatories' ? 'bg-[var(--dogo-primary)] text-white' : 'text-[var(--dogo-muted)] hover:bg-[var(--dogo-cream)] hover:text-[var(--dogo-primary)]'"
+      class="px-5 py-3 rounded-xl font-bold text-xs md:text-sm transition-all whitespace-nowrap flex items-center gap-2 cursor-pointer">
+      <i class="ri-group-line text-lg"></i> Signatories & Directors
+    </button>
+    <button (click)="setTab('security')" [class]="activeTab() === 'security' ? 'bg-[var(--dogo-primary)] text-white' : 'text-[var(--dogo-muted)] hover:bg-[var(--dogo-cream)] hover:text-[var(--dogo-primary)]'"
+      class="px-5 py-3 rounded-xl font-bold text-xs md:text-sm transition-all whitespace-nowrap flex items-center gap-2 cursor-pointer">
+      <i class="ri-lock-password-line text-lg"></i> Corporate Security
+    </button>
+  </div>
+
+  <!-- TAB CONTENT -->
+  <div class="grid grid-cols-1 gap-8">
+    
+    <!-- Tab 1: Company Profile (Captured from Zedcrest Wealth Account Form) -->
+    @if(activeTab() === 'profile') {
+      <app-card title="Corporate Details" subtitle="Official registration and annual turnover details according to Shariah operational compliance">
+        
+        @if(!isEditingProfile()) {
+          <!-- View Profile Details -->
+          <div class="space-y-8 py-4">
+            
+            <!-- Section A: Company Details -->
+            <div>
+              <div class="flex items-center space-x-3 mb-6 pb-2 border-b border-[var(--dogo-primary)]/5">
+                <span class="bg-[var(--dogo-primary)] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg">A</span>
+                <h3 class="text-xs font-black text-[var(--dogo-dark)] uppercase tracking-wider">Company Details</h3>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                <div class="space-y-1">
+                  <span class="block text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Full Name of Entity</span>
+                  <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ companyProfile().companyName }}</p>
+                </div>
+                <div class="space-y-1">
+                  <span class="block text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Registration Number (RC/LLP)</span>
+                  <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ companyProfile().registrationNumber }}</p>
+                </div>
+                <div class="space-y-1">
+                  <span class="block text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Date of Incorporation</span>
+                  <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ companyProfile().dateOfIncorporation | date:'longDate' }}</p>
+                </div>
+                <div class="space-y-1">
+                  <span class="block text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Nature of Business</span>
+                  <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ companyProfile().natureOfBusiness }}</p>
+                </div>
+                <div class="space-y-1 md:col-span-2">
+                  <span class="block text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Operating/Registered Address</span>
+                  <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ companyProfile().address }}</p>
+                </div>
+                <div class="space-y-1">
+                  <span class="block text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Entity Type</span>
+                  <p class="text-sm font-bold text-[var(--dogo-dark)]">
+                    {{ companyProfile().entityType === 'Others' ? companyProfile().otherEntityType || 'Others' : companyProfile().entityType }}
+                  </p>
+                </div>
+                <div class="space-y-1">
+                  <span class="block text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Telephone Number</span>
+                  <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ companyProfile().phone }}</p>
+                </div>
+                <div class="space-y-1">
+                  <span class="block text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Tax Identity Number (TIN)</span>
+                  <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ companyProfile().tin }}</p>
+                </div>
+                <div class="space-y-1">
+                  <span class="block text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Official Email Address</span>
+                  <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ companyProfile().email }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section B: Annual Turnover and Investment -->
+            <div>
+              <div class="flex items-center space-x-3 mb-6 pb-2 border-b border-[var(--dogo-primary)]/5">
+                <span class="bg-[var(--dogo-primary)] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg">B</span>
+                <h3 class="text-xs font-black text-[var(--dogo-dark)] uppercase tracking-wider">Annual Turnover and Investment</h3>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                <div class="space-y-1">
+                  <span class="block text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Annual Turnover Range</span>
+                  <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ companyProfile().annualTurnover }}</p>
+                </div>
+                <div class="space-y-1">
+                  <span class="block text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Source of Investment Fund</span>
+                  <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ companyProfile().sourceOfFunds }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section C: Client Segmentation -->
+            <div>
+              <div class="flex items-center space-x-3 mb-6 pb-2 border-b border-[var(--dogo-primary)]/5">
+                <span class="bg-[var(--dogo-primary)] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg">C</span>
+                <h3 class="text-xs font-black text-[var(--dogo-dark)] uppercase tracking-wider">Client Segmentation</h3>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                <div class="space-y-1">
+                  <span class="block text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Designated Category</span>
+                  <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ companyProfile().clientSegmentation }}</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="flex justify-end pt-4 border-t border-[var(--dogo-primary)]/5 mt-6">
+            <app-button (click)="startEditProfile()" variant="primary" icon="ri-edit-line">Edit Profile Details</app-button>
+          </div>
+
+        } @else {
+          <!-- Edit Profile Form -->
+          <div class="space-y-8 py-4">
+            
+            <!-- Section A: Company Details (Edit Mode) -->
+            <div>
+              <div class="flex items-center space-x-3 mb-6 pb-2 border-b border-[var(--dogo-primary)]/5">
+                <span class="bg-[var(--dogo-primary)] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg">A</span>
+                <h3 class="text-xs font-black text-[var(--dogo-dark)] uppercase tracking-wider">Company Details</h3>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Full Name of Entity *</label>
+                  <input type="text" [value]="editProfileForm().companyName" (input)="updateProfileField('companyName', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Registration Number *</label>
+                    <input type="text" [value]="editProfileForm().registrationNumber" (input)="updateProfileField('registrationNumber', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Date of Incorporation *</label>
+                    <input type="date" [value]="editProfileForm().dateOfIncorporation" (input)="updateProfileField('dateOfIncorporation', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+                  </div>
+                </div>
+
+                <div class="md:col-span-2">
+                  <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Nature of Business *</label>
+                  <input type="text" [value]="editProfileForm().natureOfBusiness" (input)="updateProfileField('natureOfBusiness', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+                </div>
+
+                <div class="md:col-span-2">
+                  <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Operating/Registered Address *</label>
+                  <input type="text" [value]="editProfileForm().address" (input)="updateProfileField('address', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+                </div>
+
+                <div>
+                  <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Entity Type *</label>
+                  <app-dropdown [options]="entityTypeOptions()" [selectedValue]="editProfileForm().entityType" (valueChange)="updateProfileField('entityType', $event)"></app-dropdown>
+                </div>
+
+                @if(editProfileForm().entityType === 'Others') {
+                  <div class="animate-fade-in animate-in slide-in-from-right-4 duration-300">
+                    <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Specify Entity Type *</label>
+                    <input type="text" [value]="editProfileForm().otherEntityType" (input)="updateProfileField('otherEntityType', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+                  </div>
+                }
+
+                <div>
+                  <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Telephone Number *</label>
+                  <input type="text" [value]="editProfileForm().phone" (input)="updateProfileField('phone', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+                </div>
+
+                <div>
+                  <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Tax Identity Number (TIN) *</label>
+                  <input type="text" [value]="editProfileForm().tin" (input)="updateProfileField('tin', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+                </div>
+
+                <div class="md:col-span-2">
+                  <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Official Email Address *</label>
+                  <input type="email" [value]="editProfileForm().email" (input)="updateProfileField('email', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Section B: Annual Turnover and Investment (Edit Mode) -->
+            <div>
+              <div class="flex items-center space-x-3 mb-6 pb-2 border-b border-[var(--dogo-primary)]/5">
+                <span class="bg-[var(--dogo-primary)] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg">B</span>
+                <h3 class="text-xs font-black text-[var(--dogo-dark)] uppercase tracking-wider">Annual Turnover and Investment</h3>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Annual Turnover Range *</label>
+                  <app-dropdown [options]="turnoverOptions()" [selectedValue]="editProfileForm().annualTurnover" (valueChange)="updateProfileField('annualTurnover', $event)"></app-dropdown>
+                </div>
+                <div>
+                  <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Source of Investment Fund *</label>
+                  <input type="text" [value]="editProfileForm().sourceOfFunds" (input)="updateProfileField('sourceOfFunds', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Section C: Client Segmentation (Edit Mode) -->
+            <div>
+              <div class="flex items-center space-x-3 mb-6 pb-2 border-b border-[var(--dogo-primary)]/5">
+                <span class="bg-[var(--dogo-primary)] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg">C</span>
+                <h3 class="text-xs font-black text-[var(--dogo-dark)] uppercase tracking-wider">Client Segmentation</h3>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Designated Category *</label>
+                  <app-dropdown [options]="segmentationOptions()" [selectedValue]="editProfileForm().clientSegmentation" (valueChange)="updateProfileField('clientSegmentation', $event)"></app-dropdown>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="flex justify-end gap-3 pt-4 border-t border-[var(--dogo-primary)]/5 mt-6">
+            <app-button (click)="cancelEditProfile()" variant="secondary" [disabled]="isUpdatingProfile()">Cancel</app-button>
+            <app-button (click)="saveProfile()" variant="primary" [loading]="isUpdatingProfile()">Save Changes</app-button>
+          </div>
+        }
+        
+      </app-card>
+
+      <!-- Section G: Primary Contact Person Card (Decoupled Update Logic) -->
+      <app-card title="Primary Contact Person" subtitle="Designated point of contact for corporate communication and account alerts">
+        @if(!isEditingContact()) {
+          <div class="space-y-8 py-4">
+            <div class="flex items-center space-x-3 mb-6 pb-2 border-b border-[var(--dogo-primary)]/5">
+              <span class="bg-[var(--dogo-primary)] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg">G</span>
+              <h3 class="text-xs font-black text-[var(--dogo-dark)] uppercase tracking-wider">Primary Contact Details</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+              <div class="space-y-1 md:col-span-2">
+                <span class="block text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Full Name *</span>
+                <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ primaryContact().fullName }}</p>
+              </div>
+              <div class="space-y-1">
+                <span class="block text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Email Address *</span>
+                <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ primaryContact().email }}</p>
+              </div>
+              <div class="space-y-1">
+                <span class="block text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Phone Number *</span>
+                <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ primaryContact().phone }}</p>
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-4 border-t border-[var(--dogo-primary)]/5 mt-6">
+              <app-button (click)="startEditContact()" variant="primary" icon="ri-edit-line">Edit Contact Person</app-button>
+            </div>
+          </div>
+        } @else {
+          <!-- Edit Contact Person Form -->
+          <div class="space-y-6 py-4">
+            <div class="flex items-center space-x-3 mb-6 pb-2 border-b border-[var(--dogo-primary)]/5">
+              <span class="bg-[var(--dogo-primary)] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg">G</span>
+              <h3 class="text-xs font-black text-[var(--dogo-dark)] uppercase tracking-wider">Primary Contact Details (Edit Mode)</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="md:col-span-2">
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Full Name *</label>
+                <input type="text" [value]="editContactForm().fullName" (input)="updateContactField('fullName', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Email Address *</label>
+                <input type="email" [value]="editContactForm().email" (input)="updateContactField('email', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Phone Number *</label>
+                <input type="text" [value]="editContactForm().phone" (input)="updateContactField('phone', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-4 border-t border-[var(--dogo-primary)]/5 mt-6">
+              <app-button (click)="cancelEditContact()" variant="secondary" [disabled]="isUpdatingContact()">Cancel</app-button>
+              <app-button (click)="saveContact()" variant="primary" [loading]="isUpdatingContact()">Save Contact</app-button>
+            </div>
+          </div>
+        }
+      </app-card>
+    }
+
+    <!-- Tab 2: Compliance & KYC Documents -->
+    @if(activeTab() === 'verification') {
+      <app-card title="Corporate Verification" subtitle="Provide Shariah-compliance reserves verification paperwork">
+        <div class="divide-y divide-[var(--dogo-primary)]/5">
+          @for(v of verifications(); track v.type) {
+            <div class="py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div class="flex items-start space-x-4">
+                <div class="w-12 h-12 rounded-xl bg-[var(--dogo-cream)] flex items-center justify-center text-[var(--dogo-primary)] text-xl shrink-0">
+                  <i [class]="v.icon"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-[var(--dogo-dark)] leading-snug">{{ v.name }}</h4>
+                  <p class="text-xs text-[var(--dogo-muted)] mt-1">Submitted: {{ v.date }}</p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-4 shrink-0 self-end sm:self-center">
+                <app-badge [variant]="getBadgeVariant(v.status)">{{ v.status }}</app-badge>
+                @if(v.status === 'unverified') {
+                  <app-button (click)="openVerificationModal(v)" variant="secondary" size="sm" icon="ri-upload-cloud-2-line">Upload</app-button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </app-card>
+    }
+
+    <!-- Tab 3: Settlement Bank Accounts (Dual-Category Naira & Domiciliary) -->
+    @if(activeTab() === 'banks') {
+      <app-card title="Settlement Accounts" subtitle="Registered Naira and Domiciliary accounts for cash reserves withdrawals">
+        
+        @if(!isAddingNaira() && !isAddingDom()) {
+          <div class="space-y-10">
+            <!-- Section A: Naira Bank Accounts -->
+            <div class="space-y-4">
+              <div class="flex justify-between items-center border-b border-[var(--dogo-primary)]/10 pb-3">
+                <div>
+                  <h3 class="text-base font-black text-[var(--dogo-dark)]">A. Naira Bank Account Details</h3>
+                  <p class="text-xs text-[var(--dogo-muted)] mt-1">Default/primary local bank accounts on record where corporate NGN reserves will be sent.</p>
+                </div>
+                <app-button (click)="startAddNaira()" variant="primary" size="sm" icon="ri-add-line">Link Naira Account</app-button>
+              </div>
+
+              @if(nairaAccounts().length === 0) {
+                <div class="text-center py-8 bg-[var(--dogo-cream)]/50 border border-dashed border-[var(--dogo-primary)]/10 rounded-3xl">
+                  <p class="text-sm text-[var(--dogo-muted)] font-semibold">No Naira accounts linked yet.</p>
+                </div>
+              } @else {
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  @for(acc of nairaAccounts(); track acc.accountNumber) {
+                    <div class="bg-white border border-[var(--dogo-primary)]/10 p-6 rounded-3xl relative overflow-hidden group hover:border-[var(--dogo-secondary)] transition-all">
+                      <div class="absolute inset-0 bg-gradient-to-r from-[var(--dogo-primary)]/5 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      <div class="flex justify-between items-start relative z-10">
+                        <div>
+                          <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-[var(--dogo-cream)] flex items-center justify-center text-[var(--dogo-primary)] text-xl shrink-0">
+                              <i class="ri-bank-line"></i>
+                            </div>
+                            @if(acc.isDefault) {
+                              <app-badge variant="success">Primary</app-badge>
+                            }
+                          </div>
+                          <h4 class="text-base font-black text-[var(--dogo-dark)] leading-snug">{{ acc.bankName }}</h4>
+                          <p class="text-sm font-bold text-[var(--dogo-dark)]/70 mt-1">{{ acc.accountNumber }}</p>
+                          <p class="text-xs text-[var(--dogo-muted)] mt-0.5 uppercase tracking-wider font-semibold">{{ acc.accountName }}</p>
+                          <p class="text-[10px] text-[var(--dogo-muted)]/80 mt-2 font-medium">Branch: {{ acc.bankBranch }}</p>
+                        </div>
+                        <button (click)="deleteNaira(acc.accountNumber)" class="text-red-400 hover:text-red-600 p-2 cursor-pointer transition-colors text-lg z-20">
+                          <i class="ri-delete-bin-line"></i>
+                        </button>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+
+            <!-- Section B: Domiciliary Bank Accounts -->
+            <div class="space-y-4 pt-4">
+              <div class="flex justify-between items-center border-b border-[var(--dogo-primary)]/10 pb-3">
+                <div>
+                  <h3 class="text-base font-black text-[var(--dogo-dark)]">B. Domiciliary Bank Account Details</h3>
+                  <p class="text-xs text-[var(--dogo-muted)] mt-1">International foreign currency accounts (e.g. USD) on record for global treasury withdrawals.</p>
+                </div>
+                <app-button (click)="startAddDom()" variant="primary" size="sm" icon="ri-add-line" class="shrink-0">Link Domiciliary Account</app-button>
+              </div>
+
+              @if(domiciliaryAccounts().length === 0) {
+                <div class="text-center py-8 bg-[var(--dogo-cream)]/50 border border-dashed border-[var(--dogo-primary)]/10 rounded-3xl">
+                  <p class="text-sm text-[var(--dogo-muted)] font-semibold">No Domiciliary accounts linked yet.</p>
+                </div>
+              } @else {
+                <div class="grid grid-cols-1 gap-6">
+                  @for(acc of domiciliaryAccounts(); track acc.accountNumber) {
+                    <div class="bg-white border border-[var(--dogo-primary)]/10 p-6 rounded-3xl relative overflow-hidden group hover:border-[var(--dogo-secondary)] transition-all">
+                      <div class="absolute inset-0 bg-gradient-to-r from-[var(--dogo-primary)]/5 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      <div class="flex justify-between items-start relative z-10">
+                        <div class="w-full">
+                          <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-[var(--dogo-cream)] flex items-center justify-center text-[var(--dogo-primary)] text-xl shrink-0">
+                              <i class="ri-global-line"></i>
+                            </div>
+                            <app-badge variant="info">USD Account</app-badge>
+                            @if(acc.isDefault) {
+                              <app-badge variant="success">Primary</app-badge>
+                            }
+                          </div>
+                          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <div>
+                              <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Bank Name</span>
+                              <span class="text-sm font-bold text-[var(--dogo-dark)]">{{ acc.bankName }}</span>
+                            </div>
+                            <div>
+                              <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Account Number</span>
+                              <span class="text-sm font-bold text-[var(--dogo-dark)]">{{ acc.accountNumber }}</span>
+                            </div>
+                            <div>
+                              <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Account Name</span>
+                              <span class="text-sm font-bold text-[var(--dogo-dark)]">{{ acc.accountName }}</span>
+                            </div>
+                          </div>
+
+                          <!-- Expandable Details Grid mirroring Zedcrest Form D -->
+                          <div class="mt-4 pt-4 border-t border-[var(--dogo-primary)]/5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-3 bg-[var(--dogo-cream)]/20 p-4 rounded-2xl text-xs">
+                            <div>
+                              <span class="block text-[9px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Correspondent Bank</span>
+                              <span class="font-bold text-[var(--dogo-dark)]/90">{{ acc.correspondentBank }}</span>
+                            </div>
+                            <div>
+                              <span class="block text-[9px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Sort Code</span>
+                              <span class="font-bold text-[var(--dogo-dark)]/90">{{ acc.sortCode }}</span>
+                            </div>
+                            <div>
+                              <span class="block text-[9px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">SWIFT Code</span>
+                              <span class="font-bold text-[var(--dogo-dark)]/90">{{ acc.swiftCode }}</span>
+                            </div>
+                            <div>
+                              <span class="block text-[9px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">IBAN (Where Applicable)</span>
+                              <span class="font-bold text-[var(--dogo-dark)]/90">{{ acc.iban || 'N/A' }}</span>
+                            </div>
+                            <div>
+                              <span class="block text-[9px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Beneficiary Name & No</span>
+                              <span class="font-bold text-[var(--dogo-dark)]/90">{{ acc.beneficiaryAccountName }} ({{ acc.beneficiaryAccountNo }})</span>
+                            </div>
+                            <div>
+                              <span class="block text-[9px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Beneficiary Address</span>
+                              <span class="font-bold text-[var(--dogo-dark)]/90">{{ acc.beneficiaryAddress }}</span>
+                            </div>
+                            <div class="sm:col-span-2 md:col-span-3">
+                              <span class="block text-[9px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">For Further Credit</span>
+                              <span class="font-bold text-[var(--dogo-secondary)]">{{ acc.forFurtherCredit || 'N/A' }}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <button (click)="deleteDom(acc.accountNumber)" class="text-red-400 hover:text-red-600 p-2 cursor-pointer transition-colors text-lg z-20 shrink-0 self-start">
+                          <i class="ri-delete-bin-line"></i>
+                        </button>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Add Naira Bank Account Form -->
+        @if(isAddingNaira()) {
+          <div class="space-y-6 py-2">
+            <div class="border-b border-[var(--dogo-primary)]/10 pb-3">
+              <h3 class="text-base font-black text-[var(--dogo-dark)]">Link Company Naira Bank Account</h3>
+              <p class="text-xs text-[var(--dogo-muted)] mt-1">Provide local settlement details in NGN.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Settlement Bank</label>
+                <app-dropdown [options]="bankOptions()" [selectedValue]="newNairaForm().bankId" (valueChange)="updateNairaField('bankId', $event)"></app-dropdown>
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Account Number</label>
+                <input type="text" [value]="newNairaForm().accountNumber" (input)="updateNairaField('accountNumber', $any($event.target).value)" placeholder="0012345678" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Account Name</label>
+                <input type="text" [value]="newNairaForm().accountName" (input)="updateNairaField('accountName', $any($event.target).value)" placeholder="Bayero Corporate Reserves Ltd" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Bank Branch</label>
+                <input type="text" [value]="newNairaForm().bankBranch" (input)="updateNairaField('bankBranch', $any($event.target).value)" placeholder="Lagos Main Branch" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+            </div>
+            <div class="flex justify-end gap-3 pt-4 border-t border-[var(--dogo-primary)]/5 mt-6">
+              <app-button (click)="cancelAddNaira()" variant="secondary" [disabled]="isSavingNaira()">Cancel</app-button>
+              <app-button (click)="saveNaira()" variant="primary" [loading]="isSavingNaira()">Link Naira Account</app-button>
+            </div>
+          </div>
+        }
+
+        <!-- Add Domiciliary Bank Account Form -->
+        @if(isAddingDom()) {
+          <div class="space-y-6 py-2">
+            <div class="border-b border-[var(--dogo-primary)]/10 pb-3">
+              <h3 class="text-base font-black text-[var(--dogo-dark)]">Link Company Domiciliary Bank Account</h3>
+              <p class="text-xs text-[var(--dogo-muted)] mt-1">Provide international foreign currency settlement details (e.g. USD).</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Local Bank Name</label>
+                <app-dropdown [options]="bankOptions()" [selectedValue]="newDomForm().bankId" (valueChange)="updateDomField('bankId', $event)"></app-dropdown>
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Account Name</label>
+                <input type="text" [value]="newDomForm().accountName" (input)="updateDomField('accountName', $any($event.target).value)" placeholder="Bayero Corporate Reserves Ltd (USD)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Account Number / IBAN</label>
+                <input type="text" [value]="newDomForm().accountNumber" (input)="updateDomField('accountNumber', $any($event.target).value)" placeholder="1000152194" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Correspondent Bank</label>
+                <input type="text" [value]="newDomForm().correspondentBank" (input)="updateDomField('correspondentBank', $any($event.target).value)" placeholder="BANK OF AMERICA NEW YORK" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Sort Code</label>
+                <input type="text" [value]="newDomForm().sortCode" (input)="updateDomField('sortCode', $any($event.target).value)" placeholder="02-04-05" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Swift Code</label>
+                <input type="text" [value]="newDomForm().swiftCode" (input)="updateDomField('swiftCode', $any($event.target).value)" placeholder="FIRNNGLA" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">IBAN (Where Applicable)</label>
+                <input type="text" [value]="newDomForm().iban" (input)="updateDomField('iban', $any($event.target).value)" placeholder="US12BOFA0001000152194" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Beneficiary Account Name</label>
+                <input type="text" [value]="newDomForm().beneficiaryAccountName" (input)="updateDomField('beneficiaryAccountName', $any($event.target).value)" placeholder="ZEDCREST DOLLAR WALLET" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Beneficiary Account Number</label>
+                <input type="text" [value]="newDomForm().beneficiaryAccountNo" (input)="updateDomField('beneficiaryAccountNo', $any($event.target).value)" placeholder="1000167653" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Beneficiary Address</label>
+                <input type="text" [value]="newDomForm().beneficiaryAddress" (input)="updateDomField('beneficiaryAddress', $any($event.target).value)" placeholder="Plot 2, Kingsway Road, Ikoyi, Lagos" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">For Further Credit (FFC Details)</label>
+                <input type="text" [value]="newDomForm().forFurtherCredit" (input)="updateDomField('forFurtherCredit', $any($event.target).value)" placeholder="Bayero Reserves Sub-Account" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-4 border-t border-[var(--dogo-primary)]/5 mt-6">
+              <app-button (click)="cancelAddDom()" variant="secondary" [disabled]="isSavingDom()">Cancel</app-button>
+              <app-button (click)="saveDom()" variant="primary" [loading]="isSavingDom()">Link Domiciliary Account</app-button>
+            </div>
+          </div>
+        }
+      </app-card>
+    }
+
+    <!-- Tab 4: Authorized Signatories & Controlling Directors (Zedcrest Comprehensive Profile) -->
+    @if(activeTab() === 'signatories') {
+      <app-card title="Directors & Signatories Hub" subtitle="Authorized representatives and controlling directors with designated signing classes">
+        
+        @if(!isAddingSignatory() && !isAddingDirector()) {
+          <div class="space-y-10">
+            <!-- Section A: Authorised Signatory Personal Information -->
+            <div class="space-y-4">
+              <div class="flex justify-between items-center border-b border-[var(--dogo-primary)]/10 pb-3">
+                <div>
+                  <h3 class="text-base font-black text-[var(--dogo-dark)]">A. Authorised Signatories</h3>
+                  <p class="text-xs text-[var(--dogo-muted)] mt-1">Authorized personnel permitted to execute large-scale financial and reserve withdrawal actions.</p>
+                </div>
+                <app-button (click)="startAddSignatory()" variant="primary" size="sm" icon="ri-user-add-line">Add Signatory</app-button>
+              </div>
+
+              @if(signatories().length === 0) {
+                <div class="text-center py-8 bg-[var(--dogo-cream)]/50 border border-dashed border-[var(--dogo-primary)]/10 rounded-3xl">
+                  <p class="text-sm text-[var(--dogo-muted)] font-semibold">No signatories linked yet.</p>
+                </div>
+              } @else {
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  @for(sig of signatories(); track sig.email) {
+                    <div class="bg-white border border-[var(--dogo-primary)]/10 p-6 rounded-3xl relative overflow-hidden group hover:border-[var(--dogo-secondary)] transition-all">
+                      <div class="absolute inset-0 bg-gradient-to-r from-[var(--dogo-primary)]/5 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      <div class="flex justify-between items-start relative z-10">
+                        <div class="flex items-center space-x-4">
+                          <div class="w-14 h-14 rounded-2xl bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 flex items-center justify-center font-black text-[var(--dogo-primary)] overflow-hidden shrink-0">
+                            @if(sig.passportPhoto) {
+                              <img [src]="sig.passportPhoto" alt="passport" class="w-full h-full object-cover" />
+                            } @else {
+                              <span class="text-xl">{{ sig.firstName[0] }}{{ sig.surname[0] }}</span>
+                            }
+                          </div>
+                          <div>
+                            <h4 class="text-base font-black text-[var(--dogo-dark)] leading-snug flex items-center gap-2">
+                              {{ sig.title }} {{ sig.firstName }} {{ sig.surname }}
+                            </h4>
+                            <p class="text-xs text-[var(--dogo-muted)] font-semibold mt-0.5">{{ sig.designation }}</p>
+                            <div class="flex flex-wrap gap-1.5 mt-2">
+                              <app-badge variant="info">Class {{ sig.signingClass }}</app-badge>
+                              <app-badge [variant]="getBadgeVariant(sig.status)">{{ sig.status }}</app-badge>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="flex items-center space-x-1 shrink-0">
+                          <button (click)="viewPerson(sig)" class="text-[var(--dogo-primary)] hover:text-[var(--dogo-secondary)] p-2 cursor-pointer transition-colors text-lg" title="View Full Profile">
+                            <i class="ri-eye-line"></i>
+                          </button>
+                          @if(sig.email !== 'malik@bayerocorp.com') {
+                            <button (click)="removeSignatory(sig.email)" class="text-red-400 hover:text-red-600 p-2 cursor-pointer transition-colors text-lg" title="Remove Signatory">
+                              <i class="ri-delete-bin-line"></i>
+                            </button>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+
+            <!-- Section B: Controlling Directors' Information -->
+            <div class="space-y-4 pt-4">
+              <div class="flex justify-between items-center border-b border-[var(--dogo-primary)]/10 pb-3">
+                <div>
+                  <h3 class="text-base font-black text-[var(--dogo-dark)]">B. Controlling Directors</h3>
+                  <p class="text-xs text-[var(--dogo-muted)] mt-1">Shareholders and executive board directors holding key operational steering authority.</p>
+                </div>
+                <app-button (click)="startAddDirector()" variant="primary" size="sm" icon="ri-user-star-line">Add Director</app-button>
+              </div>
+
+              @if(directors().length === 0) {
+                <div class="text-center py-8 bg-[var(--dogo-cream)]/50 border border-dashed border-[var(--dogo-primary)]/10 rounded-3xl">
+                  <p class="text-sm text-[var(--dogo-muted)] font-semibold">No directors registered yet.</p>
+                </div>
+              } @else {
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  @for(dir of directors(); track dir.email) {
+                    <div class="bg-white border border-[var(--dogo-primary)]/10 p-6 rounded-3xl relative overflow-hidden group hover:border-[var(--dogo-secondary)] transition-all">
+                      <div class="absolute inset-0 bg-gradient-to-r from-[var(--dogo-primary)]/5 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      <div class="flex justify-between items-start relative z-10">
+                        <div class="flex items-center space-x-4">
+                          <div class="w-14 h-14 rounded-2xl bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 flex items-center justify-center font-black text-[var(--dogo-primary)] overflow-hidden shrink-0">
+                            @if(dir.passportPhoto) {
+                              <img [src]="dir.passportPhoto" alt="passport" class="w-full h-full object-cover" />
+                            } @else {
+                              <span class="text-xl">{{ dir.firstName[0] }}{{ dir.surname[0] }}</span>
+                            }
+                          </div>
+                          <div>
+                            <h4 class="text-base font-black text-[var(--dogo-dark)] leading-snug">
+                              {{ dir.title }} {{ dir.firstName }} {{ dir.surname }}
+                            </h4>
+                            <p class="text-xs text-[var(--dogo-muted)] font-semibold mt-0.5">{{ dir.designation }}</p>
+                            <div class="flex flex-wrap gap-1.5 mt-2">
+                              <app-badge variant="info">Class {{ dir.signingClass }}</app-badge>
+                              <app-badge [variant]="getBadgeVariant(dir.status)">{{ dir.status }}</app-badge>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="flex items-center space-x-1 shrink-0">
+                          <button (click)="viewPerson(dir)" class="text-[var(--dogo-primary)] hover:text-[var(--dogo-secondary)] p-2 cursor-pointer transition-colors text-lg" title="View Full Profile">
+                            <i class="ri-eye-line"></i>
+                          </button>
+                          @if(dir.email !== 'ado@bayerocorp.com') {
+                            <button (click)="removeDirector(dir.email)" class="text-red-400 hover:text-red-600 p-2 cursor-pointer transition-colors text-lg" title="Remove Director">
+                              <i class="ri-delete-bin-line"></i>
+                            </button>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Add Signatory Form Layout -->
+        @if(isAddingSignatory()) {
+          <div class="space-y-6 py-2">
+            <div class="border-b border-[var(--dogo-primary)]/10 pb-3">
+              <h3 class="text-base font-black text-[var(--dogo-dark)]">Link Company Authorized Signatory</h3>
+              <p class="text-xs text-[var(--dogo-muted)] mt-1">Complete the mandatory personal, identity, and authorization details.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <!-- Passport photo upload -->
+              <div class="md:col-span-3 flex flex-col sm:flex-row items-center gap-6 bg-[var(--dogo-cream)]/20 p-5 rounded-3xl border border-[var(--dogo-primary)]/5">
+                <div class="w-24 h-24 rounded-2xl bg-white border border-[var(--dogo-primary)]/10 flex items-center justify-center overflow-hidden shrink-0 relative group">
+                  @if(newSignatoryForm().passportPhoto) {
+                    <img [src]="newSignatoryForm().passportPhoto" alt="passport preview" class="w-full h-full object-cover" />
+                  } @else {
+                    <i class="ri-user-line text-4xl text-[var(--dogo-primary)]/30"></i>
+                  }
+                </div>
+                <div class="space-y-2 text-center sm:text-left">
+                  <h4 class="text-sm font-bold text-[var(--dogo-dark)]">Passport Photograph *</h4>
+                  <p class="text-xs text-[var(--dogo-muted)] leading-relaxed">Required. Image format (JPG, PNG). Maximum size 2MB.</p>
+                  <label class="inline-block">
+                    <span class="bg-[var(--dogo-primary)] hover:bg-[var(--dogo-secondary)] text-white text-xs font-bold px-4 h-9 flex items-center justify-center rounded-xl cursor-pointer transition-all">Upload Photo</span>
+                    <input type="file" accept="image/*" class="hidden" (change)="handlePassportUpload($event, false)" />
+                  </label>
+                </div>
+              </div>
+
+              <!-- General Fields -->
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Title *</label>
+                <input type="text" [value]="newSignatoryForm().title" (input)="updateSignatoryField('title', $any($event.target).value)" placeholder="Mr, Mrs, Dr, Chief" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Surname (Last Name) *</label>
+                <input type="text" [value]="newSignatoryForm().surname" (input)="updateSignatoryField('surname', $any($event.target).value)" placeholder="Sherifdeen" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">First Name *</label>
+                <input type="text" [value]="newSignatoryForm().firstName" (input)="updateSignatoryField('firstName', $any($event.target).value)" placeholder="Malik" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Other Names</label>
+                <input type="text" [value]="newSignatoryForm().otherNames" (input)="updateSignatoryField('otherNames', $any($event.target).value)" placeholder="Alabi" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Designation / Designation *</label>
+                <input type="text" [value]="newSignatoryForm().designation" (input)="updateSignatoryField('designation', $any($event.target).value)" placeholder="Managing Director" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Date of Birth *</label>
+                <input type="date" [value]="newSignatoryForm().dob" (input)="updateSignatoryField('dob', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+
+              <div class="md:col-span-3">
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Residential Address *</label>
+                <input type="text" [value]="newSignatoryForm().residentialAddress" (input)="updateSignatoryField('residentialAddress', $any($event.target).value)" placeholder="Residential Address" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Business Email *</label>
+                <input type="email" [value]="newSignatoryForm().email" (input)="updateSignatoryField('email', $any($event.target).value)" placeholder="malik@bayerocorp.com" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Phone Number *</label>
+                <input type="text" [value]="newSignatoryForm().phone" (input)="updateSignatoryField('phone', $any($event.target).value)" placeholder="08031234567" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">BVN (Bank Verification Number) *</label>
+                <input type="text" maxlength="11" [value]="newSignatoryForm().bvn" (input)="updateSignatoryField('bvn', $any($event.target).value)" placeholder="22194857102" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Nationality *</label>
+                <input type="text" [value]="newSignatoryForm().nationality" (input)="updateSignatoryField('nationality', $any($event.target).value)" placeholder="Nigerian" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Gender *</label>
+                <div class="flex space-x-4 h-12 items-center bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4">
+                  <label class="flex items-center space-x-2 font-semibold text-sm text-[var(--dogo-dark)] cursor-pointer">
+                    <input type="radio" name="gender-sig" value="Male" [checked]="newSignatoryForm().gender === 'Male'" (change)="updateSignatoryField('gender', 'Male')" class="text-[var(--dogo-secondary)] focus:ring-[var(--dogo-secondary)]" />
+                    <span>Male</span>
+                  </label>
+                  <label class="flex items-center space-x-2 font-semibold text-sm text-[var(--dogo-dark)] cursor-pointer">
+                    <input type="radio" name="gender-sig" value="Female" [checked]="newSignatoryForm().gender === 'Female'" (change)="updateSignatoryField('gender', 'Female')" class="text-[var(--dogo-secondary)] focus:ring-[var(--dogo-secondary)]" />
+                    <span>Female</span>
+                  </label>
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Signing Class *</label>
+                <div class="flex space-x-4 h-12 items-center bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4">
+                  @for(cls of ['A', 'B', 'C']; track cls) {
+                    <label class="flex items-center space-x-2 font-semibold text-sm text-[var(--dogo-dark)] cursor-pointer">
+                      <input type="radio" name="signingClass-sig" [value]="cls" [checked]="newSignatoryForm().signingClass === cls" (change)="updateSignatoryField('signingClass', cls)" class="text-[var(--dogo-secondary)] focus:ring-[var(--dogo-secondary)]" />
+                      <span>Class {{ cls }}</span>
+                    </label>
+                  }
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Identity Type *</label>
+                <select [value]="newSignatoryForm().idType" (change)="updateSignatoryField('idType', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all">
+                  <option value="Driver's License">Driver's License</option>
+                  <option value="National ID Card">National ID Card</option>
+                  <option value="Voter's Card">Voter's Card</option>
+                  <option value="Int Passport">International Passport</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">ID Number *</label>
+                <input type="text" [value]="newSignatoryForm().idNumber" (input)="updateSignatoryField('idNumber', $any($event.target).value)" placeholder="A00129481" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Politically Exposed Person (PEP) *</label>
+                <div class="flex space-x-4 h-12 items-center bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4">
+                  <label class="flex items-center space-x-2 font-semibold text-sm text-[var(--dogo-dark)] cursor-pointer">
+                    <input type="radio" name="isPep-sig" value="No" [checked]="newSignatoryForm().isPep === 'No'" (change)="updateSignatoryField('isPep', 'No')" class="text-[var(--dogo-secondary)] focus:ring-[var(--dogo-secondary)]" />
+                    <span>No</span>
+                  </label>
+                  <label class="flex items-center space-x-2 font-semibold text-sm text-[var(--dogo-dark)] cursor-pointer">
+                    <input type="radio" name="isPep-sig" value="Yes" [checked]="newSignatoryForm().isPep === 'Yes'" (change)="updateSignatoryField('isPep', 'Yes')" class="text-[var(--dogo-secondary)] focus:ring-[var(--dogo-secondary)]" />
+                    <span>Yes</span>
+                  </label>
+                </div>
+              </div>
+
+              @if(newSignatoryForm().isPep === 'Yes') {
+                <div class="md:col-span-3">
+                  <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Please provide PEP details *</label>
+                  <input type="text" [value]="newSignatoryForm().pepDetails" (input)="updateSignatoryField('pepDetails', $any($event.target).value)" placeholder="Enter PEP details here..." class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+                </div>
+              }
+
+              <!-- Document & Signature Uploaders -->
+              <div class="md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6 bg-[var(--dogo-cream)]/20 p-5 rounded-3xl border border-[var(--dogo-primary)]/5 mt-2">
+                <!-- Signature Upload -->
+                <div class="space-y-3">
+                  <h4 class="text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60">Signature & Date Card *</h4>
+                  <div class="h-32 bg-white border border-dashed border-[var(--dogo-primary)]/10 rounded-2xl flex flex-col items-center justify-center p-4 relative group hover:border-[var(--dogo-secondary)] transition-all">
+                    @if(newSignatoryForm().signatureImage) {
+                      <img [src]="newSignatoryForm().signatureImage" alt="signature" class="h-full object-contain" />
+                      <label class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs font-bold rounded-2xl cursor-pointer transition-opacity">
+                        <span>Replace Signature</span>
+                        <input type="file" accept="image/*" class="hidden" (change)="handleSignatureUpload($event, false)" />
+                      </label>
+                    } @else {
+                      <i class="ri-ball-pen-line text-3xl text-[var(--dogo-primary)]/30 mb-2"></i>
+                      <span class="text-xs text-[var(--dogo-muted)] font-semibold">Upload Signature File (PNG/JPG)</span>
+                      <label class="absolute inset-0 cursor-pointer">
+                        <input type="file" accept="image/*" class="hidden" (change)="handleSignatureUpload($event, false)" />
+                      </label>
+                    }
+                  </div>
+                </div>
+
+                <!-- Identity Document Upload -->
+                <div class="space-y-3">
+                  <h4 class="text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60">Identity Document Scan *</h4>
+                  <div class="h-32 bg-white border border-dashed border-[var(--dogo-primary)]/10 rounded-2xl flex flex-col items-center justify-center p-4 relative group hover:border-[var(--dogo-secondary)] transition-all">
+                    @if(newSignatoryForm().idDocument) {
+                      <div class="flex items-center space-x-2 text-[var(--dogo-primary)]">
+                        <i class="ri-file-text-line text-3xl"></i>
+                        <span class="text-xs font-bold text-ellipsis overflow-hidden max-w-[200px]">ID Document Loaded</span>
+                      </div>
+                      <label class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs font-bold rounded-2xl cursor-pointer transition-opacity">
+                        <span>Replace File</span>
+                        <input type="file" accept="image/*,application/pdf" class="hidden" (change)="handleIdUpload($event, false)" />
+                      </label>
+                    } @else {
+                      <i class="ri-contacts-card-line text-3xl text-[var(--dogo-primary)]/30 mb-2"></i>
+                      <span class="text-xs text-[var(--dogo-muted)] font-semibold">Upload ID Scan (PNG/JPG/PDF)</span>
+                      <label class="absolute inset-0 cursor-pointer">
+                        <input type="file" accept="image/*,application/pdf" class="hidden" (change)="handleIdUpload($event, false)" />
+                      </label>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="flex justify-end gap-3 pt-4 border-t border-[var(--dogo-primary)]/5 mt-6">
+              <app-button (click)="cancelAddSignatory()" variant="secondary" [disabled]="isSavingSignatory()">Cancel</app-button>
+              <app-button (click)="saveSignatory()" variant="primary" [loading]="isSavingSignatory()">Link Signatory</app-button>
+            </div>
+          </div>
+        }
+
+        <!-- Add Controlling Director Form Layout -->
+        @if(isAddingDirector()) {
+          <div class="space-y-6 py-2">
+            <div class="border-b border-[var(--dogo-primary)]/10 pb-3">
+              <h3 class="text-base font-black text-[var(--dogo-dark)]">Link Company Controlling Director</h3>
+              <p class="text-xs text-[var(--dogo-muted)] mt-1">Complete the mandatory personal, identity, and corporate shareholding details.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <!-- Passport photo upload -->
+              <div class="md:col-span-3 flex flex-col sm:flex-row items-center gap-6 bg-[var(--dogo-cream)]/20 p-5 rounded-3xl border border-[var(--dogo-primary)]/5">
+                <div class="w-24 h-24 rounded-2xl bg-white border border-[var(--dogo-primary)]/10 flex items-center justify-center overflow-hidden shrink-0 relative group">
+                  @if(newDirectorForm().passportPhoto) {
+                    <img [src]="newDirectorForm().passportPhoto" alt="passport preview" class="w-full h-full object-cover" />
+                  } @else {
+                    <i class="ri-user-line text-4xl text-[var(--dogo-primary)]/30"></i>
+                  }
+                </div>
+                <div class="space-y-2 text-center sm:text-left">
+                  <h4 class="text-sm font-bold text-[var(--dogo-dark)]">Passport Photograph *</h4>
+                  <p class="text-xs text-[var(--dogo-muted)] leading-relaxed">Required. Image format (JPG, PNG). Maximum size 2MB.</p>
+                  <label class="inline-block">
+                    <span class="bg-[var(--dogo-primary)] hover:bg-[var(--dogo-secondary)] text-white text-xs font-bold px-4 h-9 flex items-center justify-center rounded-xl cursor-pointer transition-all">Upload Photo</span>
+                    <input type="file" accept="image/*" class="hidden" (change)="handlePassportUpload($event, true)" />
+                  </label>
+                </div>
+              </div>
+
+              <!-- General Fields -->
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Title *</label>
+                <input type="text" [value]="newDirectorForm().title" (input)="updateDirectorField('title', $any($event.target).value)" placeholder="Mr, Mrs, Dr, Chief" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Surname (Last Name) *</label>
+                <input type="text" [value]="newDirectorForm().surname" (input)="updateDirectorField('surname', $any($event.target).value)" placeholder="Bayero" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">First Name *</label>
+                <input type="text" [value]="newDirectorForm().firstName" (input)="updateDirectorField('firstName', $any($event.target).value)" placeholder="Ado" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Other Names</label>
+                <input type="text" [value]="newDirectorForm().otherNames" (input)="updateDirectorField('otherNames', $any($event.target).value)" placeholder="Suleiman" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Designation / Role *</label>
+                <input type="text" [value]="newDirectorForm().designation" (input)="updateDirectorField('designation', $any($event.target).value)" placeholder="Chairman" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Date of Birth *</label>
+                <input type="date" [value]="newDirectorForm().dob" (input)="updateDirectorField('dob', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+
+              <div class="md:col-span-3">
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Residential Address *</label>
+                <input type="text" [value]="newDirectorForm().residentialAddress" (input)="updateDirectorField('residentialAddress', $any($event.target).value)" placeholder="Residential Address" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Business Email *</label>
+                <input type="email" [value]="newDirectorForm().email" (input)="updateDirectorField('email', $any($event.target).value)" placeholder="ado@bayerocorp.com" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Phone Number *</label>
+                <input type="text" [value]="newDirectorForm().phone" (input)="updateDirectorField('phone', $any($event.target).value)" placeholder="0805 987 6543" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">BVN (Bank Verification Number) *</label>
+                <input type="text" maxlength="11" [value]="newDirectorForm().bvn" (input)="updateDirectorField('bvn', $any($event.target).value)" placeholder="22147859301" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Nationality *</label>
+                <input type="text" [value]="newDirectorForm().nationality" (input)="updateDirectorField('nationality', $any($event.target).value)" placeholder="Nigerian" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Gender *</label>
+                <div class="flex space-x-4 h-12 items-center bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4">
+                  <label class="flex items-center space-x-2 font-semibold text-sm text-[var(--dogo-dark)] cursor-pointer">
+                    <input type="radio" name="gender-dir" value="Male" [checked]="newDirectorForm().gender === 'Male'" (change)="updateDirectorField('gender', 'Male')" class="text-[var(--dogo-secondary)] focus:ring-[var(--dogo-secondary)]" />
+                    <span>Male</span>
+                  </label>
+                  <label class="flex items-center space-x-2 font-semibold text-sm text-[var(--dogo-dark)] cursor-pointer">
+                    <input type="radio" name="gender-dir" value="Female" [checked]="newDirectorForm().gender === 'Female'" (change)="updateDirectorField('gender', 'Female')" class="text-[var(--dogo-secondary)] focus:ring-[var(--dogo-secondary)]" />
+                    <span>Female</span>
+                  </label>
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Signing Class *</label>
+                <div class="flex space-x-4 h-12 items-center bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4">
+                  @for(cls of ['A', 'B', 'C']; track cls) {
+                    <label class="flex items-center space-x-2 font-semibold text-sm text-[var(--dogo-dark)] cursor-pointer">
+                      <input type="radio" name="signingClass-dir" [value]="cls" [checked]="newDirectorForm().signingClass === cls" (change)="updateDirectorField('signingClass', cls)" class="text-[var(--dogo-secondary)] focus:ring-[var(--dogo-secondary)]" />
+                      <span>Class {{ cls }}</span>
+                    </label>
+                  }
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Identity Type *</label>
+                <select [value]="newDirectorForm().idType" (change)="updateDirectorField('idType', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all">
+                  <option value="Driver's License">Driver's License</option>
+                  <option value="National ID Card">National ID Card</option>
+                  <option value="Voter's Card">Voter's Card</option>
+                  <option value="Int Passport">International Passport</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">ID Number *</label>
+                <input type="text" [value]="newDirectorForm().idNumber" (input)="updateDirectorField('idNumber', $any($event.target).value)" placeholder="984712048591" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Politically Exposed Person (PEP) *</label>
+                <div class="flex space-x-4 h-12 items-center bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4">
+                  <label class="flex items-center space-x-2 font-semibold text-sm text-[var(--dogo-dark)] cursor-pointer">
+                    <input type="radio" name="isPep-dir" value="No" [checked]="newDirectorForm().isPep === 'No'" (change)="updateDirectorField('isPep', 'No')" class="text-[var(--dogo-secondary)] focus:ring-[var(--dogo-secondary)]" />
+                    <span>No</span>
+                  </label>
+                  <label class="flex items-center space-x-2 font-semibold text-sm text-[var(--dogo-dark)] cursor-pointer">
+                    <input type="radio" name="isPep-dir" value="Yes" [checked]="newDirectorForm().isPep === 'Yes'" (change)="updateDirectorField('isPep', 'Yes')" class="text-[var(--dogo-secondary)] focus:ring-[var(--dogo-secondary)]" />
+                    <span>Yes</span>
+                  </label>
+                </div>
+              </div>
+
+              @if(newDirectorForm().isPep === 'Yes') {
+                <div class="md:col-span-3">
+                  <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Please provide PEP details *</label>
+                  <input type="text" [value]="newDirectorForm().pepDetails" (input)="updateDirectorField('pepDetails', $any($event.target).value)" placeholder="Enter PEP details here..." class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+                </div>
+              }
+
+              <!-- Document & Signature Uploaders -->
+              <div class="md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6 bg-[var(--dogo-cream)]/20 p-5 rounded-3xl border border-[var(--dogo-primary)]/5 mt-2">
+                <!-- Signature Upload -->
+                <div class="space-y-3">
+                  <h4 class="text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60">Signature & Date Card *</h4>
+                  <div class="h-32 bg-white border border-dashed border-[var(--dogo-primary)]/10 rounded-2xl flex flex-col items-center justify-center p-4 relative group hover:border-[var(--dogo-secondary)] transition-all">
+                    @if(newDirectorForm().signatureImage) {
+                      <img [src]="newDirectorForm().signatureImage" alt="signature" class="h-full object-contain" />
+                      <label class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs font-bold rounded-2xl cursor-pointer transition-opacity">
+                        <span>Replace Signature</span>
+                        <input type="file" accept="image/*" class="hidden" (change)="handleSignatureUpload($event, true)" />
+                      </label>
+                    } @else {
+                      <i class="ri-ball-pen-line text-3xl text-[var(--dogo-primary)]/30 mb-2"></i>
+                      <span class="text-xs text-[var(--dogo-muted)] font-semibold">Upload Signature File (PNG/JPG)</span>
+                      <label class="absolute inset-0 cursor-pointer">
+                        <input type="file" accept="image/*" class="hidden" (change)="handleSignatureUpload($event, true)" />
+                      </label>
+                    }
+                  </div>
+                </div>
+
+                <!-- Identity Document Upload -->
+                <div class="space-y-3">
+                  <h4 class="text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60">Identity Document Scan *</h4>
+                  <div class="h-32 bg-white border border-dashed border-[var(--dogo-primary)]/10 rounded-2xl flex flex-col items-center justify-center p-4 relative group hover:border-[var(--dogo-secondary)] transition-all">
+                    @if(newDirectorForm().idDocument) {
+                      <div class="flex items-center space-x-2 text-[var(--dogo-primary)]">
+                        <i class="ri-file-text-line text-3xl"></i>
+                        <span class="text-xs font-bold text-ellipsis overflow-hidden max-w-[200px]">ID Document Loaded</span>
+                      </div>
+                      <label class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs font-bold rounded-2xl cursor-pointer transition-opacity">
+                        <span>Replace File</span>
+                        <input type="file" accept="image/*,application/pdf" class="hidden" (change)="handleIdUpload($event, true)" />
+                      </label>
+                    } @else {
+                      <i class="ri-contacts-card-line text-3xl text-[var(--dogo-primary)]/30 mb-2"></i>
+                      <span class="text-xs text-[var(--dogo-muted)] font-semibold">Upload ID Scan (PNG/JPG/PDF)</span>
+                      <label class="absolute inset-0 cursor-pointer">
+                        <input type="file" accept="image/*,application/pdf" class="hidden" (change)="handleIdUpload($event, true)" />
+                      </label>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="flex justify-end gap-3 pt-4 border-t border-[var(--dogo-primary)]/5 mt-6">
+              <app-button (click)="cancelAddDirector()" variant="secondary" [disabled]="isSavingDirector()">Cancel</app-button>
+              <app-button (click)="saveDirector()" variant="primary" [loading]="isSavingDirector()">Link Director</app-button>
+            </div>
+          </div>
+        }
+      </app-card>
+    }
+
+    <!-- Beautiful Person Profile Details Modal Drawer -->
+    @if(selectedPerson()) {
+      <div class="fixed inset-0 z-50 overflow-y-auto bg-[var(--dogo-dark)]/60 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6">
+        <div class="bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/15 w-full max-w-3xl rounded-[32px] shadow-2xl relative overflow-hidden flex flex-col max-h-[90vh]">
+          <!-- Header -->
+          <div class="p-6 border-b border-[var(--dogo-primary)]/10 flex justify-between items-center bg-white">
+            <div>
+              <h3 class="text-lg font-black text-[var(--dogo-dark)]">
+                {{ selectedPerson().title }} {{ selectedPerson().firstName }} {{ selectedPerson().surname }}
+              </h3>
+              <p class="text-xs text-[var(--dogo-muted)] mt-1 font-semibold">{{ selectedPerson().designation }} • Class {{ selectedPerson().signingClass }} Signing Authority</p>
+            </div>
+            <button (click)="closePersonModal()" class="text-[var(--dogo-muted)] hover:text-[var(--dogo-dark)] p-2 cursor-pointer transition-colors text-xl">
+              <i class="ri-close-line"></i>
+            </button>
+          </div>
+
+          <!-- Body -->
+          <div class="p-6 space-y-6 overflow-y-auto flex-1">
+            <div class="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
+              <div class="w-32 h-32 rounded-3xl bg-white border border-[var(--dogo-primary)]/10 flex items-center justify-center overflow-hidden shrink-0">
+                @if(selectedPerson().passportPhoto) {
+                  <img [src]="selectedPerson().passportPhoto" alt="passport" class="w-full h-full object-cover" />
+                } @else {
+                  <i class="ri-user-line text-5xl text-[var(--dogo-primary)]/20"></i>
+                }
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-xs w-full">
+                <div>
+                  <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Full Compliance Name</span>
+                  <span class="font-bold text-[var(--dogo-dark)]">{{ selectedPerson().title }} {{ selectedPerson().firstName }} {{ selectedPerson().otherNames }} {{ selectedPerson().surname }}</span>
+                </div>
+                <div>
+                  <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Date of Birth</span>
+                  <span class="font-bold text-[var(--dogo-dark)]">{{ selectedPerson().dob }}</span>
+                </div>
+                <div>
+                  <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Gender</span>
+                  <span class="font-bold text-[var(--dogo-dark)]">{{ selectedPerson().gender }}</span>
+                </div>
+                <div>
+                  <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Nationality</span>
+                  <span class="font-bold text-[var(--dogo-dark)]">{{ selectedPerson().nationality }}</span>
+                </div>
+                <div>
+                  <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Business Email</span>
+                  <span class="font-bold text-[var(--dogo-dark)]">{{ selectedPerson().email }}</span>
+                </div>
+                <div>
+                  <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Phone Number</span>
+                  <span class="font-bold text-[var(--dogo-dark)]">{{ selectedPerson().phone }}</span>
+                </div>
+                <div>
+                  <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">BVN Number</span>
+                  <span class="font-bold text-[var(--dogo-dark)]">{{ selectedPerson().bvn }}</span>
+                </div>
+                <div>
+                  <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Identity Document</span>
+                  <span class="font-bold text-[var(--dogo-dark)]">{{ selectedPerson().idType }} ({{ selectedPerson().idNumber }})</span>
+                </div>
+                <div class="sm:col-span-2">
+                  <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Residential Address</span>
+                  <span class="font-bold text-[var(--dogo-dark)]">{{ selectedPerson().residentialAddress }}</span>
+                </div>
+                <div class="sm:col-span-2">
+                  <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Politically Exposed Person (PEP) Status</span>
+                  <span class="font-bold text-[var(--dogo-dark)]">{{ selectedPerson().isPep === 'Yes' ? 'YES - ' + selectedPerson().pepDetails : 'NO' }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Documents & Signature section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-[var(--dogo-primary)]/10">
+              <!-- Signature -->
+              <div class="space-y-2">
+                <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Signature & Date Card</span>
+                <div class="h-36 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl flex items-center justify-center p-4">
+                  @if(selectedPerson().signatureImage) {
+                    <img [src]="selectedPerson().signatureImage" alt="sig" class="h-full object-contain" />
+                  } @else {
+                    <span class="text-xs text-[var(--dogo-muted)] font-semibold">No signature uploaded</span>
+                  }
+                </div>
+              </div>
+
+              <!-- Identity scan -->
+              <div class="space-y-2">
+                <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Identity Document scan</span>
+                <div class="h-36 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl flex items-center justify-center p-4 overflow-hidden">
+                  @if(selectedPerson().idDocument) {
+                    <img [src]="selectedPerson().idDocument" alt="id doc" class="h-full w-full object-cover" />
+                  } @else {
+                    <span class="text-xs text-[var(--dogo-muted)] font-semibold">No identity scan uploaded</span>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Footer -->
+          <div class="p-6 border-t border-[var(--dogo-primary)]/10 bg-white flex justify-end">
+            <app-button (click)="closePersonModal()" variant="primary">Close Profile</app-button>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Tab 5: Corporate Security Settings -->
+    @if(activeTab() === 'security') {
+      <div class="space-y-6">
+        <app-card title="Authentication Security" subtitle="Configure secure settings for your corporate profile access">
+          <div class="flex items-center justify-between gap-6 py-2">
+            <div>
+              <h4 class="text-sm font-bold text-[var(--dogo-dark)] leading-snug">Enforce Two-Factor Authentication (2FA)</h4>
+              <p class="text-xs text-[var(--dogo-muted)] leading-relaxed mt-1">Requires all signatories to input a 6-digit one-time code on authentication requests.</p>
+            </div>
+            <button (click)="toggleTwoFactor()" [disabled]="isUpdatingTwoFactor()" class="relative shrink-0 w-12 h-6 rounded-full transition-colors duration-300 focus:outline-none cursor-pointer"
+              [class.bg-[var(--dogo-primary)]]="isTwoFactorEnabled()" [class.bg-gray-200]="!isTwoFactorEnabled()">
+              <span class="absolute left-1 top-1 w-4 h-4 rounded-full bg-white transition-transform duration-300 flex items-center justify-center shadow-md"
+                [style.transform]="isTwoFactorEnabled() ? 'translateX(1.5rem)' : 'none'">
+                @if(isUpdatingTwoFactor()) {
+                  <i class="ri-loader-4-line animate-spin text-[8px] text-[var(--dogo-primary)]"></i>
+                }
+              </span>
+            </button>
+          </div>
+        </app-card>
+
+        <app-card title="Corporate Transaction PIN" subtitle="Required to authorize deposits, portfolio investments, and withdrawals">
+          @if(!isEditingPin()) {
+            <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 py-2">
+              <div>
+                <h4 class="text-sm font-bold text-[var(--dogo-dark)] leading-snug">Security Transaction PIN</h4>
+                <p class="text-xs text-[var(--dogo-muted)] leading-relaxed mt-1">Transaction authorizations are locked behind a six-digit secure numerical PIN.</p>
+              </div>
+              <app-button (click)="startEditPin()" variant="secondary" size="sm" icon="ri-key-line">
+                {{ hasPin() ? 'Change PIN' : 'Setup PIN' }}
+              </app-button>
+            </div>
+          } @else {
+            <div class="space-y-6 py-2 max-w-md">
+              @if(hasPin()) {
+                <div>
+                  <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Current PIN</label>
+                  <input type="password" maxlength="6" [value]="pinForm().oldPin" (input)="updatePinField('oldPin', $any($event.target).value)" placeholder="••••••" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 text-center tracking-[1em] font-extrabold text-lg focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+                </div>
+              }
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">New Security PIN (6 Digits)</label>
+                <input type="password" maxlength="6" [value]="pinForm().newPin" (input)="updatePinField('newPin', $any($event.target).value)" placeholder="••••••" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 text-center tracking-[1em] font-extrabold text-lg focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Confirm New PIN</label>
+                <input type="password" maxlength="6" [value]="pinForm().confirmPin" (input)="updatePinField('confirmPin', $any($event.target).value)" placeholder="••••••" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 text-center tracking-[1em] font-extrabold text-lg focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              @if(pinError()) {
+                <span class="text-red-500 text-xs font-semibold block">{{ pinError() }}</span>
+              }
+              <div class="flex justify-end gap-3 pt-4 border-t border-[var(--dogo-primary)]/5 mt-6">
+                <app-button (click)="cancelEditPin()" variant="secondary" [disabled]="isUpdatingPin()">Cancel</app-button>
+                <app-button (click)="savePin()" variant="primary" [loading]="isUpdatingPin()">Update PIN</app-button>
+              </div>
+            </div>
+          }
+        </app-card>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- COMPLIANCE DOCUMENT UPLOAD MODAL -->
+@if(showVerificationModal()) {
+  <div class="fixed inset-0 bg-[var(--dogo-dark)]/60 backdrop-blur-md z-[100] flex items-center justify-center p-4 animate-fade-in">
+    <div class="bg-white rounded-[32px] w-full max-w-lg p-8 border border-[var(--dogo-primary)]/10 shadow-2xl relative">
+      <button (click)="closeVerificationModal()" class="absolute right-6 top-6 text-[var(--dogo-muted)] hover:text-[var(--dogo-primary)] text-xl cursor-pointer">
+        <i class="ri-close-line"></i>
+      </button>
+
+      <h3 class="text-xl font-black text-[var(--dogo-dark)] mb-2 flex items-center gap-2">
+        <i [class]="activeVerification().icon" class="text-[var(--dogo-secondary)]"></i> Upload compliance document
+      </h3>
+      <p class="text-xs font-medium text-[var(--dogo-muted)] mb-6">{{ activeVerification().name }}</p>
+
+      <div class="space-y-6">
+        <!-- Drag & Drop Container -->
+        <div class="border-2 border-dashed border-[var(--dogo-primary)]/10 rounded-2xl p-8 flex flex-col items-center justify-center text-center bg-[var(--dogo-cream)]/30 hover:bg-[var(--dogo-cream)]/50 transition-colors relative group">
+          @if(!addressFile()) {
+            <i class="ri-upload-cloud-2-line text-4xl text-[var(--dogo-primary)]/50 mb-3 group-hover:scale-110 transition-transform"></i>
+            <p class="text-xs font-bold text-[var(--dogo-dark)]">Click to browse or drop file here</p>
+            <p class="text-[10px] text-[var(--dogo-muted)] mt-1">Supports PDF, PNG, JPG up to 5MB</p>
+            <input type="file" (change)="onFileSelected($event)" class="absolute inset-0 opacity-0 cursor-pointer" />
+          } @else {
+            <i class="ri-file-pdf-2-line text-4xl text-[var(--dogo-secondary)] mb-3"></i>
+            <p class="text-xs font-bold text-[var(--dogo-dark)]">{{ addressFile()?.name }}</p>
+            <p class="text-[10px] text-[var(--dogo-muted)] mt-1">Ready for submission</p>
+            <button (click)="addressFile.set(null)" class="text-red-500 text-[10px] font-black uppercase tracking-wider mt-4 hover:underline cursor-pointer">
+              Remove File
+            </button>
+          }
+        </div>
+
+        <div class="flex justify-end gap-3 pt-4 border-t border-[var(--dogo-primary)]/5">
+          <app-button (click)="closeVerificationModal()" variant="secondary" [disabled]="isVerifying()">Cancel</app-button>
+          <app-button (click)="verifyDocument()" variant="primary" [disabled]="!addressFile()" [loading]="isVerifying()">Submit Document</app-button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

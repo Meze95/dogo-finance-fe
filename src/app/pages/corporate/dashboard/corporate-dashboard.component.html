@@ -1,0 +1,968 @@
+<div class="space-y-10 animate-fade-in relative">
+  
+  <!-- Welcome / Control Bar -->
+  <div class="bg-white border border-[var(--dogo-primary)]/5 p-6 rounded-[32px] flex flex-col lg:flex-row lg:items-center justify-between gap-6 shadow-sm">
+    <div class="flex items-center space-x-4">
+      <div class="w-14 h-14 bg-[var(--dogo-cream)] rounded-2xl flex items-center justify-center text-[var(--dogo-primary)] text-2xl font-black shrink-0">
+        <i class="ri-briefcase-line"></i>
+      </div>
+      <div>
+        <h2 class="text-xl md:text-2xl font-black text-[var(--dogo-dark)] tracking-tight">Salaam, {{ userName() }} 👋</h2>
+        <p class="text-xs font-bold text-[var(--dogo-secondary)] uppercase tracking-widest mt-0.5">{{ companyName() }}</p>
+      </div>
+    </div>
+    <div class="flex items-center space-x-2 bg-[var(--dogo-cream)] py-3 px-5 rounded-2xl border border-[var(--dogo-primary)]/5 text-xs font-bold text-[var(--dogo-dark)]/70">
+      <i class="ri-vip-crown-fill text-amber-500 text-base"></i>
+      <span class="uppercase tracking-widest text-[9px] font-black">Premium Partner Since 2018</span>
+    </div>
+  </div>
+
+  <!-- DASHBOARD TOP HEADER: Privacy & Compliance Settings -->
+  <div class="flex flex-col md:flex-row items-center justify-between gap-6 px-6 py-8 md:px-10 md:py-8 bg-white/60 rounded-[40px] border border-[var(--dogo-primary)]/5 backdrop-blur-xl shadow-sm mb-12 relative overflow-hidden group">
+      <div class="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-[var(--dogo-secondary)]/20 to-transparent"></div>
+      
+      <div class="flex flex-col md:flex-row items-center gap-6 md:gap-8 relative z-10 w-full md:w-auto">
+         <label class="relative inline-flex items-center cursor-pointer group/toggle">
+            <input type="checkbox" [checked]="hideBalances()" (change)="hideBalances.set(!hideBalances())" class="sr-only peer">
+            <div class="w-14 h-8 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:shadow-md after:rounded-full after:h-6 after:w-6 after:transition-all duration-300 peer-checked:bg-[var(--dogo-primary)]"></div>
+            <span class="ml-4 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--dogo-primary)] opacity-40 group-hover/toggle:opacity-100 transition-opacity whitespace-nowrap">Privacy Mode</span>
+         </label>
+         
+         <div class="h-8 w-[1px] bg-[var(--dogo-primary)]/10 hidden md:block"></div>
+         <div class="h-[1px] w-full bg-[var(--dogo-primary)]/5 md:hidden"></div>
+
+         <div class="flex items-center space-x-3">
+            <div class="flex items-center justify-center w-8 h-8 rounded-full bg-green-50">
+               <i class="ri-shield-star-line text-[var(--dogo-primary)]"></i>
+            </div>
+            <span class="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--dogo-primary)] whitespace-nowrap opacity-70">100% Shariah Audited</span>
+         </div>
+      </div>
+
+       <div class="h-[1px] w-full bg-[var(--dogo-primary)]/5 md:hidden"></div>
+
+       <div class="flex items-center space-x-4 relative z-10">
+          <div class="flex -space-x-2">
+             <div class="w-8 h-8 rounded-full border-2 border-white bg-slate-100 flex items-center justify-center text-[10px] font-bold text-[var(--dogo-primary)]">M</div>
+          </div>
+          <div class="flex flex-col">
+             <span class="text-[11px] font-black text-[var(--dogo-primary)] uppercase italic">Premium Member</span>
+             <span class="text-[9px] font-bold text-[var(--dogo-secondary)] uppercase tracking-widest">Since May 2018</span>
+          </div>
+       </div>
+  </div>
+
+  <!-- Main Dashboard Grid -->
+  <div class="grid xl:grid-cols-1 gap-8">
+    
+    <!-- Main Content Column -->
+    <div class="space-y-8">
+      
+      <!-- Most Beautiful Wallet Card Ever (V2 Premium - Compact) -->
+      <div class="relative group bg-gradient-to-br from-[var(--dogo-primary)] to-[var(--dogo-secondary)] rounded-[42px] p-5 md:p-8 text-white shadow-2xl shadow-[var(--dogo-primary)]/40 overflow-hidden border border-white/5 mb-10 transition-all duration-700">
+         <!-- Enhanced Depth Elements -->
+         <div class="absolute -top-1/4 -left-1/4 w-[500px] h-[500px] bg-[var(--dogo-secondary)]/5 blur-[120px] rounded-full anim-float pointer-events-none"></div>
+         <div class="absolute -bottom-1/4 -right-1/4 w-[400px] h-[400px] bg-[var(--dogo-primary)]/20 blur-[100px] rounded-full anim-float delay-300 pointer-events-none"></div>
+         <div class="absolute inset-0 dogo-pattern opacity-[0.03]"></div>
+
+         <div class="relative z-10 flex flex-col xl:flex-row items-center justify-between gap-8">
+            <!-- Left: Hero Balance -->
+            <div class="flex items-center gap-5 shrink-0">
+               <div class="hidden lg:flex w-16 h-16 rounded-[24px] premium-frosting items-center justify-center text-3xl text-white relative overflow-hidden shrink-0">
+                  <div class="absolute inset-0 bg-white/5 animate-pulse opacity-20"></div>
+                  <i class="ri-wallet-3-line relative z-10"></i>
+               </div>
+               
+               <div class="space-y-0.5">
+                  <div class="flex items-center gap-2 mb-1">
+                     <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full premium-frosting border-white/10">
+                        <div class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div>
+                        <span class="text-[8px] font-black text-emerald-400 uppercase tracking-widest">Secured</span>
+                     </div>
+                     <button (click)="hideBalances.set(!hideBalances())" class="p-1.5 rounded-full hover:bg-white/10 transition-all active:scale-90 bg-transparent border-0 cursor-pointer">
+                        <i [class]="hideBalances() ? 'ri-eye-off-line' : 'ri-eye-line'" class="text-lg text-white/70 hover:text-white transition-colors"></i>
+                     </button>
+                  </div>
+                  
+                  <div class="flex items-baseline gap-2">
+                     <span class="text-xl font-bold text-white/40">₦</span>
+                     <h2 class="text-4xl md:text-5xl font-black tracking-tight leading-none text-white">
+                        {{ hideBalances() ? '••••••••' : (availableNaira() | number:'1.0-2') }}
+                     </h2>
+                     <span class="text-xs font-bold text-white/20">NGN</span>
+                  </div>
+               </div>
+            </div>
+
+            <!-- Middle: High-End Stats -->
+            <div class="flex items-center justify-center gap-3 w-full sm:w-auto shrink-0">
+               <div class="min-w-[90px] sm:min-w-[110px] px-2 sm:px-4 py-3 rounded-[24px] premium-frosting flex flex-col items-center justify-center relative overflow-hidden border border-white/5">
+                  <span class="text-[8px] font-bold uppercase tracking-widest text-white/50 mb-1">Reserves</span>
+                  <span class="text-[11px] sm:text-sm font-black text-white whitespace-nowrap">{{ hideBalances() ? '••••' : '₦' + (totalPortfolioValue() | number:'1.0-0') }}</span>
+               </div>
+               
+               <div class="min-w-[90px] sm:min-w-[110px] px-2 sm:px-4 py-3 rounded-[24px] premium-frosting flex flex-col items-center justify-center relative overflow-hidden border border-white/5">
+                  <span class="text-[8px] font-bold uppercase tracking-widest text-white/50 mb-1">Term Placed</span>
+                  <span class="text-[11px] sm:text-sm font-black text-white whitespace-nowrap">{{ hideBalances() ? '••••' : '₦' + (totalActiveInvestment() | number:'1.0-0') }}</span>
+               </div>
+            </div>
+
+            <!-- Right: Primary Actions -->
+            <div class="flex items-center justify-center gap-3 w-full sm:w-auto xl:ml-auto">
+               <button (click)="openTransactionModal('fund')" class="flex-grow sm:flex-none h-14 md:h-16 px-6 md:px-10 rounded-[20px] bg-gradient-to-br from-[var(--dogo-secondary)] to-[var(--dogo-secondary-soft)] text-white text-[11px] font-black uppercase tracking-widest transition-all shadow-xl shadow-[var(--dogo-secondary)]/20 relative overflow-hidden hover:scale-105 active:scale-95 flex items-center justify-center border-0 cursor-pointer">
+                  <i class="ri-add-circle-fill text-lg mr-2"></i> Fund Reserves
+               </button>
+                <button (click)="openTransactionModal('withdraw')" class="flex-grow sm:flex-none h-14 md:h-16 px-6 md:px-10 rounded-[20px] premium-frosting text-white text-[11px] font-black uppercase tracking-widest hover:bg-white/10 transition-all hover:scale-105 active:scale-95 flex items-center justify-center border border-white/10 whitespace-nowrap cursor-pointer">
+                   <i class="ri-arrow-up-circle-fill text-lg mr-2 text-[var(--dogo-secondary-soft)]"></i> Withdraw
+                </button>
+             </div>
+          </div>
+       </div>
+    </div>
+
+    <!-- Onboarding checklist based on settings verifications list -->
+    @if (nextSteps().length > 0) {
+        <h3 class="text-xl font-black text-[var(--dogo-dark)] uppercase tracking-[-0.03em] italic mb-6 flex items-center gap-3">
+          <span class="w-8 h-[2px] bg-[var(--dogo-secondary)]"></span>
+          Company Action Plan
+        </h3>
+        
+        <div class="overflow-x-auto pb-10 mb-2 custom-scrollbar-h relative z-20">
+          <div class="flex gap-8 p-1">
+            @for(step of nextSteps(); track step.title) {
+              <div (click)="openModal(step)" class="flex-shrink-0 w-[85vw] md:w-[350px] group bg-white px-6 md:px-8 py-7 rounded-[40px] border border-[var(--dogo-primary)]/5 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 cursor-pointer relative overflow-hidden">
+                 <!-- Decorative corner -->
+                 <div class="absolute -top-6 -right-6 w-20 h-20 bg-[var(--dogo-cream)] rounded-full group-hover:bg-[var(--dogo-primary)] transition-colors duration-500"></div>
+                 
+                 <div class="relative z-10">
+                   <h4 class="font-black text-base text-[var(--dogo-dark)] mb-2">{{ step.title }}</h4>
+                   <p class="text-xs font-medium text-[var(--dogo-muted)] mb-10 leading-relaxed">{{ step.desc }}</p>
+                   
+                   <div class="flex items-center justify-between mt-auto">
+                     <button class="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--dogo-secondary)] flex items-center group-hover:text-[var(--dogo-primary)] transition-colors bg-transparent border-0 cursor-pointer">
+                        {{ step.action }} <i class="ri-arrow-right-line ml-2 transition-transform group-hover:translate-x-2"></i>
+                     </button>
+                     
+                     <div class="w-14 h-14 bg-[var(--dogo-cream)] rounded-2xl flex items-center justify-center text-3xl text-[var(--dogo-primary)] group-hover:bg-[var(--dogo-primary)] group-hover:text-white transition-all duration-500 shadow-sm group-hover:rotate-12">
+                       <i [class]="step.icon"></i>
+                     </div>
+                   </div>
+                 </div>
+              </div>
+            }
+          </div>
+        </div>
+    }
+
+    <!-- Recommended Placements strategy section -->
+    <div class="space-y-8 mt-12">
+      <div class="flex items-center justify-between px-4">
+          <div class="flex flex-col gap-1">
+            <h3 class="text-2xl font-black text-[var(--dogo-dark)] uppercase tracking-[-0.03em] italic">Recommended Placement Placements</h3>
+            <p class="text-[10px] font-bold text-[var(--dogo-secondary)] uppercase tracking-widest">Hand-picked Shariah-compliant funds matching corporate risk profiles</p>
+          </div>
+          <button routerLink="/corporate/products" class="text-[11px] font-black text-[var(--dogo-primary)] uppercase tracking-widest hover:text-[var(--dogo-secondary)] transition-colors flex items-center gap-2 bg-transparent border-0 cursor-pointer">
+            Browse All <i class="ri-arrow-right-line"></i>
+          </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          @for(p of suggestedPortfolios(); track p.portfolioId) {
+              <div class="group bg-white rounded-[48px] p-10 border border-[var(--dogo-primary)]/5 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 flex flex-col h-full relative overflow-hidden">
+                  <div class="absolute -top-12 -left-12 w-32 h-32 bg-[var(--dogo-cream)] rounded-full group-hover:bg-[var(--dogo-primary)]/5 transition-colors"></div>
+                  
+                  <div class="relative z-10 flex justify-between items-start mb-8">
+                      <div class="w-16 h-16 rounded-[24px] bg-[var(--dogo-cream)] flex items-center justify-center text-[var(--dogo-secondary)] transition-all duration-500 group-hover:bg-[var(--dogo-primary)] group-hover:text-white group-hover:rotate-6">
+                          <i class="ri-pie-chart-line text-3xl"></i>
+                      </div>
+                      <span class="px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border border-[var(--dogo-primary)]/10 bg-white shadow-sm">
+                          {{ p.riskLevel }} Risk
+                      </span>
+                  </div>
+                  
+                  <div class="relative z-10 mb-2">
+                    <h4 class="text-xl font-black text-[var(--dogo-dark)] tracking-tight mb-3 group-hover:text-[var(--dogo-primary)] transition-colors">{{ p.name }}</h4>
+                    <div class="inline-flex items-center gap-2 text-green-600 bg-green-50 px-3 py-1 rounded-lg">
+                        <i class="ri-line-chart-line text-xs"></i>
+                        <span class="text-[11px] font-black uppercase tracking-widest">
+                            {{ p.expectedAnnualReturn }}% Est. ROI
+                        </span>
+                    </div>
+                  </div>
+
+                  <p class="relative z-10 text-xs font-medium text-slate-400 line-clamp-2 italic mb-10 mt-4 leading-relaxed">"{{ p.description }}"</p>
+                  
+                  <div class="relative z-10 mt-auto grid grid-cols-2 gap-4">
+                      <button (click)="viewDetail(p)" class="w-full py-4 bg-[var(--dogo-cream)] hover:bg-slate-100 text-[var(--dogo-primary)] rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border-0 cursor-pointer">
+                          Analyze
+                      </button>
+                      <button (click)="openInvest(p)" class="w-full py-4 bg-[var(--dogo-primary)] hover:bg-[var(--dogo-primary-soft)] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl shadow-[var(--dogo-primary)]/10 border-0 cursor-pointer">
+                          Invest
+                      </button>
+                  </div>
+              </div>
+          }
+      </div>
+    </div>
+
+    <!-- Recent Activity log -->
+    <div class="bg-white p-6 md:p-12 rounded-[56px] border border-[var(--dogo-primary)]/5 shadow-sm relative overflow-hidden mt-12">
+      <div class="absolute top-0 right-0 w-64 h-64 bg-[var(--dogo-cream)] blur-[100px] rounded-full -mr-32 -mt-32 opacity-50"></div>
+      
+      <div class="relative z-10 flex items-center justify-between mb-12">
+         <div class="flex flex-col gap-1">
+           <h3 class="text-2xl font-black text-[var(--dogo-dark)] uppercase tracking-[-0.03em] italic">Treasury Statement</h3>
+           <p class="text-[10px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest">Tracking reserve inflows, payouts and placements</p>
+         </div>
+         <button routerLink="/corporate/transactions" class="group px-8 py-4 bg-[var(--dogo-cream)] hover:bg-[var(--dogo-primary)] hover:text-white text-[var(--dogo-primary)] text-[11px] font-black uppercase tracking-widest rounded-2xl transition-all flex items-center shadow-sm border-0 cursor-pointer">
+            View Statement <i class="ri-arrow-right-up-line ml-2 group-hover:rotate-45 transition-transform"></i>
+         </button>
+      </div>
+
+      <div class="relative z-10 space-y-6">
+         @for(tx of recentTransactions().slice(0, 5); track tx.id) {
+           <div class="flex items-center justify-between p-5 md:p-8 bg-[var(--dogo-cream)] rounded-[40px] border border-transparent hover:border-[var(--dogo-primary)]/5 hover:bg-white hover:shadow-2xl hover:scale-[1.01] transition-all duration-500 group">
+              <div class="flex items-center space-x-6">
+                 <div class="w-16 h-16 rounded-[24px] flex items-center justify-center text-white shadow-lg group-hover:rotate-6 transition-transform shrink-0" [class]="getIconBgColor(tx.type)">
+                    <i [class]="getIconForTypeSingle(tx.type)" class="text-2xl"></i>
+                 </div>
+                 <div class="space-y-1">
+                    <p class="font-black text-[var(--dogo-dark)] text-base">{{ tx.description }}</p>
+                    <p class="text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest opacity-60">
+                      {{ tx.date }} <span *ngIf="tx.signatories"> • {{ tx.signatories }}</span>
+                    </p>
+                 </div>
+              </div>
+              <div class="text-right space-y-2 shrink-0">
+                 <p class="text-lg font-black" [class]="tx.status === 'failed' ? 'text-red-400 line-through opacity-50' : (tx.type === 'deposit' || tx.type === 'profit' ? 'text-green-600' : 'text-[var(--dogo-dark)]')">
+                    {{ tx.type === 'deposit' || tx.type === 'profit' ? '+' : '-' }}₦{{ tx.amount | number }}
+                 </p>
+                 <span class="inline-block px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border border-[var(--dogo-primary)]/5"
+                       [class.bg-green-50]="tx.status === 'completed'"
+                       [class.text-green-600]="tx.status === 'completed'"
+                       [class.bg-red-50]="tx.status === 'failed'"
+                       [class.text-red-600]="tx.status === 'failed'"
+                       [class.bg-white/50]="tx.status === 'pending'"
+                       [class.text-[var(--dogo-muted)]]="tx.status === 'pending'">
+                    {{ tx.status }}
+                 </span>
+              </div>
+           </div>
+         } @empty {
+           <div class="py-20 text-center bg-[var(--dogo-cream)] rounded-[40px] border-2 border-dashed border-[var(--dogo-primary)]/10">
+             <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center text-3xl text-[var(--dogo-primary)]/20 mx-auto mb-6 shadow-sm">
+               <i class="ri-history-line"></i>
+             </div>
+             <h4 class="text-xl font-black text-[var(--dogo-dark)] uppercase italic">No treasury transactions</h4>
+             <p class="text-xs font-bold text-[var(--dogo-muted)] uppercase tracking-widest mt-2">Initialize reserves allocation to start.</p>
+             <button (click)="openTransactionModal('fund')" class="mt-8 px-8 py-3 bg-[var(--dogo-primary)] text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-[var(--dogo-primary-soft)] transition-all border-0 cursor-pointer">
+               Fund Reserves
+             </button>
+           </div>
+         }
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Checklist Onboarding Verification Modal -->
+@if (showVerificationModal()) {
+  <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-300">
+    <div class="absolute inset-0 bg-[var(--dogo-dark)]/80 backdrop-blur-md" (click)="closeModal()"></div>
+    
+    <div class="relative w-full max-w-md bg-white rounded-[40px] shadow-2xl overflow-hidden transform animate-in slide-in-from-bottom-8 duration-500 max-h-[90vh] flex flex-col">
+      <!-- Fixed Modal Header -->
+      <div class="p-6 pb-2 flex justify-end shrink-0">
+        <button (click)="closeModal()" class="w-10 h-10 rounded-full bg-[var(--dogo-cream)] flex items-center justify-center text-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)] hover:text-white transition-all border-0 cursor-pointer">
+          <i class="ri-close-line text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Modal Content -->
+      <div class="p-10 pt-0 overflow-y-auto custom-scrollbar-h flex-grow">
+        <div class="text-center">
+          <div class="w-16 h-16 bg-[var(--dogo-cream)] rounded-2xl flex items-center justify-center text-3xl text-[var(--dogo-primary)] mx-auto mb-6 animate-bounce shrink-0">
+            <i [class]="activeVerification()?.icon"></i>
+          </div>
+
+          <h3 class="text-2xl font-black text-[var(--dogo-dark)] italic tracking-tighter mb-2">{{ activeVerification()?.title }}</h3>
+          <p class="text-xs font-bold text-[var(--dogo-muted)] uppercase tracking-widest mb-10">{{ activeVerification()?.desc }}</p>
+
+          @if (!isSuccess()) {
+            <div class="space-y-6">
+              
+              <!-- General Corporate document drag-n-drop file uploader -->
+              <div class="text-left space-y-6">
+                 <div class="space-y-4">
+                     <div class="space-y-2">
+                         <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 ml-4">Upload Document (Image/PDF) *</label>
+                         <div (click)="fileInput.click()" 
+                              class="w-full h-40 bg-[var(--dogo-cream)] border-2 border-dashed border-[var(--dogo-primary)]/10 rounded-3xl flex flex-col items-center justify-center cursor-pointer hover:border-[var(--dogo-secondary)]/40 transition-all overflow-hidden relative group">
+                             <input #fileInput type="file" (change)="onAddressFileSelected($event)" class="hidden" accept="image/*,application/pdf">
+                             
+                             @if (addressFilePreview()) {
+                                 <img [src]="addressFilePreview()" class="w-full h-full object-cover">
+                                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                     <i class="ri-refresh-line text-white text-3xl"></i>
+                                 </div>
+                             } @else {
+                                 <i class="ri-upload-cloud-2-line text-4xl text-[var(--dogo-primary)]/20 mb-2"></i>
+                                 <p class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40">Tap to select file</p>
+                             }
+                         </div>
+                         @if (addressFile()) {
+                             <p class="text-[9px] font-bold text-[var(--dogo-secondary)] mt-2 text-center uppercase tracking-widest">Selected: {{ addressFile()?.name }}</p>
+                         }
+                     </div>
+                     <p class="text-[9px] font-medium text-[var(--dogo-muted)] leading-relaxed text-center px-4 italic">
+                       Official CAC Forms, Corporate Resolutions, and Signatories ID Scans must be fully legible in high resolution.
+                     </p>
+                 </div>
+              </div>
+
+              @if (errorMessage()) {
+                <div class="p-4 bg-red-50 text-red-600 rounded-2xl text-[10px] uppercase font-black tracking-widest animate-in shake duration-300 text-center">
+                   {{ errorMessage() }}
+                </div>
+              }
+
+              <button 
+                (click)="verifyAction()"
+                [disabled]="!addressFile() || isProcessing()"
+                class="w-full h-16 bg-[var(--dogo-primary)] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[var(--dogo-primary-soft)] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl shadow-[var(--dogo-primary)]/20 flex items-center justify-center relative overflow-hidden border-0 cursor-pointer"
+              >
+                @if (isProcessing()) {
+                  <div class="flex items-center space-x-2">
+                    <div class="w-2 h-2 rounded-full bg-[var(--dogo-secondary)] animate-pulse"></div>
+                    <span>Uploading...</span>
+                  </div>
+                } @else {
+                  <span>Upload Document</span>
+                  <i class="ri-shield-check-line text-lg ml-2"></i>
+                }
+              </button>
+            </div>
+          } @else {
+            <div class="py-6 animate-in zoom-in duration-500 text-center">
+              <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-4xl text-green-600 mx-auto mb-6 shadow-pill">
+                <i class="ri-checkbox-circle-fill"></i>
+              </div>
+              <h4 class="text-xl font-black text-[var(--dogo-primary)] uppercase italic">Upload Complete</h4>
+              <p class="text-xs font-bold text-[var(--dogo-muted)] mt-2">Your document has been sent for compliance review.</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Deposit & Withdrawal transaction modal -->
+@if (showTransactionModal()) {
+  <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-300">
+    <div class="absolute inset-0 bg-[var(--dogo-dark)]/80 backdrop-blur-md" (click)="closeTransactionModal()"></div>
+    
+    <div class="relative w-full max-w-md bg-white rounded-[40px] shadow-2xl overflow-hidden transform animate-in slide-in-from-bottom-8 duration-500 max-h-[95vh] flex flex-col">
+      <!-- Modal Header -->
+      <div class="p-6 pb-2 flex items-center justify-between shrink-0">
+        @if (fundingStep() !== 'amount' && fundingStep() !== 'success' && transactionType() === 'fund') {
+          <button (click)="fundingStep.set('amount')" class="w-10 h-10 rounded-full bg-[var(--dogo-cream)] flex items-center justify-center text-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)] hover:text-white transition-all border-0 cursor-pointer">
+            <i class="ri-arrow-left-line text-xl"></i>
+          </button>
+        } @else {
+          <div></div>
+        }
+        <button (click)="closeTransactionModal()" class="w-10 h-10 rounded-full bg-[var(--dogo-cream)] flex items-center justify-center text-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)] hover:text-white transition-all border-0 cursor-pointer">
+          <i class="ri-close-line text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Modal Content -->
+      <div class="p-10 pt-0 overflow-y-auto custom-scrollbar-h flex-grow">
+        <div class="text-center">
+          <!-- Step Icon -->
+          <div class="w-16 h-16 bg-[var(--dogo-cream)] rounded-2xl flex items-center justify-center text-3xl mx-auto mb-6 shrink-0"
+               [class]="transactionType() === 'fund' ? 'text-green-600' : 'text-orange-500'">
+            <i [class]="fundingStep() === 'success' ? 'ri-checkbox-circle-fill' : (transactionType() === 'fund' ? 'ri-add-circle-fill' : 'ri-bank-card-line')"></i>
+          </div>
+
+          <h3 class="text-2xl font-black text-[var(--dogo-dark)] italic tracking-tighter mb-2">
+            {{ fundingStep() === 'success' ? 'Payment Complete' : (transactionType() === 'fund' ? 'Fund reserves' : 'Withdraw reserves') }}
+          </h3>
+          <p class="text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest mb-8">
+             {{ fundingStep() === 'success' ? 'Reserves balance has been updated' : (transactionType() === 'fund' ? 'Securely allocate corporate liquidity' : 'Transfer directly to settlement bank') }}
+          </p>
+
+          <div [ngSwitch]="transactionType() === 'withdraw' && fundingStep() === 'amount' ? 'withdraw' : fundingStep()" class="text-left">
+            
+            <!-- STEP: AMOUNT -->
+            <div *ngSwitchCase="'amount'" class="space-y-6 animate-in slide-in-from-right-4 duration-300">
+               <div class="space-y-2">
+                  <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 ml-4">Enter Reserve Amount *</label>
+                  <div class="relative group">
+                    <div class="absolute left-6 top-1/2 -translate-y-1/2 text-lg font-black text-[var(--dogo-primary)]/20 group-focus-within:text-[var(--dogo-primary)] transition-colors">₦</div>
+                      <input 
+                        type="text" 
+                        placeholder="5,000,000" 
+                        autocomplete="off"
+                        [value]="formatWithCommas(transactionAmount())"
+                        (input)="onAmountInput($event)"
+                        class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-12 py-5 text-xl font-black text-[var(--dogo-dark)] outline-none transition-all placeholder:text-[var(--dogo-primary)]/10 shadow-sm"
+                      >
+                  </div>
+               </div>
+            </div>
+
+            <!-- STEP: SOURCE SELECTION -->
+            <div *ngSwitchCase="'source'" class="space-y-6 animate-in slide-in-from-right-4 duration-300">
+              <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 ml-4">Select Reserve Source</label>
+              <div class="space-y-4">
+                <div (click)="selectedSource.set('virtual')" 
+                     [class.border-[var(--dogo-secondary)]]="selectedSource() === 'virtual'"
+                     class="group relative bg-[var(--dogo-cream)] rounded-3xl p-6 flex items-center space-x-5 cursor-pointer border-2 border-transparent hover:border-[var(--dogo-secondary)] transition-all">
+                  <div class="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-[var(--dogo-primary)] shadow-sm shrink-0 group-hover:scale-105 transition-transform">
+                    <i class="ri-bank-card-line text-2xl"></i>
+                  </div>
+                  <div class="flex-grow">
+                    <h4 class="text-sm font-black text-[var(--dogo-dark)] mb-1">Reserves Virtual Account</h4>
+                    <p class="text-[10px] font-medium text-[var(--dogo-muted)] leading-tight">Instant allocation into dynamic collection bank</p>
+                  </div>
+                  @if (selectedSource() === 'virtual') {
+                    <div class="text-[var(--dogo-secondary)] animate-in zoom-in"><i class="ri-checkbox-circle-fill text-2xl"></i></div>
+                  }
+                </div>
+
+                <div (click)="selectedSource.set('card')" 
+                     [class.border-[var(--dogo-secondary)]]="selectedSource() === 'card'"
+                     class="group relative bg-[var(--dogo-cream)] rounded-3xl p-6 flex items-center space-x-5 cursor-pointer border-2 border-transparent hover:border-[var(--dogo-secondary)] transition-all">
+                  <div class="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-[var(--dogo-primary)] shadow-sm shrink-0 group-hover:scale-105 transition-transform">
+                    <i class="ri-bank-card-2-line text-2xl"></i>
+                  </div>
+                  <div class="flex-grow">
+                    <h4 class="text-sm font-black text-[var(--dogo-dark)] mb-1">Corporate Card Link</h4>
+                    <p class="text-[10px] font-medium text-[var(--dogo-muted)] leading-tight">Securely debit linked corporate card</p>
+                  </div>
+                  @if (selectedSource() === 'card') {
+                    <div class="text-[var(--dogo-secondary)] animate-in zoom-in"><i class="ri-checkbox-circle-fill text-2xl"></i></div>
+                  }
+                </div>
+
+                <div (click)="selectedSource.set('manual')" 
+                     [class.border-[var(--dogo-secondary)]]="selectedSource() === 'manual'"
+                     class="group relative bg-[var(--dogo-cream)] rounded-3xl p-6 flex items-center space-x-5 cursor-pointer border-2 border-transparent hover:border-[var(--dogo-secondary)] transition-all">
+                  <div class="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-[var(--dogo-primary)] shadow-sm shrink-0 group-hover:scale-105 transition-transform">
+                    <i class="ri-bank-line text-2xl"></i>
+                  </div>
+                  <div class="flex-grow">
+                    <h4 class="text-sm font-black text-[var(--dogo-dark)] mb-1">Manual Wire / RTGS</h4>
+                    <p class="text-[10px] font-medium text-[var(--dogo-muted)] leading-tight">Upload transaction receipt from bank terminal</p>
+                  </div>
+                  @if (selectedSource() === 'manual') {
+                    <div class="text-[var(--dogo-secondary)] animate-in zoom-in"><i class="ri-checkbox-circle-fill text-2xl"></i></div>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <!-- STEP: VIRTUAL ACCOUNT -->
+            <div *ngSwitchCase="'virtual'" class="space-y-6 animate-in slide-in-from-right-4 duration-300">
+               <div class="text-center">
+                  <h4 class="text-xl font-black text-[var(--dogo-dark)] italic tracking-tighter mb-2">Fund Reserves via Transfer</h4>
+                  <p class="text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest mb-6">Use the institutional accounts below</p>
+               </div>
+
+               <div class="space-y-4">
+                  @for (acc of virtualAccounts(); track acc.accountNumber) {
+                     <div class="bg-[var(--dogo-cream)] p-6 rounded-[2rem] border border-[var(--dogo-primary)]/5 relative overflow-hidden group">
+                        <div class="flex justify-between items-start mb-4">
+                           <div>
+                              <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">{{ acc.bankName }}</p>
+                              <h4 class="text-base font-black text-[var(--dogo-dark)]">{{ acc.accountNumber }}</h4>
+                           </div>
+                           <button (click)="copyToClipboard(acc.accountNumber)" class="w-8 h-8 rounded-xl bg-white hover:bg-[var(--dogo-primary)] hover:text-white flex items-center justify-center text-slate-400 transition-all border-0 cursor-pointer shadow-sm">
+                              <i class="ri-file-copy-line text-sm"></i>
+                           </button>
+                        </div>
+                        <div class="flex justify-between text-[9px] font-bold text-[var(--dogo-muted)] uppercase tracking-wider">
+                           <span>Name: {{ acc.accountName }}</span>
+                           <span class="text-emerald-500 font-extrabold flex items-center gap-0.5"><i class="ri-flashlight-fill"></i> Instant Inflow</span>
+                        </div>
+                     </div>
+                  }
+               </div>
+
+               <div class="p-6 bg-blue-50/50 rounded-[2rem] text-center border border-blue-100">
+                  <p class="text-[10px] font-medium text-[var(--dogo-primary)] leading-relaxed italic">
+                     * Transfers made into these channels are credited instantly into your active reserves wallet.
+                  </p>
+               </div>
+            </div>
+
+            <!-- STEP: CARD DEBIT FORM -->
+            <div *ngSwitchCase="'card'" class="space-y-4 animate-in slide-in-from-right-4 duration-300">
+               <div class="space-y-2">
+                  <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 ml-4">Corporate Card Number *</label>
+                  <div class="relative group">
+                     <input 
+                       type="text" 
+                       placeholder="0000 0000 0000 0000" 
+                       [value]="cardNumber()"
+                       (input)="onCardNumberInput($event)"
+                       class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-4 text-sm font-bold text-[var(--dogo-dark)] outline-none transition-all placeholder:text-[var(--dogo-primary)]/20"
+                     >
+                     <div class="absolute right-6 top-1/2 -translate-y-1/2 text-2xl">
+                        <i [class]="cardTypeIcon()"></i>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="grid grid-cols-2 gap-4">
+                  <div class="space-y-2">
+                     <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 ml-4">Expiry Date *</label>
+                     <input 
+                       type="text" 
+                       placeholder="MM/YY" 
+                       [value]="expiryDate()"
+                       (input)="onExpiryInput($event)"
+                       class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-4 text-sm font-bold text-[var(--dogo-dark)] outline-none transition-all placeholder:text-[var(--dogo-primary)]/20 text-center"
+                     >
+                  </div>
+                  <div class="space-y-2">
+                     <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 ml-4">CVV *</label>
+                     <input 
+                       type="password" 
+                       placeholder="123" 
+                       maxlength="3"
+                       [value]="cvv()"
+                       (input)="cvv.set($any($event.target).value = $any($event.target).value.replace(/[^0-9]/g, ''))"
+                       class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-4 text-sm font-bold text-[var(--dogo-dark)] outline-none transition-all placeholder:text-[var(--dogo-primary)]/20 text-center"
+                     >
+                  </div>
+               </div>
+
+               <div class="space-y-2">
+                  <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 ml-4">Card Security PIN *</label>
+                  <input 
+                    type="password" 
+                    placeholder="****" 
+                    maxlength="4"
+                    [value]="cardPin()"
+                    (input)="cardPin.set($any($event.target).value = $any($event.target).value.replace(/[^0-9]/g, ''))"
+                    class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-4 text-sm font-bold text-[var(--dogo-dark)] outline-none transition-all placeholder:text-[var(--dogo-primary)]/20 text-center tracking-[0.3em]"
+                  >
+               </div>
+
+               @if (validationError()) {
+                 <div class="p-4 bg-red-50 text-red-600 rounded-2xl text-[11px] uppercase font-black tracking-widest animate-in fade-in duration-300 text-center mt-2">
+                   <i class="ri-error-warning-line mr-2"></i> {{ validationError() }}
+                 </div>
+               }
+            </div>
+
+            <!-- STEP: OTP AUTHORIZATION -->
+            <div *ngSwitchCase="'otp'" class="space-y-6 animate-in slide-in-from-right-4 duration-300">
+               <div class="text-center p-6 bg-[var(--dogo-cream)] rounded-[32px] border border-[var(--dogo-primary)]/5 mb-6">
+                 <p class="text-xs font-bold text-[var(--dogo-primary)]/60 uppercase tracking-widest mb-2">Dual Verification Required</p>
+                 <p class="text-[11px] font-medium text-[var(--dogo-muted)]">{{ otpMessage() }}</p>
+               </div>
+               <div>
+                  <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 ml-4 text-center block w-full mb-3">One-Time Password (OTP)</label>
+                  <input 
+                    type="text" 
+                    placeholder="Enter OTP" 
+                    maxlength="6"
+                    [value]="otpInput()"
+                    (input)="otpInput.set($any($event.target).value)"
+                    class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-5 text-2xl font-black text-center tracking-[0.5em] text-[var(--dogo-dark)] outline-none transition-all"
+                  >
+               </div>
+
+               <div class="text-center pt-2">
+                 @if (canResendOtp()) {
+                   <button (click)="transactionType() === 'withdraw' ? resendWithdrawalOtp() : resendInvestOtp()" 
+                           class="text-[11px] font-black uppercase tracking-widest text-[var(--dogo-secondary)] hover:text-[var(--dogo-primary)] transition-colors bg-transparent border-0 cursor-pointer">
+                     Resend Authorization Code
+                   </button>
+                 } @else {
+                   <p class="text-[10px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest opacity-60">
+                     Resend in {{ otpCountdown() }}s
+                   </p>
+                 }
+               </div>
+            </div>
+
+            <!-- STEP: MANUAL TRANSFER -->
+            <div *ngSwitchCase="'manual'" class="space-y-4 animate-in slide-in-from-right-4 duration-300">
+               <div class="bg-[var(--dogo-cream)] p-6 rounded-[2rem] border border-[var(--dogo-primary)]/5 relative overflow-hidden group">
+                  <div class="flex justify-between items-start mb-4">
+                     <div>
+                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Company Bank Details</p>
+                        <h4 class="text-base font-black text-[var(--dogo-dark)]">{{ companyBankDetails().accountNumber }}</h4>
+                     </div>
+                     <button (click)="copyToClipboard(companyBankDetails().accountNumber)" class="w-8 h-8 rounded-xl bg-white hover:bg-[var(--dogo-primary)] hover:text-white flex items-center justify-center text-slate-400 transition-all border-0 cursor-pointer shadow-sm">
+                        <i class="ri-file-copy-line text-sm"></i>
+                     </button>
+                  </div>
+                  <div class="flex justify-between text-[9px] font-bold text-[var(--dogo-muted)] uppercase tracking-wider">
+                     <span>Bank: {{ companyBankDetails().bankName }}</span>
+                     <span>Name: {{ companyBankDetails().accountName }}</span>
+                  </div>
+               </div>
+
+               <div class="space-y-2">
+                  <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 ml-4">Payment Reference Number *</label>
+                  <input 
+                    type="text" 
+                    placeholder="e.g. wire-92847190" 
+                    [value]="manualReference()"
+                    (input)="manualReference.set($any($event.target).value)"
+                    class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-4 text-sm font-bold text-[var(--dogo-dark)] outline-none transition-all placeholder:text-[var(--dogo-primary)]/20"
+                  >
+               </div>
+
+               <div class="space-y-2">
+                  <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 ml-4">Upload Transfer Slip Slip / PDF *</label>
+                  <div (click)="slipInput.click()" 
+                       class="w-full h-32 bg-[var(--dogo-cream)] border-2 border-dashed border-[var(--dogo-primary)]/10 rounded-3xl flex flex-col items-center justify-center cursor-pointer hover:border-[var(--dogo-secondary)]/40 transition-all overflow-hidden relative group">
+                      <input #slipInput type="file" (change)="manualReceiptPath.set($any($event.target).value)" class="hidden" accept="image/*,application/pdf">
+                      
+                      @if (manualReceiptPath()) {
+                          <i class="ri-checkbox-circle-fill text-4xl text-green-500 mb-2"></i>
+                          <p class="text-[10px] font-black uppercase tracking-widest text-green-500">Receipt slip selected</p>
+                      } @else {
+                          <i class="ri-upload-cloud-2-line text-4xl text-[var(--dogo-primary)]/20 mb-2"></i>
+                          <p class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40">Tap to upload slip</p>
+                      }
+                  </div>
+               </div>
+
+               <button 
+                  (click)="submitManualTransfer()"
+                  [disabled]="!manualReference() || !manualReceiptPath() || isProcessing()"
+                  class="w-full h-16 mt-6 bg-[var(--dogo-primary)] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[var(--dogo-primary-soft)] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl shadow-[var(--dogo-primary)]/20 flex items-center justify-center relative overflow-hidden border-0 cursor-pointer"
+                >
+                  @if (isProcessing()) {
+                    <div class="flex items-center space-x-2">
+                      <div class="w-2 h-2 rounded-full bg-[var(--dogo-secondary)] animate-pulse"></div>
+                      <span>Submitting...</span>
+                    </div>
+                  } @else {
+                    <span>Submit Transfer Slip</span>
+                    <i class="ri-shield-check-line text-lg ml-2"></i>
+                  }
+               </button>
+            </div>
+
+            <!-- STEP: WITHDRAWAL ACCOUNT SELECTION -->
+            <div *ngSwitchCase="'withdraw'" class="space-y-5 animate-in slide-in-from-right-4 duration-300">
+                <div>
+                   <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 ml-4">Amount (₦)</label>
+                    <input 
+                      type="text" 
+                      placeholder="Enter Amount" 
+                      autocomplete="off"
+                      [value]="formatWithCommas(transactionAmount())"
+                      (input)="onAmountInput($event)"
+                      class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-4 text-sm font-bold text-[var(--dogo-dark)] outline-none transition-all placeholder:text-[var(--dogo-primary)]/20 shadow-sm"
+                    >
+                </div> 
+                <div> 
+                   <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 ml-4">Select Settlement Account</label>
+                   <app-dropdown
+                     [options]="registeredBankOptions()"
+                     [selectedValue]="withdrawAccountId()"
+                     (valueChange)="withdrawAccountId.set($event)"
+                     placeholder="Choose corporate settlement destination"
+                     placeholderIcon="ri-bank-line"
+                   ></app-dropdown>
+                </div>
+               @if (transactionAmount() && (+transactionAmount().replace(/,/g, '') > availableNaira())) {
+                  <div class="p-4 bg-red-50 text-red-600 rounded-2xl text-[11px] uppercase tracking-widest font-bold mt-4 text-center">Withdrawal amount exceeds cash reserves</div>
+               }
+            </div>
+
+            <!-- STEP: PIN SECURITY -->
+            <div *ngSwitchCase="'pin'" class="space-y-6 animate-in slide-in-from-right-4 duration-300">
+               <div class="text-center p-6 bg-[var(--dogo-cream)] rounded-[32px] border border-[var(--dogo-primary)]/5 mb-6">
+                 <p class="text-xs font-bold text-[var(--dogo-primary)]/60 uppercase tracking-widest mb-2">Final Treasury Authorization</p>
+                 <p class="text-[11px] font-medium text-[var(--dogo-muted)]">Please enter your 6-digit corporate PIN to authorize this reserve payout of ₦{{ transactionAmount() | number }}.</p>
+               </div>
+               <div>
+                  <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 ml-4 text-center block w-full mb-3">Treasury PIN</label>
+                  <input 
+                    type="password" 
+                    placeholder="******" 
+                    maxlength="6"
+                    [value]="withdrawPin()"
+                    (input)="withdrawPin.set($any($event.target).value = $any($event.target).value.replace(/[^0-9]/g, ''))"
+                    class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-5 text-2xl font-black text-center tracking-[0.5em] text-[var(--dogo-dark)] outline-none transition-all"
+                  >
+               </div>
+            </div>
+
+            <!-- STEP: SUCCESS DIALOG -->
+            <div *ngSwitchCase="'success'" class="py-6 animate-in zoom-in duration-500 text-center">
+              <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-4xl text-green-600 mx-auto mb-6 shadow-pill">
+                <i class="ri-checkbox-circle-fill"></i>
+              </div>
+              <h4 class="text-xl font-black text-[var(--dogo-primary)] uppercase italic">Reserve Credit Processing</h4>
+              <p class="text-xs font-bold text-[var(--dogo-muted)] mt-2">₦{{ transactionAmount() | number }} is currently being credited to your reserves.</p>
+            </div>
+
+          </div>
+
+          @if (errorMessage()) {
+            <div class="mt-6 p-4 bg-red-50 text-red-600 rounded-2xl text-[10px] uppercase font-black tracking-widest animate-in shake duration-300 text-center">
+               {{ errorMessage() }}
+            </div>
+          }
+
+          @if (fundingStep() !== 'success' && fundingStep() !== 'virtual' && fundingStep() !== 'bvn' && fundingStep() !== 'manual') {
+            <button 
+              (click)="processTransaction()"
+              [disabled]="isProcessing() || 
+                         (transactionType() === 'fund' && (!transactionAmount() || (fundingStep() === 'source' && !selectedSource()) || (fundingStep() === 'card' && !isCardValid()))) ||
+                         (transactionType() === 'withdraw' && (+transactionAmount().replace(/,/g, '') > availableNaira() || (fundingStep() === 'otp' && otpInput().length < 6) || (fundingStep() === 'pin' && withdrawPin().length < 6)))"
+              class="w-full h-16 mt-10 bg-[var(--dogo-primary)] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[var(--dogo-primary-soft)] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl shadow-[var(--dogo-primary)]/20 flex items-center justify-center relative overflow-hidden border-0 cursor-pointer"
+            >
+               @if (isProcessing()) {
+                 <div class="flex items-center space-x-2">
+                   <div class="w-2 h-2 rounded-full bg-[var(--dogo-secondary)] animate-pulse"></div>
+                   <span>Processing...</span>
+                 </div>
+               } @else {
+                 <span>{{ fundingStep() === 'amount' ? 'Proceed' : (fundingStep() === 'source' ? 'Continue' : (fundingStep() === 'otp' ? 'Verify OTP' : (fundingStep() === 'pin' ? 'Confirm Authorization' : 'Authorize Payment'))) }}</span>
+                 <i class="ri-arrow-right-line text-lg ml-2"></i>
+               }
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Product detailed placements investment modal -->
+@if(showInvestModal()) {
+    <div class="fixed inset-0 z-[1000] flex items-center justify-center p-4 animate-fade-in shadow-2xl">
+        <div class="absolute inset-0 bg-[var(--dogo-dark)]/80 backdrop-blur-xl" (click)="showInvestModal.set(false)"></div>
+        <div class="relative bg-white rounded-[40px] shadow-2xl w-full max-w-md p-10 transform transition-all animate-slide-up text-center border border-[var(--dogo-primary)]/5">
+            <div class="w-16 h-16 rounded-3xl bg-[var(--dogo-secondary)]/20 text-[var(--dogo-secondary)] flex items-center justify-center mx-auto mb-6 shadow-pill">
+                <i class="ri-copper-coin-line text-3xl"></i>
+            </div>
+            <p class="text-[10px] font-bold text-slate-400 mb-8 uppercase tracking-widest leading-relaxed">Choose placement principal for <br><span class="text-[var(--dogo-primary)] font-black">{{ selectedPortfolio()?.name }}</span></p>
+            
+            <div class="space-y-6 text-left mb-10">
+                @if(investStep() === 'amount') {
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-secondary)] ml-1">Placement Amount (₦)</label>
+                        <div class="relative group">
+                            <div class="absolute left-6 top-1/2 -translate-y-1/2 text-xl font-black text-slate-300 group-focus-within:text-[var(--dogo-primary)] transition-colors">₦</div>
+                            <input type="text" 
+                                   [value]="formatWithCommas(investAmount())"
+                                   (input)="onAmountInput($event, 'invest')"
+                                   class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl py-6 pl-12 pr-6 text-2xl font-black text-[var(--dogo-dark)] outline-none transition-all shadow-sm"
+                                   placeholder="0.00" />
+                        </div>
+                    </div>
+
+                    <!-- Liquidation rules -->
+                    <div class="mt-8 p-6 bg-[var(--dogo-cream)]/80 border border-[var(--dogo-primary)]/5 rounded-[30px] space-y-4">
+                        <div class="flex items-center gap-2 mb-2">
+                           <i class="ri-information-fill text-[var(--dogo-secondary)]"></i>
+                           <span class="text-[9px] font-black uppercase tracking-widest text-[var(--dogo-primary)]">Placement Lock Terms</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                           <div class="space-y-1">
+                              <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Mandatory Lock-in</p>
+                              <p class="text-[11px] font-black text-[var(--dogo-dark)]">30 Days</p>
+                           </div>
+                           <div class="space-y-1">
+                              <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Notice Period</p>
+                              <p class="text-[11px] font-black text-[var(--dogo-dark)]">7 Days</p>
+                           </div>
+                           <div class="space-y-1">
+                              <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Min Holding</p>
+                              <p class="text-[11px] font-black text-[var(--dogo-dark)]">90 Days</p>
+                           </div>
+                           <div class="space-y-1">
+                              <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Exit Fee Rate</p>
+                              <p class="text-[11px] font-black text-red-600">1.50%</p>
+                           </div>
+                        </div>
+                        
+                        <p class="text-[9px] font-medium text-slate-400 italic leading-relaxed pt-2 border-t border-[var(--dogo-primary)]/5">
+                          * Early liquidations are subject to administrative clearance and standard penalties.
+                        </p>
+                    </div>
+                }
+
+                @if(investStep() === 'pin') {
+                    <div class="space-y-2 text-center">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Enter Treasury PIN</label>
+                        <p class="text-[10px] text-slate-400 mb-2">Authorize this Sukuk allocation of ₦{{ investAmount() }}</p>
+                        <div class="flex justify-center gap-2">
+                            <input type="password" 
+                                   maxlength="6"
+                                   [value]="investPin()"
+                                   (input)="investPin.set($any($event.target).value)"
+                                   class="w-48 bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl py-4 text-center text-2xl font-black tracking-[0.5em] outline-none transition-all"
+                                   placeholder="******" />
+                        </div>
+                    </div>
+                }
+
+                @if(investStep() === 'otp') {
+                    <div class="space-y-2 text-center">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Verify Email OTP</label>
+                        <p class="text-[10px] text-slate-400 mb-2">A code has been sent to your primary contact email.</p>
+                        <div class="flex justify-center gap-2 mb-4">
+                            <input type="text" 
+                                   maxlength="6"
+                                   [value]="investOtp()"
+                                   (input)="investOtp.set($any($event.target).value)"
+                                   class="w-48 bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl py-4 text-center text-2xl font-black tracking-[0.2em] outline-none transition-all"
+                                   placeholder="000000" />
+                        </div>
+                        
+                        <div class="text-[10px] font-black">
+                            @if(!canResendOtp()) {
+                                <span class="text-slate-400 uppercase tracking-widest">Resend code in <span class="text-[var(--dogo-primary)]">{{ otpCountdown() }}s</span></span>
+                            } @else {
+                                <button (click)="resendInvestOtp()" class="text-[var(--dogo-primary)] hover:text-[var(--dogo-secondary)] uppercase tracking-widest transition-colors bg-transparent border-0 cursor-pointer">Resend Code</button>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="flex flex-col gap-3">
+                @if(investStep() === 'amount' && investAmount() && +investAmount().replace(/,/g, '') > availableNaira()) {
+                    <div class="space-y-3 w-full animate-fade-in">
+                        <div class="p-4 bg-red-50 text-red-600 rounded-2xl text-[10px] font-black uppercase tracking-widest text-center border border-red-100 italic">
+                            <i class="ri-error-warning-line mr-1"></i> Insufficient Reserves Balance
+                        </div>
+                        <button (click)="quickFund()" 
+                                type="button"
+                                class="w-full py-4 bg-gradient-to-r from-[var(--dogo-secondary)] to-[var(--dogo-secondary-soft)] hover:scale-[1.02] active:scale-95 text-white text-[10px] font-black uppercase tracking-widest rounded-2xl transition-all shadow-lg shadow-[var(--dogo-secondary)]/20 flex items-center justify-center gap-2 border-0 cursor-pointer">
+                            <i class="ri-add-circle-fill text-sm"></i> Fund Reserves (₦{{ formatWithCommas(investAmount()) }})
+                        </button>
+                    </div>
+                }
+
+                <button (click)="investStep() === 'amount' ? investStep.set('pin') : investStep() === 'pin' ? investStep.set('otp') : confirmInvestment()" 
+                        [disabled]="isInvesting() || !investAmount() || (+investAmount().replace(/,/g, '') <= 0) || (+investAmount().replace(/,/g, '') > availableNaira()) || (investStep() === 'pin' && investPin().length < 6) || (investStep() === 'otp' && investOtp().length < 6)"
+                        class="w-full bg-[var(--dogo-primary)] disabled:opacity-50 hover:bg-[var(--dogo-primary-soft)] text-white py-5 rounded-[2rem] font-black text-[10px] uppercase tracking-widest shadow-2xl transition-all border-0 cursor-pointer">
+                    @if(isInvesting()) {
+                        <i class="ri-loader-4-line animate-spin mr-2"></i> Allocating...
+                    } @else {
+                        @if(investStep() === 'amount') { Authorize Placement } @else if(investStep() === 'pin') { Enter OTP Verification } @else { Complete Allocation }
+                    }
+                </button>
+                <button (click)="showInvestModal.set(false)" class="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-red-500 transition-colors py-2 bg-transparent border-0 cursor-pointer">Cancel Placement</button>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Placements detailed analytics drawer -->
+@if(showDetailModal() && selectedPortfolio()) {
+  <div class="fixed inset-0 z-[1100] flex items-center justify-center p-4 animate-fade-in shadow-2xl">
+    <div class="absolute inset-0 bg-[var(--dogo-dark)]/80 backdrop-blur-md" (click)="showDetailModal.set(false)"></div>
+    
+    <div class="relative bg-white rounded-[40px] shadow-2xl w-full max-w-2xl transform transition-all animate-slide-up flex flex-col max-h-[90vh] overflow-hidden border border-[var(--dogo-primary)]/5">
+      <!-- Header -->
+      <div class="p-8 pb-4 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-4">
+            <button (click)="showDetailModal.set(false)" class="w-10 h-10 rounded-2xl bg-[var(--dogo-cream)] hover:bg-slate-100 flex items-center justify-center text-[var(--dogo-primary)] transition-colors border-0 cursor-pointer">
+                <i class="ri-arrow-left-line text-xl"></i>
+            </button>
+            <h3 class="text-2xl font-black text-[var(--dogo-dark)] tracking-tight">Institutional Placement Details</h3>
+        </div>
+        <button (click)="showDetailModal.set(false)" class="text-slate-400 hover:text-red-500 transition-colors bg-transparent border-0 cursor-pointer">
+            <i class="ri-close-line text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="p-8 pt-4 overflow-y-auto custom-scrollbar-h space-y-10 flex-grow">
+        <div class="text-center space-y-4 py-4">
+            <div class="inline-flex px-4 py-1.5 rounded-full bg-[var(--dogo-secondary)]/10 text-[var(--dogo-secondary)] text-[10px] font-black uppercase tracking-[0.2em] mb-2">Corporate Treasury Asset</div>
+            <h2 class="text-4xl font-black text-[var(--dogo-dark)] tracking-tight leading-none">{{ selectedPortfolio()?.name }}</h2>
+            <p class="text-sm font-medium text-slate-500 max-w-md mx-auto italic">"{{ selectedPortfolio()?.description }}"</p>
+        </div>
+
+        <!-- Performance -->
+        <div class="bg-white p-10 rounded-[40px] border border-[var(--dogo-primary)]/5 text-center shadow-sm space-y-4">
+            <h4 class="text-xs font-black text-[var(--dogo-primary)] uppercase tracking-[0.3em]">Expected Yield (Est. ROI)</h4>
+            <div class="space-y-1">
+                <p class="text-4xl font-black text-[var(--dogo-dark)] tracking-tighter">{{ selectedPortfolio()?.expectedAnnualReturn }}%</p>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Average Annual Return</p>
+            </div>
+            <p class="text-[10px] font-medium text-slate-400 italic">Audited and Shariah-compliant high-yield reserves growth asset</p>
+            
+            <div class="h-32 w-full relative mt-6 px-4">
+                <svg viewBox="0 0 400 100" class="w-full h-full preserve-3d">
+                    <path d="M0,80 Q50,75 100,60 T200,50 T300,30 T400,10" 
+                          fill="none" 
+                          stroke="var(--dogo-primary)" 
+                          stroke-width="3" 
+                          stroke-linecap="round"
+                          class="drop-shadow-xl" />
+                    <circle cx="280" cy="35" r="5" fill="var(--dogo-primary)" class="animate-pulse" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Liquidation Rules Disclosure -->
+        <div class="grid grid-cols-2 gap-6 p-10 bg-[var(--dogo-cream)]/60 rounded-[40px] border border-[var(--dogo-primary)]/5 shadow-sm relative overflow-hidden group">
+            <div class="col-span-2 mb-2">
+                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--dogo-secondary)]">Liquidation Terms & Guidelines</span>
+            </div>
+            
+            <div class="space-y-1">
+                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Mandatory Lock-in</p>
+                <div class="flex items-center gap-2">
+                    <i class="ri-lock-fill text-[var(--dogo-primary)] text-xs"></i>
+                    <p class="text-sm font-black text-[var(--dogo-dark)]">30 Days</p>
+                </div>
+            </div>
+
+            <div class="space-y-1">
+                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Notice Period</p>
+                <div class="flex items-center gap-2">
+                    <i class="ri-timer-flash-fill text-[var(--dogo-primary)] text-xs"></i>
+                    <p class="text-sm font-black text-[var(--dogo-dark)]">7 Days</p>
+                </div>
+            </div>
+
+            <div class="space-y-1 border-t border-[var(--dogo-primary)]/5 pt-4">
+                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Early Liquidation exit fee</p>
+                <div class="flex items-center gap-2">
+                    <i class="ri-percent-fill text-red-600 text-xs"></i>
+                    <p class="text-sm font-black text-red-600">1.50%</p>
+                </div>
+            </div>
+
+            <div class="space-y-1 border-t border-[var(--dogo-primary)]/5 pt-4">
+                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Waiver Period</p>
+                <div class="flex items-center gap-2">
+                    <i class="ri-checkbox-circle-fill text-green-600 text-xs"></i>
+                    <p class="text-sm font-black text-[var(--dogo-dark)]">After 90 Days</p>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <!-- Action -->
+      <div class="p-8 border-t border-slate-50 bg-[var(--dogo-cream)] shrink-0">
+        <button (click)="openInvest(selectedPortfolio()!)" 
+                class="w-full bg-[var(--dogo-primary)] hover:bg-[var(--dogo-primary-soft)] text-white py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-2xl transition-all flex items-center justify-center gap-3 border-0 cursor-pointer">
+          <i class="ri-shield-check-fill text-[var(--dogo-secondary)] text-lg"></i>
+           Initialize Placement Placement
+        </button>
+      </div>
+    </div>
+  </div>
+}

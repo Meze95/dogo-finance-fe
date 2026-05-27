@@ -61,6 +61,20 @@ export const routes: Routes = [
     ]
   },
 
+  // ---- CORPORATE DASHBOARD (Unsecured Layout for Design Review) ----
+  {
+    path: 'corporate',
+    loadComponent: () => import('./layouts/corporate-layout/corporate-layout').then(m => m.CorporateLayout),
+    children: [
+      { path: 'dashboard', loadComponent: () => import('./pages/corporate/dashboard/corporate-dashboard.component').then(m => m.CorporateDashboardComponent) },
+      { path: 'products', loadComponent: () => import('./pages/client/portfolios/portfolios.component').then(m => m.ClientPortfoliosComponent) },
+      { path: 'investments', loadComponent: () => import('./pages/client/investments/investments.component').then(m => m.ClientInvestmentsComponent) },
+      { path: 'settings', loadComponent: () => import('./pages/corporate/settings/corporate-settings.component').then(m => m.CorporateSettingsComponent) },
+      { path: 'profile', loadComponent: () => import('./pages/client/profile/profile.component').then(m => m.ProfileComponent) },
+      { path: 'transactions', loadComponent: () => import('./pages/client/transactions/transactions.component').then(m => m.TransactionsComponent) }
+    ]
+  },
+
   // ---- ADMIN PANEL (Secured Layout) ----
   {
     path: 'admin',
