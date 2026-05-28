@@ -52,6 +52,7 @@ export class AdminLayout implements OnInit {
   }> = [
     { label: 'System Overview', icon: 'ri-dashboard-3-fill', link: '/admin/dashboard', permission: 'ViewDashboard' },
     { label: 'Clients Hub', icon: 'ri-contacts-line', link: '/admin/clients', permission: 'ViewClients' },
+    { label: 'Corporate Hub', icon: 'ri-building-4-line', link: '/admin/corporate-hub', permission: 'ViewClients' },
     { label: 'Plan & Products', icon: 'ri-funds-box-line', link: '/admin/products', permission: 'ViewProducts' },
     { label: 'Investments', icon: 'ri-briefcase-4-fill', link: '/admin/investments', permission: 'ViewInvestments' },
     { label: 'Liquidation Requests', icon: 'ri-exchange-funds-line', link: '/admin/liquidation-requests', permission: 'ViewLiquidations' },

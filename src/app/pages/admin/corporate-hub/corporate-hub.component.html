@@ -1,0 +1,1486 @@
+<div class="space-y-6 animate-fade-in relative z-10 hidden-scrollbar pb-10">
+  
+  <!-- Header Control Bar -->
+  <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+    <div>
+      <h2 class="text-3xl font-black text-[var(--dogo-dark)] tracking-tighter italic">Corporate Hub</h2>
+      <p class="text-gray-500 text-sm mt-1 uppercase tracking-widest font-bold">
+        Review, verify, and manage institutional corporate accounts.
+      </p>
+    </div>
+    
+    <!-- Tab Filter Controls -->
+    <div class="flex flex-col sm:flex-row items-center gap-3">
+      <!-- Search Input -->
+      <div class="relative w-full sm:w-64">
+        <i class="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+        <input 
+          type="text" 
+          [ngModel]="searchQuery()" 
+          (ngModelChange)="searchQuery.set($event)" 
+          placeholder="Search corporate..." 
+          class="w-full bg-white border border-[var(--dogo-primary)]/10 focus:border-[var(--dogo-secondary)] rounded-2xl py-3 pl-11 pr-4 text-slate-800 font-bold placeholder:text-slate-300 outline-none transition-all shadow-sm" 
+        />
+      </div>
+
+      <!-- Dual Tabs Filter -->
+      <div class="bg-white rounded-2xl border border-[var(--dogo-primary)]/5 p-1.5 flex space-x-1 shadow-sm w-full sm:w-auto">
+        <button 
+          (click)="setFilter('pending')" 
+          [class]="activeFilter() === 'pending' ? 'bg-[var(--dogo-primary)] text-white shadow-lg' : 'text-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)]/5'"
+          class="flex-1 sm:flex-none px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
+          Pending Reviews ({{ registrations().filter(r => r.status !== 'Verified').length }})
+        </button>
+        <button 
+          (click)="setFilter('verified')" 
+          [class]="activeFilter() === 'verified' ? 'bg-[var(--dogo-primary)] text-white shadow-lg' : 'text-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)]/5'"
+          class="flex-1 sm:flex-none px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all font-bold">
+          Verified Accounts ({{ registrations().filter(r => r.status === 'Verified').length }})
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Corporate Table List Card -->
+  <div class="bg-white rounded-[40px] p-4 sm:p-8 border border-[var(--dogo-primary)]/5 shadow-sm overflow-hidden">
+    <div class="overflow-x-auto custom-scrollbar pb-4">
+      <table class="w-full text-left border-collapse min-w-[900px]">
+        <thead>
+          <tr class="border-b-2 border-slate-100">
+            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Company Profile</th>
+            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Representative Contact</th>
+            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Incorporation Details</th>
+            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">KYC Progress</th>
+            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Account Status</th>
+            <th class="py-4 px-4 text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)] text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="text-sm">
+          @for(reg of paginatedRegistrations(); track reg.id) {
+          <tr class="border-b border-slate-50 hover:bg-[var(--dogo-cream)] transition-colors group">
+            
+            <!-- Company Profile -->
+            <td class="py-5 px-4">
+              <div class="flex items-center gap-4">
+                <div class="w-11 h-11 rounded-2xl flex items-center justify-center font-black text-xs text-white shadow-sm shrink-0 uppercase bg-[var(--dogo-primary)]">
+                  {{ getInitials(reg.businessName) }}
+                </div>
+                <div>
+                  <div class="font-black text-[var(--dogo-dark)] text-base group-hover:text-[var(--dogo-secondary)] transition-colors">
+                    {{ reg.businessName }}
+                  </div>
+                  <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+                    RC ID: {{ reg.rcNumber }}
+                  </div>
+                </div>
+              </div>
+            </td>
+
+            <!-- Contact -->
+            <td class="py-5 px-4 space-y-1">
+              <div class="font-bold text-slate-700 flex items-center gap-2">
+                <i class="ri-user-star-line text-slate-400"></i>{{ reg.representativeName }}
+              </div>
+              <div class="text-[11px] font-medium text-slate-500 flex items-center gap-2">
+                <i class="ri-mail-line text-slate-400"></i>{{ reg.representativeEmail }}
+              </div>
+            </td>
+
+            <!-- Incorporation -->
+            <td class="py-5 px-4">
+              <div class="font-bold text-slate-600">Inc: {{ reg.dateIncorporated }}</div>
+              <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+                Submitted: {{ reg.dateSubmitted }}
+              </div>
+            </td>
+
+            <!-- KYC Progress Bar -->
+            <td class="py-5 px-4">
+              <div class="w-full max-w-[120px] space-y-1">
+                <div class="flex justify-between items-center text-[10px] font-black uppercase text-slate-400">
+                  <span>Progress</span>
+                  <span class="text-[var(--dogo-primary)] font-bold">{{ reg.kycProgress }}/10</span>
+                </div>
+                <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                  <div 
+                    class="h-full bg-gradient-to-r from-[var(--dogo-secondary)] to-[var(--dogo-primary)] rounded-full transition-all duration-500" 
+                    [style.width.%]="reg.kycProgress * 10">
+                  </div>
+                </div>
+              </div>
+            </td>
+
+            <!-- Status Badge -->
+            <td class="py-5 px-4">
+              <span class="inline-flex px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm border"
+                    [ngClass]="{
+                      'bg-green-50 text-green-700 border-green-200': reg.status === 'Verified',
+                      'bg-yellow-50 text-yellow-700 border-yellow-200': reg.status === 'Pending',
+                      'bg-red-50 text-red-700 border-red-200': reg.status === 'Rejected'
+                    }">
+                {{ reg.status }}
+              </span>
+            </td>
+
+            <!-- Actions -->
+            <td class="py-5 px-4 text-right">
+              <button 
+                (click)="viewDetails(reg)" 
+                class="bg-[var(--dogo-primary)]/5 hover:bg-[var(--dogo-primary)] hover:text-white text-[var(--dogo-primary)] font-black text-[10px] uppercase tracking-widest px-4 py-2.5 rounded-xl transition-all shadow-sm"
+              >
+                Review Hub
+              </button>
+            </td>
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="6" class="py-20 text-center text-slate-400 font-bold">
+              <div class="flex flex-col items-center justify-center gap-3">
+                <div class="w-16 h-16 rounded-3xl bg-slate-50 flex items-center justify-center text-2xl text-slate-300">
+                  <i class="ri-building-4-line"></i>
+                </div>
+                <p>No corporate registrations found matching "{{ searchQuery() }}"</p>
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination Controls -->
+    @if (totalPages() > 1) {
+    <div class="mt-8 flex items-center justify-between pt-8 border-t border-[var(--dogo-primary)]/5">
+      <p class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40">
+        Showing <span class="text-[var(--dogo-primary)]">PAGE {{ currentPage() }}</span> OF {{ totalPages() }}
+      </p>
+      
+      <div class="flex items-center space-x-2">
+        <button 
+          (click)="prevPage()"
+          [disabled]="currentPage() === 1"
+          class="w-10 h-10 rounded-xl bg-[var(--dogo-cream)] flex items-center justify-center text-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+        >
+          <i class="ri-arrow-left-s-line"></i>
+        </button>
+        
+        <div class="flex items-center space-x-1">
+          @for (p of pages(); track p) {
+            <button 
+              (click)="goToPage(p)"
+              [class]="p === currentPage() ? 'bg-[var(--dogo-primary)] text-white shadow-md' : 'bg-[var(--dogo-cream)] text-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)]/10'"
+              class="w-10 h-10 rounded-xl flex items-center justify-center text-[10px] font-black transition-all"
+            >
+              {{ p }}
+            </button>
+          }
+        </div>
+
+        <button 
+          (click)="nextPage()"
+          [disabled]="currentPage() === totalPages()"
+          class="w-10 h-10 rounded-xl bg-[var(--dogo-cream)] flex items-center justify-center text-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+        >
+          <i class="ri-arrow-right-s-line"></i>
+        </button>
+      </div>
+    </div>
+    }
+  </div>
+</div>
+
+<!-- ============================================
+     HIGH-FIDELITY ONBOARDING DETAIL DRAWER
+     ============================================ -->
+@if (showDetailDrawer() && selectedRegistration()) {
+<div class="fixed inset-0 z-[100] flex justify-end animate-fade-in-overlay bg-[var(--dogo-dark)]/60 backdrop-blur-md">
+  <!-- Backdrop click close -->
+  <div class="absolute inset-0 cursor-pointer" (click)="closeDrawer()"></div>
+  
+  <!-- Drawer Container -->
+  <div class="relative w-full max-w-4xl bg-[var(--dogo-cream)] shadow-2xl h-screen flex flex-col z-10 animate-slide-in-right border-l border-[var(--dogo-primary)]/10">
+    
+    <!-- Drawer Header -->
+    <div class="p-8 bg-white border-b border-[var(--dogo-primary)]/5 flex items-center justify-between shrink-0">
+      <div>
+        <div class="flex items-center gap-3">
+          <div class="px-3 py-1 rounded-full bg-[var(--dogo-secondary)]/10 text-[var(--dogo-secondary)] text-[10px] font-black uppercase tracking-wider">
+            Onboarding Hub
+          </div>
+          <p class="text-[10px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest">ID: {{ selectedRegistration()?.id }}</p>
+        </div>
+        <h2 class="text-2xl font-black text-[var(--dogo-dark)] italic tracking-tighter mt-1">
+          Review: {{ selectedRegistration()?.businessName }}
+        </h2>
+      </div>
+      <div class="flex items-center gap-3">
+        <button 
+          (click)="showDossierModal.set(true)" 
+          class="bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs uppercase tracking-widest px-5 py-3 rounded-2xl transition-all shadow-md flex items-center gap-2"
+        >
+          <i class="ri-article-line"></i> View Complete Dossier
+        </button>
+        <button (click)="closeDrawer()" class="w-12 h-12 rounded-full bg-[var(--dogo-cream)] flex items-center justify-center text-[var(--dogo-primary)] hover:bg-red-500 hover:text-white transition-all">
+          <i class="ri-close-line text-2xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Drawer Body -->
+    <div class="flex-grow overflow-y-auto drawer-scroll p-8 space-y-8">
+      
+      <!-- Full Shariah Company Profile Section (Enriched full details as in profile tab) -->
+      <div class="bg-white rounded-[32px] p-6 border border-[var(--dogo-primary)]/5 shadow-sm space-y-6">
+        <h4 class="text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)] pb-3 border-b border-slate-100 flex items-center gap-2">
+          <i class="ri-briefcase-line text-lg"></i> Full Shariah Company Profile Details
+        </h4>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5 text-xs font-bold">
+          <div class="space-y-1">
+            <span class="block text-[10px] font-black uppercase tracking-widest text-slate-400">Full Name of Entity</span>
+            <p class="text-sm font-black text-[var(--dogo-dark)]">{{ selectedRegistration()?.businessName }}</p>
+          </div>
+          <div class="space-y-1">
+            <span class="block text-[10px] font-black uppercase tracking-widest text-slate-400">Registration Number (RC/LLP)</span>
+            <p class="text-sm font-black text-[var(--dogo-dark)] font-mono">{{ selectedRegistration()?.rcNumber }}</p>
+          </div>
+          <div class="space-y-1">
+            <span class="block text-[10px] font-black uppercase tracking-widest text-slate-400">Date of Incorporation</span>
+            <p class="text-sm font-black text-[var(--dogo-dark)]">{{ selectedRegistration()?.dateIncorporated }}</p>
+          </div>
+          <div class="space-y-1">
+            <span class="block text-[10px] font-black uppercase tracking-widest text-slate-400">Tax Identity Number (TIN)</span>
+            <p class="text-sm font-black text-[var(--dogo-dark)] font-mono">{{ selectedRegistration()?.tin || 'TIN-83920194' }}</p>
+          </div>
+          <div class="space-y-1 md:col-span-2">
+            <span class="block text-[10px] font-black uppercase tracking-widest text-slate-400">Nature of Business</span>
+            <p class="text-sm font-black text-[var(--dogo-dark)]">{{ selectedRegistration()?.natureOfBusiness || 'Commodity Trading & Asset Placements' }}</p>
+          </div>
+          <div class="space-y-1 md:col-span-2">
+            <span class="block text-[10px] font-black uppercase tracking-widest text-slate-400">Registered Operating Address</span>
+            <p class="text-sm font-black text-[var(--dogo-dark)] leading-snug">{{ selectedRegistration()?.registeredAddress }}</p>
+          </div>
+          <div class="space-y-1">
+            <span class="block text-[10px] font-black uppercase tracking-widest text-slate-400">Entity Legal Type</span>
+            <p class="text-sm font-black text-[var(--dogo-dark)]">{{ selectedRegistration()?.entityType || 'Private Limited Company' }}</p>
+          </div>
+          <div class="space-y-1">
+            <span class="block text-[10px] font-black uppercase tracking-widest text-slate-400">Official Company Phone</span>
+            <p class="text-sm font-black text-[var(--dogo-dark)] font-mono">{{ selectedRegistration()?.companyPhone || selectedRegistration()?.representativePhone }}</p>
+          </div>
+          <div class="space-y-1">
+            <span class="block text-[10px] font-black uppercase tracking-widest text-slate-400">Official Company Email</span>
+            <p class="text-sm font-black text-[var(--dogo-dark)]">{{ selectedRegistration()?.companyEmail || selectedRegistration()?.representativeEmail }}</p>
+          </div>
+          <div class="space-y-1">
+            <span class="block text-[10px] font-black uppercase tracking-widest text-slate-400">Client Category Segmentation</span>
+            <p class="text-sm font-black text-[var(--dogo-dark)]">
+              <span class="inline-flex px-2 py-0.5 rounded bg-[var(--dogo-primary)]/5 text-[var(--dogo-primary)] border border-[var(--dogo-primary)]/10 text-[10px]">
+                {{ selectedRegistration()?.clientSegmentation || 'Corporate Partner' }}
+              </span>
+            </p>
+          </div>
+          <div class="space-y-1">
+            <span class="block text-[10px] font-black uppercase tracking-widest text-slate-400">Annual Turnover Range</span>
+            <p class="text-sm font-black text-[var(--dogo-primary)]">{{ selectedRegistration()?.annualTurnover || '₦100M - ₦499.9M' }}</p>
+          </div>
+          <div class="space-y-1">
+            <span class="block text-[10px] font-black uppercase tracking-widest text-slate-400">Source of Investment Funds</span>
+            <p class="text-sm font-black text-[var(--dogo-dark)]">{{ selectedRegistration()?.sourceOfFunds || 'Corporate Reserves & Retained Business Inflow' }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Primary Authorized Representative & Contact Person Profile -->
+      @if (selectedRegistration()?.contactPerson) {
+      <div class="bg-white rounded-[32px] p-6 border border-[var(--dogo-primary)]/5 shadow-sm space-y-5">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <h4 class="text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)] flex items-center gap-2">
+            <i class="ri-user-star-line text-lg"></i> Primary Representative & Contact Person
+          </h4>
+          <span class="text-[10px] font-black uppercase bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full border border-emerald-100">
+            Account Creator
+          </span>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-6 items-start w-full">
+          <!-- Profile Card -->
+          <div class="w-full lg:w-1/2 p-5 bg-[var(--dogo-cream)] rounded-2xl border border-[var(--dogo-primary)]/5 space-y-4">
+            <div class="flex items-center gap-4">
+              <div class="w-16 h-16 rounded-2xl overflow-hidden shadow-inner border border-slate-200 shrink-0 bg-slate-100 flex items-center justify-center">
+                @if (selectedRegistration()?.contactPerson?.passportPhoto) {
+                  <img [src]="selectedRegistration()?.contactPerson?.passportPhoto" alt="rep photo" class="w-full h-full object-cover">
+                } @else {
+                  <i class="ri-user-line text-2xl text-slate-400"></i>
+                }
+              </div>
+              <div>
+                <h5 class="font-black text-[var(--dogo-dark)] text-base">
+                  {{ selectedRegistration()?.contactPerson?.title }}. {{ selectedRegistration()?.contactPerson?.firstName }} {{ selectedRegistration()?.contactPerson?.surname }}
+                </h5>
+                <p class="text-[10px] font-bold text-slate-400 uppercase mt-0.5">
+                  {{ selectedRegistration()?.contactPerson?.role }}
+                </p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-x-4 gap-y-3 text-xs font-bold pt-3 border-t border-slate-200/50">
+              <div>
+                <span class="block text-[8px] text-slate-400 uppercase tracking-widest">Email</span>
+                <span class="text-[var(--dogo-dark)] truncate block max-w-[150px]" [title]="selectedRegistration()?.contactPerson?.email">{{ selectedRegistration()?.contactPerson?.email }}</span>
+              </div>
+              <div>
+                <span class="block text-[8px] text-slate-400 uppercase tracking-widest">Phone</span>
+                <span class="text-[var(--dogo-dark)] font-mono">{{ selectedRegistration()?.contactPerson?.phone }}</span>
+              </div>
+              <div>
+                <span class="block text-[8px] text-slate-400 uppercase tracking-widest">BVN Number</span>
+                <span class="text-[var(--dogo-dark)] font-mono">{{ selectedRegistration()?.contactPerson?.bvn }}</span>
+              </div>
+              <div>
+                <span class="block text-[8px] text-slate-400 uppercase tracking-widest">Signing Class</span>
+                <span class="text-[var(--dogo-dark)]">Class {{ selectedRegistration()?.contactPerson?.signingClass }}</span>
+              </div>
+              <div class="col-span-2">
+                <span class="block text-[8px] text-slate-400 uppercase tracking-widest">Residential Address</span>
+                <span class="text-[var(--dogo-dark)] leading-tight block text-[11px]">{{ selectedRegistration()?.contactPerson?.residentialAddress }}</span>
+              </div>
+            </div>
+            
+            <div class="pt-2 flex justify-end">
+              <button 
+                (click)="viewDirectorDetails(selectedRegistration()!.contactPerson!)"
+                class="bg-[var(--dogo-primary)] hover:bg-[var(--dogo-secondary)] text-white text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl transition-all shadow-sm flex items-center gap-1.5"
+              >
+                <i class="ri-shield-user-line"></i> Inspect Full KYC Profile
+              </button>
+            </div>
+          </div>
+
+          <!-- Submitted Assets Previews -->
+          <div class="w-full lg:w-1/2 grid grid-cols-2 gap-4 h-full">
+            <!-- Passport Asset Slot -->
+            <div class="bg-slate-50 border border-slate-200 p-3 rounded-2xl flex flex-col items-center justify-center text-center relative h-[110px] shadow-sm select-none shrink-0">
+              <span class="absolute top-1 left-2 text-[6px] font-black uppercase tracking-widest text-slate-400">Passport scan</span>
+              @if (selectedRegistration()?.contactPerson?.passportPhoto) {
+                <div class="w-12 h-12 rounded-full overflow-hidden border border-slate-200">
+                  <img [src]="selectedRegistration()?.contactPerson?.passportPhoto" class="w-full h-full object-cover">
+                </div>
+                <p class="text-[8px] font-black text-slate-400 uppercase tracking-wider mt-1">Verified Photo</p>
+              } @else {
+                <i class="ri-user-line text-lg text-slate-300"></i>
+              }
+            </div>
+
+            <!-- Signature Asset Slot -->
+            <div class="bg-slate-50 border border-slate-200 p-3 rounded-2xl flex flex-col items-center justify-center text-center relative h-[110px] shadow-sm select-none shrink-0">
+              <span class="absolute top-1 left-2 text-[6px] font-black uppercase tracking-widest text-slate-400">Specimen Signature</span>
+              @if (selectedRegistration()?.contactPerson?.signatureImage) {
+                <div class="w-20 h-8 bg-white rounded flex items-center justify-center border border-slate-200 overflow-hidden p-0.5 animate-pulse-subtle">
+                  <img [src]="selectedRegistration()?.contactPerson?.signatureImage" class="w-full h-full object-contain">
+                </div>
+                <p class="text-[8px] font-black text-slate-400 uppercase tracking-wider mt-1.5">Signature spec</p>
+              } @else {
+                <i class="ri-edit-line text-lg text-slate-300"></i>
+              }
+            </div>
+
+            <!-- ID Scan Slot -->
+            <div class="col-span-2 bg-slate-50 border border-slate-200 p-3 rounded-2xl flex items-center justify-between gap-4 shadow-sm relative select-none shrink-0">
+              <span class="absolute top-1 left-2 text-[6px] font-black uppercase tracking-widest text-slate-400">ID Scan Doc</span>
+              <div class="flex items-center gap-2 mt-1">
+                <i class="ri-file-text-line text-xl text-[var(--dogo-primary)]"></i>
+                <div class="text-[10px] text-left">
+                  <p class="font-black text-[var(--dogo-dark)]">{{ selectedRegistration()?.contactPerson?.idType }}</p>
+                  <p class="font-mono text-slate-400 font-bold tracking-wider uppercase">No: {{ selectedRegistration()?.contactPerson?.idNumber }}</p>
+                </div>
+              </div>
+              <button 
+                (click)="selectedDirector.set(selectedRegistration()!.contactPerson!)"
+                class="bg-[var(--dogo-primary)]/5 hover:bg-[var(--dogo-primary)] text-[var(--dogo-primary)] hover:text-white text-[8px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all"
+              >
+                Open Scan
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      }
+
+      <!-- Shariah Reserves Settlement Bank Accounts -->
+      <div class="bg-white rounded-[32px] p-6 border border-[var(--dogo-primary)]/5 shadow-sm space-y-5">
+        <h4 class="text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)] pb-3 border-b border-slate-100 flex items-center gap-2">
+          <i class="ri-bank-line text-lg"></i> Reserves Settlement Bank Accounts
+        </h4>
+
+        <div class="grid md:grid-cols-2 gap-6 w-full">
+          <!-- Naira Reserve Accounts -->
+          <div class="space-y-3">
+            <h5 class="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Naira Settlement (NGN)
+            </h5>
+            
+            @if (!selectedRegistration()?.nairaAccounts || selectedRegistration()?.nairaAccounts?.length === 0) {
+              <div class="p-5 text-center text-slate-300 font-semibold bg-slate-50 border border-dashed rounded-2xl text-xs">
+                No Naira accounts registered.
+              </div>
+            } @else {
+              @for (acc of selectedRegistration()?.nairaAccounts; track acc.accountNumber) {
+                <div class="bg-[var(--dogo-cream)]/50 border border-[var(--dogo-primary)]/5 p-4 rounded-2xl space-y-2 relative overflow-hidden group">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <h6 class="font-black text-[var(--dogo-dark)] text-sm">{{ acc.bankName }}</h6>
+                      <p class="text-xs font-black text-[var(--dogo-primary)] font-mono mt-0.5">{{ acc.accountNumber }}</p>
+                      <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">{{ acc.accountName }}</p>
+                    </div>
+                    @if (acc.isDefault) {
+                      <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-100 text-[8px] font-black uppercase tracking-wider shrink-0">
+                        Primary
+                      </span>
+                    }
+                  </div>
+                  <p class="text-[9px] text-[var(--dogo-muted)] font-bold">Branch: {{ acc.bankBranch }}</p>
+                </div>
+              }
+            }
+          </div>
+
+          <!-- Domiciliary Reserves Accounts -->
+          <div class="space-y-3">
+            <h5 class="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Domiciliary Settlement (USD)
+            </h5>
+            
+            @if (!selectedRegistration()?.domiciliaryAccounts || selectedRegistration()?.domiciliaryAccounts?.length === 0) {
+              <div class="p-5 text-center text-slate-300 font-semibold bg-slate-50 border border-dashed rounded-2xl text-xs">
+                No Domiciliary accounts registered.
+              </div>
+            } @else {
+              @for (acc of selectedRegistration()?.domiciliaryAccounts; track acc.accountNumber) {
+                <div class="bg-[var(--dogo-cream)]/50 border border-[var(--dogo-primary)]/5 p-4 rounded-2xl space-y-2 relative overflow-hidden group">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <h6 class="font-black text-[var(--dogo-dark)] text-sm">{{ acc.bankName }}</h6>
+                      <p class="text-xs font-black text-blue-600 font-mono mt-0.5">{{ acc.accountNumber }}</p>
+                      <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">{{ acc.accountName }}</p>
+                    </div>
+                    @if (acc.isDefault) {
+                      <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-100 text-[8px] font-black uppercase tracking-wider shrink-0">
+                        Primary
+                      </span>
+                    }
+                  </div>
+                  
+                  <div class="pt-2 border-t border-slate-200/50 grid grid-cols-2 gap-2 text-[9px] font-bold text-slate-500 leading-tight">
+                    <div>
+                      <span class="text-[7px] text-slate-400 uppercase tracking-widest block">SWIFT</span>
+                      <span class="text-[var(--dogo-dark)] font-mono">{{ acc.swiftCode }}</span>
+                    </div>
+                    <div>
+                      <span class="text-[7px] text-slate-400 uppercase tracking-widest block">Sort Code</span>
+                      <span class="text-[var(--dogo-dark)] font-mono">{{ acc.sortCode }}</span>
+                    </div>
+                    <div class="col-span-2">
+                      <span class="text-[7px] text-slate-400 uppercase tracking-widest block">Correspondent</span>
+                      <span class="text-[var(--dogo-dark)] truncate block max-w-[160px]" [title]="acc.correspondentBank">{{ acc.correspondentBank }}</span>
+                    </div>
+                  </div>
+                </div>
+              }
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Directors / Controlling Signatories Hub -->
+      <div class="bg-white rounded-[32px] p-6 border border-[var(--dogo-primary)]/5 shadow-sm space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <h4 class="text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)] flex items-center gap-2">
+            <i class="ri-team-line text-lg"></i> Directors & Controlling Signatories
+          </h4>
+          <span class="text-[10px] font-black uppercase bg-green-50 text-green-700 px-3 py-1 rounded-full border border-green-100">
+            Registry Match 100%
+          </span>
+        </div>
+        
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          @for(dir of selectedRegistration()?.directors; track dir.name) {
+          <div class="p-4 bg-[var(--dogo-cream)] rounded-2xl border border-[var(--dogo-primary)]/5 space-y-3 relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-16 h-16 bg-[var(--dogo-primary)]/2 opacity-0 group-hover:opacity-100 transition-opacity rounded-bl-[40px] pointer-events-none"></div>
+            <div>
+              <p class="font-black text-[var(--dogo-dark)] text-sm">{{ dir.name }}</p>
+              <p class="text-[10px] font-bold text-slate-400 uppercase mt-0.5">{{ dir.role }}</p>
+            </div>
+            
+            <div class="flex justify-between items-center pt-2 border-t border-slate-200/50">
+              <span class="text-[10px] font-bold text-slate-500">{{ dir.idType }}:</span>
+              <span class="text-[11px] font-mono font-bold text-[var(--dogo-dark)]">{{ dir.idNumber }}</span>
+            </div>
+            
+            <div class="flex justify-between items-center text-[10px] font-bold">
+              <span class="text-slate-500">Holding:</span>
+              <span class="text-[var(--dogo-primary)] font-black">{{ dir.shareholding }}% Shares</span>
+            </div>
+            
+            <div class="flex items-center justify-between pt-2 border-t border-slate-200/50">
+              <div class="flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full" [ngClass]="dir.status === 'Verified' ? 'bg-green-500' : 'bg-yellow-500'"></span>
+                <span class="text-[9px] font-black uppercase tracking-widest" [ngClass]="dir.status === 'Verified' ? 'text-green-700' : 'text-yellow-700'">
+                  KYC {{ dir.status }}
+                </span>
+              </div>
+              <button 
+                (click)="viewDirectorDetails(dir)"
+                class="bg-[var(--dogo-primary)]/5 hover:bg-[var(--dogo-primary)] text-[var(--dogo-primary)] hover:text-white text-[8px] font-black uppercase tracking-widest px-2.5 py-1.5 rounded-lg transition-all flex items-center gap-0.5"
+              >
+                Inspect <i class="ri-arrow-right-s-line"></i>
+              </button>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+
+      <!-- CAC Compliance Documentation List -->
+      <div class="bg-white rounded-[32px] p-6 border border-[var(--dogo-primary)]/5 shadow-sm space-y-4">
+        <h4 class="text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)] pb-3 border-b border-slate-100 flex items-center gap-2">
+          <i class="ri-folder-shield-2-line text-lg"></i> Compliance Documentation Checklist
+        </h4>
+        
+        <div class="divide-y divide-slate-100">
+          @for(doc of selectedRegistration()?.documents; track doc.name) {
+          <div class="py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 group">
+            
+            <div class="flex items-center gap-4">
+              <!-- Document Icon -->
+              <div 
+                [ngClass]="{
+                  'bg-green-50 text-green-600': doc.status === 'verified',
+                  'bg-yellow-50 text-yellow-600': doc.status === 'pending',
+                  'bg-red-50 text-red-600': doc.status === 'unverified'
+                }"
+                class="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"
+              >
+                <i [class]="doc.status === 'verified' ? 'ri-file-check-line' : (doc.status === 'pending' ? 'ri-file-warning-line' : 'ri-file-damage-line')"></i>
+              </div>
+              
+              <div>
+                <p class="font-black text-sm text-[var(--dogo-dark)] group-hover:text-[var(--dogo-secondary)] transition-colors">
+                  {{ doc.name }}
+                </p>
+                <div class="flex items-center gap-3 mt-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                  @if (doc.status !== 'unverified') {
+                    <span class="truncate max-w-[150px]"><i class="ri-attachment-2 mr-1"></i>{{ doc.fileName }}</span>
+                    <span>•</span>
+                    <span>{{ doc.fileSize }}</span>
+                    <span>•</span>
+                    <span>Uploaded: {{ doc.dateUploaded }}</span>
+                  } @else {
+                    <span class="text-red-500 font-bold"><i class="ri-error-warning-line mr-1"></i>Missing or Flagged File</span>
+                  }
+                </div>
+                @if (doc.notes) {
+                  <p class="text-[10px] text-red-600 font-bold mt-1 bg-red-50 px-2 py-0.5 rounded border border-red-100 inline-block">
+                    Rejection: {{ doc.notes }}
+                  </p>
+                }
+              </div>
+            </div>
+
+            <!-- Review Actions -->
+            <div class="flex items-center gap-2 shrink-0 justify-end">
+              @if (doc.status !== 'unverified') {
+                <button 
+                  (click)="triggerDocumentPreview(doc)"
+                  class="bg-[var(--dogo-cream)] hover:bg-[var(--dogo-secondary)]/10 text-[var(--dogo-primary)] hover:text-[var(--dogo-secondary)] font-bold text-[10px] uppercase tracking-widest px-4 py-2 rounded-xl transition-all"
+                >
+                  <i class="ri-eye-line mr-1.5"></i> View Doc
+                </button>
+              }
+              
+              <!-- Inline Manual Actions for Pending Documents inside Pending Corporate Profiles -->
+              @if (doc.status === 'pending' && selectedRegistration()?.status === 'Pending') {
+                <button 
+                  (click)="verifyIndividualDocument(doc)"
+                  class="bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white font-black text-[10px] uppercase tracking-widest px-3 py-2 rounded-xl transition-all flex items-center gap-1 border border-emerald-200 shadow-sm"
+                  title="Verify Document"
+                >
+                  <i class="ri-check-line"></i> Verify
+                </button>
+                <button 
+                  (click)="rejectIndividualDocument(doc)"
+                  class="bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white font-black text-[10px] uppercase tracking-widest px-3 py-2 rounded-xl transition-all flex items-center gap-1 border border-rose-200 shadow-sm"
+                  title="Reject Document"
+                >
+                  <i class="ri-close-line"></i> Reject
+                </button>
+              }
+
+              <app-badge [variant]="getBadgeVariant(doc.status)">{{ doc.status }}</app-badge>
+            </div>
+
+          </div>
+          }
+        </div>
+      </div>
+
+      <!-- Verification Rejection Reasoning / Notes Section -->
+      @if (selectedRegistration()?.status === 'Pending') {
+      <div class="bg-white rounded-[32px] p-6 border border-[var(--dogo-primary)]/5 shadow-sm space-y-4">
+        <h4 class="text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)] flex items-center gap-2">
+          <i class="ri-draft-line text-lg"></i> Verification & Review Action Panel
+        </h4>
+        
+        <div>
+          <label class="block text-[11px] font-black uppercase tracking-widest text-slate-400 mb-2">
+            Rejection Feedback Notes (Required ONLY if flagging or rejecting account)
+          </label>
+          <textarea 
+            [(ngModel)]="rejectionReason"
+            placeholder="Type CAC review details, discrepancies, or notes for the representative..."
+            class="w-full h-32 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 focus:border-red-400 rounded-3xl px-6 py-4 text-sm font-bold text-[var(--dogo-dark)] outline-none transition-all placeholder:text-[var(--dogo-primary)]/20 resize-none"
+          ></textarea>
+        </div>
+
+        <div class="flex items-center gap-4 pt-4">
+          <app-button 
+            variant="danger" 
+            size="md" 
+            class="flex-1 h-14 font-black uppercase text-[11px] tracking-widest rounded-2xl" 
+            [disabled]="!rejectionReason().trim() || isProcessing()"
+            (click)="rejectRegistration()"
+          >
+            {{ isProcessing() ? 'Processing...' : 'Flag & Reject Registration' }}
+          </app-button>
+          
+          <app-button 
+            variant="primary" 
+            size="md" 
+            class="flex-1 h-14 font-black uppercase text-[11px] tracking-widest rounded-2xl" 
+            [disabled]="isProcessing() || !isAllDocumentsVerified()"
+            (click)="approveRegistration()"
+          >
+            {{ isProcessing() ? 'Processing...' : 'Approve & Verify Account' }}
+          </app-button>
+        </div>
+      </div>
+      } @else {
+      <!-- Historical Review Ledger -->
+      <div class="bg-white rounded-[32px] p-8 border border-[var(--dogo-primary)]/5 text-center space-y-4">
+        <div 
+          [ngClass]="selectedRegistration()?.status === 'Verified' ? 'text-green-500 bg-green-50 border-green-100' : 'text-red-500 bg-red-50 border-red-100'"
+          class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mx-auto border"
+        >
+          <i [class]="selectedRegistration()?.status === 'Verified' ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill'"></i>
+        </div>
+        <div>
+          <h4 class="text-xl font-black text-[var(--dogo-dark)] italic tracking-tighter uppercase">
+            Account Registration processed
+          </h4>
+          <p class="text-xs font-bold text-[var(--dogo-muted)] uppercase tracking-wider mt-1">
+            Status: <span class="font-black" [class.text-green-600]="selectedRegistration()?.status === 'Verified'" [class.text-red-600]="selectedRegistration()?.status === 'Rejected'">{{ selectedRegistration()?.status }}</span> · Reviewed: {{ selectedRegistration()?.dateReviewed }}
+          </p>
+        </div>
+        
+        @if (selectedRegistration()?.adminNotes) {
+          <div class="max-w-xl mx-auto p-4 bg-[var(--dogo-cream)] rounded-2xl border border-[var(--dogo-primary)]/5 text-left italic">
+            <p class="text-[9px] font-black text-[var(--dogo-secondary)] uppercase tracking-widest mb-1">Historical Reviewer Notes:</p>
+            <p class="text-xs font-bold text-[var(--dogo-dark)] leading-relaxed">{{ selectedRegistration()?.adminNotes }}</p>
+          </div>
+        }
+        
+        <div class="pt-2">
+          <app-button variant="outline" size="sm" (click)="closeDrawer()">Close Details</app-button>
+        </div>
+      </div>
+      }
+
+    </div>
+  </div>
+</div>
+}
+
+<!-- ============================================
+     INTERACTIVE CAC GORGEOUS DOCUMENT PREVIEW
+     ============================================ -->
+@if (activeDocPreview()) {
+<div class="fixed inset-0 z-[200] flex items-center justify-center p-4 animate-fade-in-overlay bg-black/60 backdrop-blur-md">
+  <!-- Close backdrop click -->
+  <div class="absolute inset-0 cursor-pointer" (click)="closeDocPreview()"></div>
+  
+  <div class="relative w-full max-w-2xl bg-white rounded-[40px] shadow-2xl p-8 transform animate-slide-up doc-preview-container flex flex-col max-h-[85vh]">
+    <!-- Doc preview header -->
+    <div class="flex justify-between items-center pb-4 border-b border-slate-100 shrink-0">
+      <div>
+        <h3 class="text-lg font-black text-[var(--dogo-dark)] italic tracking-tighter">
+          CAC Document Viewer
+        </h3>
+        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+          {{ activeDocPreview()?.docName }} · File: {{ activeDocPreview()?.fileName }}
+        </p>
+      </div>
+      <button (click)="closeDocPreview()" class="w-10 h-10 rounded-full bg-slate-100 hover:bg-red-500 hover:text-white text-slate-600 flex items-center justify-center transition-all">
+        <i class="ri-close-large-line text-lg"></i>
+      </button>
+    </div>
+
+    <!-- Live CSS-rendered Document Frame -->
+    <div class="flex-grow overflow-y-auto drawer-scroll p-6 bg-slate-50 rounded-3xl mt-6 border border-slate-200/50 flex justify-center">
+      
+      <!-- Certificate of Incorporation Template -->
+      @if (activeDocPreview()?.type === 'incorporation') {
+      <div class="w-full max-w-[450px] bg-[#fdfdfb] border-[16px] border-[#0c4017] p-8 shadow-md relative min-h-[560px] flex flex-col justify-between font-serif text-[#0b3814] select-none text-center">
+        <!-- Watermark -->
+        <div class="absolute inset-0 opacity-[0.03] flex items-center justify-center pointer-events-none">
+          <i class="ri-government-line text-[240px]"></i>
+        </div>
+        
+        <!-- Document Content -->
+        <div>
+          <!-- Logo & Header -->
+          <div class="flex flex-col items-center space-y-1">
+            <div class="w-10 h-10 rounded-full border-2 border-[#0b3814] flex items-center justify-center text-xs font-black bg-white">CAC</div>
+            <h5 class="text-[9px] font-bold tracking-[0.2em] font-sans uppercase">Federal Republic of Nigeria</h5>
+            <h4 class="text-xs font-bold font-sans uppercase text-emerald-800 tracking-wider">Corporate Affairs Commission</h4>
+          </div>
+          
+          <!-- Stamp of Verification -->
+          <div class="absolute top-8 right-8 w-20 h-20 rounded-full flex items-center justify-center font-bold text-[8px] uppercase tracking-tighter official-stamp select-none">
+            Verified
+          </div>
+
+          <!-- Body -->
+          <div class="mt-8 space-y-4">
+            <p class="text-[8px] font-sans tracking-widest uppercase">Certificate of Incorporation</p>
+            
+            <p class="text-[10px] leading-relaxed italic">
+              I hereby certify that the administrative entity
+            </p>
+            
+            <h3 class="text-base font-sans font-black uppercase text-emerald-950 tracking-wide font-serif pt-1 pb-1">
+              {{ activeDocPreview()?.businessName }}
+            </h3>
+            
+            <p class="text-[10px] leading-relaxed italic">
+              is this day incorporated under the <span class="font-bold">COMPANIES AND ALLIED MATTERS ACT 2020</span> and that the Company is Limited by Shares.
+            </p>
+
+            <p class="text-[10px] leading-relaxed italic">
+              Given under my hand at Abuja this <span class="font-bold">24th Day of May, 2026.</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Seal & Register ID -->
+        <div class="flex justify-between items-end pt-8 border-t border-emerald-900/10">
+          <div class="text-left font-sans">
+            <p class="text-[8px] uppercase tracking-wider text-slate-400">RC Number</p>
+            <p class="text-xs font-bold text-slate-900 font-mono">{{ activeDocPreview()?.rcNumber }}</p>
+          </div>
+          
+          <div class="text-center font-sans space-y-1 flex flex-col items-center">
+            <div class="w-16 h-6 border-b border-slate-400 border-dashed"></div>
+            <p class="text-[6px] uppercase tracking-widest text-slate-400">Registrar-General</p>
+          </div>
+        </div>
+      </div>
+      }
+
+      <!-- CAC CAC2 & CAC7 Form Templates -->
+      @else if (activeDocPreview()?.type === 'cac2' || activeDocPreview()?.type === 'cac7') {
+      <div class="w-full max-w-[450px] bg-white border border-slate-300 p-8 shadow-sm relative min-h-[560px] flex flex-col justify-between font-sans text-slate-800 text-left">
+        <div>
+          <!-- Header -->
+          <div class="flex items-center justify-between pb-4 border-b border-slate-300">
+            <div>
+              <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest">FORM CAC 7</p>
+              <h4 class="text-[10px] font-black text-slate-800 uppercase tracking-wide">Particulars of Directors</h4>
+            </div>
+            <div class="text-right">
+              <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[8px] font-black uppercase">Official Copy</span>
+            </div>
+          </div>
+
+          <!-- Document Watermark Stamp -->
+          <div class="absolute top-20 right-8 w-24 h-10 border-4 border-double border-emerald-500/30 flex items-center justify-center font-bold text-[10px] uppercase text-emerald-500/40 rotate-12 select-none pointer-events-none">
+            CAC Approved
+          </div>
+
+          <!-- Form Fields -->
+          <div class="mt-6 space-y-4 text-[10px]">
+            <div>
+              <p class="font-black text-slate-400 uppercase text-[8px]">1. Company Name</p>
+              <p class="font-bold text-slate-900 text-sm mt-0.5 uppercase">{{ activeDocPreview()?.businessName }}</p>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="font-black text-slate-400 uppercase text-[8px]">RC ID</p>
+                <p class="font-mono font-bold text-slate-900 mt-0.5">{{ activeDocPreview()?.rcNumber }}</p>
+              </div>
+              <div>
+                <p class="font-black text-slate-400 uppercase text-[8px]">Type of Entity</p>
+                <p class="font-bold text-slate-900 mt-0.5">Private Limited Company</p>
+              </div>
+            </div>
+
+            <!-- Table of Directors -->
+            <div class="pt-4 space-y-2">
+              <p class="font-black text-slate-400 uppercase text-[8px]">2. Listed Directors Details</p>
+              <table class="w-full text-left text-[9px] border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 border-b border-slate-200">
+                    <th class="p-1.5 font-bold uppercase text-slate-500">Director Name</th>
+                    <th class="p-1.5 font-bold uppercase text-slate-500">Designation</th>
+                    <th class="p-1.5 font-bold uppercase text-slate-500 text-right">Shares %</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr class="hover:bg-slate-50/50">
+                    <td class="p-1.5 font-black">Aisha Musa</td>
+                    <td class="p-1.5 text-slate-500">Managing Director</td>
+                    <td class="p-1.5 text-right font-black">40%</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50/50">
+                    <td class="p-1.5 font-black">Ibrahim Kazeem</td>
+                    <td class="p-1.5 text-slate-500">Operations Director</td>
+                    <td class="p-1.5 text-right font-black">30%</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50/50">
+                    <td class="p-1.5 font-black">Fatimah Yusuf</td>
+                    <td class="p-1.5 text-slate-500">Finance Director</td>
+                    <td class="p-1.5 text-right font-black">30%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Address -->
+            <div class="pt-2">
+              <p class="font-black text-slate-400 uppercase text-[8px]">3. Notice of Registered Address</p>
+              <p class="font-medium text-slate-700 leading-relaxed mt-0.5">12, Medina Crescent, Victoria Island, Lagos State</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="pt-6 border-t border-slate-200 flex justify-between items-center text-[7px] text-slate-400 font-mono">
+          <span>Form CAC-02/07 Revision 2024</span>
+          <span>Security Pin: CA9038-0239-1094</span>
+        </div>
+      </div>
+      }
+
+      <!-- General Signatory Identification & Supporting Docs Mockups -->
+      @else {
+      <div class="w-full max-w-[450px] bg-gradient-to-br from-emerald-800 to-emerald-950 text-white rounded-3xl p-6 shadow-lg min-h-[260px] flex flex-col justify-between font-sans relative overflow-hidden select-none">
+        <!-- Background graphics -->
+        <div class="absolute inset-0 bg-dogo-pattern opacity-5 pointer-events-none"></div>
+        <div class="absolute -right-16 -top-16 w-48 h-48 bg-white/5 rounded-full blur-2xl"></div>
+
+        <div>
+          <!-- Header -->
+          <div class="flex justify-between items-center pb-3 border-b border-white/10 shrink-0">
+            <div class="flex items-center gap-2">
+              <div class="w-6 h-6 rounded-full bg-white flex items-center justify-center text-[8px] font-black text-emerald-900">NGA</div>
+              <span class="text-[9px] font-black uppercase tracking-widest text-slate-200">National Identity Management Commission</span>
+            </div>
+            <i class="ri-rfid-line text-lg text-emerald-300"></i>
+          </div>
+
+          <!-- Body -->
+          <div class="flex gap-6 mt-6">
+            <!-- Mock Portrait -->
+            <div class="w-20 h-24 rounded-2xl bg-white/10 border border-white/20 flex flex-col items-center justify-center text-xs shrink-0 overflow-hidden relative">
+              <i class="ri-user-star-line text-4xl text-emerald-300/40"></i>
+              <div class="absolute bottom-1 left-0 right-0 text-[6px] text-center uppercase text-white/50 tracking-wider">Portrait</div>
+            </div>
+            
+            <!-- Details -->
+            <div class="space-y-3 flex-grow text-left">
+              <div>
+                <p class="text-[7px] text-slate-300 uppercase tracking-widest">Authorized Representative / Holder</p>
+                <p class="text-sm font-black tracking-wide uppercase">{{ activeDocPreview()?.businessName === 'Halal Invest Ltd' ? 'Aisha Musa' : 'Ibrahim Kazeem' }}</p>
+              </div>
+              
+              <div class="grid grid-cols-2 gap-2 text-[8px]">
+                <div>
+                  <p class="text-[7px] text-slate-300 uppercase tracking-widest">Document Class</p>
+                  <p class="font-bold">NIN / Signatory Card</p>
+                </div>
+                <div>
+                  <p class="text-[7px] text-slate-300 uppercase tracking-widest">Verification Status</p>
+                  <p class="font-bold text-emerald-300">100% Validated</p>
+                </div>
+              </div>
+
+              <div>
+                <p class="text-[7px] text-slate-300 uppercase tracking-widest">Linked Corporation</p>
+                <p class="text-[9px] font-bold truncate uppercase text-emerald-200">{{ activeDocPreview()?.businessName }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="flex justify-between items-center pt-4 border-t border-white/10 text-[7px] font-mono text-emerald-200/50">
+          <span>ID NUMBER: NIN-893049281</span>
+          <span>NGA CLASS A ENTITY</span>
+        </div>
+      </div>
+      }
+
+    </div>
+
+    <!-- Footer Controls -->
+    <div class="mt-6 flex justify-end">
+      <app-button variant="outline" size="sm" (click)="closeDocPreview()">
+        Close Preview
+      </app-button>
+    </div>
+
+  </div>
+</div>
+}
+
+<!-- ============================================
+     DIRECTOR/SIGNATORY KYB PROFILE INSPECTOR
+     ============================================ -->
+@if (selectedDirector()) {
+<div class="fixed inset-0 z-[250] flex items-center justify-center p-4 animate-fade-in-overlay bg-[var(--dogo-dark)]/70 backdrop-blur-md">
+  <!-- Close backdrop click -->
+  <div class="absolute inset-0 cursor-pointer" (click)="closeDirectorDetails()"></div>
+  
+  <div class="relative w-full max-w-4xl bg-white rounded-[40px] shadow-2xl p-8 transform animate-slide-up flex flex-col max-h-[90vh] overflow-hidden border border-[var(--dogo-primary)]/10">
+    
+    <!-- Modal Header -->
+    <div class="flex justify-between items-center pb-6 border-b border-slate-100 shrink-0">
+      <div class="flex items-center gap-4">
+        <!-- Avatar thumbnail -->
+        <div class="w-14 h-14 rounded-2xl overflow-hidden shadow-inner border border-slate-200 shrink-0 bg-slate-100 flex items-center justify-center">
+          @if (selectedDirector()?.passportPhoto) {
+            <img [src]="selectedDirector()?.passportPhoto" alt="photo" class="w-full h-full object-cover">
+          } @else {
+            <i class="ri-user-line text-2xl text-slate-400"></i>
+          }
+        </div>
+        <div>
+          <h3 class="text-xl font-black text-[var(--dogo-dark)] italic tracking-tighter flex items-center gap-2">
+            KYB Inspector: {{ selectedDirector()?.title }}. {{ selectedDirector()?.firstName }} {{ selectedDirector()?.surname }}
+          </h3>
+          <p class="text-[10px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest mt-0.5">
+            Designation: {{ selectedDirector()?.role }} · Class: {{ selectedDirector()?.signingClass || 'N/A' }}
+          </p>
+        </div>
+      </div>
+      <button (click)="closeDirectorDetails()" class="w-10 h-10 rounded-full bg-slate-100 hover:bg-red-500 hover:text-white text-slate-600 flex items-center justify-center transition-all">
+        <i class="ri-close-large-line text-lg"></i>
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="flex-grow overflow-y-auto drawer-scroll mt-6 pr-2 space-y-6">
+      <div class="grid lg:grid-cols-2 gap-8">
+        
+        <!-- Left: KYB Parameters -->
+        <div class="space-y-6">
+          
+          <!-- Personal Identifiers -->
+          <div class="bg-[var(--dogo-cream)] rounded-3xl p-6 border border-[var(--dogo-primary)]/5 space-y-4">
+            <h4 class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-secondary)] border-b border-slate-200/50 pb-2">
+              Personal Information
+            </h4>
+            
+            <div class="grid grid-cols-2 gap-4 text-xs font-bold">
+              <div>
+                <p class="text-[8px] text-slate-400 uppercase tracking-widest">Surname</p>
+                <p class="text-[var(--dogo-dark)] mt-0.5">{{ selectedDirector()?.surname }}</p>
+              </div>
+              <div>
+                <p class="text-[8px] text-slate-400 uppercase tracking-widest">First Name</p>
+                <p class="text-[var(--dogo-dark)] mt-0.5">{{ selectedDirector()?.firstName }}</p>
+              </div>
+              <div>
+                <p class="text-[8px] text-slate-400 uppercase tracking-widest">Other Names</p>
+                <p class="text-[var(--dogo-dark)] mt-0.5">{{ selectedDirector()?.otherNames || 'N/A' }}</p>
+              </div>
+              <div>
+                <p class="text-[8px] text-slate-400 uppercase tracking-widest">Date of Birth</p>
+                <p class="text-[var(--dogo-dark)] mt-0.5 font-mono">{{ selectedDirector()?.dob || 'N/A' }}</p>
+              </div>
+              <div>
+                <p class="text-[8px] text-slate-400 uppercase tracking-widest">Gender</p>
+                <p class="text-[var(--dogo-dark)] mt-0.5">{{ selectedDirector()?.gender || 'N/A' }}</p>
+              </div>
+              <div>
+                <p class="text-[8px] text-slate-400 uppercase tracking-widest">Nationality</p>
+                <p class="text-[var(--dogo-dark)] mt-0.5">{{ selectedDirector()?.nationality || 'N/A' }}</p>
+              </div>
+            </div>
+            
+            <div class="pt-2 text-xs font-bold">
+              <p class="text-[8px] text-slate-400 uppercase tracking-widest">Residential Address</p>
+              <p class="text-[var(--dogo-dark)] mt-0.5 leading-snug">{{ selectedDirector()?.residentialAddress }}</p>
+            </div>
+          </div>
+
+          <!-- Contact Details & Identifiers -->
+          <div class="bg-[var(--dogo-cream)] rounded-3xl p-6 border border-[var(--dogo-primary)]/5 space-y-4">
+            <h4 class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-secondary)] border-b border-slate-200/50 pb-2">
+              Contact & Registry Identifiers
+            </h4>
+            
+            <div class="grid grid-cols-2 gap-4 text-xs font-bold">
+              <div>
+                <p class="text-[8px] text-slate-400 uppercase tracking-widest">Email Address</p>
+                <p class="text-[var(--dogo-dark)] mt-0.5 truncate">{{ selectedDirector()?.email }}</p>
+              </div>
+              <div>
+                <p class="text-[8px] text-slate-400 uppercase tracking-widest">Telephone Number</p>
+                <p class="text-[var(--dogo-dark)] mt-0.5 font-mono">{{ selectedDirector()?.phone }}</p>
+              </div>
+              <div>
+                <p class="text-[8px] text-slate-400 uppercase tracking-widest">BVN Code</p>
+                <p class="text-[var(--dogo-dark)] mt-0.5 font-mono">{{ selectedDirector()?.bvn }}</p>
+              </div>
+              <div>
+                <p class="text-[8px] text-slate-400 uppercase tracking-widest">Signing Authority Class</p>
+                <p class="text-[var(--dogo-dark)] mt-0.5">Class {{ selectedDirector()?.signingClass || 'N/A' }}</p>
+              </div>
+            </div>
+
+            <!-- PEP Status -->
+            <div class="pt-2 text-xs font-bold border-t border-slate-200/50">
+              <div class="flex items-center justify-between">
+                <span class="text-[8px] text-slate-400 uppercase tracking-widest">Politically Exposed Person (PEP)</span>
+                <span 
+                  [ngClass]="selectedDirector()?.isPep === 'Yes' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-green-50 text-green-700 border-green-200'"
+                  class="px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest border"
+                >
+                  PEP: {{ selectedDirector()?.isPep || 'No' }}
+                </span>
+              </div>
+              @if (selectedDirector()?.isPep === 'Yes') {
+                <p class="text-[10px] text-red-700 font-medium mt-1 bg-red-50/50 p-2 rounded-lg border border-red-100">
+                  Notes: {{ selectedDirector()?.pepDetails }}
+                </p>
+              }
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Signatory Verification Assets -->
+        <div class="space-y-6">
+          <h4 class="text-[10px] font-black uppercase tracking-widest text-slate-400">
+            Signatory Verification Assets
+          </h4>
+          
+          <div class="grid sm:grid-cols-2 gap-4">
+            
+            <!-- Passport Slot -->
+            <div class="bg-slate-50 border border-slate-200/70 p-4 rounded-2xl flex flex-col items-center justify-center space-y-2 relative overflow-hidden h-[180px] text-center shadow-inner">
+              <span class="absolute top-2 left-3 text-[7px] font-black uppercase tracking-widest text-slate-400">Passport Slot</span>
+              @if (selectedDirector()?.passportPhoto) {
+                <div class="w-20 h-20 rounded-full overflow-hidden border border-slate-300 shadow-sm shrink-0">
+                  <img [src]="selectedDirector()?.passportPhoto" alt="passport image" class="w-full h-full object-cover">
+                </div>
+                <p class="text-[9px] font-black text-slate-500 uppercase truncate max-w-[140px]">Verified Portrait</p>
+              } @else {
+                <div class="w-16 h-16 rounded-full bg-slate-200/50 flex items-center justify-center text-slate-400">
+                  <i class="ri-user-line text-2xl"></i>
+                </div>
+                <p class="text-[9px] text-red-500 font-bold uppercase">Pending Upload</p>
+              }
+            </div>
+
+            <!-- Signature Slot -->
+            <div class="bg-slate-50 border border-slate-200/70 p-4 rounded-2xl flex flex-col items-center justify-center space-y-2 relative overflow-hidden h-[180px] text-center shadow-inner">
+              <span class="absolute top-2 left-3 text-[7px] font-black uppercase tracking-widest text-slate-400">Authorized Signature</span>
+              @if (selectedDirector()?.signatureImage) {
+                <div class="w-28 h-14 bg-white rounded-lg flex items-center justify-center border border-slate-200 shadow-sm overflow-hidden p-1 shrink-0">
+                  <img [src]="selectedDirector()?.signatureImage" alt="signature image" class="w-full h-full object-contain">
+                </div>
+                <p class="text-[9px] font-black text-slate-500 uppercase">Verified Specimen</p>
+              } @else {
+                <div class="w-20 h-10 bg-slate-200/50 rounded-lg flex items-center justify-center text-slate-400">
+                  <i class="ri-edit-line text-2xl"></i>
+                </div>
+                <p class="text-[9px] text-red-500 font-bold uppercase">Pending Specimen</p>
+              }
+            </div>
+
+          </div>
+
+          <!-- Identity Document Slot -->
+          <div class="bg-slate-50 border border-slate-200/70 p-6 rounded-3xl flex flex-col space-y-3 relative overflow-hidden shadow-inner">
+            <span class="text-[7px] font-black uppercase tracking-widest text-slate-400 block">Identity Document Scan</span>
+            
+            <div class="flex justify-between items-center text-xs font-bold bg-white p-3 rounded-2xl border border-slate-100">
+              <div>
+                <p class="text-[8px] text-slate-400 uppercase tracking-widest">Document Type</p>
+                <p class="text-[var(--dogo-dark)] font-black mt-0.5">{{ selectedDirector()?.idType }}</p>
+              </div>
+              <div>
+                <p class="text-[8px] text-slate-400 uppercase tracking-widest">Card ID Number</p>
+                <p class="text-[var(--dogo-dark)] font-mono font-black mt-0.5">{{ selectedDirector()?.idNumber }}</p>
+              </div>
+            </div>
+
+            <!-- Identity Document Scan Graphic Mockup -->
+            <div class="w-full aspect-[16/9] rounded-2xl bg-white border border-slate-200 flex items-center justify-center relative overflow-hidden p-2 group shadow-sm">
+              @if (selectedDirector()?.idDocument) {
+                <img [src]="selectedDirector()?.idDocument" alt="id document scan" class="w-full h-full object-cover rounded-xl filter contrast-125 select-none pointer-events-none">
+              } @else {
+                <div class="text-center space-y-2 text-slate-300">
+                  <i class="ri-shield-user-line text-4xl block mx-auto"></i>
+                  <p class="text-[10px] font-bold uppercase">No Document Page Uploaded</p>
+                </div>
+              }
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+}
+
+<!-- ============================================
+     CONSOLIDATED SHARIAH CORPORATE PROFILE DOSSIER OVERLAY
+     ============================================ -->
+@if (showDossierModal() && selectedRegistration()) {
+<div class="fixed inset-0 z-[300] flex items-center justify-center p-4 animate-fade-in-overlay bg-[var(--dogo-dark)]/80 backdrop-blur-md">
+  <!-- Close backdrop click -->
+  <div class="absolute inset-0 cursor-pointer" (click)="closeDossierModal()"></div>
+  
+  <div class="relative w-full max-w-5xl bg-[var(--dogo-cream)] rounded-[48px] shadow-2xl p-6 sm:p-10 transform animate-slide-up flex flex-col max-h-[92vh] overflow-hidden border border-[var(--dogo-primary)]/15">
+    
+    <!-- Watermark Pattern -->
+    <div class="absolute inset-0 opacity-[0.02] bg-dogo-pattern pointer-events-none rounded-[48px]"></div>
+
+    <!-- Modal Header -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-[var(--dogo-primary)]/10 shrink-0 gap-4 relative z-10 w-full">
+      <div class="flex items-center gap-4">
+        <div class="w-16 h-16 rounded-[24px] bg-[var(--dogo-primary)] flex items-center justify-center text-white font-black text-xl shadow-md border-2 border-white select-none">
+          {{ getInitials(selectedRegistration()?.businessName) }}
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full bg-[var(--dogo-secondary)]/10 text-[var(--dogo-secondary)] text-[9px] font-black uppercase tracking-wider">
+              Shariah Compliant Portfolio Dossier
+            </span>
+            <span class="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-wide">ID: {{ selectedRegistration()?.id }}</span>
+          </div>
+          <h3 class="text-2xl sm:text-3xl font-black text-[var(--dogo-dark)] italic tracking-tighter mt-1 flex items-center gap-2">
+            {{ selectedRegistration()?.businessName }}
+          </h3>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-2 self-end sm:self-auto">
+        <button 
+          (click)="closeDossierModal()" 
+          class="w-12 h-12 rounded-full bg-white hover:bg-red-500 hover:text-white text-slate-600 flex items-center justify-center transition-all shadow-sm cursor-pointer border border-[var(--dogo-primary)]/5"
+        >
+          <i class="ri-close-large-line text-lg"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="flex-grow overflow-y-auto drawer-scroll mt-8 pr-2 space-y-8 relative z-10 w-full">
+      
+      <!-- Grid Layout -->
+      <div class="grid lg:grid-cols-3 gap-8 w-full">
+        
+        <!-- Column 1 & 2: Main Business Data Dossier -->
+        <div class="lg:col-span-2 space-y-8 w-full">
+          
+          <!-- Company Vital Profile card -->
+          <div class="bg-white rounded-[32px] p-6 sm:p-8 border border-[var(--dogo-primary)]/5 shadow-sm space-y-6">
+            <div class="flex items-center space-x-3 pb-3 border-b border-slate-100">
+              <span class="w-2 h-5 rounded bg-[var(--dogo-primary)] shrink-0"></span>
+              <h4 class="text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Company Registry Dossier</h4>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5 text-xs font-bold w-full">
+              <div>
+                <span class="block text-[9px] text-slate-400 uppercase tracking-widest">Legal Business Name</span>
+                <span class="text-sm font-black text-[var(--dogo-dark)] block mt-0.5">{{ selectedRegistration()?.businessName }}</span>
+              </div>
+              <div>
+                <span class="block text-[9px] text-slate-400 uppercase tracking-widest">CAC RC ID Number</span>
+                <span class="text-sm font-black text-[var(--dogo-dark)] block mt-0.5 font-mono">{{ selectedRegistration()?.rcNumber }}</span>
+              </div>
+              <div>
+                <span class="block text-[9px] text-slate-400 uppercase tracking-widest">Date Incorporated</span>
+                <span class="text-sm font-black text-[var(--dogo-dark)] block mt-0.5">{{ selectedRegistration()?.dateIncorporated }}</span>
+              </div>
+              <div>
+                <span class="block text-[9px] text-slate-400 uppercase tracking-widest">Tax Identity Number (TIN)</span>
+                <span class="text-sm font-black text-[var(--dogo-dark)] block mt-0.5 font-mono">{{ selectedRegistration()?.tin || 'TIN-89301928' }}</span>
+              </div>
+              <div class="sm:col-span-2">
+                <span class="block text-[9px] text-slate-400 uppercase tracking-widest">Registered Corporate Address</span>
+                <span class="text-sm font-black text-[var(--dogo-dark)] block mt-0.5 leading-snug">{{ selectedRegistration()?.registeredAddress }}</span>
+              </div>
+              <div>
+                <span class="block text-[9px] text-slate-400 uppercase tracking-widest">Business Category</span>
+                <span class="text-sm font-black text-[var(--dogo-dark)] block mt-0.5">{{ selectedRegistration()?.natureOfBusiness || 'Islamic FinTech & Microfinance Services' }}</span>
+              </div>
+              <div>
+                <span class="block text-[9px] text-slate-400 uppercase tracking-widest">Entity Legal Structure</span>
+                <span class="text-sm font-black text-[var(--dogo-dark)] block mt-0.5">{{ selectedRegistration()?.entityType || 'Private Limited Company' }}</span>
+              </div>
+              <div>
+                <span class="block text-[9px] text-slate-400 uppercase tracking-widest">Official Phone</span>
+                <span class="text-sm font-black text-[var(--dogo-dark)] block mt-0.5 font-mono">{{ selectedRegistration()?.companyPhone || selectedRegistration()?.representativePhone }}</span>
+              </div>
+              <div>
+                <span class="block text-[9px] text-slate-400 uppercase tracking-widest">Official Email</span>
+                <span class="text-sm font-black text-[var(--dogo-dark)] block mt-0.5">{{ selectedRegistration()?.companyEmail || selectedRegistration()?.representativeEmail }}</span>
+              </div>
+              <div>
+                <span class="block text-[9px] text-slate-400 uppercase tracking-widest">Annual Turnover Range</span>
+                <span class="text-sm font-black text-[var(--dogo-primary)] block mt-0.5">{{ selectedRegistration()?.annualTurnover || '₦250M - ₦1B' }}</span>
+              </div>
+              <div>
+                <span class="block text-[9px] text-slate-400 uppercase tracking-widest">Source of Funds</span>
+                <span class="text-sm font-black text-[var(--dogo-dark)] block mt-0.5">{{ selectedRegistration()?.sourceOfFunds || 'Retained Earnings & Reserves' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Representative & Creator Section -->
+          @if (selectedRegistration()?.contactPerson) {
+          <div class="bg-white rounded-[32px] p-6 sm:p-8 border border-[var(--dogo-primary)]/5 shadow-sm space-y-6">
+            <div class="flex items-center space-x-3 pb-3 border-b border-slate-100">
+              <span class="w-2 h-5 rounded bg-[var(--dogo-primary)] shrink-0"></span>
+              <h4 class="text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Primary Contact Representative Profile</h4>
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-6 w-full">
+              <!-- Rep card detail -->
+              <div class="space-y-4 text-xs font-bold bg-[var(--dogo-cream)]/50 p-5 rounded-2xl border border-[var(--dogo-primary)]/5">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 rounded-xl overflow-hidden border border-slate-200 shrink-0 bg-slate-100 flex items-center justify-center">
+                    @if (selectedRegistration()?.contactPerson?.passportPhoto) {
+                      <img [src]="selectedRegistration()?.contactPerson?.passportPhoto" alt="passport rep" class="w-full h-full object-cover">
+                    } @else {
+                      <i class="ri-user-line text-xl text-slate-400"></i>
+                    }
+                  </div>
+                  <div>
+                    <h5 class="text-base font-black text-[var(--dogo-dark)] leading-snug">
+                      {{ selectedRegistration()?.contactPerson?.title }}. {{ selectedRegistration()?.contactPerson?.firstName }} {{ selectedRegistration()?.contactPerson?.surname }}
+                    </h5>
+                    <p class="text-[9px] text-slate-400 uppercase tracking-wider font-extrabold">{{ selectedRegistration()?.contactPerson?.role }}</p>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 pt-3 border-t border-slate-200/50 w-full">
+                  <div>
+                    <span class="block text-[7px] text-slate-400 uppercase tracking-widest">BVN Code</span>
+                    <span class="font-mono text-[var(--dogo-dark)]">{{ selectedRegistration()?.contactPerson?.bvn }}</span>
+                  </div>
+                  <div>
+                    <span class="block text-[7px] text-slate-400 uppercase tracking-widest">Nationality</span>
+                    <span class="text-[var(--dogo-dark)]">{{ selectedRegistration()?.contactPerson?.nationality }}</span>
+                  </div>
+                  <div>
+                    <span class="block text-[7px] text-slate-400 uppercase tracking-widest">Phone</span>
+                    <span class="font-mono text-[var(--dogo-dark)]">{{ selectedRegistration()?.contactPerson?.phone }}</span>
+                  </div>
+                  <div>
+                    <span class="block text-[7px] text-slate-400 uppercase tracking-widest">Gender</span>
+                    <span class="text-[var(--dogo-dark)]">{{ selectedRegistration()?.contactPerson?.gender }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Rep visuals card -->
+              <div class="grid grid-cols-2 gap-3 w-full">
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-col items-center justify-center text-center relative h-[95px] shrink-0 shadow-inner">
+                  <span class="absolute top-1 left-2 text-[6px] font-black uppercase text-slate-400 block">Passport photo</span>
+                  @if (selectedRegistration()?.contactPerson?.passportPhoto) {
+                    <div class="w-10 h-10 rounded-full overflow-hidden border border-slate-300 shadow-sm shrink-0">
+                      <img [src]="selectedRegistration()?.contactPerson?.passportPhoto" class="w-full h-full object-cover">
+                    </div>
+                  } @else {
+                    <i class="ri-user-line text-lg text-slate-300"></i>
+                  }
+                </div>
+
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-col items-center justify-center text-center relative h-[95px] shrink-0 shadow-inner">
+                  <span class="absolute top-1 left-2 text-[6px] font-black uppercase text-slate-400 block">Signature spec</span>
+                  @if (selectedRegistration()?.contactPerson?.signatureImage) {
+                    <div class="w-16 h-8 bg-white rounded border flex items-center justify-center overflow-hidden shrink-0">
+                      <img [src]="selectedRegistration()?.contactPerson?.signatureImage" class="w-full h-full object-contain">
+                    </div>
+                  } @else {
+                    <i class="ri-edit-line text-lg text-slate-300"></i>
+                  }
+                </div>
+
+                <div class="col-span-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 flex items-center justify-between text-xs font-bold shadow-inner w-full">
+                  <div>
+                    <span class="text-[7px] text-slate-400 uppercase tracking-widest block">Linked ID: {{ selectedRegistration()?.contactPerson?.idType }}</span>
+                    <span class="font-mono text-[var(--dogo-dark)] text-[10px] block mt-0.5">{{ selectedRegistration()?.contactPerson?.idNumber }}</span>
+                  </div>
+                  <button 
+                    (click)="selectedDirector.set(selectedRegistration()!.contactPerson!)"
+                    class="bg-[var(--dogo-primary)] text-white text-[8px] font-black uppercase px-2.5 py-1.5 rounded-lg transition-all shadow-sm"
+                  >
+                    Open ID Card
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          }
+
+          <!-- Directors and Controlling Signatories Ledger -->
+          <div class="bg-white rounded-[32px] p-6 border border-[var(--dogo-primary)]/5 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+              <h4 class="text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)]">Authorized Board Signatories</h4>
+              <span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[8px] font-black uppercase">Registry Matching Verified</span>
+            </div>
+
+            <div class="divide-y divide-slate-50">
+              @for (dir of selectedRegistration()?.directors; track dir.name) {
+                <div class="py-3 flex items-center justify-between text-xs font-bold gap-4 w-full">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl overflow-hidden border border-slate-200 shrink-0 bg-slate-100 flex items-center justify-center">
+                      @if (dir.passportPhoto) {
+                        <img [src]="dir.passportPhoto" class="w-full h-full object-cover">
+                      } @else {
+                        <i class="ri-user-line text-slate-400 text-lg"></i>
+                      }
+                    </div>
+                    <div>
+                      <p class="font-black text-[var(--dogo-dark)] text-sm leading-snug">{{ dir.name }}</p>
+                      <p class="text-[9px] text-slate-400 uppercase tracking-wider mt-0.5">{{ dir.role }} · Class {{ dir.signingClass || 'A' }}</p>
+                    </div>
+                  </div>
+
+                  <div class="text-right shrink-0">
+                    <p class="text-[var(--dogo-primary)] font-black text-sm">{{ dir.shareholding }}%</p>
+                    <p class="text-[8px] font-black uppercase text-slate-400 mt-0.5">Holding</p>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Column 3: Shariah Accounts & CAC compliance Documents -->
+        <div class="space-y-8 w-full">
+          
+          <!-- Shariah Review official Status Stamp -->
+          <div class="bg-gradient-to-br from-[var(--dogo-primary)] to-[var(--dogo-dark)] text-white rounded-[32px] p-6 text-center shadow-lg relative overflow-hidden flex flex-col justify-between min-h-[220px] w-full">
+            <div class="absolute inset-0 opacity-[0.03] bg-dogo-pattern pointer-events-none"></div>
+            <div>
+              <p class="text-[8px] font-black uppercase tracking-widest text-slate-300">Reserves Compliance Status</p>
+              <h4 class="text-2xl font-black italic tracking-tighter uppercase mt-2">Dossier Audited</h4>
+            </div>
+
+            <!-- Official verification Seal -->
+            <div class="w-24 h-24 rounded-full border-4 border-double border-emerald-400/40 flex flex-col items-center justify-center font-bold text-[8px] uppercase text-emerald-400 rotate-12 mx-auto select-none bg-emerald-950/20 my-4 tracking-wider">
+              <span class="font-serif font-black text-[10px]">DOGO</span>
+              <span>VERIFIED</span>
+            </div>
+
+            <div class="pt-4 border-t border-white/10 flex justify-between items-center text-[8px] text-slate-300 font-mono w-full">
+              <span>RC Status: {{ selectedRegistration()?.status }}</span>
+              <span>KYC: {{ selectedRegistration()?.kycProgress }}/10</span>
+            </div>
+          </div>
+
+          <!-- Linked Settlement Accounts Deck -->
+          <div class="bg-white rounded-[32px] p-6 border border-[var(--dogo-primary)]/5 shadow-sm space-y-4">
+            <h4 class="text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)] pb-2 border-b border-slate-100 flex items-center gap-1.5">
+              <i class="ri-bank-line"></i> Reserves Settlement Accounts
+            </h4>
+
+            <div class="space-y-4">
+              <!-- Naira -->
+              <div class="space-y-2">
+                <span class="text-[8px] font-black uppercase tracking-widest text-slate-400 block">Naira bank (NGN)</span>
+                @for (acc of selectedRegistration()?.nairaAccounts; track acc.accountNumber) {
+                  <div class="p-3 bg-[var(--dogo-cream)] rounded-xl text-xs font-bold relative overflow-hidden">
+                    <p class="text-[var(--dogo-dark)] font-black text-sm">{{ acc.bankName }}</p>
+                    <p class="text-[var(--dogo-primary)] font-mono mt-0.5">{{ acc.accountNumber }}</p>
+                    <p class="text-[8px] text-slate-400 uppercase tracking-widest mt-1">{{ acc.accountName }}</p>
+                  </div>
+                }
+              </div>
+
+              <!-- USD -->
+              @if (selectedRegistration()?.domiciliaryAccounts && selectedRegistration()!.domiciliaryAccounts!.length > 0) {
+                <div class="space-y-2">
+                  <span class="text-[8px] font-black uppercase tracking-widest text-slate-400 block">Domiciliary bank (USD)</span>
+                  @for (acc of selectedRegistration()?.domiciliaryAccounts; track acc.accountNumber) {
+                    <div class="p-3 bg-[var(--dogo-cream)] rounded-xl text-xs font-bold relative overflow-hidden">
+                      <p class="text-[var(--dogo-dark)] font-black text-sm">{{ acc.bankName }}</p>
+                      <p class="text-blue-600 font-mono mt-0.5">{{ acc.accountNumber }}</p>
+                      <p class="text-[8px] text-slate-400 uppercase tracking-widest mt-1">{{ acc.accountName }}</p>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- CAC Documentation compliance list -->
+          <div class="bg-white rounded-[32px] p-6 border border-[var(--dogo-primary)]/5 shadow-sm space-y-4">
+            <h4 class="text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)] pb-2 border-b border-slate-100 flex items-center gap-1.5">
+              <i class="ri-folder-shield-2-line"></i> CAC Compliance Documentation
+            </h4>
+
+            <div class="space-y-2">
+              @for (doc of selectedRegistration()?.documents; track doc.name) {
+                <div class="flex items-center justify-between text-xs font-bold py-1 border-b border-slate-50 last:border-b-0 w-full">
+                  <span class="text-[var(--dogo-dark)] text-[11px] truncate max-w-[170px]" [title]="doc.name">{{ doc.name }}</span>
+                  <span class="inline-flex px-2 py-0.5 rounded text-[8px] font-black uppercase"
+                        [ngClass]="{
+                          'bg-green-50 text-green-700': doc.status === 'verified',
+                          'bg-yellow-50 text-yellow-700': doc.status === 'pending',
+                          'bg-red-50 text-red-700': doc.status === 'unverified'
+                        }">
+                    {{ doc.status }}
+                  </span>
+                </div>
+              }
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="mt-8 pt-4 border-t border-[var(--dogo-primary)]/10 flex justify-between items-center shrink-0 relative z-10 w-full">
+      <div class="flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-dark)]">
+          Audit Compliance Ledger Complete
+        </span>
+      </div>
+      <div class="flex items-center gap-3">
+        <app-button variant="outline" size="sm" (click)="closeDossierModal()">
+          Close Dossier
+        </app-button>
+      </div>
+    </div>
+
+  </div>
+</div>
+}

@@ -100,6 +100,7 @@ export const routes: Routes = [
       { path: 'liquidation-requests', loadComponent: () => import('./pages/admin/liquidations/liquidations.component').then(m => m.AdminLiquidationsComponent) },
       { path: 'transactions', loadComponent: () => import('./pages/admin/transactions/transactions.component').then(m => m.AdminTransactionsComponent) },
       { path: 'verifications', loadComponent: () => import('./pages/admin/verifications/verifications.component').then(m => m.VerificationsComponent) },
+      { path: 'corporate-hub', loadComponent: () => import('./pages/admin/corporate-hub/corporate-hub.component').then(m => m.CorporateHubComponent) },
       { path: 'withdrawals', loadComponent: () => import('./pages/admin/withdrawals/withdrawals').then(m => m.WithdrawalsComponent) },
       { path: 'manual-fund-approval', loadComponent: () => import('./pages/admin/manual-fund-approval/manual-fund-approval').then(m => m.ManualFundApprovalComponent) },
       { path: 'settings', loadComponent: () => import('./pages/admin/settings/settings').then(m => m.Settings) },
