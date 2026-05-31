@@ -38,7 +38,7 @@ export class ClientLayout {
 
   menuItems = [
     { label: 'Dashboard', icon: 'ri-dashboard-3-fill', link: '/client/dashboard' },
-    { label: 'Opportunities', icon: 'ri-funds-box-fill', link: '/client/products' },
+    { label: 'Investments', icon: 'ri-funds-box-fill', link: '/client/products' },
     { label: 'My Portfolio', icon: 'ri-pie-chart-2-fill', link: '/client/investments' },
     { label: 'Transactions', icon: 'ri-exchange-box-fill', link: '/client/transactions' },
   ];

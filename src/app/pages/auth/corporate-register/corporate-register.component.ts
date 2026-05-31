@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { AuthLayoutComponent } from '../../../layouts/auth-layout/auth-layout.component';
+import { AuthService } from '../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-corporate-register',
@@ -14,6 +15,7 @@ import { AuthLayoutComponent } from '../../../layouts/auth-layout/auth-layout.co
 export class CorporateRegisterComponent {
   private fb = inject(FormBuilder);
   private router = inject(Router);
+  private authService = inject(AuthService);
 
   corporateForm: FormGroup;
   showPassword = signal(false);
@@ -29,8 +31,6 @@ export class CorporateRegisterComponent {
 
   constructor() {
     this.corporateForm = this.fb.group({
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
       businessName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, this.passwordStrengthValidator.bind(this)]],
@@ -75,8 +75,6 @@ export class CorporateRegisterComponent {
       // Log the collected form data to the console as requested
       console.log('--- Corporate Registration Submitted ---');
       console.log('Payload:', {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
         businessName: formData.businessName,
         email: formData.email,
         password: '••••••••', // Mask for security in logs but log that it is captured
@@ -85,13 +83,32 @@ export class CorporateRegisterComponent {
       console.log('Raw Form Values:', formData);
       console.log('-----------------------------------------');
 
-      // Simulate API interaction
-      setTimeout(() => {
-        this.isProcessing.set(false);
-        this.isSuccess.set(true);
-        // Scroll to top to see success message if any
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 1500);
+      // Use the unified SignUp API
+      const payload = {
+        customerTypeId: 2, // 2 = Corporate
+        businessName: formData.businessName,
+        email: formData.email,
+        password: formData.password,
+        confirmPassword: formData.password, // Frontend only captures 1 password, backend expects confirmPassword too
+        phoneNumber: '00000000000' // Placeholder if not captured in the frontend yet
+      };
+
+      this.authService.signUp(payload).subscribe({
+        next: (response) => {
+          this.isProcessing.set(false);
+          if (response.success || response.boolean) {
+            this.isSuccess.set(true);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          } else {
+            this.errorMessage.set(response.message || 'Registration failed');
+          }
+        },
+        error: (err) => {
+          this.isProcessing.set(false);
+          this.errorMessage.set(err.error?.message || 'An error occurred during registration.');
+          console.error('Registration error:', err);
+        }
+      });
     } else {
       // Mark all controls as touched to trigger validation displays
       Object.keys(this.corporateForm.controls).forEach(key => {

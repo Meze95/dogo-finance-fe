@@ -79,6 +79,7 @@ export class RegisterComponent {
 
       const formData = this.registerForm.value;
       const payload = {
+        customerTypeId: 1, // 1 = Individual
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,

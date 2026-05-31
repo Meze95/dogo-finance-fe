@@ -103,4 +103,17 @@ export class AdminService {
   reviewManualFundingRequest(data: { requestId: number, status: 'Approved' | 'Rejected', adminNotes?: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/manual-funding/review`, data);
   }
+
+  // --- CORPORATE HUB ---
+  getCorporateRegistrations(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/corporate-registrations`);
+  }
+
+  reviewCorporateDocument(customerId: string | number, documentId: string | number, data: { approved: boolean, adminNotes?: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/corporate-registrations/${customerId}/documents/${documentId}/review`, data);
+  }
+
+  reviewCorporateRegistration(customerId: string | number, data: { approved: boolean, adminNotes?: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/corporate-registrations/${customerId}/review`, data);
+  }
 }

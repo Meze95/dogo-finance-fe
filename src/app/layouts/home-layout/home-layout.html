@@ -152,27 +152,19 @@
             </button>
             <div class="absolute top-full right-0 pt-3 hidden group-hover:block z-[100] min-w-[240px]">
               <div class="bg-white shadow-[0_20px_50px_rgba(3,14,101,0.18)] rounded-2xl p-4 border border-[var(--dogo-primary)]/8 flex flex-col gap-2">
-                <!-- Individual option -->
-                <a routerLink="/register" class="flex items-center space-x-3 p-2.5 rounded-xl hover:bg-[var(--dogo-cream)] transition-all group/item text-left">
-                  <div class="w-9 h-9 bg-[var(--dogo-cream)] rounded-lg flex items-center justify-center shrink-0">
-                    <i class="ri-user-3-line text-[var(--dogo-primary)] text-lg"></i>
-                  </div>
-                  <div>
-                    <p class="font-black text-[var(--dogo-dark)] text-[13px]">Individual Account</p>
-                    <p class="text-[9px] text-[var(--dogo-muted)] font-bold uppercase tracking-wider">Start Investing</p>
-                  </div>
-                </a>
-                
-                <!-- Corporate option -->
-                <a routerLink="/register/corporate" class="flex items-center space-x-3 p-2.5 rounded-xl hover:bg-[var(--dogo-cream)] transition-all group/item text-left">
-                  <div class="w-9 h-9 bg-[var(--dogo-cream)] rounded-lg flex items-center justify-center shrink-0">
-                    <i class="ri-briefcase-line text-[var(--dogo-primary)] text-lg"></i>
-                  </div>
-                  <div>
-                    <p class="font-black text-[var(--dogo-dark)] text-[13px]">Corporate Account</p>
-                    <p class="text-[9px] text-[var(--dogo-secondary)] font-extrabold uppercase tracking-wider">Coming Soon</p>
-                  </div>
-                </a>
+                @for(type of customerTypes(); track type.id) {
+                  <a [routerLink]="type.name === 'Corporate' ? '/register/corporate' : '/register'" class="flex items-center space-x-3 p-2.5 rounded-xl hover:bg-[var(--dogo-cream)] transition-all group/item text-left">
+                    <div class="w-9 h-9 bg-[var(--dogo-cream)] rounded-lg flex items-center justify-center shrink-0">
+                      <i [class]="type.name === 'Corporate' ? 'ri-briefcase-line' : 'ri-user-3-line'" class="text-[var(--dogo-primary)] text-lg"></i>
+                    </div>
+                    <div>
+                      <p class="font-black text-[var(--dogo-dark)] text-[13px]">{{type.name}} Account</p>
+                      <p class="text-[9px] text-[var(--dogo-muted)] font-bold uppercase tracking-wider">
+                        {{type.description}}
+                      </p>
+                    </div>
+                  </a> 
+                }
               </div>
             </div>
           </div>
@@ -229,12 +221,15 @@
             <button routerLink="/login" (click)="toggleMenu()" class="w-full py-4 border-2 border-[var(--dogo-primary)] text-[var(--dogo-primary)] font-black rounded-xl">Sign In</button>
             <div class="border border-[var(--dogo-primary)]/8 rounded-2xl p-4 bg-[var(--dogo-cream)]/50 space-y-3">
               <p class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Create Free Account</p>
-              <button routerLink="/register" (click)="toggleMenu()" class="w-full py-3.5 bg-[var(--dogo-primary)] text-white font-black rounded-xl shadow-md flex items-center justify-center gap-2 cursor-pointer">
-                <i class="ri-user-3-fill text-sm text-[var(--dogo-secondary)]"></i> Individual Account
-              </button>
-              <button routerLink="/register/corporate" (click)="toggleMenu()" class="w-full py-3.5 border-2 border-[var(--dogo-primary)]/10 bg-white text-[var(--dogo-dark)] font-black rounded-xl flex items-center justify-center gap-2 cursor-pointer">
-                <i class="ri-briefcase-fill text-sm text-[var(--dogo-muted)]"></i> Corporate <span class="text-[9px] font-extrabold uppercase bg-[var(--dogo-cream)] text-[var(--dogo-secondary)] px-2 py-0.5 rounded-full shrink-0">Soon</span>
-              </button>
+              @for(type of customerTypes(); track type.id) {
+                <button [routerLink]="type.name === 'Corporate' ? '/register/corporate' : '/register'" (click)="toggleMenu()" class="w-full py-3.5 bg-white text-[var(--dogo-dark)] font-black rounded-xl border-2 border-[var(--dogo-primary)]/10 flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:shadow-md transition-all">
+                  <i [class]="type.name === 'Corporate' ? 'ri-briefcase-fill text-sm text-[var(--dogo-muted)]' : 'ri-user-3-fill text-sm text-[var(--dogo-secondary)]'"></i> 
+                  {{type.name}} Account 
+                  @if(type.name === 'Corporate') {
+                    <span class="text-[9px] font-extrabold uppercase bg-[var(--dogo-cream)] text-[var(--dogo-secondary)] px-2 py-0.5 rounded-full shrink-0">Soon</span>
+                  }
+                </button>
+              }
             </div>
           } @else {
             <button [routerLink]="dashboardLink()" (click)="toggleMenu()" class="w-full py-4 bg-[var(--dogo-primary)] text-white font-black rounded-xl shadow-lg">Go to Dashboard</button>

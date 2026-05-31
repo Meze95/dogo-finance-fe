@@ -366,10 +366,9 @@
                           </div>
                           <h4 class="text-base font-black text-[var(--dogo-dark)] leading-snug">{{ acc.bankName }}</h4>
                           <p class="text-sm font-bold text-[var(--dogo-dark)]/70 mt-1">{{ acc.accountNumber }}</p>
-                          <p class="text-xs text-[var(--dogo-muted)] mt-0.5 uppercase tracking-wider font-semibold">{{ acc.accountName }}</p>
-                          <p class="text-[10px] text-[var(--dogo-muted)]/80 mt-2 font-medium">Branch: {{ acc.bankBranch }}</p>
+                          <p class="text-xs text-[var(--dogo-muted)] uppercase tracking-wide font-medium mt-1">{{ acc.accountName }}</p>
                         </div>
-                        <button (click)="deleteNaira(acc.accountNumber)" class="text-red-400 hover:text-red-600 p-2 cursor-pointer transition-colors text-lg z-20">
+                        <button (click)="deleteNaira(acc.customerBankId)" class="text-red-400 hover:text-red-600 p-2 cursor-pointer transition-colors text-lg z-20">
                           <i class="ri-delete-bin-line"></i>
                         </button>
                       </div>
@@ -456,7 +455,7 @@
                             </div>
                           </div>
                         </div>
-                        <button (click)="deleteDom(acc.accountNumber)" class="text-red-400 hover:text-red-600 p-2 cursor-pointer transition-colors text-lg z-20 shrink-0 self-start">
+                        <button (click)="deleteDom(acc.customerBankId)" class="text-red-400 hover:text-red-600 p-2 cursor-pointer transition-colors text-lg z-20 shrink-0 self-start">
                           <i class="ri-delete-bin-line"></i>
                         </button>
                       </div>
@@ -488,10 +487,10 @@
                 <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Account Name</label>
                 <input type="text" [value]="newNairaForm().accountName" (input)="updateNairaField('accountName', $any($event.target).value)" placeholder="Bayero Corporate Reserves Ltd" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
               </div>
-              <div>
+              <!-- <div>
                 <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Bank Branch</label>
                 <input type="text" [value]="newNairaForm().bankBranch" (input)="updateNairaField('bankBranch', $any($event.target).value)" placeholder="Lagos Main Branch" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
-              </div>
+              </div> -->
             </div>
             <div class="flex justify-end gap-3 pt-4 border-t border-[var(--dogo-primary)]/5 mt-6">
               <app-button (click)="cancelAddNaira()" variant="secondary" [disabled]="isSavingNaira()">Cancel</app-button>
@@ -586,14 +585,14 @@
                 </div>
               } @else {
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  @for(sig of signatories(); track sig.email) {
+                  @for(sig of signatories(); track sig.businessEmail) {
                     <div class="bg-white border border-[var(--dogo-primary)]/10 p-6 rounded-3xl relative overflow-hidden group hover:border-[var(--dogo-secondary)] transition-all">
                       <div class="absolute inset-0 bg-gradient-to-r from-[var(--dogo-primary)]/5 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity"></div>
                       <div class="flex justify-between items-start relative z-10">
                         <div class="flex items-center space-x-4">
                           <div class="w-14 h-14 rounded-2xl bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 flex items-center justify-center font-black text-[var(--dogo-primary)] overflow-hidden shrink-0">
-                            @if(sig.passportPhoto) {
-                              <img [src]="sig.passportPhoto" alt="passport" class="w-full h-full object-cover" />
+                            @if(sig.passportPhotoUrl) {
+                              <img [src]="sig.passportPhotoUrl" alt="passport" class="w-full h-full object-cover" />
                             } @else {
                               <span class="text-xl">{{ sig.firstName[0] }}{{ sig.surname[0] }}</span>
                             }
@@ -605,7 +604,7 @@
                             <p class="text-xs text-[var(--dogo-muted)] font-semibold mt-0.5">{{ sig.designation }}</p>
                             <div class="flex flex-wrap gap-1.5 mt-2">
                               <app-badge variant="info">Class {{ sig.signingClass }}</app-badge>
-                              <app-badge [variant]="getBadgeVariant(sig.status)">{{ sig.status }}</app-badge>
+                              <app-badge [variant]="getBadgeVariant(sig.isActive ? 'active' : 'inactive')">{{ sig.isActive ? 'Active' : 'Inactive' }}</app-badge>
                             </div>
                           </div>
                         </div>
@@ -613,8 +612,8 @@
                           <button (click)="viewPerson(sig)" class="text-[var(--dogo-primary)] hover:text-[var(--dogo-secondary)] p-2 cursor-pointer transition-colors text-lg" title="View Full Profile">
                             <i class="ri-eye-line"></i>
                           </button>
-                          @if(sig.email !== 'malik@bayerocorp.com') {
-                            <button (click)="removeSignatory(sig.email)" class="text-red-400 hover:text-red-600 p-2 cursor-pointer transition-colors text-lg" title="Remove Signatory">
+                          @if(sig.businessEmail !== 'malik@bayerocorp.com') {
+                            <button (click)="removeSignatory(sig.signatoryId)" class="text-red-400 hover:text-red-600 p-2 cursor-pointer transition-colors text-lg" title="Remove Signatory">
                               <i class="ri-delete-bin-line"></i>
                             </button>
                           }
@@ -642,14 +641,14 @@
                 </div>
               } @else {
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  @for(dir of directors(); track dir.email) {
+                  @for(dir of directors(); track dir.businessEmail) {
                     <div class="bg-white border border-[var(--dogo-primary)]/10 p-6 rounded-3xl relative overflow-hidden group hover:border-[var(--dogo-secondary)] transition-all">
                       <div class="absolute inset-0 bg-gradient-to-r from-[var(--dogo-primary)]/5 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity"></div>
                       <div class="flex justify-between items-start relative z-10">
                         <div class="flex items-center space-x-4">
                           <div class="w-14 h-14 rounded-2xl bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 flex items-center justify-center font-black text-[var(--dogo-primary)] overflow-hidden shrink-0">
-                            @if(dir.passportPhoto) {
-                              <img [src]="dir.passportPhoto" alt="passport" class="w-full h-full object-cover" />
+                            @if(dir.passportPhotoUrl) {
+                              <img [src]="dir.passportPhotoUrl" alt="passport" class="w-full h-full object-cover" />
                             } @else {
                               <span class="text-xl">{{ dir.firstName[0] }}{{ dir.surname[0] }}</span>
                             }
@@ -661,7 +660,7 @@
                             <p class="text-xs text-[var(--dogo-muted)] font-semibold mt-0.5">{{ dir.designation }}</p>
                             <div class="flex flex-wrap gap-1.5 mt-2">
                               <app-badge variant="info">Class {{ dir.signingClass }}</app-badge>
-                              <app-badge [variant]="getBadgeVariant(dir.status)">{{ dir.status }}</app-badge>
+                              <app-badge [variant]="getBadgeVariant(dir.isActive ? 'active' : 'inactive')">{{ dir.isActive ? 'Active' : 'Inactive' }}</app-badge>
                             </div>
                           </div>
                         </div>
@@ -669,8 +668,8 @@
                           <button (click)="viewPerson(dir)" class="text-[var(--dogo-primary)] hover:text-[var(--dogo-secondary)] p-2 cursor-pointer transition-colors text-lg" title="View Full Profile">
                             <i class="ri-eye-line"></i>
                           </button>
-                          @if(dir.email !== 'ado@bayerocorp.com') {
-                            <button (click)="removeDirector(dir.email)" class="text-red-400 hover:text-red-600 p-2 cursor-pointer transition-colors text-lg" title="Remove Director">
+                          @if(dir.businessEmail !== 'ado@bayerocorp.com') {
+                            <button (click)="removeDirector(dir.directorId)" class="text-red-400 hover:text-red-600 p-2 cursor-pointer transition-colors text-lg" title="Remove Director">
                               <i class="ri-delete-bin-line"></i>
                             </button>
                           }
@@ -696,8 +695,8 @@
               <!-- Passport photo upload -->
               <div class="md:col-span-3 flex flex-col sm:flex-row items-center gap-6 bg-[var(--dogo-cream)]/20 p-5 rounded-3xl border border-[var(--dogo-primary)]/5">
                 <div class="w-24 h-24 rounded-2xl bg-white border border-[var(--dogo-primary)]/10 flex items-center justify-center overflow-hidden shrink-0 relative group">
-                  @if(newSignatoryForm().passportPhoto) {
-                    <img [src]="newSignatoryForm().passportPhoto" alt="passport preview" class="w-full h-full object-cover" />
+                  @if(newSignatoryForm().passportPhotoUrl) {
+                    <img [src]="newSignatoryForm().passportPhotoUrl" alt="passport preview" class="w-full h-full object-cover" />
                   } @else {
                     <i class="ri-user-line text-4xl text-[var(--dogo-primary)]/30"></i>
                   }
@@ -825,8 +824,8 @@
                 <div class="space-y-3">
                   <h4 class="text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60">Signature & Date Card *</h4>
                   <div class="h-32 bg-white border border-dashed border-[var(--dogo-primary)]/10 rounded-2xl flex flex-col items-center justify-center p-4 relative group hover:border-[var(--dogo-secondary)] transition-all">
-                    @if(newSignatoryForm().signatureImage) {
-                      <img [src]="newSignatoryForm().signatureImage" alt="signature" class="h-full object-contain" />
+                    @if(newSignatoryForm().signatureCardUrl) {
+                      <img [src]="newSignatoryForm().signatureCardUrl" alt="signature" class="h-full object-contain" />
                       <label class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs font-bold rounded-2xl cursor-pointer transition-opacity">
                         <span>Replace Signature</span>
                         <input type="file" accept="image/*" class="hidden" (change)="handleSignatureUpload($event, false)" />
@@ -845,12 +844,16 @@
                 <div class="space-y-3">
                   <h4 class="text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60">Identity Document Scan *</h4>
                   <div class="h-32 bg-white border border-dashed border-[var(--dogo-primary)]/10 rounded-2xl flex flex-col items-center justify-center p-4 relative group hover:border-[var(--dogo-secondary)] transition-all">
-                    @if(newSignatoryForm().idDocument) {
-                      <div class="flex items-center space-x-2 text-[var(--dogo-primary)]">
-                        <i class="ri-file-text-line text-3xl"></i>
-                        <span class="text-xs font-bold text-ellipsis overflow-hidden max-w-[200px]">ID Document Loaded</span>
-                      </div>
-                      <label class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs font-bold rounded-2xl cursor-pointer transition-opacity">
+                    @if(newSignatoryForm().identityDocumentUrl) {
+                      @if(newSignatoryForm().identityDocumentUrl.startsWith('data:image/')) {
+                        <img [src]="newSignatoryForm().identityDocumentUrl" alt="id document" class="h-full object-contain" />
+                      } @else {
+                        <div class="flex flex-col items-center justify-center space-y-1 text-[var(--dogo-primary)] group-hover:opacity-0 transition-opacity">
+                          <i class="ri-file-text-line text-3xl"></i>
+                          <span class="text-[10px] font-bold">Document Loaded</span>
+                        </div>
+                      }
+                      <label class="absolute inset-0 bg-black/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs font-bold rounded-2xl cursor-pointer transition-all">
                         <span>Replace File</span>
                         <input type="file" accept="image/*,application/pdf" class="hidden" (change)="handleIdUpload($event, false)" />
                       </label>
@@ -885,8 +888,8 @@
               <!-- Passport photo upload -->
               <div class="md:col-span-3 flex flex-col sm:flex-row items-center gap-6 bg-[var(--dogo-cream)]/20 p-5 rounded-3xl border border-[var(--dogo-primary)]/5">
                 <div class="w-24 h-24 rounded-2xl bg-white border border-[var(--dogo-primary)]/10 flex items-center justify-center overflow-hidden shrink-0 relative group">
-                  @if(newDirectorForm().passportPhoto) {
-                    <img [src]="newDirectorForm().passportPhoto" alt="passport preview" class="w-full h-full object-cover" />
+                  @if(newDirectorForm().passportPhotoUrl) {
+                    <img [src]="newDirectorForm().passportPhotoUrl" alt="passport preview" class="w-full h-full object-cover" />
                   } @else {
                     <i class="ri-user-line text-4xl text-[var(--dogo-primary)]/30"></i>
                   }
@@ -924,7 +927,7 @@
               </div>
               <div>
                 <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Date of Birth *</label>
-                <input type="date" [value]="newDirectorForm().dob" (input)="updateDirectorField('dob', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+                <input type="date" [value]="newDirectorForm().dateOfBirth" (input)="updateDirectorField('dateOfBirth', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
               </div>
 
               <div class="md:col-span-3">
@@ -934,11 +937,11 @@
 
               <div>
                 <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Business Email *</label>
-                <input type="email" [value]="newDirectorForm().email" (input)="updateDirectorField('email', $any($event.target).value)" placeholder="ado@bayerocorp.com" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+                <input type="email" [value]="newDirectorForm().businessEmail" (input)="updateDirectorField('businessEmail', $any($event.target).value)" placeholder="ado@bayerocorp.com" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
               </div>
               <div>
                 <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Phone Number *</label>
-                <input type="text" [value]="newDirectorForm().phone" (input)="updateDirectorField('phone', $any($event.target).value)" placeholder="0805 987 6543" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+                <input type="text" [value]="newDirectorForm().phoneNumber" (input)="updateDirectorField('phoneNumber', $any($event.target).value)" placeholder="0805 987 6543" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
               </div>
               <div>
                 <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">BVN (Bank Verification Number) *</label>
@@ -976,7 +979,7 @@
 
               <div>
                 <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Identity Type *</label>
-                <select [value]="newDirectorForm().idType" (change)="updateDirectorField('idType', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all">
+                <select [value]="newDirectorForm().identityType" (change)="updateDirectorField('identityType', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all">
                   <option value="Driver's License">Driver's License</option>
                   <option value="National ID Card">National ID Card</option>
                   <option value="Voter's Card">Voter's Card</option>
@@ -1014,8 +1017,8 @@
                 <div class="space-y-3">
                   <h4 class="text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60">Signature & Date Card *</h4>
                   <div class="h-32 bg-white border border-dashed border-[var(--dogo-primary)]/10 rounded-2xl flex flex-col items-center justify-center p-4 relative group hover:border-[var(--dogo-secondary)] transition-all">
-                    @if(newDirectorForm().signatureImage) {
-                      <img [src]="newDirectorForm().signatureImage" alt="signature" class="h-full object-contain" />
+                    @if(newDirectorForm().signatureCardUrl) {
+                      <img [src]="newDirectorForm().signatureCardUrl" alt="signature" class="h-full object-contain" />
                       <label class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs font-bold rounded-2xl cursor-pointer transition-opacity">
                         <span>Replace Signature</span>
                         <input type="file" accept="image/*" class="hidden" (change)="handleSignatureUpload($event, true)" />
@@ -1034,12 +1037,16 @@
                 <div class="space-y-3">
                   <h4 class="text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60">Identity Document Scan *</h4>
                   <div class="h-32 bg-white border border-dashed border-[var(--dogo-primary)]/10 rounded-2xl flex flex-col items-center justify-center p-4 relative group hover:border-[var(--dogo-secondary)] transition-all">
-                    @if(newDirectorForm().idDocument) {
-                      <div class="flex items-center space-x-2 text-[var(--dogo-primary)]">
-                        <i class="ri-file-text-line text-3xl"></i>
-                        <span class="text-xs font-bold text-ellipsis overflow-hidden max-w-[200px]">ID Document Loaded</span>
-                      </div>
-                      <label class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs font-bold rounded-2xl cursor-pointer transition-opacity">
+                    @if(newDirectorForm().identityDocumentUrl) {
+                      @if(newDirectorForm().identityDocumentUrl.startsWith('data:image/')) {
+                        <img [src]="newDirectorForm().identityDocumentUrl" alt="id document" class="h-full object-contain" />
+                      } @else {
+                        <div class="flex flex-col items-center justify-center space-y-1 text-[var(--dogo-primary)] group-hover:opacity-0 transition-opacity">
+                          <i class="ri-file-text-line text-3xl"></i>
+                          <span class="text-[10px] font-bold">Document Loaded</span>
+                        </div>
+                      }
+                      <label class="absolute inset-0 bg-black/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs font-bold rounded-2xl cursor-pointer transition-all">
                         <span>Replace File</span>
                         <input type="file" accept="image/*,application/pdf" class="hidden" (change)="handleIdUpload($event, true)" />
                       </label>
@@ -1085,8 +1092,8 @@
           <div class="p-6 space-y-6 overflow-y-auto flex-1">
             <div class="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
               <div class="w-32 h-32 rounded-3xl bg-white border border-[var(--dogo-primary)]/10 flex items-center justify-center overflow-hidden shrink-0">
-                @if(selectedPerson().passportPhoto) {
-                  <img [src]="selectedPerson().passportPhoto" alt="passport" class="w-full h-full object-cover" />
+                @if(selectedPerson().passportPhotoUrl) {
+                  <img [src]="selectedPerson().passportPhotoUrl" alt="passport" class="w-full h-full object-cover" />
                 } @else {
                   <i class="ri-user-line text-5xl text-[var(--dogo-primary)]/20"></i>
                 }
@@ -1098,7 +1105,7 @@
                 </div>
                 <div>
                   <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Date of Birth</span>
-                  <span class="font-bold text-[var(--dogo-dark)]">{{ selectedPerson().dob }}</span>
+                  <span class="font-bold text-[var(--dogo-dark)]">{{ selectedPerson().dateOfBirth | date:'longDate' }}</span>
                 </div>
                 <div>
                   <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Gender</span>
@@ -1110,11 +1117,11 @@
                 </div>
                 <div>
                   <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Business Email</span>
-                  <span class="font-bold text-[var(--dogo-dark)]">{{ selectedPerson().email }}</span>
+                  <span class="font-bold text-[var(--dogo-dark)]">{{ selectedPerson().businessEmail }}</span>
                 </div>
                 <div>
                   <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Phone Number</span>
-                  <span class="font-bold text-[var(--dogo-dark)]">{{ selectedPerson().phone }}</span>
+                  <span class="font-bold text-[var(--dogo-dark)]">{{ selectedPerson().phoneNumber }}</span>
                 </div>
                 <div>
                   <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">BVN Number</span>
@@ -1122,7 +1129,7 @@
                 </div>
                 <div>
                   <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Identity Document</span>
-                  <span class="font-bold text-[var(--dogo-dark)]">{{ selectedPerson().idType }} ({{ selectedPerson().idNumber }})</span>
+                  <span class="font-bold text-[var(--dogo-dark)]">{{ selectedPerson().identityType }} ({{ selectedPerson().idNumber }})</span>
                 </div>
                 <div class="sm:col-span-2">
                   <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Residential Address</span>
@@ -1141,8 +1148,8 @@
               <div class="space-y-2">
                 <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Signature & Date Card</span>
                 <div class="h-36 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl flex items-center justify-center p-4">
-                  @if(selectedPerson().signatureImage) {
-                    <img [src]="selectedPerson().signatureImage" alt="sig" class="h-full object-contain" />
+                  @if(selectedPerson().signatureCardUrl) {
+                    <img [src]="selectedPerson().signatureCardUrl" alt="sig" class="h-full object-contain" />
                   } @else {
                     <span class="text-xs text-[var(--dogo-muted)] font-semibold">No signature uploaded</span>
                   }
@@ -1153,8 +1160,8 @@
               <div class="space-y-2">
                 <span class="block text-[10px] uppercase tracking-wider font-extrabold text-[var(--dogo-muted)]">Identity Document scan</span>
                 <div class="h-36 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl flex items-center justify-center p-4 overflow-hidden">
-                  @if(selectedPerson().idDocument) {
-                    <img [src]="selectedPerson().idDocument" alt="id doc" class="h-full w-full object-cover" />
+                  @if(selectedPerson().identityDocumentUrl) {
+                    <img [src]="selectedPerson().identityDocumentUrl" alt="id doc" class="h-full w-full object-cover" />
                   } @else {
                     <span class="text-xs text-[var(--dogo-muted)] font-semibold">No identity scan uploaded</span>
                   }
@@ -1173,62 +1180,110 @@
 
     <!-- Tab 5: Corporate Security Settings -->
     @if(activeTab() === 'security') {
-      <div class="space-y-6">
-        <app-card title="Authentication Security" subtitle="Configure secure settings for your corporate profile access">
-          <div class="flex items-center justify-between gap-6 py-2">
-            <div>
-              <h4 class="text-sm font-bold text-[var(--dogo-dark)] leading-snug">Enforce Two-Factor Authentication (2FA)</h4>
-              <p class="text-xs text-[var(--dogo-muted)] leading-relaxed mt-1">Requires all signatories to input a 6-digit one-time code on authentication requests.</p>
-            </div>
-            <button (click)="toggleTwoFactor()" [disabled]="isUpdatingTwoFactor()" class="relative shrink-0 w-12 h-6 rounded-full transition-colors duration-300 focus:outline-none cursor-pointer"
-              [class.bg-[var(--dogo-primary)]]="isTwoFactorEnabled()" [class.bg-gray-200]="!isTwoFactorEnabled()">
-              <span class="absolute left-1 top-1 w-4 h-4 rounded-full bg-white transition-transform duration-300 flex items-center justify-center shadow-md"
-                [style.transform]="isTwoFactorEnabled() ? 'translateX(1.5rem)' : 'none'">
+      <div class="grid lg:grid-cols-[1fr_350px] gap-8 animate-fade-in">
+        <!-- Left Column -->
+        <div class="space-y-6">
+          
+          <!-- High Security Mode Card -->
+          <div class="bg-white rounded-[32px] p-2 border border-[var(--dogo-primary)]/5 shadow-sm">
+            <div class="bg-[#f8f9fc] rounded-[28px] p-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+              <div>
+                <h4 class="text-[15px] font-black text-[var(--dogo-dark)] leading-snug">High-Security Mode</h4>
+                <p class="text-xs font-medium text-[var(--dogo-muted)] mt-1">Add Email OTP to PIN for Investments & withdrawals</p>
+              </div>
+              <button (click)="toggleTwoFactor()" [disabled]="isUpdatingTwoFactor()" class="px-6 py-2.5 rounded-[14px] text-[10px] font-black tracking-widest text-white transition-all cursor-pointer shadow-md"
+                [class.bg-[#f63d46]]="isTwoFactorEnabled()" [class.hover:bg-[#e0343c]]="isTwoFactorEnabled()" [class.shadow-[#f63d46]/30]="isTwoFactorEnabled()"
+                [class.bg-[var(--dogo-primary)]]="!isTwoFactorEnabled()" [class.hover:bg-[var(--dogo-secondary)]]="!isTwoFactorEnabled()" [class.shadow-[var(--dogo-primary)]/30]="!isTwoFactorEnabled()">
                 @if(isUpdatingTwoFactor()) {
-                  <i class="ri-loader-4-line animate-spin text-[8px] text-[var(--dogo-primary)]"></i>
+                  <i class="ri-loader-4-line animate-spin text-sm"></i>
+                } @else {
+                  {{ isTwoFactorEnabled() ? 'DISABLE' : 'ENABLE' }}
                 }
-              </span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Transaction PIN Card -->
+          <div class="bg-white rounded-[32px] p-8 border border-[var(--dogo-primary)]/5 shadow-sm relative">
+            <div class="absolute top-8 right-8 w-10 h-10 rounded-2xl bg-[#f8f9fc] flex items-center justify-center">
+              <i class="ri-shield-keyhole-line text-[var(--dogo-primary)] text-lg"></i>
+            </div>
+            
+            <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--dogo-primary)]/70 mb-8">TRANSACTION PIN</h3>
+            
+            <div class="bg-[#f8f9fc] rounded-[24px] p-6 flex justify-between items-center mb-8">
+              <div>
+                <h4 class="text-[15px] font-black text-[var(--dogo-dark)]">Transaction PIN</h4>
+                <p class="text-xs font-medium text-[var(--dogo-muted)] mt-1">Required for withdrawals and settings changes</p>
+              </div>
+              @if(hasPin()) {
+                <span class="px-4 py-1.5 rounded-full bg-[#e8f5ed] text-[#22a05b] text-[9px] font-black tracking-widest">ACTIVE</span>
+              }
+            </div>
+
+            @if(!isEditingPin()) {
+              <button (click)="startEditPin()" class="px-5 py-2.5 rounded-[14px] border border-[var(--dogo-primary)]/10 text-[10px] font-black tracking-[0.1em] text-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)] hover:text-white transition-all cursor-pointer shadow-sm">
+                {{ hasPin() ? 'CHANGE TRANSACTION PIN' : 'SETUP TRANSACTION PIN' }}
+              </button>
+            } @else {
+              <div class="space-y-5 max-w-[450px]">
+                @if(hasPin()) {
+                  <div>
+                    <label class="block text-[10px] font-black uppercase tracking-[0.1em] text-[#727d97] mb-2">CURRENT PIN</label>
+                    <input type="password" maxlength="6" autocomplete="new-password" [value]="pinForm().oldPin" (input)="updatePinField('oldPin', $any($event.target).value)" placeholder="•  •  •  •  •  •" class="w-full h-[60px] bg-[#ebf0fa] border border-[#dce4f5] rounded-[14px] px-6 text-center tracking-[1em] font-extrabold text-2xl text-[#050b4a] focus:outline-none focus:border-[#050b4a]/30 transition-all shadow-inner" />
+                  </div>
+                }
+                <div>
+                  <label class="block text-[10px] font-black uppercase tracking-[0.1em] text-[#727d97] mb-2">NEW PIN</label>
+                  <input type="password" maxlength="6" autocomplete="new-password" [value]="pinForm().newPin" (input)="updatePinField('newPin', $any($event.target).value)" placeholder="•  •  •  •  •  •" class="w-full h-[60px] bg-[#ebf0fa] border border-[#dce4f5] rounded-[14px] px-6 text-center tracking-[1em] font-extrabold text-2xl text-[#050b4a] focus:outline-none focus:border-[#050b4a]/30 transition-all shadow-inner" />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-black uppercase tracking-[0.1em] text-[#727d97] mb-2">CONFIRM PIN</label>
+                  <input type="password" maxlength="6" autocomplete="new-password" [value]="pinForm().confirmPin" (input)="updatePinField('confirmPin', $any($event.target).value)" placeholder="•  •  •  •  •  •" class="w-full h-[60px] bg-white border border-[#e5e9f2] rounded-[14px] px-6 text-center tracking-[1em] font-extrabold text-2xl text-[#8b98b9] focus:outline-none focus:border-[#050b4a]/30 transition-all shadow-[0_2px_10px_rgba(0,0,0,0.02)]" />
+                </div>
+                @if(pinError()) {
+                  <span class="text-red-500 text-xs font-semibold block">{{ pinError() }}</span>
+                }
+                <div class="flex gap-4 pt-4">
+                  <button (click)="cancelEditPin()" [disabled]="isUpdatingPin()" class="px-8 py-3.5 rounded-[12px] bg-white text-[10px] font-black tracking-widest text-[#050b4a] hover:bg-[#f8f9fc] transition-colors cursor-pointer border border-[#e5e9f2] shadow-sm">CANCEL</button>
+                  <button (click)="savePin()" [disabled]="isUpdatingPin()" class="px-8 py-3.5 rounded-[12px] bg-[#050b4a] text-[10px] font-black tracking-widest text-white hover:bg-[#030730] transition-colors cursor-pointer shadow-lg shadow-[#050b4a]/20">
+                    @if(isUpdatingPin()) { <i class="ri-loader-4-line animate-spin"></i> } @else { SAVE PIN }
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="space-y-6">
+          
+          <!-- Upgrade Card -->
+          <div class="bg-[#050b4a] rounded-[36px] p-10 text-white relative overflow-hidden shadow-xl shadow-[#050b4a]/20">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-white/[0.02] rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none"></div>
+            <h3 class="text-[13px] font-medium leading-[1.8] relative z-10 text-white/90">
+              Upgrade your profile to Tier 3 to increase your daily Halal investment limit to ₦50 Million and unlock premium Sukuk rates.
+            </h3>
+            <button class="mt-8 px-6 py-3 rounded-2xl bg-[#0051a8] hover:bg-[#00438a] transition-colors text-[10px] font-black tracking-[0.15em] text-white cursor-pointer relative z-10 shadow-lg shadow-[#0051a8]/30">
+              UPGRADE NOW
             </button>
           </div>
-        </app-card>
 
-        <app-card title="Corporate Transaction PIN" subtitle="Required to authorize deposits, portfolio investments, and withdrawals">
-          @if(!isEditingPin()) {
-            <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 py-2">
-              <div>
-                <h4 class="text-sm font-bold text-[var(--dogo-dark)] leading-snug">Security Transaction PIN</h4>
-                <p class="text-xs text-[var(--dogo-muted)] leading-relaxed mt-1">Transaction authorizations are locked behind a six-digit secure numerical PIN.</p>
-              </div>
-              <app-button (click)="startEditPin()" variant="secondary" size="sm" icon="ri-key-line">
-                {{ hasPin() ? 'Change PIN' : 'Setup PIN' }}
-              </app-button>
+          <!-- Support Center Card -->
+          <div class="bg-[#fcfdfd] border border-[var(--dogo-primary)]/5 rounded-[36px] p-8 shadow-sm relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 opacity-5 pointer-events-none">
+              <i class="ri-customer-service-2-line text-9xl"></i>
             </div>
-          } @else {
-            <div class="space-y-6 py-2 max-w-md">
-              @if(hasPin()) {
-                <div>
-                  <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Current PIN</label>
-                  <input type="password" maxlength="6" [value]="pinForm().oldPin" (input)="updatePinField('oldPin', $any($event.target).value)" placeholder="••••••" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 text-center tracking-[1em] font-extrabold text-lg focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
-                </div>
-              }
-              <div>
-                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">New Security PIN (6 Digits)</label>
-                <input type="password" maxlength="6" [value]="pinForm().newPin" (input)="updatePinField('newPin', $any($event.target).value)" placeholder="••••••" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 text-center tracking-[1em] font-extrabold text-lg focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
-              </div>
-              <div>
-                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Confirm New PIN</label>
-                <input type="password" maxlength="6" [value]="pinForm().confirmPin" (input)="updatePinField('confirmPin', $any($event.target).value)" placeholder="••••••" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 text-center tracking-[1em] font-extrabold text-lg focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
-              </div>
-              @if(pinError()) {
-                <span class="text-red-500 text-xs font-semibold block">{{ pinError() }}</span>
-              }
-              <div class="flex justify-end gap-3 pt-4 border-t border-[var(--dogo-primary)]/5 mt-6">
-                <app-button (click)="cancelEditPin()" variant="secondary" [disabled]="isUpdatingPin()">Cancel</app-button>
-                <app-button (click)="savePin()" variant="primary" [loading]="isUpdatingPin()">Update PIN</app-button>
-              </div>
-            </div>
-          }
-        </app-card>
+            <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--dogo-primary)]/70 mb-6">SUPPORT CENTER</h3>
+            <p class="text-[13px] font-medium italic text-[var(--dogo-muted)] leading-relaxed mb-8 pr-4">
+              Our Shariah Advisory team and Customer Support are active Monday - Friday, 9AM - 5PM.
+            </p>
+            <button class="w-full py-3.5 rounded-2xl bg-white text-[10px] font-black tracking-widest text-[var(--dogo-primary)] hover:bg-[#f8f9fc] transition-colors border border-[var(--dogo-primary)]/10 shadow-sm flex items-center justify-center gap-2 cursor-pointer relative z-10">
+              <i class="ri-customer-service-2-fill text-lg"></i> LIVE SUPPORT CHAT
+            </button>
+          </div>
+
+        </div>
       </div>
     }
   </div>

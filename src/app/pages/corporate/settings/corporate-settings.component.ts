@@ -1,10 +1,14 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BadgeComponent } from '../../../shared/components/ui/badge.component';
 import { ButtonComponent } from '../../../shared/components/ui/button.component';
 import { CardComponent } from '../../../shared/components/ui/card.component';
 import { DropdownComponent, DropdownOption } from '../../../shared/components/ui/dropdown.component';
+
+import { CustomerService } from '../../../shared/services/customer.service';
+import { BankService } from '../../../shared/services/bank.service';
+import { AuthService } from '../../../shared/services/auth.service';
 
 declare var Swal: any;
 
@@ -17,7 +21,11 @@ export type CorporateSettingsTab = 'profile' | 'verification' | 'banks' | 'signa
   templateUrl: './corporate-settings.component.html',
   styleUrl: './corporate-settings.component.css'
 })
-export class CorporateSettingsComponent {
+export class CorporateSettingsComponent implements OnInit {
+  private customerService = inject(CustomerService);
+  private bankService = inject(BankService);
+  private authService = inject(AuthService);
+
   activeTab = signal<CorporateSettingsTab>('profile');
 
   constructor() {
@@ -31,6 +39,115 @@ export class CorporateSettingsComponent {
     }
   }
 
+  ngOnInit() {
+    this.loadCorporateProfile();
+    this.loadPrimaryContact();
+    this.loadVerifications();
+    this.loadAvailableBanks();
+    this.loadBankAccounts();
+    this.loadSignatories();
+    this.loadDirectors();
+  }
+
+  loadSignatories() {
+    this.customerService.getCorporateSignatories().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.signatories.set(res.data);
+        }
+      },
+      error: (err) => console.error('Failed to load signatories', err)
+    });
+  }
+
+  loadDirectors() {
+    this.customerService.getCorporateDirectors().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.directors.set(res.data);
+        }
+      },
+      error: (err) => console.error('Failed to load directors', err)
+    });
+  }
+
+  loadAvailableBanks() {
+    this.bankService.getBanks().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.availableBanks.set(res.data);
+        }
+      },
+      error: (err) => console.error('Failed to load banks', err)
+    });
+  }
+
+  loadBankAccounts() {
+    this.bankService.getMyBanks().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          const naira = res.data.filter((b: any) => !b.currencyCode || b.currencyCode === 'NGN');
+          const dom = res.data.filter((b: any) => b.currencyCode && b.currencyCode !== 'NGN');
+          this.nairaAccounts.set(naira);
+          this.domiciliaryAccounts.set(dom);
+        }
+      },
+      error: (err) => console.error('Failed to load user banks', err)
+    });
+  }
+
+  loadVerifications() {
+    this.customerService.getCorporateVerifications().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.verifications.set(res.data);
+          localStorage.setItem('corporate_verifications', JSON.stringify(res.data));
+        }
+      },
+      error: (err) => console.error('Failed to load verifications', err)
+    });
+  }
+
+  loadPrimaryContact() {
+    this.customerService.getPrimaryContact().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.primaryContact.set({
+            fullName: res.data.fullName || '',
+            email: res.data.email || '',
+            phone: res.data.phone || ''
+          });
+        }
+      },
+      error: (err) => console.error('Failed to load primary contact', err)
+    });
+  }
+
+  loadCorporateProfile() {
+    this.customerService.getCorporateProfile().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.companyProfile.set({
+            companyName: res.data.companyName || '',
+            registrationNumber: res.data.registrationNumber || '',
+            dateOfIncorporation: res.data.dateOfIncorporation ? res.data.dateOfIncorporation.substring(0, 10) : '',
+            natureOfBusiness: res.data.natureOfBusiness || '',
+            address: res.data.address || '',
+            entityType: res.data.entityType || '',
+            otherEntityType: res.data.otherEntityType || '',
+            phone: res.data.phone || '',
+            tin: res.data.tin || '',
+            email: res.data.email || '',
+            annualTurnover: res.data.annualTurnover || '',
+            sourceOfFunds: res.data.sourceOfFunds || '',
+            clientSegmentation: res.data.clientSegmentation || ''
+          });
+        }
+      },
+      error: (err) => console.error('Failed to load corporate profile', err)
+    });
+  }
+
   loadStateFromStorage() {
     if (typeof window === 'undefined') return;
     
@@ -41,20 +158,6 @@ export class CorporateSettingsComponent {
       localStorage.setItem('corporate_verifications', JSON.stringify(this.verifications()));
     }
 
-    const storedNaira = localStorage.getItem('corporate_naira_accounts');
-    if (storedNaira) {
-      this.nairaAccounts.set(JSON.parse(storedNaira));
-    } else {
-      localStorage.setItem('corporate_naira_accounts', JSON.stringify([]));
-    }
-
-    const storedDom = localStorage.getItem('corporate_dom_accounts');
-    if (storedDom) {
-      this.domiciliaryAccounts.set(JSON.parse(storedDom));
-    } else {
-      localStorage.setItem('corporate_dom_accounts', JSON.stringify([]));
-    }
-
     this.checkSettlementLinkVerification();
   }
 
@@ -63,19 +166,19 @@ export class CorporateSettingsComponent {
   isEditingProfile = signal(false);
   isUpdatingProfile = signal(false);
   companyProfile = signal({
-    companyName: 'Bayero Corporate Reserves Ltd',
-    registrationNumber: 'RC-1294819',
-    dateOfIncorporation: '2018-05-20',
-    natureOfBusiness: 'Commodity Trading & Asset Placements',
-    address: '22 Alhaji Kanike Close, Off Awolowo Road, Ikoyi, Lagos',
-    entityType: 'Ltd',
+    companyName: '',
+    registrationNumber: '',
+    dateOfIncorporation: '',
+    natureOfBusiness: '',
+    address: '',
+    entityType: '',
     otherEntityType: '',
-    phone: '0801 234 5678',
-    tin: '21092847-0001',
-    email: 'ado.bayero@bayerocorp.com',
-    annualTurnover: '₦100M - ₦499.9M',
-    sourceOfFunds: 'Corporate Reserves & Retained Business Inflow',
-    clientSegmentation: 'Corporate'
+    phone: '',
+    tin: '',
+    email: '',
+    annualTurnover: '',
+    sourceOfFunds: '',
+    clientSegmentation: ''
   });
   editProfileForm = signal<any>({});
 
@@ -83,9 +186,9 @@ export class CorporateSettingsComponent {
   isEditingContact = signal(false);
   isUpdatingContact = signal(false);
   primaryContact = signal({
-    fullName: 'Malik Sherifdeen',
-    email: 'malik@bayerocorp.com',
-    phone: '0803 123 4567'
+    fullName: '',
+    email: '',
+    phone: ''
   });
   editContactForm = signal<any>({});
 
@@ -137,32 +240,26 @@ export class CorporateSettingsComponent {
   nairaAccounts = signal<any[]>([]);
   domiciliaryAccounts = signal<any[]>([]);
 
-  availableBanks = signal([
-    { bankId: 1, bankName: 'Jaiz Bank PLC' },
-    { bankId: 2, bankName: 'Lotus Bank Ltd' },
-    { bankId: 3, bankName: 'TAJBank Ltd' },
-    { bankId: 4, bankName: 'Stanbic IBTC Bank (Halal)' },
-    { bankId: 5, bankName: 'Rand Merchant Bank' }
-  ]);
+  availableBanks = signal<any[]>([]);
 
   isAddingNaira = signal(false);
   isSavingNaira = signal(false);
-  newNairaForm = signal<any>({ bankId: 5, accountNumber: '1000152204', accountName: 'Bayero Corporate Reserves Ltd', bankBranch: 'Lagos Main Branch' });
+  newNairaForm = signal<any>({ bankId: '', accountNumber: '', accountName: '', bankBranch: '' });
 
   isAddingDom = signal(false);
   isSavingDom = signal(false);
   newDomForm = signal<any>({
-    bankId: 5,
-    accountNumber: '1000152194',
-    accountName: 'Bayero Corporate Reserves Ltd (USD)',
-    correspondentBank: 'BANK OF AMERICA NEW YORK',
-    sortCode: '02-04-05',
-    iban: 'US12BOFA0001000152194',
-    swiftCode: 'FIRNNGLA',
-    beneficiaryAccountName: 'ZEDCREST DOLLAR WALLET',
-    beneficiaryAccountNo: '1000167653',
-    beneficiaryAddress: 'Plot 2, Kingsway Road, Ikoyi, Lagos',
-    forFurtherCredit: 'Bayero Reserves Sub-Account'
+    bankId: '',
+    accountNumber: '',
+    accountName: '',
+    correspondentBank: '',
+    sortCode: '',
+    iban: '',
+    swiftCode: '',
+    beneficiaryAccountName: '',
+    beneficiaryAccountNo: '',
+    beneficiaryAddress: '',
+    forFurtherCredit: ''
   });
 
   bankOptions = computed<DropdownOption[]>(() =>
@@ -176,103 +273,9 @@ export class CorporateSettingsComponent {
   // --- Signatories & Directors State (Dual-Category with Complete Profile Fields) ---
   selectedPerson = signal<any>(null);
 
-  signatories = signal([
-    {
-      title: 'Mr',
-      surname: 'Sherifdeen',
-      firstName: 'Malik',
-      otherNames: 'Alabi',
-      designation: 'Managing Director',
-      dob: '1985-04-12',
-      residentialAddress: '22 Alhaji Kanike Close, Off Awolowo Road, Ikoyi, Lagos',
-      email: 'malik@bayerocorp.com',
-      phone: '0803 123 4567',
-      bvn: '22194857102',
-      nationality: 'Nigerian',
-      gender: 'Male',
-      idType: 'Int Passport',
-      idNumber: 'A00129481',
-      isPep: 'No',
-      pepDetails: '',
-      signingClass: 'A',
-      passportPhoto: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop',
-      signatureImage: 'https://upload.wikimedia.org/wikipedia/commons/3/3a/Jon_Foreman_Signature.png',
-      idDocument: 'https://images.unsplash.com/photo-1554774853-719586f82d77?q=80&w=300',
-      status: 'active'
-    },
-    {
-      title: 'Mr',
-      surname: 'Bayero',
-      firstName: 'Ado',
-      otherNames: 'Suleiman',
-      designation: 'Chairman',
-      dob: '1978-08-22',
-      residentialAddress: 'Plot 45 Gwarinpa Estate, Abuja',
-      email: 'ado@bayerocorp.com',
-      phone: '0805 987 6543',
-      bvn: '22147859301',
-      nationality: 'Nigerian',
-      gender: 'Male',
-      idType: 'National ID Card',
-      idNumber: '984712048591',
-      isPep: 'Yes',
-      pepDetails: 'Relative of former local council chairman',
-      signingClass: 'A',
-      passportPhoto: '',
-      signatureImage: '',
-      idDocument: '',
-      status: 'active'
-    }
-  ]);
+  signatories = signal<any[]>([]);
 
-  directors = signal([
-    {
-      title: 'Mr',
-      surname: 'Bayero',
-      firstName: 'Ado',
-      otherNames: 'Suleiman',
-      designation: 'Chairman',
-      dob: '1978-08-22',
-      residentialAddress: 'Plot 45 Gwarinpa Estate, Abuja',
-      email: 'ado@bayerocorp.com',
-      phone: '0805 987 6543',
-      bvn: '22147859301',
-      nationality: 'Nigerian',
-      gender: 'Male',
-      idType: 'National ID Card',
-      idNumber: '984712048591',
-      isPep: 'Yes',
-      pepDetails: 'Relative of former local council chairman',
-      signingClass: 'A',
-      passportPhoto: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=256&auto=format&fit=crop',
-      signatureImage: 'https://upload.wikimedia.org/wikipedia/commons/3/3a/Jon_Foreman_Signature.png',
-      idDocument: '',
-      status: 'active'
-    },
-    {
-      title: 'Mrs',
-      surname: 'Bello',
-      firstName: 'Zainab',
-      otherNames: 'Aisha',
-      designation: 'Executive Director',
-      dob: '1990-11-05',
-      residentialAddress: '15 Lekki Phase 1, Lagos',
-      email: 'zainab@bayerocorp.com',
-      phone: '0812 345 6789',
-      bvn: '22384710928',
-      nationality: 'Nigerian',
-      gender: 'Female',
-      idType: 'Driver\'s License',
-      idNumber: 'DL-92847190A',
-      isPep: 'No',
-      pepDetails: '',
-      signingClass: 'B',
-      passportPhoto: '',
-      signatureImage: '',
-      idDocument: '',
-      status: 'pending'
-    }
-  ]);
+  directors = signal<any[]>([]);
 
   isAddingSignatory = signal(false);
   isSavingSignatory = signal(false);
@@ -281,23 +284,26 @@ export class CorporateSettingsComponent {
     surname: '',
     firstName: '',
     otherNames: '',
-    designation: 'Director / Signatory',
-    dob: '',
+    designation: '',
+    dateOfBirth: '',
     residentialAddress: '',
-    email: '',
-    phone: '',
+    businessEmail: '',
+    phoneNumber: '',
     bvn: '',
     nationality: 'Nigerian',
     gender: 'Male',
-    idType: 'Driver\'s License',
+    identityType: 'Driver\'s License',
     idNumber: '',
     isPep: 'No',
     pepDetails: '',
     signingClass: 'A',
-    passportPhoto: '',
-    signatureImage: '',
-    idDocument: ''
+    passportPhotoUrl: '',
+    signatureCardUrl: '',
+    identityDocumentUrl: ''
   });
+  passportPhotoFile = signal<File | null>(null);
+  signatureCardFile = signal<File | null>(null);
+  idDocumentFile = signal<File | null>(null);
 
   isAddingDirector = signal(false);
   isSavingDirector = signal(false);
@@ -323,13 +329,22 @@ export class CorporateSettingsComponent {
     signatureImage: '',
     idDocument: ''
   });
+  directorPassportPhotoFile = signal<File | null>(null);
+  directorSignatureCardFile = signal<File | null>(null);
+  directorIdDocumentFile = signal<File | null>(null);
 
   // --- Corporate Security State ---
-  isTwoFactorEnabled = signal(true);
+  isTwoFactorEnabled = computed(() => {
+    const user = this.authService.currentUser();
+    return user?.is2faEnabled || user?.Is2faEnabled || false;
+  });
   isUpdatingTwoFactor = signal(false);
   isEditingPin = signal(false);
   isUpdatingPin = signal(false);
-  hasPin = signal(true);
+  hasPin = computed(() => {
+    const user = this.authService.currentUser();
+    return user?.isPinSet || user?.IsPinSet || false;
+  });
   pinForm = signal({ oldPin: '', newPin: '', confirmPin: '' });
   pinError = signal('');
 
@@ -359,21 +374,34 @@ export class CorporateSettingsComponent {
 
   saveProfile() {
     this.isUpdatingProfile.set(true);
-    setTimeout(() => {
-      this.companyProfile.set({ ...this.companyProfile(), ...this.editProfileForm() });
-      this.isEditingProfile.set(false);
-      this.isUpdatingProfile.set(false);
+    const updatedData = { ...this.companyProfile(), ...this.editProfileForm() };
+    
+    this.customerService.updateCorporateProfile(updatedData).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.companyProfile.set(updatedData);
+          this.isEditingProfile.set(false);
+          this.isUpdatingProfile.set(false);
 
-      Swal.fire({
-        icon: 'success',
-        title: 'Company Profile Updated',
-        text: 'Your corporate business details have been successfully saved.',
-        timer: 2000,
-        showConfirmButton: false,
-        background: 'var(--dogo-cream)',
-        customClass: { popup: 'rounded-[30px]' }
-      });
-    }, 1200);
+          Swal.fire({
+            icon: 'success',
+            title: 'Company Profile Updated',
+            text: 'Your corporate business details have been successfully saved.',
+            timer: 2000,
+            showConfirmButton: false,
+            background: 'var(--dogo-cream)',
+            customClass: { popup: 'rounded-[30px]' }
+          });
+        } else {
+          this.isUpdatingProfile.set(false);
+          Swal.fire('Error', res.message || 'Failed to update profile', 'error');
+        }
+      },
+      error: (err) => {
+        this.isUpdatingProfile.set(false);
+        Swal.fire('Error', 'An error occurred while updating profile', 'error');
+      }
+    });
   }
 
   updateProfileField(field: string, value: string) {
@@ -392,21 +420,38 @@ export class CorporateSettingsComponent {
 
   saveContact() {
     this.isUpdatingContact.set(true);
-    setTimeout(() => {
-      this.primaryContact.set({ ...this.primaryContact(), ...this.editContactForm() });
-      this.isEditingContact.set(false);
-      this.isUpdatingContact.set(false);
+    const updatedData = { ...this.primaryContact(), ...this.editContactForm() };
 
-      Swal.fire({
-        icon: 'success',
-        title: 'Primary Contact Updated',
-        text: 'Primary contact details have been successfully saved.',
-        timer: 2000,
-        showConfirmButton: false,
-        background: 'var(--dogo-cream)',
-        customClass: { popup: 'rounded-[30px]' }
-      });
-    }, 1200);
+    this.customerService.updatePrimaryContact({
+      fullName: updatedData.fullName,
+      email: updatedData.email,
+      phoneNumber: updatedData.phone
+    }).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.primaryContact.set(updatedData);
+          this.isEditingContact.set(false);
+          this.isUpdatingContact.set(false);
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Primary Contact Updated',
+            text: 'Primary contact details have been successfully saved.',
+            timer: 2000,
+            showConfirmButton: false,
+            background: 'var(--dogo-cream)',
+            customClass: { popup: 'rounded-[30px]' }
+          });
+        } else {
+          this.isUpdatingContact.set(false);
+          Swal.fire('Error', res.message || 'Failed to update contact', 'error');
+        }
+      },
+      error: (err) => {
+        this.isUpdatingContact.set(false);
+        Swal.fire('Error', 'An error occurred while updating contact', 'error');
+      }
+    });
   }
 
   updateContactField(field: string, value: string) {
@@ -441,25 +486,45 @@ export class CorporateSettingsComponent {
   }
 
   verifyDocument() {
+    const active = this.activeVerification();
+    const file = this.addressFile();
+    
+    if (!file) {
+      Swal.fire('Error', 'Please select a file to upload.', 'error');
+      return;
+    }
+
     this.isVerifying.set(true);
-    setTimeout(() => {
-      this.isVerifying.set(false);
-      this.isVerificationSuccess.set(true);
+    const formData = new FormData();
+    formData.append('documentType', active.type);
+    formData.append('file', file);
 
-      const active = this.activeVerification();
-      const updated = this.verifications().map(item =>
-        item.type === active.type ? { ...item, status: 'pending', date: 'May 27, 2026' } : item
-      );
-      this.verifications.set(updated);
-      localStorage.setItem('corporate_verifications', JSON.stringify(updated));
-
-      setTimeout(() => this.closeVerificationModal(), 1500);
-    }, 1500);
+    this.customerService.uploadCorporateDocument(formData).subscribe({
+      next: (res) => {
+        this.isVerifying.set(false);
+        if (res.success) {
+          this.isVerificationSuccess.set(true);
+          this.loadVerifications();
+          setTimeout(() => this.closeVerificationModal(), 1500);
+        } else {
+          Swal.fire('Error', res.message || 'Failed to upload document', 'error');
+        }
+      },
+      error: (err) => {
+        this.isVerifying.set(false);
+        Swal.fire('Error', 'An error occurred during upload', 'error');
+      }
+    });
   }
 
   // --- Naira Bank Account Actions ---
   startAddNaira() {
-    this.newNairaForm.set({ bankId: 1, accountNumber: '', accountName: this.companyProfile().companyName, bankBranch: 'Lagos Main Branch' });
+    this.newNairaForm.set({ 
+      bankId: '', 
+      accountNumber: '', 
+      accountName: this.companyProfile()?.companyName || '', 
+      bankBranch: '' 
+    });
     this.isAddingNaira.set(true);
   }
 
@@ -469,37 +534,43 @@ export class CorporateSettingsComponent {
 
   saveNaira() {
     this.isSavingNaira.set(true);
-    setTimeout(() => {
-      const selectedBank = this.availableBanks().find(b => b.bankId == this.newNairaForm().bankId);
-      const newAcc = {
-        bankId: this.newNairaForm().bankId,
-        bankName: selectedBank ? selectedBank.bankName : 'Commercial Bank',
-        accountNumber: this.newNairaForm().accountNumber,
-        accountName: this.newNairaForm().accountName,
-        bankBranch: this.newNairaForm().bankBranch,
-        isDefault: false
-      };
-      this.nairaAccounts.update(accounts => {
-        const updated = [...accounts, newAcc];
-        localStorage.setItem('corporate_naira_accounts', JSON.stringify(updated));
-        return updated;
-      });
-      this.checkSettlementLinkVerification();
-      this.isAddingNaira.set(false);
-      this.isSavingNaira.set(false);
+    const form = this.newNairaForm();
+    const payload = {
+      bankId: form.bankId,
+      accountNumber: form.accountNumber,
+      accountName: form.accountName,
+      currencyCode: 'NGN',
+      isDefault: false
+    };
 
-      Swal.fire({
-        icon: 'success',
-        title: 'Naira Account Linked',
-        text: 'Local Naira settlement account has been added successfully.',
-        confirmButtonColor: 'var(--dogo-primary)',
-        background: 'var(--dogo-cream)',
-        customClass: { popup: 'rounded-[30px]' }
-      });
-    }, 1200);
+    this.bankService.addBank(payload).subscribe({
+      next: (res) => {
+        this.isSavingNaira.set(false);
+        if (res.success) {
+          this.loadBankAccounts();
+          this.checkSettlementLinkVerification();
+          this.isAddingNaira.set(false);
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Naira Account Linked',
+            text: 'Local Naira settlement account has been added successfully.',
+            confirmButtonColor: 'var(--dogo-primary)',
+            background: 'var(--dogo-cream)',
+            customClass: { popup: 'rounded-[30px]' }
+          });
+        } else {
+          Swal.fire('Error', res.message || 'Failed to add Naira account', 'error');
+        }
+      },
+      error: (err) => {
+        this.isSavingNaira.set(false);
+        Swal.fire('Error', 'An error occurred while linking account.', 'error');
+      }
+    });
   }
 
-  deleteNaira(accountNumber: string) {
+  deleteNaira(customerBankId: string | number) {
     Swal.fire({
       title: 'Remove Naira Account?',
       text: "You won't be able to withdraw corporate NGN reserves to this account.",
@@ -512,20 +583,25 @@ export class CorporateSettingsComponent {
       customClass: { popup: 'rounded-[30px]' }
     }).then((result: any) => {
       if (result.isConfirmed) {
-        this.nairaAccounts.update(accounts => {
-          const updated = accounts.filter(acc => acc.accountNumber !== accountNumber);
-          localStorage.setItem('corporate_naira_accounts', JSON.stringify(updated));
-          return updated;
-        });
-        this.checkSettlementLinkVerification();
-        Swal.fire({
-          icon: 'success',
-          title: 'Removed!',
-          text: 'The Naira bank account has been removed.',
-          timer: 2000,
-          showConfirmButton: false,
-          background: 'var(--dogo-cream)',
-          customClass: { popup: 'rounded-[30px]' }
+        this.bankService.deleteBank(customerBankId).subscribe({
+          next: (res) => {
+            if (res.success) {
+              this.loadBankAccounts();
+              this.checkSettlementLinkVerification();
+              Swal.fire({
+                icon: 'success',
+                title: 'Removed!',
+                text: 'The Naira bank account has been removed.',
+                timer: 2000,
+                showConfirmButton: false,
+                background: 'var(--dogo-cream)',
+                customClass: { popup: 'rounded-[30px]' }
+              });
+            } else {
+              Swal.fire('Error', res.message || 'Failed to remove account', 'error');
+            }
+          },
+          error: (err) => Swal.fire('Error', 'An error occurred.', 'error')
         });
       }
     });
@@ -538,14 +614,14 @@ export class CorporateSettingsComponent {
   // --- Domiciliary Bank Account Actions ---
   startAddDom() {
     this.newDomForm.set({
-      bankId: 5,
+      bankId: '',
       accountNumber: '',
-      accountName: this.companyProfile().companyName + ' (USD)',
-      correspondentBank: 'BANK OF AMERICA NEW YORK',
+      accountName: this.companyProfile()?.companyName || '',
+      correspondentBank: '',
       sortCode: '',
       iban: '',
-      swiftCode: 'FIRNNGLA',
-      beneficiaryAccountName: '',
+      swiftCode: '',
+      beneficiaryAccountName: this.companyProfile()?.companyName || '',
       beneficiaryAccountNo: '',
       beneficiaryAddress: '',
       forFurtherCredit: ''
@@ -559,44 +635,51 @@ export class CorporateSettingsComponent {
 
   saveDom() {
     this.isSavingDom.set(true);
-    setTimeout(() => {
-      const selectedBank = this.availableBanks().find(b => b.bankId == this.newDomForm().bankId);
-      const newAcc = {
-        bankId: this.newDomForm().bankId,
-        bankName: selectedBank ? selectedBank.bankName : 'Rand Merchant Bank',
-        accountNumber: this.newDomForm().accountNumber,
-        accountName: this.newDomForm().accountName,
-        correspondentBank: this.newDomForm().correspondentBank,
-        sortCode: this.newDomForm().sortCode,
-        iban: this.newDomForm().iban,
-        swiftCode: this.newDomForm().swiftCode,
-        beneficiaryAccountName: this.newDomForm().beneficiaryAccountName,
-        beneficiaryAccountNo: this.newDomForm().beneficiaryAccountNo,
-        beneficiaryAddress: this.newDomForm().beneficiaryAddress,
-        forFurtherCredit: this.newDomForm().forFurtherCredit,
-        isDefault: false
-      };
-      this.domiciliaryAccounts.update(accounts => {
-        const updated = [...accounts, newAcc];
-        localStorage.setItem('corporate_dom_accounts', JSON.stringify(updated));
-        return updated;
-      });
-      this.checkSettlementLinkVerification();
-      this.isAddingDom.set(false);
-      this.isSavingDom.set(false);
+    const form = this.newDomForm();
+    const payload = {
+      bankId: form.bankId,
+      accountNumber: form.accountNumber,
+      accountName: form.accountName,
+      currencyCode: 'USD', // For now hardcoded or fetched from form
+      correspondentBank: form.correspondentBank,
+      sortCode: form.sortCode,
+      iban: form.iban,
+      swiftCode: form.swiftCode,
+      beneficiaryAccountName: form.beneficiaryAccountName,
+      beneficiaryAccountNumber: form.beneficiaryAccountNo,
+      beneficiaryAddress: form.beneficiaryAddress,
+      ffcDetails: form.forFurtherCredit,
+      isDefault: false
+    };
 
-      Swal.fire({
-        icon: 'success',
-        title: 'Domiciliary Account Linked',
-        text: 'International settlement account has been added successfully.',
-        confirmButtonColor: 'var(--dogo-primary)',
-        background: 'var(--dogo-cream)',
-        customClass: { popup: 'rounded-[30px]' }
-      });
-    }, 1200);
+    this.bankService.addBank(payload).subscribe({
+      next: (res) => {
+        this.isSavingDom.set(false);
+        if (res.success) {
+          this.loadBankAccounts();
+          this.checkSettlementLinkVerification();
+          this.isAddingDom.set(false);
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Domiciliary Account Linked',
+            text: 'International settlement account has been added successfully.',
+            confirmButtonColor: 'var(--dogo-primary)',
+            background: 'var(--dogo-cream)',
+            customClass: { popup: 'rounded-[30px]' }
+          });
+        } else {
+          Swal.fire('Error', res.message || 'Failed to add account', 'error');
+        }
+      },
+      error: (err) => {
+        this.isSavingDom.set(false);
+        Swal.fire('Error', 'An error occurred while linking account.', 'error');
+      }
+    });
   }
 
-  deleteDom(accountNumber: string) {
+  deleteDom(customerBankId: string | number) {
     Swal.fire({
       title: 'Remove Domiciliary Account?',
       text: "You won't be able to withdraw corporate foreign currency reserves to this account.",
@@ -609,20 +692,25 @@ export class CorporateSettingsComponent {
       customClass: { popup: 'rounded-[30px]' }
     }).then((result: any) => {
       if (result.isConfirmed) {
-        this.domiciliaryAccounts.update(accounts => {
-          const updated = accounts.filter(acc => acc.accountNumber !== accountNumber);
-          localStorage.setItem('corporate_dom_accounts', JSON.stringify(updated));
-          return updated;
-        });
-        this.checkSettlementLinkVerification();
-        Swal.fire({
-          icon: 'success',
-          title: 'Removed!',
-          text: 'The Domiciliary account has been removed.',
-          timer: 2000,
-          showConfirmButton: false,
-          background: 'var(--dogo-cream)',
-          customClass: { popup: 'rounded-[30px]' }
+        this.bankService.deleteBank(customerBankId).subscribe({
+          next: (res) => {
+            if (res.success) {
+              this.loadBankAccounts();
+              this.checkSettlementLinkVerification();
+              Swal.fire({
+                icon: 'success',
+                title: 'Removed!',
+                text: 'The Domiciliary account has been removed.',
+                timer: 2000,
+                showConfirmButton: false,
+                background: 'var(--dogo-cream)',
+                customClass: { popup: 'rounded-[30px]' }
+              });
+            } else {
+              Swal.fire('Error', res.message || 'Failed to remove account', 'error');
+            }
+          },
+          error: (err) => Swal.fire('Error', 'An error occurred.', 'error')
         });
       }
     });
@@ -635,7 +723,7 @@ export class CorporateSettingsComponent {
   // --- Signatories & Directors Expanded Actions ---
   startAddSignatory() {
     this.newSignatoryForm.set({
-      title: 'Mr',
+      title: '',
       surname: '',
       firstName: '',
       otherNames: '',
@@ -651,11 +739,14 @@ export class CorporateSettingsComponent {
       idNumber: '',
       isPep: 'No',
       pepDetails: '',
-      signingClass: 'A',
+      signingClass: 'Class A',
       passportPhoto: '',
       signatureImage: '',
       idDocument: ''
     });
+    this.passportPhotoFile.set(null);
+    this.signatureCardFile.set(null);
+    this.idDocumentFile.set(null);
     this.isAddingSignatory.set(true);
   }
 
@@ -665,28 +756,64 @@ export class CorporateSettingsComponent {
 
   saveSignatory() {
     this.isSavingSignatory.set(true);
-    setTimeout(() => {
-      const form = this.newSignatoryForm();
-      const newSig = {
-        ...form,
-        status: 'active'
-      };
-      this.signatories.update(sigs => [...sigs, newSig]);
-      this.isAddingSignatory.set(false);
-      this.isSavingSignatory.set(false);
+    const form = this.newSignatoryForm();
 
-      Swal.fire({
-        icon: 'success',
-        title: 'Signatory Profile Linked',
-        text: 'The authorized signatory has been registered successfully.',
-        confirmButtonColor: 'var(--dogo-primary)',
-        background: 'var(--dogo-cream)',
-        customClass: { popup: 'rounded-[30px]' }
-      });
-    }, 1200);
+    if (!this.passportPhotoFile() || !this.signatureCardFile() || !this.idDocumentFile()) {
+      Swal.fire('Missing Files', 'Please upload Passport, Signature Card, and ID Document.', 'error');
+      this.isSavingSignatory.set(false);
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('Title', form.title || 'Mr');
+    formData.append('Surname', form.surname);
+    formData.append('FirstName', form.firstName);
+    formData.append('OtherNames', form.otherNames || '');
+    formData.append('Designation', form.designation);
+    formData.append('DateOfBirth', form.dob);
+    formData.append('ResidentialAddress', form.residentialAddress);
+    formData.append('BusinessEmail', form.email);
+    formData.append('PhoneNumber', form.phone);
+    formData.append('Bvn', form.bvn);
+    formData.append('Nationality', form.nationality);
+    formData.append('Gender', form.gender);
+    formData.append('SigningClass', form.signingClass);
+    formData.append('IdentityType', form.idType);
+    formData.append('IdNumber', form.idNumber);
+    formData.append('IsPep', form.isPep === 'Yes' ? 'true' : 'false');
+    
+    formData.append('PassportPhoto', this.passportPhotoFile() as Blob);
+    formData.append('SignatureCard', this.signatureCardFile() as Blob);
+    formData.append('IdentityDocument', this.idDocumentFile() as Blob);
+
+    this.customerService.addCorporateSignatory(formData).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.loadSignatories();
+          this.isAddingSignatory.set(false);
+          this.isSavingSignatory.set(false);
+   
+          Swal.fire({
+            icon: 'success',
+            title: 'Signatory Profile Linked',
+            text: 'The authorized signatory has been registered successfully.',
+            confirmButtonColor: 'var(--dogo-primary)',
+            background: 'var(--dogo-cream)',
+            customClass: { popup: 'rounded-[30px]' }
+          });
+        } else {
+          Swal.fire('Error', res.message || 'Failed to add signatory', 'error');
+          this.isSavingSignatory.set(false);
+        }
+      },
+      error: (err) => {
+        Swal.fire('Error', 'An unexpected error occurred.', 'error');
+        this.isSavingSignatory.set(false);
+      }
+    });
   }
 
-  removeSignatory(email: string) {
+  removeSignatory(signatoryId: number) {
     Swal.fire({
       title: 'Remove Signatory?',
       text: 'This individual will lose authorization to execute corporate transactions.',
@@ -699,15 +826,24 @@ export class CorporateSettingsComponent {
       customClass: { popup: 'rounded-[30px]' }
     }).then((result: any) => {
       if (result.isConfirmed) {
-        this.signatories.update(sigs => sigs.filter(s => s.email !== email));
-        Swal.fire({
-          icon: 'success',
-          title: 'Access Revoked!',
-          text: 'The signatory authorization has been removed.',
-          timer: 2000,
-          showConfirmButton: false,
-          background: 'var(--dogo-cream)',
-          customClass: { popup: 'rounded-[30px]' }
+        this.customerService.deleteCorporateSignatory(signatoryId).subscribe({
+          next: (res) => {
+            if (res.success) {
+              this.loadSignatories();
+              Swal.fire({
+                icon: 'success',
+                title: 'Access Revoked!',
+                text: 'The signatory authorization has been removed.',
+                timer: 2000,
+                showConfirmButton: false,
+                background: 'var(--dogo-cream)',
+                customClass: { popup: 'rounded-[30px]' }
+              });
+            } else {
+              Swal.fire('Error', res.message || 'Failed to remove signatory', 'error');
+            }
+          },
+          error: (err) => Swal.fire('Error', 'Failed to remove signatory.', 'error')
         });
       }
     });
@@ -741,6 +877,9 @@ export class CorporateSettingsComponent {
       signatureImage: '',
       idDocument: ''
     });
+    this.directorPassportPhotoFile.set(null);
+    this.directorSignatureCardFile.set(null);
+    this.directorIdDocumentFile.set(null);
     this.isAddingDirector.set(true);
   }
 
@@ -750,49 +889,95 @@ export class CorporateSettingsComponent {
 
   saveDirector() {
     this.isSavingDirector.set(true);
-    setTimeout(() => {
-      const form = this.newDirectorForm();
-      const newDir = {
-        ...form,
-        status: 'active'
-      };
-      this.directors.update(dirs => [...dirs, newDir]);
-      this.isAddingDirector.set(false);
-      this.isSavingDirector.set(false);
 
-      Swal.fire({
-        icon: 'success',
-        title: 'Director Registered',
-        text: 'The controlling director profile has been successfully saved.',
-        confirmButtonColor: 'var(--dogo-primary)',
-        background: 'var(--dogo-cream)',
-        customClass: { popup: 'rounded-[30px]' }
-      });
-    }, 1200);
+    const form = this.newDirectorForm();
+    const formData = new FormData();
+    
+    // Map existing form properties
+    formData.append('title', form.title);
+    formData.append('surname', form.surname);
+    formData.append('firstName', form.firstName);
+    if (form.otherNames) formData.append('otherNames', form.otherNames);
+    formData.append('designation', form.designation);
+    formData.append('dateOfBirth', form.dateOfBirth);
+    formData.append('residentialAddress', form.residentialAddress);
+    formData.append('businessEmail', form.businessEmail);
+    formData.append('phoneNumber', form.phoneNumber);
+    formData.append('bvn', form.bvn);
+    formData.append('nationality', form.nationality);
+    formData.append('gender', form.gender);
+    formData.append('signingClass', form.signingClass);
+    formData.append('identityType', form.identityType);
+    formData.append('idNumber', form.idNumber);
+    formData.append('isPep', form.isPep ? 'true' : 'false');
+
+    // Append raw File objects for Cloudinary
+    const passportFile = this.directorPassportPhotoFile();
+    const signatureFile = this.directorSignatureCardFile();
+    const idDocFile = this.directorIdDocumentFile();
+
+    if (!passportFile || !signatureFile || !idDocFile) {
+      Swal.fire('Error', 'Please upload Passport, Signature, and ID Document.', 'error');
+      this.isSavingDirector.set(false);
+      return;
+    }
+
+    formData.append('passportPhoto', passportFile);
+    formData.append('signatureCard', signatureFile);
+    formData.append('identityDocument', idDocFile);
+
+    this.customerService.addCorporateDirector(formData).subscribe({
+      next: (res) => {
+        if (res.success) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Director Registered',
+            text: 'The controlling director profile has been successfully saved.',
+            timer: 2000,
+            showConfirmButton: false,
+            confirmButtonColor: 'var(--dogo-primary)',
+            background: 'var(--dogo-cream)',
+            customClass: { popup: 'rounded-[30px]' }
+          });
+          this.loadDirectors();
+          this.isAddingDirector.set(false);
+        } else {
+          Swal.fire('Error', res.message || 'Failed to add director', 'error');
+        }
+        this.isSavingDirector.set(false);
+      },
+      error: (err) => {
+        console.error(err);
+        Swal.fire('Error', 'An error occurred while adding director', 'error');
+        this.isSavingDirector.set(false);
+      }
+    });
   }
 
-  removeDirector(email: string) {
+  removeDirector(id: number) {
     Swal.fire({
+      icon: 'warning',
       title: 'Remove Controlling Director?',
       text: 'This user will be removed from your active compliance directories.',
-      icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: 'var(--dogo-primary)',
-      confirmButtonText: 'Yes, Remove Profile',
-      background: 'var(--dogo-cream)',
-      customClass: { popup: 'rounded-[30px]' }
+      confirmButtonText: 'Yes, remove',
+      confirmButtonColor: '#ef4444',
+      cancelButtonText: 'Cancel'
     }).then((result: any) => {
       if (result.isConfirmed) {
-        this.directors.update(dirs => dirs.filter(d => d.email !== email));
-        Swal.fire({
-          icon: 'success',
-          title: 'Director Removed!',
-          text: 'The controlling director profile has been removed.',
-          timer: 2000,
-          showConfirmButton: false,
-          background: 'var(--dogo-cream)',
-          customClass: { popup: 'rounded-[30px]' }
+        this.customerService.deleteCorporateDirector(id).subscribe({
+          next: (res) => {
+            if (res.success) {
+              Swal.fire('Director Removed!', 'The controlling director profile has been removed.', 'success');
+              this.loadDirectors();
+            } else {
+              Swal.fire('Error', res.message || 'Failed to remove director', 'error');
+            }
+          },
+          error: (err) => {
+            console.error(err);
+            Swal.fire('Error', 'An error occurred', 'error');
+          }
         });
       }
     });
@@ -806,12 +991,17 @@ export class CorporateSettingsComponent {
   handlePassportUpload(event: any, isDirector: boolean) {
     const file = event.target.files?.[0];
     if (file) {
+      if (!isDirector) {
+        this.passportPhotoFile.set(file);
+      } else {
+        this.directorPassportPhotoFile.set(file);
+      }
       const reader = new FileReader();
       reader.onload = (e: any) => {
         if (isDirector) {
-          this.newDirectorForm.set({ ...this.newDirectorForm(), passportPhoto: e.target.result });
+          this.newDirectorForm.set({ ...this.newDirectorForm(), passportPhotoUrl: e.target.result });
         } else {
-          this.newSignatoryForm.set({ ...this.newSignatoryForm(), passportPhoto: e.target.result });
+          this.newSignatoryForm.set({ ...this.newSignatoryForm(), passportPhotoUrl: e.target.result });
         }
       };
       reader.readAsDataURL(file);
@@ -821,12 +1011,17 @@ export class CorporateSettingsComponent {
   handleSignatureUpload(event: any, isDirector: boolean) {
     const file = event.target.files?.[0];
     if (file) {
+      if (!isDirector) {
+        this.signatureCardFile.set(file);
+      } else {
+        this.directorSignatureCardFile.set(file);
+      }
       const reader = new FileReader();
       reader.onload = (e: any) => {
         if (isDirector) {
-          this.newDirectorForm.set({ ...this.newDirectorForm(), signatureImage: e.target.result });
+          this.newDirectorForm.set({ ...this.newDirectorForm(), signatureCardUrl: e.target.result });
         } else {
-          this.newSignatoryForm.set({ ...this.newSignatoryForm(), signatureImage: e.target.result });
+          this.newSignatoryForm.set({ ...this.newSignatoryForm(), signatureCardUrl: e.target.result });
         }
       };
       reader.readAsDataURL(file);
@@ -836,12 +1031,17 @@ export class CorporateSettingsComponent {
   handleIdUpload(event: any, isDirector: boolean) {
     const file = event.target.files?.[0];
     if (file) {
+      if (!isDirector) {
+        this.idDocumentFile.set(file);
+      } else {
+        this.directorIdDocumentFile.set(file);
+      }
       const reader = new FileReader();
       reader.onload = (e: any) => {
         if (isDirector) {
-          this.newDirectorForm.set({ ...this.newDirectorForm(), idDocument: e.target.result });
+          this.newDirectorForm.set({ ...this.newDirectorForm(), identityDocumentUrl: e.target.result });
         } else {
-          this.newSignatoryForm.set({ ...this.newSignatoryForm(), idDocument: e.target.result });
+          this.newSignatoryForm.set({ ...this.newSignatoryForm(), identityDocumentUrl: e.target.result });
         }
       };
       reader.readAsDataURL(file);
@@ -860,10 +1060,15 @@ export class CorporateSettingsComponent {
   // --- Security Actions ---
   toggleTwoFactor() {
     this.isUpdatingTwoFactor.set(true);
-    setTimeout(() => {
-      this.isTwoFactorEnabled.set(!this.isTwoFactorEnabled());
-      this.isUpdatingTwoFactor.set(false);
-    }, 800);
+    const newState = !this.isTwoFactorEnabled();
+    this.authService.toggle2fa(newState).subscribe({
+      next: () => {
+        const user = this.authService.currentUser();
+        this.authService.setCurrentUser({ ...user, is2faEnabled: newState, Is2faEnabled: newState });
+        this.isUpdatingTwoFactor.set(false);
+      },
+      error: () => this.isUpdatingTwoFactor.set(false)
+    });
   }
 
   startEditPin() {
@@ -897,21 +1102,42 @@ export class CorporateSettingsComponent {
 
     this.isUpdatingPin.set(true);
     this.pinError.set('');
-    setTimeout(() => {
-      this.hasPin.set(true);
-      this.isEditingPin.set(false);
-      this.isUpdatingPin.set(false);
+    
+    const request = this.hasPin() 
+      ? this.authService.changePin({ oldPin: form.oldPin, newPin: form.newPin })
+      : this.authService.setupPin({ pin: form.newPin, confirmPin: form.confirmPin });
 
-      Swal.fire({
-        icon: 'success',
-        title: 'Corporate PIN Saved',
-        text: 'The security transaction PIN has been updated.',
-        timer: 2000,
-        showConfirmButton: false,
-        background: 'var(--dogo-cream)',
-        customClass: { popup: 'rounded-[30px]' }
-      });
-    }, 1200);
+    request.subscribe({
+      next: (res: any) => {
+        const currentUser = this.authService.currentUser();
+        this.authService.setCurrentUser({ ...currentUser, isPinSet: true, IsPinSet: true });
+        
+        this.isEditingPin.set(false);
+        this.isUpdatingPin.set(false);
+        
+        Swal.fire({
+          icon: 'success',
+          title: 'Corporate PIN Saved',
+          text: 'The security transaction PIN has been updated.',
+          timer: 2000,
+          showConfirmButton: false,
+          background: 'var(--dogo-cream)',
+          customClass: { popup: 'rounded-[30px]' }
+        });
+      },
+      error: (err: any) => {
+        this.isUpdatingPin.set(false);
+        this.pinError.set(err.error?.message || 'Failed to update PIN');
+        Swal.fire({
+          icon: 'error',
+          title: 'PIN Update Failed',
+          text: err.error?.message || 'Could not change your security PIN.',
+          confirmButtonColor: 'var(--dogo-primary)',
+          background: 'var(--dogo-cream)',
+          customClass: { popup: 'rounded-[30px]' }
+        });
+      }
+    });
   }
 
   checkSettlementLinkVerification() {

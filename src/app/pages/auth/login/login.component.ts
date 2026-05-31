@@ -56,7 +56,12 @@ export class LoginComponent {
             if (isStaff) {
               this.router.navigate(['/admin/dashboard']);
             } else {
-              this.router.navigate(['/client/dashboard']);
+              const customerType = user.CustomerTypeId || user.customerTypeId || 1;
+              if (customerType === 2) {
+                this.router.navigate(['/corporate/dashboard']);
+              } else {
+                this.router.navigate(['/client/dashboard']);
+              }
             }
           } else {
             this.errorMessage.set(response.message || 'Login failed');

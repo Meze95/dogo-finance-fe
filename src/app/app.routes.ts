@@ -50,7 +50,7 @@ export const routes: Routes = [
     path: 'client',
     canActivate: [roleGuard],
     loadComponent: () => import('./layouts/client-layout/client-layout').then(m => m.ClientLayout),
-    data: { roles: [UserRole.Customer] },
+    data: { roles: [UserRole.Customer], customerType: 1 },
     children: [
       { path: 'dashboard', loadComponent: () => import('./pages/client/dashboard/dashboard.component').then(m => m.ClientDashboardComponent) },
       { path: 'products', loadComponent: () => import('./pages/client/portfolios/portfolios.component').then(m => m.ClientPortfoliosComponent) },
@@ -61,10 +61,12 @@ export const routes: Routes = [
     ]
   },
 
-  // ---- CORPORATE DASHBOARD (Unsecured Layout for Design Review) ----
+  // ---- CORPORATE DASHBOARD (Secured Layout) ----
   {
     path: 'corporate',
+    canActivate: [roleGuard],
     loadComponent: () => import('./layouts/corporate-layout/corporate-layout').then(m => m.CorporateLayout),
+    data: { roles: [UserRole.Customer], customerType: 2 },
     children: [
       { path: 'dashboard', loadComponent: () => import('./pages/corporate/dashboard/corporate-dashboard.component').then(m => m.CorporateDashboardComponent) },
       { path: 'products', loadComponent: () => import('./pages/client/portfolios/portfolios.component').then(m => m.ClientPortfoliosComponent) },

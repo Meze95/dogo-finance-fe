@@ -60,6 +60,21 @@ export const roleGuard: CanActivateFn = (route, state) => {
 
   if (requiredRoles.some(r => String(r).toLowerCase() === String(userRole).toLowerCase()) || (isAdminRequired && isCustomAdmin)) {
     
+    // Check for specific CustomerType constraint (1 = Individual, 2 = Corporate)
+    const requiredCustomerType = route.data['customerType'] as number;
+    if (requiredCustomerType !== undefined) {
+      const userCustomerType = user.CustomerTypeId || user.customerTypeId || 1;
+      if (userCustomerType !== requiredCustomerType) {
+        // Smart redirection based on their actual type instead of access denied
+        if (userCustomerType === 2) {
+          router.navigate(['/corporate/dashboard']);
+        } else {
+          router.navigate(['/client/dashboard']);
+        }
+        return false;
+      }
+    }
+
     // 5. Additional check for specific permission (Access Rights) if specified
     const requiredPermission = route.data['permission'] as string;
     if (requiredPermission) {

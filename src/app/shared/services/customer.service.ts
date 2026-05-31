@@ -49,4 +49,61 @@ export class CustomerService {
   getCompanyBankDetails(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/company-bank-details`);
   }
+
+  getCorporateProfile(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/corporate-profile`);
+  }
+
+  updateCorporateProfile(data: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/corporate-profile`, data);
+  }
+
+  getPrimaryContact(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/primary-contact`);
+  }
+
+  updatePrimaryContact(data: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/primary-contact`, data);
+  }
+
+  getCorporateVerifications(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/corporate-verifications`);
+  }
+
+  uploadCorporateDocument(formData: FormData): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/corporate-document`, formData);
+  }
+
+  getCorporateSignatories(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/signatories`);
+  }
+
+  addCorporateSignatory(formData: FormData): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/signatories`, formData);
+  }
+
+  deleteCorporateSignatory(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/signatories/${id}`);
+  }
+
+  getCorporateDirectors(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/directors`);
+  }
+
+  addCorporateDirector(formData: FormData): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/directors`, formData);
+  }
+
+  deleteCorporateDirector(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/directors/${id}`);
+  }
+
+  // --- NOTIFICATIONS ---
+  getNotifications(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/notifications`);
+  }
+
+  markNotificationRead(notificationId: number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/notifications/${notificationId}/read`, {});
+  }
 }

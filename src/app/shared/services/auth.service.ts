@@ -40,6 +40,10 @@ export class AuthService {
     return this.http.get(`${this.apiUrl}/Customer/genders`);
   }
 
+  getCustomerTypes(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/Customer/customer-types`);
+  }
+
   verifyEmail(email: string, code: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/Customer/verify-email`, { email, code });
   }
@@ -83,6 +87,10 @@ export class AuthService {
 
   setupPin(data: { pin: string, confirmPin: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/Auth/pin/setup`, data);
+  }
+
+  changePin(data: { oldPin: string, newPin: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/Auth/pin/change`, data);
   }
 
   refreshToken(): Observable<any> {

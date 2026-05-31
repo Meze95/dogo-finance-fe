@@ -1,4 +1,4 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject, computed, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet, Router } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
@@ -10,7 +10,7 @@ import { UserRole } from '../../shared/models/user-role.enum';
   templateUrl: './home-layout.html',
   styleUrl: './home-layout.css',
 })
-export class HomeLayout {
+export class HomeLayout implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
 
@@ -30,5 +30,18 @@ export class HomeLayout {
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  customerTypes = signal<any[]>([]);
+
+  ngOnInit() {
+    this.authService.getCustomerTypes().subscribe({
+      next: (res) => {
+        if (res && res.data) {
+          this.customerTypes.set(res.data);
+        }
+      },
+      error: (err) => console.error('Failed to load customer types', err)
+    });
   }
 }

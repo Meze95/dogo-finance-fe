@@ -84,27 +84,32 @@ export class ClientPortfoliosComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   private loadTradingViewWidgets() {
+    // 1. Ticker Tape Widget - More comprehensive global & local halal assets
     this.loadScript('https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js', 'tradingview-ticker-container', {
       "symbols": [
         { "proName": "FX_IDC:USDNGN", "title": "USD/NGN" },
-        { "description": "Global Sukuk ETF", "proName": "AMEX:SKUK" },
+        { "proName": "FX_IDC:GBPNGN", "title": "GBP/NGN" },
+        { "description": "Global Sukuk", "proName": "AMEX:SKUK" },
+        { "description": "Wahed ETF", "proName": "NASDAQ:HLAL" },
         { "description": "MTN Nigeria", "proName": "NSE:MTNN" },
         { "description": "Dangote Cement", "proName": "NSE:DANGCEM" },
-        { "description": "Gold (Halal)", "proName": "TVC:GOLD" },
-        { "description": "Microsoft (Halal)", "proName": "NASDAQ:MSFT" },
-        { "description": "Tesla (Halal)", "proName": "NASDAQ:TSLA" }
+        { "description": "Gold (Spot)", "proName": "TVC:GOLD" },
+        { "description": "Silver (Spot)", "proName": "TVC:SILVER" },
+        { "description": "Apple (Halal)", "proName": "NASDAQ:AAPL" },
+        { "description": "Microsoft", "proName": "NASDAQ:MSFT" }
       ],
       "showSymbolLogo": true,
       "colorTheme": "light",
-      "isTransparent": false,
+      "isTransparent": true,
       "displayMode": "adaptive",
       "locale": "en"
     });
 
+    // 2. Technical Analysis Widget
     this.loadScript('https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js', 'tradingview-tech-analysis', {
-      "interval": "1m",
+      "interval": "15m",
       "width": "100%",
-      "isTransparent": false,
+      "isTransparent": true,
       "height": "100%",
       "symbol": "NASDAQ:MSFT",
       "showIntervalTabs": true,
@@ -112,6 +117,7 @@ export class ClientPortfoliosComponent implements OnInit, AfterViewInit, OnDestr
       "colorTheme": "light"
     });
 
+    // 3. Market Overview Widget - Much more comprehensive with brand colors
     this.loadScript('https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js', 'tradingview-market-overview', {
       "colorTheme": "light",
       "dateRange": "12M",
@@ -119,27 +125,35 @@ export class ClientPortfoliosComponent implements OnInit, AfterViewInit, OnDestr
       "locale": "en",
       "width": "100%",
       "height": "100%",
-      "largeChartByThreeColumns": true,
-      "isTransparent": false,
+      "largeChartByThreeColumns": false,
+      "isTransparent": true,
       "showSymbolLogo": true,
       "showFloatingTooltip": true,
+      "plotLineColorGrowing": "#023E8A",
+      "plotLineColorFalling": "#ef4444",
+      "gridLineColor": "#f0f4f8",
+      "scaleFontColor": "#64748b",
+      "belowLineFillColorGrowing": "rgba(2, 62, 138, 0.12)",
+      "belowLineFillColorFalling": "rgba(239, 68, 68, 0.12)",
+      "belowLineFillColorGrowingBottom": "rgba(2, 62, 138, 0)",
+      "belowLineFillColorFallingBottom": "rgba(239, 68, 68, 0)",
+      "symbolActiveColor": "rgba(2, 62, 138, 0.12)",
       "tabs": [
         {
-          "title": "Global Halal Giants",
+          "title": "Global Halal Tech",
           "symbols": [
             { "s": "NASDAQ:AAPL", "d": "Apple Inc." },
             { "s": "NASDAQ:MSFT", "d": "Microsoft" },
-            { "s": "NASDAQ:GOOGL", "d": "Alphabet" },
             { "s": "NASDAQ:NVDA", "d": "NVIDIA" },
             { "s": "NASDAQ:TSLA", "d": "Tesla" },
-            { "s": "NASDAQ:AMZN", "d": "Amazon" },
-            { "s": "NYSE:JNJ", "d": "Johnson & Johnson" },
-            { "s": "NYSE:V", "d": "Visa" }
+            { "s": "NASDAQ:ADBE", "d": "Adobe" },
+            { "s": "NASDAQ:CRM", "d": "Salesforce" },
+            { "s": "NASDAQ:AMD", "d": "AMD" }
           ],
-          "originalTitle": "Global Stocks"
+          "originalTitle": "Global Tech"
         },
         {
-          "title": "Nigerian Halal Sector",
+          "title": "Nigerian Equities",
           "symbols": [
             { "s": "NSE:MTNN", "d": "MTN Nigeria" },
             { "s": "NSE:DANGCEM", "d": "Dangote Cement" },
@@ -147,22 +161,51 @@ export class ClientPortfoliosComponent implements OnInit, AfterViewInit, OnDestr
             { "s": "NSE:AIRTELAFRI", "d": "Airtel Africa" },
             { "s": "NSE:OKOMUOIL", "d": "Okomu Oil" },
             { "s": "NSE:NESTLE", "d": "Nestle Nigeria" },
-            { "s": "NSE:PRESCO", "d": "Presco Plc" },
-            { "s": "NSE:TOTAL", "d": "TotalEnergies" },
-            { "s": "NSE:SEPLAT", "d": "Seplat Energy" }
+            { "s": "NSE:ZENITHBANK", "d": "Zenith Bank" },
+            { "s": "NSE:GTCO", "d": "GTCO" }
           ],
           "originalTitle": "Local Stocks"
         },
         {
-          "title": "Fixed Income & Sukuk",
+          "title": "Halal ETFs & Funds",
           "symbols": [
-            { "s": "AMEX:SKUK", "d": "Global Sukuk" },
-            { "s": "NASDAQ:HLAL", "d": "Wahed Shariah ETF" },
-            { "s": "NASDAQ:SPRE", "d": "Shariah REITs" },
-            { "s": "TVC:GOLD", "d": "Spot Gold" },
-            { "s": "NASDAQ:SUSA", "d": "iShares Shariah" }
+            { "s": "NASDAQ:HLAL", "d": "Wahed FTSE USA Shariah" },
+            { "s": "NYSE:SPUS", "d": "SP Funds S&P 500 Sharia" },
+            { "s": "NASDAQ:SPRE", "d": "SP Funds REIT Sharia" },
+            { "s": "NYSE:UMMA", "d": "Wahed Dow Jones Islamic" },
+            { "s": "NASDAQ:SUSA", "d": "iShares ESG Aware" }
+          ],
+          "originalTitle": "ETFs"
+        },
+        {
+          "title": "Sukuk & Fixed Income",
+          "symbols": [
+            { "s": "AMEX:SKUK", "d": "SP Funds Dow Jones Global Sukuk" },
+            { "s": "NYSE:SPSK", "d": "SP Funds Dow Jones Sukuk" }
           ],
           "originalTitle": "Fixed Income"
+        },
+        {
+          "title": "Commodities & Metals",
+          "symbols": [
+            { "s": "TVC:GOLD", "d": "Spot Gold" },
+            { "s": "TVC:SILVER", "d": "Spot Silver" },
+            { "s": "TVC:PLATINUM", "d": "Spot Platinum" },
+            { "s": "TVC:USOIL", "d": "WTI Crude Oil" },
+            { "s": "TVC:UKOIL", "d": "Brent Crude" }
+          ],
+          "originalTitle": "Commodities"
+        },
+        {
+          "title": "Currencies",
+          "symbols": [
+            { "s": "FX_IDC:USDNGN", "d": "USD / NGN" },
+            { "s": "FX_IDC:GBPNGN", "d": "GBP / NGN" },
+            { "s": "FX_IDC:EURNGN", "d": "EUR / NGN" },
+            { "s": "FX:EURUSD", "d": "EUR / USD" },
+            { "s": "FX:GBPUSD", "d": "GBP / USD" }
+          ],
+          "originalTitle": "Forex"
         }
       ]
     });
@@ -322,6 +365,20 @@ export class ClientPortfoliosComponent implements OnInit, AfterViewInit, OnDestr
           } else if (res.message === 'OTP_REQUIRED') {
             this.investStep.set('otp');
             this.startOtpCountdown();
+          } else if (res.message === 'CORPORATE_VERIFICATION_REQUIRED') {
+            this.closeModal();
+            Swal.fire({
+              icon: 'warning',
+              title: 'Verification Required',
+              text: 'You must complete your corporate verification checklist before investing.',
+              confirmButtonText: 'Go to Verification',
+              showCancelButton: true,
+              confirmButtonColor: 'var(--dogo-primary)'
+            }).then((result: any) => {
+              if (result.isConfirmed) {
+                this.router.navigate(['/corporate/settings']);
+              }
+            });
           } else if (res.message?.includes('BVN')) {
             this.investStep.set('bvn');
           } else {
@@ -342,6 +399,20 @@ export class ClientPortfoliosComponent implements OnInit, AfterViewInit, OnDestr
         } else if (msg === 'OTP_REQUIRED') {
           this.investStep.set('otp');
           this.startOtpCountdown();
+        } else if (msg === 'CORPORATE_VERIFICATION_REQUIRED') {
+          this.closeModal();
+          Swal.fire({
+            icon: 'warning',
+            title: 'Verification Required',
+            text: 'You must complete your corporate verification checklist before investing.',
+            confirmButtonText: 'Go to Verification',
+            showCancelButton: true,
+            confirmButtonColor: 'var(--dogo-primary)'
+          }).then((result: any) => {
+            if (result.isConfirmed) {
+              this.router.navigate(['/corporate/hub']);
+            }
+          });
         } else if (msg?.includes('BVN')) {
           this.investStep.set('bvn');
         } else {
