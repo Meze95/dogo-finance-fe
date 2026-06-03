@@ -20,7 +20,7 @@
           100% Riba-Free
         </div>
 
-        <h1 class="text-[60px] md:text-[80px] xl:text-[96px] font-black leading-[0.9] tracking-tighter text-[var(--dogo-dark)] mb-8">
+        <h1 class="text-[46px] md:text-[80px] xl:text-[96px] font-black leading-[0.9] tracking-tighter text-[var(--dogo-dark)] mb-6 md:mb-8">
           Grow Your <br>
           Wealth. <br>
           <span class="text-[var(--dogo-primary)]">The Halal </span><span class="text-[var(--dogo-secondary)]">Way.</span>
@@ -32,10 +32,10 @@
           all in Naira, all Riba-free.
         </p>
 
-        <div class="flex flex-wrap gap-4 mb-14">
+        <div class="flex flex-col sm:flex-row flex-wrap gap-4 mb-10 md:mb-14 w-full">
           @if (!isLoggedIn()) {
-            <div class="group relative inline-block">
-              <button class="px-10 py-5 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] transition-all shadow-xl shadow-[var(--dogo-primary)]/25 text-lg flex items-center gap-2 cursor-pointer">
+            <div class="group relative inline-block w-full sm:w-auto">
+              <button class="w-full sm:w-auto justify-center px-6 py-4 md:px-10 md:py-5 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] transition-all shadow-xl shadow-[var(--dogo-primary)]/25 text-base md:text-lg flex items-center gap-2 cursor-pointer">
                 <span>Create Free Account</span>
                 <i class="ri-arrow-down-s-line text-xl transition-transform group-hover:rotate-180 duration-300"></i>
               </button>
@@ -66,28 +66,28 @@
               </div>
             </div>
           } @else {
-            <button [routerLink]="dashboardLink()" class="px-10 py-5 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] transition-all shadow-xl shadow-[var(--dogo-primary)]/25 text-lg">
+            <button [routerLink]="dashboardLink()" class="w-full sm:w-auto justify-center px-6 py-4 md:px-10 md:py-5 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] transition-all shadow-xl shadow-[var(--dogo-primary)]/25 text-base md:text-lg">
               Go to Dashboard
             </button>
           }
-          <a routerLink="/how-it-works" class="px-10 py-5 border-2 border-[var(--dogo-primary)]/20 text-[var(--dogo-primary)] font-black rounded-2xl hover:border-[var(--dogo-primary)] hover:bg-[var(--dogo-cream)] transition-all text-lg flex items-center gap-2">
+          <a routerLink="/how-it-works" class="w-full sm:w-auto justify-center px-6 py-4 md:px-10 md:py-5 border-2 border-[var(--dogo-primary)]/20 text-[var(--dogo-primary)] font-black rounded-2xl hover:border-[var(--dogo-primary)] hover:bg-[var(--dogo-cream)] transition-all text-base md:text-lg flex items-center gap-2">
             How It Works <i class="ri-arrow-right-line"></i>
           </a>
         </div>
 
         <!-- Social Proof Numbers -->
-        <div class="flex items-center gap-4 lg:gap-8 pb-10 whitespace-nowrap">
+        <div class="flex items-center justify-between sm:justify-start gap-2 sm:gap-4 lg:gap-8 pb-10 w-full">
           <div>
-            <p class="text-2xl lg:text-3xl font-black text-[var(--dogo-primary)]">₦10B+</p>
-            <p class="text-[9px] lg:text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest">Target AUM Year 1</p>
+            <p class="text-lg sm:text-2xl lg:text-3xl font-black text-[var(--dogo-primary)]">₦10B+</p>
+            <p class="text-[8px] sm:text-[9px] lg:text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest leading-tight">Target AUM <span class="hidden sm:inline">Year 1</span></p>
           </div>
-          <div class="border-l border-[var(--dogo-primary)]/10 pl-4 lg:pl-8">
-            <p class="text-2xl lg:text-3xl font-black text-[var(--dogo-primary)]">50K+</p>
-            <p class="text-[9px] lg:text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest">Target Users (6 months)</p>
+          <div class="border-l border-[var(--dogo-primary)]/10 pl-2 sm:pl-4 lg:pl-8">
+            <p class="text-lg sm:text-2xl lg:text-3xl font-black text-[var(--dogo-primary)]">50K+</p>
+            <p class="text-[8px] sm:text-[9px] lg:text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest leading-tight">Target Users <span class="hidden lg:inline">(6 mo)</span></p>
           </div>
-          <div class="border-l border-[var(--dogo-primary)]/10 pl-4 lg:pl-8">
-            <p class="text-2xl lg:text-3xl font-black text-[var(--dogo-primary)]">0</p>
-            <p class="text-[9px] lg:text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest">Shariah Violations · Ever</p>
+          <div class="border-l border-[var(--dogo-primary)]/10 pl-2 sm:pl-4 lg:pl-8">
+            <p class="text-lg sm:text-2xl lg:text-3xl font-black text-[var(--dogo-primary)]">0</p>
+            <p class="text-[8px] sm:text-[9px] lg:text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest leading-tight">Shariah Violations</p>
           </div>
         </div>
       </div>
