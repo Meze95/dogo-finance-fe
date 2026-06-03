@@ -75,6 +75,7 @@ export class ClientDashboardComponent implements OnInit {
   });
 
   availableNaira = signal(0);
+  availableDollar = signal(0);
   actualInvestedValue = signal(0);
   portfolioGrowth = signal(0);
   totalProfit = signal(0);
@@ -186,6 +187,7 @@ export class ClientDashboardComponent implements OnInit {
             
             if (isSuccess && data) {
               this.availableNaira.set(data.balance || data.Balance || 0);
+              this.availableDollar.set(data.usdBalance || data.UsdBalance || data.dollarBalance || data.DollarBalance || 0);
             }
           }
         });
