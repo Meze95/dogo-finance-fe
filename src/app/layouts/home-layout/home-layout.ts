@@ -32,7 +32,10 @@ export class HomeLayout implements OnInit {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
-  customerTypes = signal<any[]>([]);
+  customerTypes = signal<any[]>([
+    { id: 1, name: 'Individual', description: 'For personal wealth' },
+    { id: 2, name: 'Corporate', description: 'For registered businesses' }
+  ]);
 
   ngOnInit() {
     this.authService.getCustomerTypes().subscribe({

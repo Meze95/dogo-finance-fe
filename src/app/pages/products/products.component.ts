@@ -34,7 +34,7 @@ export const PRODUCTS_DATA: Record<string, ProductData> = {
     minInvestment: '₦10,000',
     tenor: '3, 6, or 12 months',
     icon: 'ri-seedling-fill',
-    accentColor: '#4CC9F0',
+    accentColor: 'var(--dogo-secondary)',
     accentLight: 'var(--dogo-cream)',
     features: [
       { icon: 'ri-percent-line', title: '70/30 Profit Split', desc: '70% of profits go to you (Rabb-ul-Mal). 30% goes to DOGO Finance (Mudarib) for management. No interest, no fees.' },
@@ -64,7 +64,7 @@ export const PRODUCTS_DATA: Record<string, ProductData> = {
     minInvestment: '₦50,000',
     tenor: '1 to 5 years',
     icon: 'ri-bank-fill',
-    accentColor: '#F9C74F',
+    accentColor: 'var(--dogo-secondary)',
     accentLight: 'var(--dogo-cream)',
     features: [
       { icon: 'ri-building-4-line', title: 'Asset-Backed', desc: 'Every Sukuk on our platform is backed by real, tangible assets — real estate, infrastructure, commodities. No speculative instruments.' },
@@ -93,7 +93,7 @@ export const PRODUCTS_DATA: Record<string, ProductData> = {
     minInvestment: '₦25,000',
     tenor: 'Open-ended',
     icon: 'ri-line-chart-fill',
-    accentColor: '#43AA8B',
+    accentColor: 'var(--dogo-secondary)',
     accentLight: 'var(--dogo-cream)',
     features: [
       { icon: 'ri-robot-line', title: 'AI Haram Screening', desc: 'Real-time screening powered by MSCI Islamic Index data. 7 prohibited criteria checked against every stock automatically.' },
@@ -122,7 +122,7 @@ export const PRODUCTS_DATA: Record<string, ProductData> = {
     minInvestment: '₦25,000',
     tenor: '6 or 12 months',
     icon: 'ri-shield-star-fill',
-    accentColor: '#480CA8',
+    accentColor: 'var(--dogo-secondary)',
     accentLight: 'var(--dogo-cream)',
     features: [
       { icon: 'ri-handshake-line', title: 'Fixed Agency Fee', desc: 'DOGO Finance earns a fixed Wakalah fee regardless of profit — aligning our interests with yours.' },
@@ -150,7 +150,7 @@ export const PRODUCTS_DATA: Record<string, ProductData> = {
     minInvestment: '₦100,000',
     tenor: '12 to 36 months',
     icon: 'ri-team-fill',
-    accentColor: '#3A0CA3',
+    accentColor: 'var(--dogo-secondary)',
     accentLight: 'var(--dogo-cream)',
     features: [
       { icon: 'ri-group-line', title: 'True Partnership Structure', desc: 'All partners share in both upside profits and downside losses proportionately — the most equitable Islamic finance contract.' },
@@ -178,7 +178,7 @@ export const PRODUCTS_DATA: Record<string, ProductData> = {
     minInvestment: '₦50,000',
     tenor: '12 to 60 months',
     icon: 'ri-building-2-fill',
-    accentColor: '#F72585',
+    accentColor: 'var(--dogo-secondary)',
     accentLight: 'var(--dogo-cream)',
     features: [
       { icon: 'ri-home-gear-line', title: 'Real Asset Backing', desc: 'Every Ijarah instrument is backed by a real, tangible, productive asset that generates lease income.' },

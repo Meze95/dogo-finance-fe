@@ -10,10 +10,10 @@
   <div class="absolute -bottom-20 left-10 w-64 h-64 rounded-full blur-[100px] opacity-10" style="background: radial-gradient(circle, var(--dogo-primary), transparent)"></div>
 
   <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-    <div class="grid lg:grid-cols-2 gap-16 items-center">
+    <div class="grid lg:grid-cols-12 gap-16 items-center">
 
       <!-- Text Content -->
-      <div class="pt-4 lg:pt-0">
+      <div class="pt-4 lg:pt-0 lg:col-span-7">
         <!-- Trust Badge -->
         <div class="halal-badge mb-5">
           <i class="ri-verified-badge-fill text-sm"></i>
@@ -76,24 +76,24 @@
         </div>
 
         <!-- Social Proof Numbers -->
-        <div class="flex flex-wrap gap-8 pb-10">
+        <div class="flex items-center gap-4 lg:gap-8 pb-10 whitespace-nowrap">
           <div>
-            <p class="text-3xl font-black text-[var(--dogo-primary)]">₦10B+</p>
-            <p class="text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest">Target AUM Year 1</p>
+            <p class="text-2xl lg:text-3xl font-black text-[var(--dogo-primary)]">₦10B+</p>
+            <p class="text-[9px] lg:text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest">Target AUM Year 1</p>
           </div>
-          <div class="border-l border-[var(--dogo-primary)]/10 pl-8">
-            <p class="text-3xl font-black text-[var(--dogo-primary)]">50K+</p>
-            <p class="text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest">Target Users (6 months)</p>
+          <div class="border-l border-[var(--dogo-primary)]/10 pl-4 lg:pl-8">
+            <p class="text-2xl lg:text-3xl font-black text-[var(--dogo-primary)]">50K+</p>
+            <p class="text-[9px] lg:text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest">Target Users (6 months)</p>
           </div>
-          <div class="border-l border-[var(--dogo-primary)]/10 pl-8">
-            <p class="text-3xl font-black text-[var(--dogo-primary)]">0</p>
-            <p class="text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest">Shariah Violations · Ever</p>
+          <div class="border-l border-[var(--dogo-primary)]/10 pl-4 lg:pl-8">
+            <p class="text-2xl lg:text-3xl font-black text-[var(--dogo-primary)]">0</p>
+            <p class="text-[9px] lg:text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest">Shariah Violations · Ever</p>
           </div>
         </div>
       </div>
 
       <!-- Hero Visual -->
-      <div class="flex justify-center items-end lg:items-end relative">
+      <div class="flex justify-center items-end lg:items-end relative lg:col-span-5">
         <!-- Phone Mockup -->
         <div class="relative anim-float">
           <!-- Main phone image -->
@@ -128,7 +128,7 @@
           <i class="ri-verified-badge-fill text-[var(--dogo-primary)] text-3xl group-hover:text-[var(--dogo-secondary)] transition-colors"></i>
         </div>
         <h3 class="text-2xl font-black text-[var(--dogo-dark)] mb-4 group-hover:text-white transition-colors">100% Halal-Certified</h3>
-        <p class="text-[var(--dogo-muted)] font-medium leading-relaxed group-hover:text-white/70 transition-colors">
+        <p class="text-[var(--dogo-muted)] font-medium leading-relaxed text-justify group-hover:text-white/70 transition-colors">
           Every product is approved by our Shariah Supervisory Board and reviewed against AAOIFI standards. No hidden interest, no Gharar, no Maysir — guaranteed.
         </p>
       </div>
@@ -139,7 +139,7 @@
           <i class="ri-map-pin-user-fill text-[var(--dogo-primary)] text-3xl group-hover:text-[var(--dogo-secondary)] transition-colors"></i>
         </div>
         <h3 class="text-2xl font-black text-[var(--dogo-dark)] mb-4 group-hover:text-white transition-colors">Built for Nigerians</h3>
-        <p class="text-[var(--dogo-muted)] font-medium leading-relaxed group-hover:text-white/70 transition-colors">
+        <p class="text-[var(--dogo-muted)] font-medium leading-relaxed text-justify group-hover:text-white/70 transition-colors">
           All investments are ₦ denominated. Fund your account via Paystack, NIBSS bank transfer, or USSD. Full BVN and NIN verified KYC. Your data stays in Nigeria under NDPR.
         </p>
       </div>
@@ -150,7 +150,7 @@
           <i class="ri-funds-box-fill text-[var(--dogo-primary)] text-3xl group-hover:text-[var(--dogo-secondary)] transition-colors"></i>
         </div>
         <h3 class="text-2xl font-black text-[var(--dogo-dark)] mb-4 group-hover:text-white transition-colors">Real Returns, Real Impact</h3>
-        <p class="text-[var(--dogo-muted)] font-medium leading-relaxed group-hover:text-white/70 transition-colors">
+        <p class="text-[var(--dogo-muted)] font-medium leading-relaxed text-justify group-hover:text-white/70 transition-colors">
           Earn competitive profit-sharing returns on Mudarabah, Sukuk and Halal equities — all while your Zakat is automatically calculated and disbursed to CBN-approved charities.
         </p>
       </div>
@@ -278,7 +278,7 @@
           @for(item of ['Haram sector automated screening (alcohol, Riba, weapons, adult content)', 'AAOIFI standards compliance on all products', 'Quarterly SSB audit reports published publicly', 'Automatic income purification routed to Nigerian Islamic charities']; track item) {
             <div class="flex items-start gap-4">
               <div class="w-7 h-7 rounded-full bg-[var(--dogo-primary)] flex items-center justify-center shrink-0 mt-0.5">
-                <i class="ri-check-line text-[var(--dogo-secondary)] text-sm"></i>
+                <i class="ri-check-line text-white text-sm"></i>
               </div>
               <p class="font-medium text-[#374151]">{{ item }}</p>
             </div>
@@ -295,8 +295,8 @@
         <div class="bg-[var(--dogo-primary)] rounded-[50px] p-12 text-white relative overflow-hidden shadow-premium">
           <div class="absolute top-0 right-0 w-72 h-72 rounded-full blur-[80px] opacity-10" style="background: radial-gradient(circle, var(--dogo-secondary), transparent)"></div>
           <div class="relative z-10">
-            <div class="w-16 h-16 rounded-full bg-[var(--dogo-secondary)]/20 flex items-center justify-center mb-8">
-              <i class="ri-verified-badge-fill text-[var(--dogo-secondary)] text-3xl"></i>
+            <div class="w-16 h-16 rounded-full bg-white/10 border border-white/20 flex items-center justify-center mb-8">
+              <i class="ri-verified-badge-fill text-white text-3xl shadow-sm"></i>
             </div>
             <h3 class="text-3xl font-black mb-4">What We Screen Out</h3>
             <p class="text-white/60 font-medium mb-8">Our AI engine auto-removes all Haram elements from every portfolio, in real-time.</p>
@@ -324,47 +324,47 @@
 <!-- ===== ZAKAT TEASER ===== -->
 <section class="py-24 bg-white">
   <div class="max-w-7xl mx-auto px-6 md:px-12">
-    <div class="bg-gradient-to-br from-[var(--dogo-primary)] to-[var(--dogo-secondary)] rounded-[60px] p-12 md:p-16 lg:p-20 relative overflow-hidden">
+    <div class="bg-[var(--dogo-primary)] rounded-[40px] md:rounded-[60px] p-8 md:p-12 lg:p-20 relative overflow-hidden shadow-2xl">
       <!-- Pattern -->
       <div class="absolute inset-0 dogo-pattern opacity-10"></div>
-      <!-- Gold glow -->
-      <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-[var(--dogo-secondary)]/20 rounded-full blur-[100px]"></div>
+      <!-- Glow -->
+      <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-[var(--dogo-secondary)] rounded-full blur-[100px] opacity-50"></div>
 
-      <div class="grid lg:grid-cols-2 gap-12 items-center relative z-10">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center relative z-10">
         <div>
-          <div class="halal-badge mb-8">
+          <div class="halal-badge bg-[var(--dogo-secondary)] text-white mb-8 border-none">
             <i class="ri-hand-heart-fill"></i> Zakat Made Easy
           </div>
-          <h2 class="text-4xl md:text-5xl font-black text-white tracking-tighter leading-tight mb-8">
-            Calculate your Zakat.<br><span class="text-[var(--dogo-secondary)]">Fulfill your obligation.</span>
+          <h2 class="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tighter leading-tight mb-6">
+            Calculate your Zakat.<br><span class="text-white/90">Fulfill your obligation.</span>
           </h2>
-          <p class="text-white/70 font-medium leading-relaxed text-lg mb-10">
+          <p class="text-white/70 font-medium leading-relaxed text-lg mb-10 max-w-lg">
             Nigeria's most accurate Naira-based Zakat calculator. Built on current gold nisab thresholds. Pay directly to CBN-approved Islamic charities with one tap.
           </p>
-          <a routerLink="/zakat" class="inline-flex items-center gap-3 bg-[var(--dogo-secondary)] text-[var(--dogo-dark)] px-10 py-5 rounded-2xl font-black hover:bg-[var(--dogo-secondary-soft,var(--dogo-secondary))] transition-all shadow-xl shadow-[var(--dogo-secondary)]/30 text-lg">
+          <a routerLink="/zakat" class="inline-flex items-center justify-center gap-3 w-full sm:w-auto bg-white text-[var(--dogo-primary)] px-10 py-5 rounded-2xl font-black hover:bg-slate-100 transition-all shadow-xl text-lg">
             <i class="ri-calculator-2-fill text-xl"></i> Calculate My Zakat
           </a>
         </div>
 
-        <div class="bg-white/10 backdrop-blur-sm rounded-[40px] p-10 border border-white/10">
-          <p class="text-[11px] font-black uppercase tracking-widest text-[var(--dogo-secondary)] mb-2">Your Zakat Summary</p>
-          <p class="text-4xl font-black text-white mb-8">₦ — ,— —</p>
+        <div class="bg-[var(--dogo-secondary)]/40 backdrop-blur-md rounded-[32px] md:rounded-[40px] p-8 md:p-10 border border-white/10 shadow-2xl">
+          <p class="text-[11px] font-black uppercase tracking-widest text-white/60 mb-2">Your Zakat Summary</p>
+          <p class="text-4xl md:text-5xl font-black text-white mb-8">₦ — ,— —</p>
           <div class="space-y-4">
             <div class="flex justify-between items-center py-3 border-b border-white/10">
-              <span class="text-white/60 font-medium">Cash & Savings</span>
-              <span class="text-white font-black">₦ 0</span>
+              <span class="text-white/70 font-medium text-sm md:text-base">Cash & Savings</span>
+              <span class="text-white font-black text-lg">₦ 0</span>
             </div>
             <div class="flex justify-between items-center py-3 border-b border-white/10">
-              <span class="text-white/60 font-medium">Investments</span>
-              <span class="text-white font-black">₦ 0</span>
+              <span class="text-white/70 font-medium text-sm md:text-base">Investments</span>
+              <span class="text-white font-black text-lg">₦ 0</span>
             </div>
             <div class="flex justify-between items-center py-3 border-b border-white/10">
-              <span class="text-white/60 font-medium">Gold Value</span>
-              <span class="text-white font-black">₦ 0</span>
+              <span class="text-white/70 font-medium text-sm md:text-base">Gold Value</span>
+              <span class="text-white font-black text-lg">₦ 0</span>
             </div>
           </div>
-          <button class="w-full mt-8 py-4 bg-[var(--dogo-secondary)] text-[var(--dogo-dark)] rounded-2xl font-black hover:bg-[var(--dogo-secondary-soft,var(--dogo-secondary))] transition-all">
-            Start Calculator <i class="ri-arrow-right-line ml-1"></i>
+          <button class="w-full mt-8 py-4 md:py-5 bg-[var(--dogo-primary)] text-white rounded-2xl font-black hover:bg-[var(--dogo-primary)]/80 transition-all shadow-xl flex items-center justify-center gap-2 border border-white/5">
+            Start Calculator <i class="ri-arrow-right-line text-lg"></i>
           </button>
         </div>
       </div>
