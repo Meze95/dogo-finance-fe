@@ -19,6 +19,7 @@ export class CorporateRegisterComponent {
 
   corporateForm: FormGroup;
   showPassword = signal(false);
+  showConfirmPassword = signal(false);
   isProcessing = signal(false);
   isSuccess = signal(false);
   errorMessage = signal<string | null>(null);
@@ -33,9 +34,11 @@ export class CorporateRegisterComponent {
     this.corporateForm = this.fb.group({
       businessName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
+      phoneNumber: ['', [Validators.required]],
       password: ['', [Validators.required, this.passwordStrengthValidator.bind(this)]],
+      confirmPassword: ['', [Validators.required]],
       agreeToTerms: [false, [Validators.requiredTrue]]
-    });
+    }, { validators: this.passwordMatchValidator });
 
     // Listen to password changes to update requirement signals in real time
     this.corporateForm.get('password')?.valueChanges.subscribe(val => {
@@ -61,8 +64,32 @@ export class CorporateRegisterComponent {
     return { strength: true };
   }
 
+  passwordMatchValidator(group: AbstractControl) {
+    const password = group.get('password')?.value;
+    const confirmPassword = group.get('confirmPassword')?.value;
+    if (password && confirmPassword && password !== confirmPassword) {
+      group.get('confirmPassword')?.setErrors({ ...group.get('confirmPassword')?.errors, mismatch: true });
+      return { mismatch: true };
+    } else {
+      const confirmErrors = group.get('confirmPassword')?.errors;
+      if (confirmErrors) {
+        delete confirmErrors['mismatch'];
+        if (Object.keys(confirmErrors).length === 0) {
+          group.get('confirmPassword')?.setErrors(null);
+        } else {
+          group.get('confirmPassword')?.setErrors(confirmErrors);
+        }
+      }
+    }
+    return null;
+  }
+
   togglePassword() {
     this.showPassword.set(!this.showPassword());
+  }
+
+  toggleConfirmPassword() {
+    this.showConfirmPassword.set(!this.showConfirmPassword());
   }
 
   onSubmit() {
@@ -77,7 +104,9 @@ export class CorporateRegisterComponent {
       console.log('Payload:', {
         businessName: formData.businessName,
         email: formData.email,
+        phoneNumber: formData.phoneNumber,
         password: '••••••••', // Mask for security in logs but log that it is captured
+        confirmPassword: '••••••••',
         agreedToTerms: formData.agreeToTerms
       });
       console.log('Raw Form Values:', formData);
@@ -89,8 +118,8 @@ export class CorporateRegisterComponent {
         businessName: formData.businessName,
         email: formData.email,
         password: formData.password,
-        confirmPassword: formData.password, // Frontend only captures 1 password, backend expects confirmPassword too
-        phoneNumber: '00000000000' // Placeholder if not captured in the frontend yet
+        confirmPassword: formData.confirmPassword,
+        phoneNumber: formData.phoneNumber
       };
 
       this.authService.signUp(payload).subscribe({

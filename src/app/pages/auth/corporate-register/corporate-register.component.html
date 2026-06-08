@@ -102,6 +102,18 @@
         }
       </div>
 
+      <!-- Phone Number -->
+      <div>
+        <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Phone Number</label>
+        <div class="relative group">
+          <input type="tel" formControlName="phoneNumber" class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl px-5 pl-12 font-medium text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:ring-4 focus:ring-[var(--dogo-secondary)]/10 transition-all placeholder:text-gray-400" placeholder="Phone Number" />
+          <i class="ri-phone-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[var(--dogo-secondary)] transition-colors"></i>
+        </div>
+        @if(corporateForm.get('phoneNumber')?.invalid && corporateForm.get('phoneNumber')?.touched) {
+          <span class="text-red-500 text-xs font-bold mt-2 block">Phone number is required.</span>
+        }
+      </div>
+
       <!-- Create Password -->
       <div>
         <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Create Password</label>
@@ -149,7 +161,22 @@
         }
       </div>
 
-
+      <!-- Confirm Password -->
+      <div>
+        <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Confirm Password</label>
+        <div class="relative group">
+          <input [type]="showConfirmPassword() ? 'text' : 'password'" formControlName="confirmPassword" class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl px-5 pl-12 pr-16 font-medium text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:ring-4 focus:ring-[var(--dogo-secondary)]/10 transition-all placeholder:text-gray-400" placeholder="Confirm Password" />
+          <i class="ri-lock-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[var(--dogo-secondary)] transition-colors"></i>
+          <button type="button" (click)="toggleConfirmPassword()" class="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[var(--dogo-primary)] transition-colors text-xs font-extrabold uppercase tracking-wider cursor-pointer">
+            {{ showConfirmPassword() ? 'Hide' : 'Show' }}
+          </button>
+        </div>
+        @if(corporateForm.get('confirmPassword')?.hasError('required') && corporateForm.get('confirmPassword')?.touched) {
+          <span class="text-red-500 text-xs font-bold mt-2 block">Confirm Password is required.</span>
+        } @else if(corporateForm.get('confirmPassword')?.hasError('mismatch') && corporateForm.get('confirmPassword')?.touched) {
+          <span class="text-red-500 text-xs font-bold mt-2 block">Passwords do not match.</span>
+        }
+      </div>
 
       <!-- Terms of Use Checkbox -->
       <div class="flex items-start space-x-3 cursor-pointer group mt-4">
