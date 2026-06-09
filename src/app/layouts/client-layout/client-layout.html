@@ -30,21 +30,26 @@
 
     <!-- Brand Header -->
     <div class="h-20 flex items-center px-6 shrink-0 border-b border-white/5 bg-[var(--dogo-primary)]/20">
-      <div class="flex items-center space-x-4 overflow-hidden">
-        <div
-          class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-[var(--dogo-primary)]/10 border border-white/10">
-          <img src="/brand/icon.png" alt="Dogo" class="w-7 h-7 object-contain">
+      <div class="relative flex flex-col justify-center w-full h-full">
+        <!-- Icon only (fades in when collapsed) -->
+        <div class="absolute left-0 top-1/2 -translate-y-1/2 flex items-center transition-opacity duration-300" 
+             [class.opacity-0]="isSidebarOpen() || isMobileMenuOpen()"
+             [class.pointer-events-none]="isSidebarOpen() || isMobileMenuOpen()">
+          <img src="/brand/D LOGO W.png" alt="Dogo Icon" class="w-8 h-8 object-contain">
         </div>
-        <div class="flex flex-col leading-none transition-opacity duration-300" [class.opacity-0]="!isSidebarOpen()">
-          <span class="text-xl font-black tracking-tight text-white uppercase italic">DOGO</span>
-          <span class="text-[9px] font-bold text-[var(--dogo-secondary)] tracking-[0.2em] uppercase mt-0.5 whitespace-nowrap">Halal Finance</span>
+        
+        <!-- Full Logo + Text (fades out when collapsed) -->
+        <div class="flex flex-col min-w-max transition-opacity duration-300" 
+             [class.opacity-0]="!isSidebarOpen() && !isMobileMenuOpen()">
+          <img src="/brand/D LOGO FW.png" alt="Dogo" class="h-6 md:h-7 w-auto object-contain object-left">
+          <span class="text-[9px] font-bold text-white/60 tracking-[0.2em] uppercase mt-1.5 whitespace-nowrap">Halal Finance</span>
         </div>
       </div>
     </div>
 
     <!-- Navigation Area -->
     <div class="flex-grow flex flex-col py-8 overflow-y-auto custom-scrollbar px-3 space-y-2">
-      <p class="px-5 text-[10px] font-black uppercase tracking-[0.3em] text-[var(--dogo-secondary)] mb-4 transition-opacity shrink-0 whitespace-nowrap"
+      <p class="px-5 text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-4 transition-opacity shrink-0 whitespace-nowrap"
         [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">Main System</p>
 
       @for(item of menuItems; track item.label) {
