@@ -545,7 +545,7 @@ export class CorporateDashboardComponent implements OnInit {
               ? 'Awaiting corporate compliance review and approval.' 
               : 'Please upload this required corporate document to verify your business.',
             icon: v.icon || 'ri-checkbox-circle-line',
-            action: v.status === 'pending' ? 'PENDING REVIEW' : 'UPLOAD NOW',
+            action: v.status === 'pending' ? 'PENDING REVIEW' : 'VERIFY NOW',
             status: v.status,
             type: v.type,
             originalName: v.name
@@ -624,6 +624,8 @@ export class CorporateDashboardComponent implements OnInit {
   companyBankDetails = signal<{bankName: string, accountName: string, accountNumber: string} | null>(null);
   manualReference = signal('');
   manualReceiptPath = signal('');
+  manualReceiptFile = signal<File | null>(null);
+  manualReceiptFilePreview = signal<string | null>(null);
 
   virtualAccounts = signal<{bankName: string, accountName: string, accountNumber: string}[]>([]);
 
@@ -747,7 +749,7 @@ export class CorporateDashboardComponent implements OnInit {
     // Corporate steps should be handled on the Settings page instead of showing the BVN modal
     const corporateStepTypes = ['appForm', 'incorporation', 'passport', 'memart', 'cac2', 'cac7', 'cac3', 'signatoryId', 'boardResolution', 'settlementLink', 'settlement_link'];
     if (corporateStepTypes.includes(step.type)) {
-      this.router.navigate(['/client/settings']);
+      this.router.navigate(['/corporate/settings']);
       return;
     }
 
@@ -779,6 +781,16 @@ export class CorporateDashboardComponent implements OnInit {
       this.addressFile.set(file);
       const reader = new FileReader();
       reader.onload = () => this.addressFilePreview.set(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onManualReceiptFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.manualReceiptFile.set(file);
+      const reader = new FileReader();
+      reader.onload = () => this.manualReceiptFilePreview.set(reader.result as string);
       reader.readAsDataURL(file);
     }
   }
@@ -928,6 +940,8 @@ export class CorporateDashboardComponent implements OnInit {
     this.otpInput.set('');
     this.manualReference.set('');
     this.manualReceiptPath.set('');
+    this.manualReceiptFile.set(null);
+    this.manualReceiptFilePreview.set(null);
     this.errorMessage.set('');
     this.showTransactionModal.set(true);
     this.isProcessing.set(false);
@@ -1237,7 +1251,8 @@ export class CorporateDashboardComponent implements OnInit {
     this.transactionService.submitManualFunding({
       amount: amount,
       reference: this.manualReference(),
-      receiptPath: this.manualReceiptPath()
+      receiptPath: this.manualReceiptPath(),
+      receiptFile: this.manualReceiptFile()
     }).subscribe({
       next: (res) => {
         this.isProcessing.set(false);

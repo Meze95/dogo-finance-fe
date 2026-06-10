@@ -682,7 +682,7 @@
             variant="danger" 
             size="md" 
             class="flex-1 h-14 font-black uppercase text-[11px] tracking-widest rounded-2xl" 
-            [disabled]="!rejectionReason().trim() || isProcessing()"
+            [disabled]="!rejectionReason().trim() || isProcessing() || hasPendingDocuments()"
             (click)="rejectRegistration()"
           >
             {{ isProcessing() ? 'Processing...' : 'Flag & Reject Registration' }}
@@ -692,12 +692,18 @@
             variant="primary" 
             size="md" 
             class="flex-1 h-14 font-black uppercase text-[11px] tracking-widest rounded-2xl" 
-            [disabled]="isProcessing() || !isAllDocumentsVerified()"
+            [disabled]="isProcessing() || !isAllDocumentsVerified() || hasPendingDocuments()"
             (click)="approveRegistration()"
           >
             {{ isProcessing() ? 'Processing...' : 'Approve & Verify Account' }}
           </app-button>
         </div>
+
+        @if (hasPendingDocuments()) {
+          <p class="text-[10px] text-red-500 font-bold text-center mt-3 bg-red-50 py-2 px-4 rounded-xl border border-red-100">
+            * Please verify or reject all pending documents in the checklist before taking final action.
+          </p>
+        }
       </div>
       } @else {
       <!-- Historical Review Ledger -->
@@ -760,211 +766,40 @@
     </div>
 
     <!-- Live CSS-rendered Document Frame -->
-    <div class="flex-grow overflow-y-auto drawer-scroll p-6 bg-slate-50 rounded-3xl mt-6 border border-slate-200/50 flex justify-center">
+    <div class="flex-grow overflow-y-auto drawer-scroll p-6 bg-slate-50 rounded-3xl mt-6 border border-slate-200/50 flex justify-center items-center relative min-h-[400px]">
       
-      <!-- Certificate of Incorporation Template -->
-      @if (activeDocPreview()?.type === 'incorporation') {
-      <div class="w-full max-w-[450px] bg-[#fdfdfb] border-[16px] border-[#0c4017] p-8 shadow-md relative min-h-[560px] flex flex-col justify-between font-serif text-[#0b3814] select-none text-center">
-        <!-- Watermark -->
-        <div class="absolute inset-0 opacity-[0.03] flex items-center justify-center pointer-events-none">
-          <i class="ri-government-line text-[240px]"></i>
-        </div>
-        
-        <!-- Document Content -->
-        <div>
-          <!-- Logo & Header -->
-          <div class="flex flex-col items-center space-y-1">
-            <div class="w-10 h-10 rounded-full border-2 border-[#0b3814] flex items-center justify-center text-xs font-black bg-white">CAC</div>
-            <h5 class="text-[9px] font-bold tracking-[0.2em] font-sans uppercase">Federal Republic of Nigeria</h5>
-            <h4 class="text-xs font-bold font-sans uppercase text-emerald-800 tracking-wider">Corporate Affairs Commission</h4>
-          </div>
-          
-          <!-- Stamp of Verification -->
-          <div class="absolute top-8 right-8 w-20 h-20 rounded-full flex items-center justify-center font-bold text-[8px] uppercase tracking-tighter official-stamp select-none">
-            Verified
-          </div>
-
-          <!-- Body -->
-          <div class="mt-8 space-y-4">
-            <p class="text-[8px] font-sans tracking-widest uppercase">Certificate of Incorporation</p>
-            
-            <p class="text-[10px] leading-relaxed italic">
-              I hereby certify that the administrative entity
-            </p>
-            
-            <h3 class="text-base font-sans font-black uppercase text-emerald-950 tracking-wide font-serif pt-1 pb-1">
-              {{ activeDocPreview()?.businessName }}
-            </h3>
-            
-            <p class="text-[10px] leading-relaxed italic">
-              is this day incorporated under the <span class="font-bold">COMPANIES AND ALLIED MATTERS ACT 2020</span> and that the Company is Limited by Shares.
-            </p>
-
-            <p class="text-[10px] leading-relaxed italic">
-              Given under my hand at Abuja this <span class="font-bold">24th Day of May, 2026.</span>
-            </p>
-          </div>
-        </div>
-
-        <!-- Seal & Register ID -->
-        <div class="flex justify-between items-end pt-8 border-t border-emerald-900/10">
-          <div class="text-left font-sans">
-            <p class="text-[8px] uppercase tracking-wider text-slate-400">RC Number</p>
-            <p class="text-xs font-bold text-slate-900 font-mono">{{ activeDocPreview()?.rcNumber }}</p>
-          </div>
-          
-          <div class="text-center font-sans space-y-1 flex flex-col items-center">
-            <div class="w-16 h-6 border-b border-slate-400 border-dashed"></div>
-            <p class="text-[6px] uppercase tracking-widest text-slate-400">Registrar-General</p>
-          </div>
-        </div>
-      </div>
-      }
-
-      <!-- CAC CAC2 & CAC7 Form Templates -->
-      @else if (activeDocPreview()?.type === 'cac2' || activeDocPreview()?.type === 'cac7') {
-      <div class="w-full max-w-[450px] bg-white border border-slate-300 p-8 shadow-sm relative min-h-[560px] flex flex-col justify-between font-sans text-slate-800 text-left">
-        <div>
-          <!-- Header -->
-          <div class="flex items-center justify-between pb-4 border-b border-slate-300">
+      @if (activeDocPreview()?.fileUrl) {
+        @if (isPdf(activeDocPreview()?.fileUrl)) {
+          <div class="w-full max-w-[450px] bg-white border border-slate-300 p-8 shadow-sm rounded-2xl flex flex-col items-center justify-center gap-4 text-center">
+            <div class="w-20 h-20 rounded-full bg-red-50 text-red-500 flex items-center justify-center">
+              <i class="ri-file-pdf-2-fill text-4xl"></i>
+            </div>
             <div>
-              <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest">FORM CAC 7</p>
-              <h4 class="text-[10px] font-black text-slate-800 uppercase tracking-wide">Particulars of Directors</h4>
+              <p class="font-black text-slate-800 uppercase tracking-widest">{{ activeDocPreview()?.docName }}</p>
+              <p class="text-xs font-bold text-slate-400 mt-1">PDF Document</p>
             </div>
-            <div class="text-right">
-              <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[8px] font-black uppercase">Official Copy</span>
+            <a [href]="activeDocPreview()?.fileUrl" target="_blank" class="mt-4 bg-red-500 hover:bg-red-600 text-white font-black uppercase text-[10px] tracking-widest px-6 py-3 rounded-xl transition-all shadow-md flex items-center gap-2">
+              Open Document <i class="ri-external-link-line"></i>
+            </a>
+          </div>
+        } @else {
+          <div class="w-full h-full flex flex-col items-center justify-center relative group">
+            <img [src]="activeDocPreview()?.fileUrl" class="w-full h-auto max-h-[600px] object-contain rounded-xl shadow-sm border border-slate-200 bg-white" alt="Document Preview">
+            <div class="absolute inset-0 bg-[var(--dogo-dark)]/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl">
+              <a [href]="activeDocPreview()?.fileUrl" target="_blank" class="w-14 h-14 rounded-full bg-white text-[var(--dogo-dark)] hover:text-[var(--dogo-secondary)] flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+                <i class="ri-external-link-line text-2xl"></i>
+              </a>
             </div>
           </div>
-
-          <!-- Document Watermark Stamp -->
-          <div class="absolute top-20 right-8 w-24 h-10 border-4 border-double border-emerald-500/30 flex items-center justify-center font-bold text-[10px] uppercase text-emerald-500/40 rotate-12 select-none pointer-events-none">
-            CAC Approved
-          </div>
-
-          <!-- Form Fields -->
-          <div class="mt-6 space-y-4 text-[10px]">
-            <div>
-              <p class="font-black text-slate-400 uppercase text-[8px]">1. Company Name</p>
-              <p class="font-bold text-slate-900 text-sm mt-0.5 uppercase">{{ activeDocPreview()?.businessName }}</p>
-            </div>
-            
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <p class="font-black text-slate-400 uppercase text-[8px]">RC ID</p>
-                <p class="font-mono font-bold text-slate-900 mt-0.5">{{ activeDocPreview()?.rcNumber }}</p>
-              </div>
-              <div>
-                <p class="font-black text-slate-400 uppercase text-[8px]">Type of Entity</p>
-                <p class="font-bold text-slate-900 mt-0.5">Private Limited Company</p>
-              </div>
-            </div>
-
-            <!-- Table of Directors -->
-            <div class="pt-4 space-y-2">
-              <p class="font-black text-slate-400 uppercase text-[8px]">2. Listed Directors Details</p>
-              <table class="w-full text-left text-[9px] border-collapse">
-                <thead>
-                  <tr class="bg-slate-50 border-b border-slate-200">
-                    <th class="p-1.5 font-bold uppercase text-slate-500">Director Name</th>
-                    <th class="p-1.5 font-bold uppercase text-slate-500">Designation</th>
-                    <th class="p-1.5 font-bold uppercase text-slate-500 text-right">Shares %</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100">
-                  <tr class="hover:bg-slate-50/50">
-                    <td class="p-1.5 font-black">Aisha Musa</td>
-                    <td class="p-1.5 text-slate-500">Managing Director</td>
-                    <td class="p-1.5 text-right font-black">40%</td>
-                  </tr>
-                  <tr class="hover:bg-slate-50/50">
-                    <td class="p-1.5 font-black">Ibrahim Kazeem</td>
-                    <td class="p-1.5 text-slate-500">Operations Director</td>
-                    <td class="p-1.5 text-right font-black">30%</td>
-                  </tr>
-                  <tr class="hover:bg-slate-50/50">
-                    <td class="p-1.5 font-black">Fatimah Yusuf</td>
-                    <td class="p-1.5 text-slate-500">Finance Director</td>
-                    <td class="p-1.5 text-right font-black">30%</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <!-- Address -->
-            <div class="pt-2">
-              <p class="font-black text-slate-400 uppercase text-[8px]">3. Notice of Registered Address</p>
-              <p class="font-medium text-slate-700 leading-relaxed mt-0.5">12, Medina Crescent, Victoria Island, Lagos State</p>
-            </div>
-          </div>
+        }
+      } @else {
+        <div class="text-center text-slate-400 p-8">
+          <i class="ri-file-damage-line text-6xl mb-4 opacity-50 block"></i>
+          <p class="font-black uppercase tracking-widest text-sm">No Document File Available</p>
+          <p class="text-xs font-bold mt-2">The physical document scan was not found in the registry.</p>
         </div>
-
-        <!-- Footer -->
-        <div class="pt-6 border-t border-slate-200 flex justify-between items-center text-[7px] text-slate-400 font-mono">
-          <span>Form CAC-02/07 Revision 2024</span>
-          <span>Security Pin: CA9038-0239-1094</span>
-        </div>
-      </div>
       }
-
-      <!-- General Signatory Identification & Supporting Docs Mockups -->
-      @else {
-      <div class="w-full max-w-[450px] bg-gradient-to-br from-emerald-800 to-emerald-950 text-white rounded-3xl p-6 shadow-lg min-h-[260px] flex flex-col justify-between font-sans relative overflow-hidden select-none">
-        <!-- Background graphics -->
-        <div class="absolute inset-0 bg-dogo-pattern opacity-5 pointer-events-none"></div>
-        <div class="absolute -right-16 -top-16 w-48 h-48 bg-white/5 rounded-full blur-2xl"></div>
-
-        <div>
-          <!-- Header -->
-          <div class="flex justify-between items-center pb-3 border-b border-white/10 shrink-0">
-            <div class="flex items-center gap-2">
-              <div class="w-6 h-6 rounded-full bg-white flex items-center justify-center text-[8px] font-black text-emerald-900">NGA</div>
-              <span class="text-[9px] font-black uppercase tracking-widest text-slate-200">National Identity Management Commission</span>
-            </div>
-            <i class="ri-rfid-line text-lg text-emerald-300"></i>
-          </div>
-
-          <!-- Body -->
-          <div class="flex gap-6 mt-6">
-            <!-- Mock Portrait -->
-            <div class="w-20 h-24 rounded-2xl bg-white/10 border border-white/20 flex flex-col items-center justify-center text-xs shrink-0 overflow-hidden relative">
-              <i class="ri-user-star-line text-4xl text-emerald-300/40"></i>
-              <div class="absolute bottom-1 left-0 right-0 text-[6px] text-center uppercase text-white/50 tracking-wider">Portrait</div>
-            </div>
-            
-            <!-- Details -->
-            <div class="space-y-3 flex-grow text-left">
-              <div>
-                <p class="text-[7px] text-slate-300 uppercase tracking-widest">Authorized Representative / Holder</p>
-                <p class="text-sm font-black tracking-wide uppercase">{{ activeDocPreview()?.businessName === 'Halal Invest Ltd' ? 'Aisha Musa' : 'Ibrahim Kazeem' }}</p>
-              </div>
-              
-              <div class="grid grid-cols-2 gap-2 text-[8px]">
-                <div>
-                  <p class="text-[7px] text-slate-300 uppercase tracking-widest">Document Class</p>
-                  <p class="font-bold">NIN / Signatory Card</p>
-                </div>
-                <div>
-                  <p class="text-[7px] text-slate-300 uppercase tracking-widest">Verification Status</p>
-                  <p class="font-bold text-emerald-300">100% Validated</p>
-                </div>
-              </div>
-
-              <div>
-                <p class="text-[7px] text-slate-300 uppercase tracking-widest">Linked Corporation</p>
-                <p class="text-[9px] font-bold truncate uppercase text-emerald-200">{{ activeDocPreview()?.businessName }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="flex justify-between items-center pt-4 border-t border-white/10 text-[7px] font-mono text-emerald-200/50">
-          <span>ID NUMBER: NIN-893049281</span>
-          <span>NGA CLASS A ENTITY</span>
-        </div>
-      </div>
-      }
-
+      
     </div>
 
     <!-- Footer Controls -->

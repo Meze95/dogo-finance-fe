@@ -579,6 +579,8 @@ export class ClientDashboardComponent implements OnInit {
   companyBankDetails = signal<{bankName: string, accountName: string, accountNumber: string} | null>(null);
   manualReference = signal('');
   manualReceiptPath = signal('');
+  manualReceiptFile = signal<File | null>(null);
+  manualReceiptFilePreview = signal<string | null>(null);
 
   virtualAccounts = signal<{bankName: string, accountName: string, accountNumber: string}[]>([]);
 
@@ -731,6 +733,16 @@ export class ClientDashboardComponent implements OnInit {
     }
   }
 
+  onManualReceiptFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.manualReceiptFile.set(file);
+      const reader = new FileReader();
+      reader.onload = () => this.manualReceiptFilePreview.set(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+  }
+
   verifyAction() {
     const isPinFlow = this.activeVerification()?.title === 'Create Transaction PIN';
     const isNokFlow = this.activeVerification()?.title === 'Add Next of Kin';
@@ -876,6 +888,8 @@ export class ClientDashboardComponent implements OnInit {
     this.otpInput.set('');
     this.manualReference.set('');
     this.manualReceiptPath.set('');
+    this.manualReceiptFile.set(null);
+    this.manualReceiptFilePreview.set(null);
     this.errorMessage.set('');
     this.showTransactionModal.set(true);
     this.isProcessing.set(false);
@@ -1185,7 +1199,8 @@ export class ClientDashboardComponent implements OnInit {
     this.transactionService.submitManualFunding({
       amount: amount,
       reference: this.manualReference(),
-      receiptPath: this.manualReceiptPath()
+      receiptPath: this.manualReceiptPath(),
+      receiptFile: this.manualReceiptFile()
     }).subscribe({
       next: (res) => {
         this.isProcessing.set(false);

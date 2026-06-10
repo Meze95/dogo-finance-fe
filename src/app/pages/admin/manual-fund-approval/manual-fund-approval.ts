@@ -136,6 +136,11 @@ export class ManualFundApprovalComponent implements OnInit {
     }
   }
 
+  isPdf(path: string | undefined): boolean {
+    if (!path) return false;
+    return path.toLowerCase().endsWith('.pdf');
+  }
+
   approve() {
     const r = this.selectedRequest();
     if (!r) return;

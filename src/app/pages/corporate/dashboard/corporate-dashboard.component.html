@@ -740,14 +740,56 @@
                </div>
                
                <div>
-                 <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 ml-4 block w-full mb-2">Payment Receipt URL (Optional)</label>
+                 <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 ml-4 block w-full mb-2">Payment Receipt (Optional)</label>
+                 
+                 <!-- Hidden File Input -->
                  <input 
-                   type="text" 
-                   placeholder="https://..."
-                   [value]="manualReceiptPath()"
-                   (input)="manualReceiptPath.set($any($event.target).value)"
-                   class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-4 text-sm font-bold text-[var(--dogo-dark)] outline-none transition-all placeholder:text-[var(--dogo-primary)]/20"
+                   type="file" 
+                   #receiptFile
+                   (change)="onManualReceiptFileSelected($event)"
+                   accept="image/*,.pdf"
+                   class="hidden"
                  >
+
+                 @if (!manualReceiptFile()) {
+                   <button 
+                     (click)="receiptFile.click()"
+                     class="w-full h-32 border-2 border-dashed border-[var(--dogo-primary)]/20 hover:border-[var(--dogo-secondary)] rounded-2xl flex flex-col items-center justify-center space-y-2 bg-[var(--dogo-cream)] transition-all cursor-pointer group"
+                   >
+                     <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[var(--dogo-primary)]/50 group-hover:text-[var(--dogo-secondary)] shadow-sm">
+                       <i class="ri-upload-cloud-2-line text-lg"></i>
+                     </div>
+                     <span class="text-xs font-bold text-[var(--dogo-primary)]/50 group-hover:text-[var(--dogo-secondary)]">Click to upload receipt</span>
+                   </button>
+                 } @else {
+                   <div class="relative w-full border-2 border-dashed border-[var(--dogo-secondary)] rounded-2xl bg-[var(--dogo-cream)] p-4">
+                     <div class="flex items-center justify-between mb-2">
+                       <div class="flex items-center space-x-3">
+                         <div class="w-8 h-8 rounded-full bg-[var(--dogo-secondary)]/10 flex items-center justify-center text-[var(--dogo-secondary)]">
+                           <i class="ri-file-check-fill"></i>
+                         </div>
+                         <span class="text-xs font-bold text-[var(--dogo-dark)] truncate max-w-[150px]">{{ manualReceiptFile()?.name }}</span>
+                       </div>
+                       <button 
+                         (click)="manualReceiptFile.set(null); manualReceiptFilePreview.set(null); receiptFile.value = ''"
+                         class="text-red-500 hover:text-red-600 transition-colors"
+                       >
+                         <i class="ri-close-circle-fill text-lg"></i>
+                       </button>
+                     </div>
+                     
+                     <!-- Preview Container -->
+                     <div class="w-full h-24 bg-white rounded-xl overflow-hidden flex items-center justify-center border border-[var(--dogo-primary)]/10 relative group">
+                       @if (manualReceiptFilePreview()) {
+                         <img [src]="manualReceiptFilePreview()" class="w-full h-full object-cover" alt="Document Preview">
+                       } @else {
+                         <div class="text-[var(--dogo-primary)]/30 text-xs font-bold uppercase tracking-wider">
+                           File Selected
+                         </div>
+                       }
+                     </div>
+                   </div>
+                 }
                </div>
 
                <button 

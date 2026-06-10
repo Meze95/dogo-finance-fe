@@ -154,10 +154,31 @@
              </div>
              @if(selectedRequest()!.receiptPath) {
              <div class="bg-[var(--dogo-cream)] rounded-2xl p-4">
-                <span class="text-xs font-bold text-slate-500 block mb-1">Receipt Path</span>
-                <a [href]="selectedRequest()!.receiptPath" target="_blank" class="text-sm font-black text-blue-600 hover:underline break-all">
-                  {{ selectedRequest()!.receiptPath }} <i class="ri-external-link-line ml-1"></i>
-                </a>
+                <div class="flex items-center justify-between mb-2">
+                   <span class="text-xs font-bold text-slate-500 block">Payment Receipt</span>
+                   <a [href]="selectedRequest()!.receiptPath" target="_blank" class="text-[10px] font-black text-blue-600 hover:underline uppercase tracking-widest flex items-center gap-1">
+                     Open <i class="ri-external-link-line"></i>
+                   </a>
+                </div>
+                
+                @if(isPdf(selectedRequest()!.receiptPath)) {
+                  <div class="w-full h-32 bg-white rounded-xl border border-slate-200 flex flex-col items-center justify-center gap-2">
+                    <div class="w-10 h-10 rounded-full bg-red-50 text-red-500 flex items-center justify-center">
+                      <i class="ri-file-pdf-2-fill text-xl"></i>
+                    </div>
+                    <span class="text-xs font-bold text-slate-600">PDF Document</span>
+                  </div>
+                } @else {
+                  <div class="w-full bg-white rounded-xl border border-slate-200 overflow-hidden relative group cursor-pointer" (click)="receiptLink.click()">
+                    <a #receiptLink [href]="selectedRequest()!.receiptPath" target="_blank" class="hidden"></a>
+                    <img [src]="selectedRequest()!.receiptPath" alt="Payment Receipt" class="w-full h-auto max-h-[200px] object-contain bg-slate-50">
+                    <div class="absolute inset-0 bg-[var(--dogo-dark)]/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <div class="w-10 h-10 rounded-full bg-white text-[var(--dogo-dark)] flex items-center justify-center shadow-lg">
+                        <i class="ri-zoom-in-line text-lg"></i>
+                      </div>
+                    </div>
+                  </div>
+                }
              </div>
              }
              @if(selectedRequest()!.notes) {

@@ -87,7 +87,13 @@ export class TransactionService {
     return this.http.post<ApiResponse>(`${this.apiUrl}/sell`, { portfolioId, amount, pin, otp });
   }
 
-  submitManualFunding(data: { amount: number, reference: string, receiptPath?: string }): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(`${this.apiUrl}/manual-funding`, data);
+  submitManualFunding(data: { amount: number, reference: string, receiptPath?: string, receiptFile?: File | null }): Observable<ApiResponse> {
+    const formData = new FormData();
+    formData.append('Amount', data.amount.toString());
+    formData.append('Reference', data.reference);
+    if (data.receiptPath) formData.append('ReceiptPath', data.receiptPath);
+    if (data.receiptFile) formData.append('ReceiptFile', data.receiptFile);
+    
+    return this.http.post<ApiResponse>(`${this.apiUrl}/manual-funding`, formData);
   }
 }

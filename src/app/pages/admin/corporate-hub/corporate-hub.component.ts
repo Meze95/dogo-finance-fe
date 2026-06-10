@@ -33,6 +33,7 @@ export interface CorporateDocument {
   type: string;
   status: 'verified' | 'pending' | 'unverified';
   fileName: string;
+  fileUrl?: string;
   fileSize: string;
   dateUploaded: string;
   notes?: string;
@@ -125,12 +126,18 @@ export class CorporateHubComponent implements OnInit {
   searchQuery = signal('');
   
   // Custom Document Preview Mockup Signal
-  activeDocPreview = signal<{ docName: string; fileName: string; type: string; rcNumber?: string; businessName?: string } | null>(null);
+  activeDocPreview = signal<{ docName: string; fileName: string; fileUrl?: string; type: string; rcNumber?: string; businessName?: string } | null>(null);
 
   isAllDocumentsVerified = computed(() => {
     const selected = this.selectedRegistration();
     if (!selected) return false;
     return selected.documents.every(d => d.status === 'verified');
+  });
+
+  hasPendingDocuments = computed(() => {
+    const selected = this.selectedRegistration();
+    if (!selected || !selected.documents) return false;
+    return selected.documents.some(d => d.status === 'pending');
   });
 
   // Pagination
@@ -488,6 +495,7 @@ export class CorporateHubComponent implements OnInit {
     this.activeDocPreview.set({
       docName: doc.name,
       fileName: doc.fileName,
+      fileUrl: doc.fileUrl,
       type: doc.type,
       rcNumber: selected.rcNumber,
       businessName: selected.businessName
@@ -496,6 +504,11 @@ export class CorporateHubComponent implements OnInit {
 
   closeDocPreview() {
     this.activeDocPreview.set(null);
+  }
+
+  isPdf(path: string | undefined): boolean {
+    if (!path) return false;
+    return path.toLowerCase().endsWith('.pdf');
   }
 
   getBadgeVariant(status: string): any {

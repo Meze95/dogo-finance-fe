@@ -165,6 +165,7 @@ export class CorporateSettingsComponent implements OnInit {
   // --- Corporate Profile State (ZEDCREST Form Fields) ---
   isEditingProfile = signal(false);
   isUpdatingProfile = signal(false);
+  showProfileErrors = signal(false);
   companyProfile = signal({
     companyName: '',
     registrationNumber: '',
@@ -218,16 +219,16 @@ export class CorporateSettingsComponent implements OnInit {
 
   // --- Corporate Verification State (Captured from Zedcrest Wealth Application Checklist) ---
   verifications = signal([
-    { name: '1. Completed Application Form', type: 'appForm', status: 'verified', icon: 'ri-file-list-3-line', date: 'May 20, 2026' },
-    { name: '2. Certificate of Incorporation', type: 'incorporation', status: 'verified', icon: 'ri-verified-badge-line', date: 'May 20, 2026' },
-    { name: '3. Passport Photography of each Authorized Signatory', type: 'passport', status: 'verified', icon: 'ri-user-line', date: 'May 21, 2026' },
-    { name: '4. Memorandum & Articles of Association', type: 'memart', status: 'verified', icon: 'ri-book-read-line', date: 'May 20, 2026' },
-    { name: '5. Form CAC 2 (Return of Allotment of Shares)', type: 'cac2', status: 'pending', icon: 'ri-pie-chart-line', date: 'May 26, 2026' },
-    { name: '6. Form CAC 7 (Particulars of Directors)', type: 'cac7', status: 'pending', icon: 'ri-folder-user-line', date: 'May 26, 2026' },
-    { name: '7. Form CAC 3 (Notice of Situation/Change of Registered Address)', type: 'cac3', status: 'unverified', icon: 'ri-map-pin-user-line', date: 'N/A' },
-    { name: '8. Copy of Identification of Authorized Signatories and Directors', type: 'signatoryId', status: 'unverified', icon: 'ri-shield-user-line', date: 'N/A' },
-    { name: '9. Board Resolution/minutes of meeting confirming Authorized Signatories', type: 'boardResolution', status: 'unverified', icon: 'ri-team-line', date: 'N/A' },
-    { name: '10. Link Settlement Bank Account', type: 'settlementLink', status: 'unverified', icon: 'ri-bank-line', date: 'N/A' }
+    { name: '1. Completed Application Form', type: 'appForm', status: 'verified', icon: 'ri-file-list-3-line', date: 'May 20, 2026', requiresUpload: false },
+    { name: '2. Certificate of Incorporation', type: 'incorporation', status: 'verified', icon: 'ri-verified-badge-line', date: 'May 20, 2026', requiresUpload: true },
+    { name: '3. Passport Photography of each Authorized Signatory', type: 'passport', status: 'verified', icon: 'ri-user-line', date: 'May 21, 2026', requiresUpload: false },
+    { name: '4. Memorandum & Articles of Association', type: 'memart', status: 'verified', icon: 'ri-book-read-line', date: 'May 20, 2026', requiresUpload: true },
+    { name: '5. Form CAC 2 (Return of Allotment of Shares)', type: 'cac2', status: 'pending', icon: 'ri-pie-chart-line', date: 'May 26, 2026', requiresUpload: true },
+    { name: '6. Form CAC 7 (Particulars of Directors)', type: 'cac7', status: 'pending', icon: 'ri-folder-user-line', date: 'May 26, 2026', requiresUpload: false },
+    { name: '7. Form CAC 3 (Notice of Situation/Change of Registered Address)', type: 'cac3', status: 'unverified', icon: 'ri-map-pin-user-line', date: 'N/A', requiresUpload: true },
+    { name: '8. Copy of Identification of Authorized Signatories and Directors', type: 'signatoryId', status: 'unverified', icon: 'ri-shield-user-line', date: 'N/A', requiresUpload: false },
+    { name: '9. Board Resolution/minutes of meeting confirming Authorized Signatories', type: 'boardResolution', status: 'unverified', icon: 'ri-team-line', date: 'N/A', requiresUpload: true },
+    { name: '10. Link Settlement Bank Account', type: 'settlementLink', status: 'unverified', icon: 'ri-bank-line', date: 'N/A', requiresUpload: false }
   ]);
   showVerificationModal = signal(false);
   activeVerification = signal<any>(null);
@@ -287,8 +288,8 @@ export class CorporateSettingsComponent implements OnInit {
     designation: '',
     dateOfBirth: '',
     residentialAddress: '',
-    businessEmail: '',
-    phoneNumber: '',
+    email: '',
+    phone: '',
     bvn: '',
     nationality: 'Nigerian',
     gender: 'Male',
@@ -315,8 +316,8 @@ export class CorporateSettingsComponent implements OnInit {
     designation: 'Controlling Director',
     dob: '',
     residentialAddress: '',
-    email: '',
-    phone: '',
+    businessEmail: '',
+    phoneNumber: '',
     bvn: '',
     nationality: 'Nigerian',
     gender: 'Male',
@@ -366,15 +367,24 @@ export class CorporateSettingsComponent implements OnInit {
   startEditProfile() {
     this.editProfileForm.set({ ...this.companyProfile() });
     this.isEditingProfile.set(true);
+    this.showProfileErrors.set(false);
   }
 
   cancelEditProfile() {
     this.isEditingProfile.set(false);
+    this.showProfileErrors.set(false);
   }
 
   saveProfile() {
+    this.showProfileErrors.set(true);
+    const form = this.editProfileForm();
+    if (!form.companyName || !form.registrationNumber || !form.dateOfIncorporation || !form.natureOfBusiness || !form.address || !form.entityType || (form.entityType === 'Others' && !form.otherEntityType) || !form.phone || !form.tin || !form.email || !form.annualTurnover || !form.sourceOfFunds || !form.clientSegmentation) {
+      Swal.fire('Validation Error', 'Please fill in all required fields.', 'error');
+      return;
+    }
+
     this.isUpdatingProfile.set(true);
-    const updatedData = { ...this.companyProfile(), ...this.editProfileForm() };
+    const updatedData = { ...this.companyProfile(), ...form };
     
     this.customerService.updateCorporateProfile(updatedData).subscribe({
       next: (res) => {
@@ -863,8 +873,8 @@ export class CorporateSettingsComponent implements OnInit {
       designation: 'Controlling Director',
       dob: '',
       residentialAddress: '',
-      email: '',
-      phone: '',
+      businessEmail: '',
+      phoneNumber: '',
       bvn: '',
       nationality: 'Nigerian',
       gender: 'Male',
