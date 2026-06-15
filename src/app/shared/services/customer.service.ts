@@ -66,6 +66,22 @@ export class CustomerService {
     return this.http.put<any>(`${this.apiUrl}/primary-contact`, data);
   }
 
+  getCountries(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/countries`);
+  }
+
+  getStates(countryId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/states/${countryId}`);
+  }
+
+  getNatureOfBusinesses(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/nature-of-businesses`);
+  }
+
+  getSourceOfFunds(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/source-of-funds`);
+  }
+
   getCorporateVerifications(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/corporate-verifications`);
   }

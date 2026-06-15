@@ -472,9 +472,11 @@ export class ClientDashboardComponent implements OnInit {
   }
 
   quickFund() {
-    const amount = this.investAmount();
+    const investAmt = Number(this.investAmount().replace(/,/g, ''));
+    const available = this.availableNaira();
+    const shortfall = Math.max(investAmt - available, 0);
     this.showInvestModal.set(false);
-    this.transactionAmount.set(amount);
+    this.transactionAmount.set(shortfall.toString());
     this.openTransactionModal('fund');
   }
 
@@ -1192,13 +1194,12 @@ export class ClientDashboardComponent implements OnInit {
   }
 
   submitManualTransfer() {
-    if (!this.manualReference()) return;
     this.isProcessing.set(true);
     const amount = Number(this.transactionAmount().replace(/,/g, ''));
     
     this.transactionService.submitManualFunding({
       amount: amount,
-      reference: this.manualReference(),
+      reference: 'N/A',
       receiptPath: this.manualReceiptPath(),
       receiptFile: this.manualReceiptFile()
     }).subscribe({

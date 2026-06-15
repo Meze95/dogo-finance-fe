@@ -493,11 +493,11 @@
         </div>
       </div>
 
-      <!-- Directors / Controlling Signatories Hub -->
+      <!-- Directors Hub -->
       <div class="bg-white rounded-[32px] p-6 border border-[var(--dogo-primary)]/5 shadow-sm space-y-4">
         <div class="flex items-center justify-between pb-3 border-b border-slate-100">
           <h4 class="text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)] flex items-center gap-2">
-            <i class="ri-team-line text-lg"></i> Directors & Controlling Signatories
+            <i class="ri-team-line text-lg"></i> Directors
           </h4>
           <span class="text-[10px] font-black uppercase bg-green-50 text-green-700 px-3 py-1 rounded-full border border-green-100">
             Registry Match 100%
@@ -523,22 +523,58 @@
               <span class="text-[var(--dogo-primary)] font-black">{{ dir.shareholding }}% Shares</span>
             </div>
             
-            <div class="flex items-center justify-between pt-2 border-t border-slate-200/50">
-              <div class="flex items-center gap-1">
-                <span class="w-1.5 h-1.5 rounded-full" [ngClass]="dir.status === 'Verified' ? 'bg-green-500' : 'bg-yellow-500'"></span>
-                <span class="text-[9px] font-black uppercase tracking-widest" [ngClass]="dir.status === 'Verified' ? 'text-green-700' : 'text-yellow-700'">
-                  KYC {{ dir.status }}
-                </span>
+            <div class="flex flex-col gap-2 pt-2 border-t border-slate-200/50">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full" [ngClass]="dir.status === 'Verified' ? 'bg-green-500' : 'bg-yellow-500'"></span>
+                  <span class="text-[9px] font-black uppercase tracking-widest" [ngClass]="dir.status === 'Verified' ? 'text-green-700' : 'text-yellow-700'">
+                    KYC {{ dir.status }}
+                  </span>
+                </div>
+                <button 
+                  (click)="viewDirectorDetails(dir)"
+                  class="bg-[var(--dogo-primary)]/5 hover:bg-[var(--dogo-primary)] text-[var(--dogo-primary)] hover:text-white text-[8px] font-black uppercase tracking-widest px-2.5 py-1.5 rounded-lg transition-all flex items-center gap-0.5"
+                >
+                  Inspect <i class="ri-arrow-right-s-line"></i>
+                </button>
               </div>
-              <button 
-                (click)="viewDirectorDetails(dir)"
-                class="bg-[var(--dogo-primary)]/5 hover:bg-[var(--dogo-primary)] text-[var(--dogo-primary)] hover:text-white text-[8px] font-black uppercase tracking-widest px-2.5 py-1.5 rounded-lg transition-all flex items-center gap-0.5"
-              >
-                Inspect <i class="ri-arrow-right-s-line"></i>
-              </button>
+              
+              @if (dir.status === 'Pending' && selectedRegistration()?.status === 'Pending') {
+                <div class="grid grid-cols-2 gap-2 mt-1">
+                  <button 
+                    (click)="verifyIndividualDirector(dir)"
+                    class="bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white font-black text-[10px] uppercase tracking-widest px-2.5 py-1.5 rounded-lg transition-all flex items-center justify-center gap-1 border border-emerald-200 shadow-sm"
+                    title="Verify Director"
+                  >
+                    <i class="ri-check-line"></i> Verify
+                  </button>
+                  <button 
+                    (click)="rejectIndividualDirector(dir)"
+                    class="bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white font-black text-[10px] uppercase tracking-widest px-2.5 py-1.5 rounded-lg transition-all flex items-center justify-center gap-1 border border-rose-200 shadow-sm"
+                    title="Reject Director"
+                  >
+                    <i class="ri-close-line"></i> Reject
+                  </button>
+                </div>
+              }
             </div>
           </div>
           }
+        </div>
+      </div>
+
+      <!-- Signatories Hub -->
+      <div class="bg-white rounded-[32px] p-6 border border-[var(--dogo-primary)]/5 shadow-sm space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <h4 class="text-xs font-black uppercase tracking-widest text-[var(--dogo-secondary)] flex items-center gap-2">
+            <i class="ri-pen-nib-line text-lg"></i> Controlling Signatories
+          </h4>
+          <span class="text-[10px] font-black uppercase bg-blue-50 text-blue-700 px-3 py-1 rounded-full border border-blue-100">
+            Mandate Verified
+          </span>
+        </div>
+        
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           @for(sig of selectedRegistration()?.signatories; track sig.name) {
           <div class="p-4 bg-[var(--dogo-cream)] rounded-2xl border border-[var(--dogo-primary)]/5 space-y-3 relative overflow-hidden group">
             <div class="absolute top-0 right-0 w-16 h-16 bg-[var(--dogo-secondary)]/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-bl-[40px] pointer-events-none"></div>
@@ -557,19 +593,40 @@
               <span class="text-[var(--dogo-primary)] font-black">{{ sig.shareholding }}% Shares</span>
             </div>
             
-            <div class="flex items-center justify-between pt-2 border-t border-slate-200/50">
-              <div class="flex items-center gap-1">
-                <span class="w-1.5 h-1.5 rounded-full" [ngClass]="sig.status === 'Verified' ? 'bg-green-500' : 'bg-yellow-500'"></span>
-                <span class="text-[9px] font-black uppercase tracking-widest" [ngClass]="sig.status === 'Verified' ? 'text-green-700' : 'text-yellow-700'">
-                  KYC {{ sig.status }}
-                </span>
+            <div class="flex flex-col gap-2 pt-2 border-t border-slate-200/50">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full" [ngClass]="sig.status === 'Verified' ? 'bg-green-500' : 'bg-yellow-500'"></span>
+                  <span class="text-[9px] font-black uppercase tracking-widest" [ngClass]="sig.status === 'Verified' ? 'text-green-700' : 'text-yellow-700'">
+                    KYC {{ sig.status }}
+                  </span>
+                </div>
+                <button 
+                  (click)="viewDirectorDetails(sig)"
+                  class="bg-[var(--dogo-primary)]/5 hover:bg-[var(--dogo-primary)] text-[var(--dogo-primary)] hover:text-white text-[8px] font-black uppercase tracking-widest px-2.5 py-1.5 rounded-lg transition-all flex items-center gap-0.5"
+                >
+                  Inspect <i class="ri-arrow-right-s-line"></i>
+                </button>
               </div>
-              <button 
-                (click)="viewDirectorDetails(sig)"
-                class="bg-[var(--dogo-primary)]/5 hover:bg-[var(--dogo-primary)] text-[var(--dogo-primary)] hover:text-white text-[8px] font-black uppercase tracking-widest px-2.5 py-1.5 rounded-lg transition-all flex items-center gap-0.5"
-              >
-                Inspect <i class="ri-arrow-right-s-line"></i>
-              </button>
+              
+              @if (sig.status === 'Pending' && selectedRegistration()?.status === 'Pending') {
+                <div class="grid grid-cols-2 gap-2 mt-1">
+                  <button 
+                    (click)="verifyIndividualSignatory(sig)"
+                    class="bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white font-black text-[10px] uppercase tracking-widest px-2.5 py-1.5 rounded-lg transition-all flex items-center justify-center gap-1 border border-emerald-200 shadow-sm"
+                    title="Verify Signatory"
+                  >
+                    <i class="ri-check-line"></i> Verify
+                  </button>
+                  <button 
+                    (click)="rejectIndividualSignatory(sig)"
+                    class="bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white font-black text-[10px] uppercase tracking-widest px-2.5 py-1.5 rounded-lg transition-all flex items-center justify-center gap-1 border border-rose-200 shadow-sm"
+                    title="Reject Signatory"
+                  >
+                    <i class="ri-close-line"></i> Reject
+                  </button>
+                </div>
+              }
             </div>
           </div>
           }
@@ -682,7 +739,7 @@
             variant="danger" 
             size="md" 
             class="flex-1 h-14 font-black uppercase text-[11px] tracking-widest rounded-2xl" 
-            [disabled]="!rejectionReason().trim() || isProcessing() || hasPendingDocuments()"
+            [disabled]="!rejectionReason().trim() || isProcessing() || hasPendingChecklistItems()"
             (click)="rejectRegistration()"
           >
             {{ isProcessing() ? 'Processing...' : 'Flag & Reject Registration' }}
@@ -692,16 +749,16 @@
             variant="primary" 
             size="md" 
             class="flex-1 h-14 font-black uppercase text-[11px] tracking-widest rounded-2xl" 
-            [disabled]="isProcessing() || !isAllDocumentsVerified() || hasPendingDocuments()"
+            [disabled]="isProcessing() || !isChecklistComplete() || hasPendingChecklistItems()"
             (click)="approveRegistration()"
           >
             {{ isProcessing() ? 'Processing...' : 'Approve & Verify Account' }}
           </app-button>
         </div>
 
-        @if (hasPendingDocuments()) {
+        @if (hasPendingChecklistItems()) {
           <p class="text-[10px] text-red-500 font-bold text-center mt-3 bg-red-50 py-2 px-4 rounded-xl border border-red-100">
-            * Please verify or reject all pending documents in the checklist before taking final action.
+            * Please verify or reject all pending documents, directors, and signatories in the checklist before taking final action.
           </p>
         }
       </div>

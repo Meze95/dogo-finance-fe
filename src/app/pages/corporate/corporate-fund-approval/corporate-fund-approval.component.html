@@ -1,0 +1,61 @@
+<div class="space-y-8 animate-fade-in p-4 md:p-8">
+  <div class="flex flex-col gap-2">
+    <h1 class="text-2xl font-black text-[var(--dogo-dark)]">Pending Approvals</h1>
+    <p class="text-sm font-medium text-[var(--dogo-muted)]">Review and authorize pending corporate withdrawal requests</p>
+  </div>
+
+  <app-card title="Withdrawal Requests" subtitle="Action required on the following transactions">
+    @if(isLoading()) {
+      <div class="flex justify-center items-center py-12">
+        <div class="w-10 h-10 border-4 border-[var(--dogo-primary)] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    } @else {
+      @if(pendingApprovals().length === 0) {
+        <div class="text-center py-16 bg-[var(--dogo-cream)]/30 rounded-2xl border border-dashed border-[var(--dogo-primary)]/10">
+          <div class="w-16 h-16 bg-[var(--dogo-primary)]/5 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="ri-check-double-line text-2xl text-[var(--dogo-primary)]"></i>
+          </div>
+          <h3 class="text-lg font-black text-[var(--dogo-dark)] mb-2">All Caught Up!</h3>
+          <p class="text-sm font-medium text-[var(--dogo-muted)]">You have no pending transactions waiting for your approval.</p>
+        </div>
+      } @else {
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-[var(--dogo-cream)]/50 border-b border-[var(--dogo-primary)]/5">
+                <th class="p-4 text-xs font-black text-[var(--dogo-muted)] uppercase tracking-widest whitespace-nowrap">Date</th>
+                <th class="p-4 text-xs font-black text-[var(--dogo-muted)] uppercase tracking-widest whitespace-nowrap">Reference</th>
+                <th class="p-4 text-xs font-black text-[var(--dogo-muted)] uppercase tracking-widest whitespace-nowrap">Narration</th>
+                <th class="p-4 text-xs font-black text-[var(--dogo-muted)] uppercase tracking-widest text-right whitespace-nowrap">Amount</th>
+                <th class="p-4 text-xs font-black text-[var(--dogo-muted)] uppercase tracking-widest text-right whitespace-nowrap">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for(approval of pendingApprovals(); track approval.id) {
+                <tr class="border-b border-[var(--dogo-primary)]/5 hover:bg-[var(--dogo-cream)]/30 transition-colors">
+                  <td class="p-4">
+                    <span class="text-sm font-bold text-[var(--dogo-dark)]">{{ approval.transaction.createdAt | date:'mediumDate' }}</span>
+                    <span class="block text-xs font-medium text-[var(--dogo-muted)]">{{ approval.transaction.createdAt | date:'shortTime' }}</span>
+                  </td>
+                  <td class="p-4 text-sm font-semibold text-[var(--dogo-dark)]">{{ approval.transaction.reference }}</td>
+                  <td class="p-4 text-sm font-medium text-[var(--dogo-muted)] max-w-xs truncate" [title]="approval.transaction.narration">
+                    {{ approval.transaction.narration }}
+                  </td>
+                  <td class="p-4 text-right">
+                    <span class="text-base font-black text-[var(--dogo-dark)]">{{ approval.transaction.amount | currency:'NGN':'symbol-narrow':'1.2-2' }}</span>
+                  </td>
+                  <td class="p-4 text-right">
+                    <div class="flex justify-end gap-2">
+                      <app-button (click)="processApproval(approval.transactionId, false)" variant="outline" size="sm">Reject</app-button>
+                      <app-button (click)="processApproval(approval.transactionId, true)" variant="primary" size="sm">Approve</app-button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    }
+  </app-card>
+</div>

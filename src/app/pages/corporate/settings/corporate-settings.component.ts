@@ -47,6 +47,9 @@ export class CorporateSettingsComponent implements OnInit {
     this.loadBankAccounts();
     this.loadSignatories();
     this.loadDirectors();
+    this.loadCountries();
+    this.loadNatureOfBusinesses();
+    this.loadSourceOfFunds();
   }
 
   loadSignatories() {
@@ -131,7 +134,10 @@ export class CorporateSettingsComponent implements OnInit {
             companyName: res.data.companyName || '',
             registrationNumber: res.data.registrationNumber || '',
             dateOfIncorporation: res.data.dateOfIncorporation ? res.data.dateOfIncorporation.substring(0, 10) : '',
-            natureOfBusiness: res.data.natureOfBusiness || '',
+            natureOfBusinessId: res.data.natureOfBusinessId || null,
+            countryId: res.data.countryId || null,
+            stateId: res.data.stateId || null,
+            city: res.data.city || '',
             address: res.data.address || '',
             entityType: res.data.entityType || '',
             otherEntityType: res.data.otherEntityType || '',
@@ -140,8 +146,13 @@ export class CorporateSettingsComponent implements OnInit {
             email: res.data.email || '',
             annualTurnover: res.data.annualTurnover || '',
             sourceOfFunds: res.data.sourceOfFunds || '',
-            clientSegmentation: res.data.clientSegmentation || ''
+            clientSegmentation: res.data.clientSegmentation || '',
+            signatoryMandate: res.data.signatoryMandate || ''
           });
+          
+          if (res.data.countryId) {
+            this.loadStates(res.data.countryId);
+          }
         }
       },
       error: (err) => console.error('Failed to load corporate profile', err)
@@ -162,6 +173,50 @@ export class CorporateSettingsComponent implements OnInit {
   }
 
 
+  loadCountries() {
+    this.customerService.getCountries().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.countries.set(res.data);
+        }
+      },
+      error: (err) => console.error('Failed to load countries', err)
+    });
+  }
+
+  loadStates(countryId: number) {
+    this.customerService.getStates(countryId).subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.states.set(res.data);
+        }
+      },
+      error: (err) => console.error('Failed to load states', err)
+    });
+  }
+
+  loadSourceOfFunds() {
+    this.customerService.getSourceOfFunds().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.sourceOfFunds.set(res.data);
+        }
+      },
+      error: (err) => console.error('Failed to load source of funds', err)
+    });
+  }
+
+  loadNatureOfBusinesses() {
+    this.customerService.getNatureOfBusinesses().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.natureOfBusinesses.set(res.data);
+        }
+      },
+      error: (err) => console.error('Failed to load nature of businesses', err)
+    });
+  }
+
   // --- Corporate Profile State (ZEDCREST Form Fields) ---
   isEditingProfile = signal(false);
   isUpdatingProfile = signal(false);
@@ -170,7 +225,10 @@ export class CorporateSettingsComponent implements OnInit {
     companyName: '',
     registrationNumber: '',
     dateOfIncorporation: '',
-    natureOfBusiness: '',
+    natureOfBusinessId: null as number | null,
+    countryId: null as number | null,
+    stateId: null as number | null,
+    city: '',
     address: '',
     entityType: '',
     otherEntityType: '',
@@ -179,9 +237,62 @@ export class CorporateSettingsComponent implements OnInit {
     email: '',
     annualTurnover: '',
     sourceOfFunds: '',
-    clientSegmentation: ''
+    clientSegmentation: '',
+    signatoryMandate: ''
   });
   editProfileForm = signal<any>({});
+  countries = signal<any[]>([]);
+  states = signal<any[]>([]);
+  natureOfBusinesses = signal<any[]>([]);
+  sourceOfFunds = signal<any[]>([]);
+
+  countriesOptions = computed<DropdownOption[]>(() => 
+    this.countries().map(c => ({ value: c.id, label: c.name, icon: 'ri-global-line' }))
+  );
+  statesOptions = computed<DropdownOption[]>(() => 
+    this.states().map(s => ({ value: s.id, label: s.name, icon: 'ri-map-pin-line' }))
+  );
+  natureOfBusinessOptions = computed<DropdownOption[]>(() => 
+    this.natureOfBusinesses().map(n => ({ value: n.id, label: n.name, icon: 'ri-briefcase-4-line' }))
+  );
+  nationalitiesOptions = computed<DropdownOption[]>(() => 
+    this.countries().map(c => ({ value: c.name, label: c.name, icon: 'ri-global-line' }))
+  );
+  sourceOfFundsOptions = computed<DropdownOption[]>(() =>
+    this.sourceOfFunds().map(s => ({ value: s.name, label: s.name, icon: 'ri-wallet-3-line' }))
+  );
+
+  getNatureOfBusinessLabel(): string {
+    const found = this.natureOfBusinessOptions().find(o => o.value === this.companyProfile().natureOfBusinessId);
+    return found ? found.label : 'N/A';
+  }
+
+  getCountryLabel(): string {
+    const found = this.countriesOptions().find(o => o.value === this.companyProfile().countryId);
+    return found ? found.label : 'N/A';
+  }
+
+  mandateOptions: DropdownOption[] = [
+    { value: 'Sole', label: 'Sole' },
+    { value: 'Either to sign', label: 'Either to sign' },
+    { value: 'Both to sign', label: 'Both to sign' },
+    { value: 'Any 2 to sign', label: 'Any 2 to sign' }
+  ];
+
+  updateMandate(value: string) {
+    this.companyProfile.update(p => ({ ...p, signatoryMandate: value }));
+    this.customerService.updateCorporateProfile(this.companyProfile()).subscribe({
+      next: (res) => {
+        if (!res.success) console.error('Failed to update mandate');
+      },
+      error: (err) => console.error(err)
+    });
+  }
+
+  getStateLabel(): string {
+    const found = this.statesOptions().find(o => o.value === this.companyProfile().stateId);
+    return found ? found.label : 'N/A';
+  }
 
   // --- Primary Contact Person State (G. PRIMARY CONTACT PERSON) ---
   isEditingContact = signal(false);
@@ -250,7 +361,8 @@ export class CorporateSettingsComponent implements OnInit {
   isAddingDom = signal(false);
   isSavingDom = signal(false);
   newDomForm = signal<any>({
-    bankId: '',
+    bankName: '',
+    bankCountryId: '',
     accountNumber: '',
     accountName: '',
     correspondentBank: '',
@@ -378,7 +490,7 @@ export class CorporateSettingsComponent implements OnInit {
   saveProfile() {
     this.showProfileErrors.set(true);
     const form = this.editProfileForm();
-    if (!form.companyName || !form.registrationNumber || !form.dateOfIncorporation || !form.natureOfBusiness || !form.address || !form.entityType || (form.entityType === 'Others' && !form.otherEntityType) || !form.phone || !form.tin || !form.email || !form.annualTurnover || !form.sourceOfFunds || !form.clientSegmentation) {
+    if (!form.companyName || !form.registrationNumber || !form.dateOfIncorporation || !form.natureOfBusinessId || !form.countryId || !form.stateId || !form.city || !form.address || !form.entityType || (form.entityType === 'Others' && !form.otherEntityType) || !form.phone || !form.tin || !form.email || !form.annualTurnover || !form.sourceOfFunds || !form.clientSegmentation) {
       Swal.fire('Validation Error', 'Please fill in all required fields.', 'error');
       return;
     }
@@ -414,8 +526,12 @@ export class CorporateSettingsComponent implements OnInit {
     });
   }
 
-  updateProfileField(field: string, value: string) {
+  updateProfileField(field: string, value: any) {
     this.editProfileForm.set({ ...this.editProfileForm(), [field]: value });
+    if (field === 'countryId' && value) {
+      this.loadStates(value);
+      this.editProfileForm.set({ ...this.editProfileForm(), stateId: null });
+    }
   }
 
   // --- Primary Contact Actions ---
@@ -624,7 +740,8 @@ export class CorporateSettingsComponent implements OnInit {
   // --- Domiciliary Bank Account Actions ---
   startAddDom() {
     this.newDomForm.set({
-      bankId: '',
+      bankName: '',
+      bankCountryId: '',
       accountNumber: '',
       accountName: this.companyProfile()?.companyName || '',
       correspondentBank: '',
@@ -647,7 +764,8 @@ export class CorporateSettingsComponent implements OnInit {
     this.isSavingDom.set(true);
     const form = this.newDomForm();
     const payload = {
-      bankId: form.bankId,
+      bankName: form.bankName,
+      bankCountryId: form.bankCountryId,
       accountNumber: form.accountNumber,
       accountName: form.accountName,
       currencyCode: 'USD', // For now hardcoded or fetched from form

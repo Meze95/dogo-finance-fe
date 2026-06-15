@@ -64,9 +64,17 @@
                 </div>
                 <div class="space-y-1">
                   <span class="block text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Nature of Business</span>
-                  <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ companyProfile().natureOfBusiness }}</p>
+                  <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ getNatureOfBusinessLabel() }}</p>
                 </div>
-                <div class="space-y-1 md:col-span-2">
+                <div class="space-y-1">
+                  <span class="block text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Country & State</span>
+                  <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ getCountryLabel() }}, {{ getStateLabel() }}</p>
+                </div>
+                <div class="space-y-1">
+                  <span class="block text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">City</span>
+                  <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ companyProfile().city || 'N/A' }}</p>
+                </div>
+                <div class="space-y-1">
                   <span class="block text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Operating/Registered Address</span>
                   <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ companyProfile().address }}</p>
                 </div>
@@ -87,6 +95,10 @@
                 <div class="space-y-1">
                   <span class="block text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Official Email Address</span>
                   <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ companyProfile().email }}</p>
+                </div>
+                <div class="space-y-1">
+                  <span class="block text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Account Withdrawal Mandate</span>
+                  <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ companyProfile().signatoryMandate || 'N/A' }}</p>
                 </div>
               </div>
             </div>
@@ -137,6 +149,10 @@
             
             <!-- Section A: Company Details (Edit Mode) -->
             <div>
+ 
+             
+ 
+
               <div class="flex items-center space-x-3 mb-6 pb-2 border-b border-[var(--dogo-primary)]/5">
                 <span class="bg-[var(--dogo-primary)] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg">A</span>
                 <h3 class="text-xs font-black text-[var(--dogo-dark)] uppercase tracking-wider">Company Details</h3>
@@ -149,26 +165,43 @@
                   @if(showProfileErrors() && !editProfileForm().companyName) { <span class="text-xs text-red-500 mt-1 block">This field is required.</span> }
                 </div>
                 
-                <div class="grid grid-cols-2 gap-4">
-                  <div>
-                    <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Registration Number *</label>
-                    <input type="text" [value]="editProfileForm().registrationNumber" (input)="updateProfileField('registrationNumber', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" [class.border-red-500]="showProfileErrors() && !editProfileForm().registrationNumber" />
-                    @if(showProfileErrors() && !editProfileForm().registrationNumber) { <span class="text-xs text-red-500 mt-1 block">This field is required.</span> }
-                  </div>
-                  <div>
-                    <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Date of Incorporation *</label>
-                    <input type="date" [value]="editProfileForm().dateOfIncorporation" (input)="updateProfileField('dateOfIncorporation', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" [class.border-red-500]="showProfileErrors() && !editProfileForm().dateOfIncorporation" />
-                    @if(showProfileErrors() && !editProfileForm().dateOfIncorporation) { <span class="text-xs text-red-500 mt-1 block">This field is required.</span> }
-                  </div>
+                <div>
+                  <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Registration Number *</label>
+                  <input type="text" [value]="editProfileForm().registrationNumber" (input)="updateProfileField('registrationNumber', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" [class.border-red-500]="showProfileErrors() && !editProfileForm().registrationNumber" />
+                  @if(showProfileErrors() && !editProfileForm().registrationNumber) { <span class="text-xs text-red-500 mt-1 block">This field is required.</span> }
                 </div>
 
-                <div class="md:col-span-2">
+                <div>
+                  <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Date of Incorporation *</label>
+                  <input type="date" [value]="editProfileForm().dateOfIncorporation" (input)="updateProfileField('dateOfIncorporation', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" [class.border-red-500]="showProfileErrors() && !editProfileForm().dateOfIncorporation" />
+                  @if(showProfileErrors() && !editProfileForm().dateOfIncorporation) { <span class="text-xs text-red-500 mt-1 block">This field is required.</span> }
+                </div>
+
+                <div>
                   <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Nature of Business *</label>
-                  <input type="text" [value]="editProfileForm().natureOfBusiness" (input)="updateProfileField('natureOfBusiness', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" [class.border-red-500]="showProfileErrors() && !editProfileForm().natureOfBusiness" />
-                  @if(showProfileErrors() && !editProfileForm().natureOfBusiness) { <span class="text-xs text-red-500 mt-1 block">This field is required.</span> }
+                  <app-dropdown [options]="natureOfBusinessOptions()" [selectedValue]="editProfileForm().natureOfBusinessId" (valueChange)="updateProfileField('natureOfBusinessId', $event)" [class.border-red-500]="showProfileErrors() && !editProfileForm().natureOfBusinessId"></app-dropdown>
+                  @if(showProfileErrors() && !editProfileForm().natureOfBusinessId) { <span class="text-xs text-red-500 mt-1 block">This field is required.</span> }
                 </div>
 
-                <div class="md:col-span-2">
+                <div>
+                  <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Country *</label>
+                  <app-dropdown [options]="countriesOptions()" [selectedValue]="editProfileForm().countryId" (valueChange)="updateProfileField('countryId', $event)" [class.border-red-500]="showProfileErrors() && !editProfileForm().countryId"></app-dropdown>
+                  @if(showProfileErrors() && !editProfileForm().countryId) { <span class="text-xs text-red-500 mt-1 block">This field is required.</span> }
+                </div>
+
+                <div>
+                  <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">State *</label>
+                  <app-dropdown [options]="statesOptions()" [selectedValue]="editProfileForm().stateId" (valueChange)="updateProfileField('stateId', $event)" [class.border-red-500]="showProfileErrors() && !editProfileForm().stateId"></app-dropdown>
+                  @if(showProfileErrors() && !editProfileForm().stateId) { <span class="text-xs text-red-500 mt-1 block">This field is required.</span> }
+                </div>
+
+                <div>
+                  <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">City *</label>
+                  <input type="text" [value]="editProfileForm().city" (input)="updateProfileField('city', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" [class.border-red-500]="showProfileErrors() && !editProfileForm().city" />
+                  @if(showProfileErrors() && !editProfileForm().city) { <span class="text-xs text-red-500 mt-1 block">This field is required.</span> }
+                </div>
+
+                <div>
                   <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Operating/Registered Address *</label>
                   <input type="text" [value]="editProfileForm().address" (input)="updateProfileField('address', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" [class.border-red-500]="showProfileErrors() && !editProfileForm().address" />
                   @if(showProfileErrors() && !editProfileForm().address) { <span class="text-xs text-red-500 mt-1 block">This field is required.</span> }
@@ -200,10 +233,16 @@
                   @if(showProfileErrors() && !editProfileForm().tin) { <span class="text-xs text-red-500 mt-1 block">This field is required.</span> }
                 </div>
 
-                <div class="md:col-span-2">
+                <div>
                   <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Official Email Address *</label>
                   <input type="email" readonly [value]="editProfileForm().email" (input)="updateProfileField('email', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" [class.border-red-500]="showProfileErrors() && !editProfileForm().email" />
                   @if(showProfileErrors() && !editProfileForm().email) { <span class="text-xs text-red-500 mt-1 block">This field is required.</span> }
+                </div>
+
+                <div>
+                  <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Account Withdrawal Mandate *</label>
+                  <app-dropdown [options]="mandateOptions" [selectedValue]="editProfileForm().signatoryMandate || ''" (valueChange)="updateProfileField('signatoryMandate', $event)" [class.border-red-500]="showProfileErrors() && !editProfileForm().signatoryMandate"></app-dropdown>
+                  @if(showProfileErrors() && !editProfileForm().signatoryMandate) { <span class="text-xs text-red-500 mt-1 block">This field is required.</span> }
                 </div>
               </div>
             </div>
@@ -223,7 +262,7 @@
                 </div>
                 <div>
                   <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Source of Investment Fund *</label>
-                  <input type="text" [value]="editProfileForm().sourceOfFunds" (input)="updateProfileField('sourceOfFunds', $any($event.target).value)" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" [class.border-red-500]="showProfileErrors() && !editProfileForm().sourceOfFunds" />
+                  <app-dropdown [options]="sourceOfFundsOptions()" [selectedValue]="editProfileForm().sourceOfFunds" (valueChange)="updateProfileField('sourceOfFunds', $event)" [class.border-red-500]="showProfileErrors() && !editProfileForm().sourceOfFunds"></app-dropdown>
                   @if(showProfileErrors() && !editProfileForm().sourceOfFunds) { <span class="text-xs text-red-500 mt-1 block">This field is required.</span> }
                 </div>
               </div>
@@ -313,6 +352,7 @@
           </div>
         }
       </app-card>
+
     }
 
     <!-- Tab 2: Compliance & KYC Documents -->
@@ -523,8 +563,12 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Local Bank Name</label>
-                <app-dropdown [options]="bankOptions()" [selectedValue]="newDomForm().bankId" (valueChange)="updateDomField('bankId', $event)"></app-dropdown>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Bank Name</label>
+                <input type="text" [value]="newDomForm().bankName" (input)="updateDomField('bankName', $any($event.target).value)" placeholder="e.g. Bank of America" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Bank Country</label>
+                <app-dropdown [options]="countriesOptions()" [selectedValue]="newDomForm().bankCountryId" (valueChange)="updateDomField('bankCountryId', $event)"></app-dropdown>
               </div>
               <div>
                 <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Account Name</label>
@@ -781,7 +825,7 @@
 
               <div>
                 <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Nationality *</label>
-                <input type="text" [value]="newSignatoryForm().nationality" (input)="updateSignatoryField('nationality', $any($event.target).value)" placeholder="Nigerian" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+                <app-dropdown [options]="nationalitiesOptions()" [selectedValue]="newSignatoryForm().nationality" (valueChange)="updateSignatoryField('nationality', $event)"></app-dropdown>
               </div>
               <div>
                 <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Gender *</label>
@@ -984,7 +1028,7 @@
 
               <div>
                 <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Nationality *</label>
-                <input type="text" [value]="newDirectorForm().nationality" (input)="updateDirectorField('nationality', $any($event.target).value)" placeholder="Nigerian" class="w-full h-12 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/10 rounded-xl px-4 font-semibold text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] transition-all" />
+                <app-dropdown [options]="nationalitiesOptions()" [selectedValue]="newDirectorForm().nationality" (valueChange)="updateDirectorField('nationality', $event)"></app-dropdown>
               </div>
               <div>
                 <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Gender *</label>

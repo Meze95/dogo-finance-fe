@@ -58,16 +58,36 @@ export class CorporateLayout {
     return ((first ? first[0] : 'M') + (last ? last[0] : 'S')).toUpperCase();
   });
 
-  menuItems = [
-    { label: 'Dashboard', icon: 'ri-dashboard-3-fill', link: '/corporate/dashboard' },
-    { label: 'Investments', icon: 'ri-funds-box-fill', link: '/corporate/products' },
-    { label: 'My Portfolio', icon: 'ri-pie-chart-2-fill', link: '/corporate/investments' },
-    { label: 'Transactions', icon: 'ri-exchange-box-fill', link: '/corporate/transactions' },
-  ];
+  isSignatory = computed(() => {
+    const role = this.user()?.Role || this.user()?.role || this.user()?.userRole;
+    return String(role).toLowerCase() === 'corporatesignatory';
+  });
 
-  managementItems = [
-    { label: 'Account', icon: 'ri-settings-4-line', link: '/corporate/settings' },
-  ];
+  menuItems = computed(() => {
+    if (this.isSignatory()) {
+      return [
+        { label: 'Dashboard', icon: 'ri-dashboard-3-fill', link: '/signatory/dashboard' }
+      ];
+    }
+    return [
+      { label: 'Dashboard', icon: 'ri-dashboard-3-fill', link: '/corporate/dashboard' },
+      { label: 'Investments', icon: 'ri-funds-box-fill', link: '/corporate/products' },
+      { label: 'My Portfolio', icon: 'ri-pie-chart-2-fill', link: '/corporate/investments' },
+      { label: 'Transactions', icon: 'ri-exchange-box-fill', link: '/corporate/transactions' },
+    ];
+  });
+
+  managementItems = computed(() => {
+    if (this.isSignatory()) {
+      return [
+        { label: 'Fund Approvals', icon: 'ri-check-double-line', link: '/signatory/fund-approval' }
+      ];
+    }
+    return [
+      { label: 'Fund Approvals', icon: 'ri-check-double-line', link: '/corporate/fund-approval' },
+      { label: 'Account', icon: 'ri-settings-4-line', link: '/corporate/settings' },
+    ];
+  });
 
   toggleSidebar() {
     this.isSidebarOpen.update(v => !v);

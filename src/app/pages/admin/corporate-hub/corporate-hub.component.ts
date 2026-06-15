@@ -40,12 +40,14 @@ export interface CorporateDocument {
 }
 
 export interface CorporateDirector {
+  directorId?: number;
+  signatoryId?: number;
   name: string;
   role: string;
   shareholding: number;
   idType: string;
   idNumber: string;
-  status: 'Verified' | 'Pending' | 'Unverified';
+  status: 'Verified' | 'Pending' | 'Unverified' | 'Rejected';
   
   title?: string;
   surname?: string;
@@ -128,16 +130,22 @@ export class CorporateHubComponent implements OnInit {
   // Custom Document Preview Mockup Signal
   activeDocPreview = signal<{ docName: string; fileName: string; fileUrl?: string; type: string; rcNumber?: string; businessName?: string } | null>(null);
 
-  isAllDocumentsVerified = computed(() => {
+  isChecklistComplete = computed(() => {
     const selected = this.selectedRegistration();
     if (!selected) return false;
-    return selected.documents.every(d => d.status === 'verified');
+    const docsOk = selected.documents ? selected.documents.every(d => d.status === 'verified') : false;
+    const dirsOk = !selected.directors ? true : selected.directors.every(d => d.status === 'Verified');
+    const sigsOk = !selected.signatories ? true : selected.signatories.every(s => s.status === 'Verified');
+    return Boolean(docsOk && dirsOk && sigsOk);
   });
 
-  hasPendingDocuments = computed(() => {
+  hasPendingChecklistItems = computed(() => {
     const selected = this.selectedRegistration();
-    if (!selected || !selected.documents) return false;
-    return selected.documents.some(d => d.status === 'pending');
+    if (!selected) return false;
+    const pendingDocs = selected.documents ? selected.documents.some(d => d.status === 'pending') : false;
+    const pendingDirs = selected.directors ? selected.directors.some(d => d.status === 'Pending') : false;
+    const pendingSigs = selected.signatories ? selected.signatories.some(s => s.status === 'Pending') : false;
+    return Boolean(pendingDocs || pendingDirs || pendingSigs);
   });
 
   // Pagination
@@ -382,6 +390,200 @@ export class CorporateHubComponent implements OnInit {
                 customClass: {
                   popup: 'rounded-[32px]'
                 }
+              });
+            }
+          }
+        });
+      }
+    });
+  }
+
+  verifyIndividualDirector(dir: CorporateDirector) {
+    if (!this.selectedRegistration()) return;
+    const selected = this.selectedRegistration()!;
+    if (!dir.directorId) return;
+
+    this.adminService.reviewCorporateDirector(dir.directorId, { approved: true }).subscribe({
+      next: (res) => {
+        if (res.success) {
+          const updatedDirs = selected.directors.map(d => {
+            if (d.directorId === dir.directorId) {
+              return { ...d, status: 'Verified' as const };
+            }
+            return d;
+          });
+
+          const updatedList = this.registrations().map(reg => {
+            if (reg.id === selected.id) {
+              return { ...reg, directors: updatedDirs };
+            }
+            return reg;
+          });
+
+          this.registrations.set(updatedList);
+          const updatedSelected = updatedList.find(r => r.id === selected.id) || null;
+          this.selectedRegistration.set(updatedSelected);
+
+          Swal.fire({
+            title: 'Director Verified',
+            text: `"${dir.name}" has been marked as verified.`,
+            icon: 'success',
+            confirmButtonColor: '#030E65',
+            timer: 1800,
+            customClass: { popup: 'rounded-[32px]' }
+          });
+        }
+      }
+    });
+  }
+
+  rejectIndividualDirector(dir: CorporateDirector) {
+    if (!this.selectedRegistration()) return;
+    const selected = this.selectedRegistration()!;
+    if (!dir.directorId) return;
+
+    Swal.fire({
+      title: 'Reject Director',
+      text: `Enter the reason for rejecting "${dir.name}":`,
+      input: 'text',
+      inputPlaceholder: 'e.g. Invalid ID, mismatched details...',
+      showCancelButton: true,
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#64748b',
+      confirmButtonText: 'Confirm Rejection',
+      inputValidator: (value: string) => {
+        if (!value) return 'You must enter a feedback reason!';
+        return null;
+      },
+      customClass: { popup: 'rounded-[32px]' }
+    }).then((result: any) => {
+      if (result.isConfirmed && result.value) {
+        const feedback = result.value;
+        this.adminService.reviewCorporateDirector(dir.directorId!, { approved: false, adminNotes: feedback }).subscribe({
+          next: (res) => {
+            if (res.success) {
+              const updatedDirs = selected.directors.map(d => {
+                if (d.directorId === dir.directorId) {
+                  return { ...d, status: 'Rejected' as const };
+                }
+                return d;
+              });
+
+              const updatedList = this.registrations().map(reg => {
+                if (reg.id === selected.id) {
+                  return { ...reg, directors: updatedDirs };
+                }
+                return reg;
+              });
+
+              this.registrations.set(updatedList);
+              const updatedSelected = updatedList.find(r => r.id === selected.id) || null;
+              this.selectedRegistration.set(updatedSelected);
+
+              Swal.fire({
+                title: 'Director Flagged',
+                text: `"${dir.name}" has been rejected.`,
+                icon: 'info',
+                confirmButtonColor: '#030E65',
+                timer: 1800,
+                customClass: { popup: 'rounded-[32px]' }
+              });
+            }
+          }
+        });
+      }
+    });
+  }
+
+  verifyIndividualSignatory(sig: CorporateDirector) {
+    if (!this.selectedRegistration()) return;
+    const selected = this.selectedRegistration()!;
+    if (!sig.signatoryId) return;
+
+    this.adminService.reviewCorporateSignatory(sig.signatoryId, { approved: true }).subscribe({
+      next: (res) => {
+        if (res.success) {
+          const updatedSigs = (selected.signatories || []).map(s => {
+            if (s.signatoryId === sig.signatoryId) {
+              return { ...s, status: 'Verified' as const };
+            }
+            return s;
+          });
+
+          const updatedList = this.registrations().map(reg => {
+            if (reg.id === selected.id) {
+              return { ...reg, signatories: updatedSigs };
+            }
+            return reg;
+          });
+
+          this.registrations.set(updatedList);
+          const updatedSelected = updatedList.find(r => r.id === selected.id) || null;
+          this.selectedRegistration.set(updatedSelected);
+
+          Swal.fire({
+            title: 'Signatory Verified',
+            text: `"${sig.name}" has been marked as verified.`,
+            icon: 'success',
+            confirmButtonColor: '#030E65',
+            timer: 1800,
+            customClass: { popup: 'rounded-[32px]' }
+          });
+        }
+      }
+    });
+  }
+
+  rejectIndividualSignatory(sig: CorporateDirector) {
+    if (!this.selectedRegistration()) return;
+    const selected = this.selectedRegistration()!;
+    if (!sig.signatoryId) return;
+
+    Swal.fire({
+      title: 'Reject Signatory',
+      text: `Enter the reason for rejecting "${sig.name}":`,
+      input: 'text',
+      inputPlaceholder: 'e.g. Invalid signature, missing documents...',
+      showCancelButton: true,
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#64748b',
+      confirmButtonText: 'Confirm Rejection',
+      inputValidator: (value: string) => {
+        if (!value) return 'You must enter a feedback reason!';
+        return null;
+      },
+      customClass: { popup: 'rounded-[32px]' }
+    }).then((result: any) => {
+      if (result.isConfirmed && result.value) {
+        const feedback = result.value;
+        this.adminService.reviewCorporateSignatory(sig.signatoryId!, { approved: false, adminNotes: feedback }).subscribe({
+          next: (res) => {
+            if (res.success) {
+              const updatedSigs = (selected.signatories || []).map(s => {
+                if (s.signatoryId === sig.signatoryId) {
+                  return { ...s, status: 'Rejected' as const };
+                }
+                return s;
+              });
+
+              const updatedList = this.registrations().map(reg => {
+                if (reg.id === selected.id) {
+                  return { ...reg, signatories: updatedSigs };
+                }
+                return reg;
+              });
+
+              this.registrations.set(updatedList);
+              const updatedSelected = updatedList.find(r => r.id === selected.id) || null;
+              this.selectedRegistration.set(updatedSelected);
+
+              Swal.fire({
+                title: 'Signatory Flagged',
+                text: `"${sig.name}" has been rejected.`,
+                icon: 'info',
+                confirmButtonColor: '#030E65',
+                timer: 1800,
+                customClass: { popup: 'rounded-[32px]' }
               });
             }
           }

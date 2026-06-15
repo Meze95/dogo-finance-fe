@@ -428,9 +428,11 @@ export class ClientPortfoliosComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   quickFund() {
-    const amount = this.investAmount();
+    const investAmt = Number(this.investAmount().replace(/,/g, ''));
+    const available = this.availableNaira();
+    const shortfall = Math.max(investAmt - available, 0);
     this.showInvestModal.set(false);
-    this.router.navigate(['/client/dashboard'], { queryParams: { fundAmount: amount } });
+    this.router.navigate(['/client/dashboard'], { queryParams: { fundAmount: shortfall.toString() } });
   }
 
   getAssetColor(index: number): string {

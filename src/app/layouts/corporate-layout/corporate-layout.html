@@ -52,7 +52,7 @@
       <p class="px-5 text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-4 transition-opacity shrink-0 whitespace-nowrap"
         [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">Corporate System</p>
 
-      @for(item of menuItems; track item.label) {
+      @for(item of menuItems(); track item.label) {
       <a [routerLink]="item.link" routerLinkActive="bg-white/10 text-white shadow-lg border-l-4 border-[var(--dogo-secondary)]"
         (click)="isMobileMenuOpen() ? toggleMobileMenu() : null"
         class="flex items-center space-x-4 h-12 rounded-2xl transition-all group px-4 hover:bg-[var(--dogo-primary)]/40 text-white/60 hover:text-white border-l-4 border-transparent">
@@ -71,7 +71,7 @@
         <p class="px-5 text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-4 transition-opacity shrink-0 whitespace-nowrap"
           [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">Management</p>
 
-        @for(item of managementItems; track item.label) {
+        @for(item of managementItems(); track item.label) {
         <a [routerLink]="item.link" routerLinkActive="bg-white/10 text-[var(--dogo-secondary)]"
           (click)="isMobileMenuOpen() ? toggleMobileMenu() : null"
           class="flex items-center space-x-4 h-12 rounded-2xl transition-all group px-4 hover:bg-white/5 text-white/60 hover:text-white">
@@ -189,7 +189,7 @@
         </div>
 
         <!-- Client Profile Pill -->
-        <div routerLink="/corporate/profile"
+        <div [routerLink]="isSignatory() ? '/signatory/profile' : '/corporate/profile'"
           class="flex items-center bg-white p-1.5 rounded-2xl shadow-sm border border-[var(--dogo-primary)]/5 group cursor-pointer hover:border-[var(--dogo-secondary)] hover:shadow-xl transition-all">
           <div
             class="w-8 lg:w-9 h-8 lg:h-9 bg-[var(--dogo-cream)] rounded-xl flex items-center justify-center font-black text-[var(--dogo-primary)] group-hover:bg-[var(--dogo-primary)] group-hover:text-white transition-all">
@@ -197,7 +197,7 @@
           </div>
           <div class="px-3 hidden md:block">
             <p class="text-[11px] font-black text-[var(--dogo-dark)] leading-none uppercase tracking-tighter group-hover:text-[var(--dogo-primary)] transition-colors">{{ userName() }}</p>
-            <p class="text-[9px] font-bold text-[var(--dogo-secondary)] leading-none mt-1 uppercase tracking-widest">Corporate Profile</p>
+            <p class="text-[9px] font-bold text-[var(--dogo-secondary)] leading-none mt-1 uppercase tracking-widest">{{ isSignatory() ? 'Signatory Profile' : 'Corporate Profile' }}</p>
           </div>
         </div>
       </div>

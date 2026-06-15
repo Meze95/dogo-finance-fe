@@ -116,4 +116,12 @@ export class AdminService {
   reviewCorporateRegistration(customerId: string | number, data: { approved: boolean, adminNotes?: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/corporate-registrations/${customerId}/review`, data);
   }
+
+  reviewCorporateDirector(directorId: string | number, data: { approved: boolean, adminNotes?: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/corporate-registrations/directors/${directorId}/review`, data);
+  }
+
+  reviewCorporateSignatory(signatoryId: string | number, data: { approved: boolean, adminNotes?: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/corporate-registrations/signatories/${signatoryId}/review`, data);
+  }
 }

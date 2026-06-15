@@ -729,17 +729,6 @@
                }
 
                <div>
-                 <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 ml-4 block w-full mb-2">Transfer Reference / Description</label>
-                 <input 
-                   type="text" 
-                   placeholder="e.g. John Doe Funding"
-                   [value]="manualReference()"
-                   (input)="manualReference.set($any($event.target).value)"
-                   class="w-full bg-[var(--dogo-cream)] border-2 border-transparent focus:border-[var(--dogo-secondary)] rounded-2xl px-6 py-4 text-sm font-bold text-[var(--dogo-dark)] outline-none transition-all placeholder:text-[var(--dogo-primary)]/20"
-                 >
-               </div>
-               
-               <div>
                  <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 ml-4 block w-full mb-2">Payment Receipt (Optional)</label>
                  
                  <!-- Hidden File Input -->
@@ -794,7 +783,7 @@
 
                <button 
                  (click)="submitManualTransfer()" 
-                 [disabled]="!manualReference() || isProcessing() || !companyBankDetails()"
+                 [disabled]="isProcessing() || !companyBankDetails()"
                  class="w-full h-16 mt-4 bg-[var(--dogo-primary)] text-white rounded-[2rem] text-[10px] font-black uppercase tracking-widest hover:bg-[var(--dogo-primary-soft)] transition-all shadow-xl disabled:opacity-50 flex justify-center items-center">
                  @if (isProcessing()) {
                     <div class="flex items-center space-x-2">
@@ -802,7 +791,7 @@
                       <span>Submitting...</span>
                     </div>
                  } @else {
-                    Submit Proof
+                    I have made the transfer
                  }
                </button>
             </div>
@@ -951,8 +940,12 @@
               <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-4xl text-green-600 mx-auto mb-6 shadow-pill">
                 <i class="ri-checkbox-circle-fill"></i>
               </div>
-              <h4 class="text-xl font-black text-[var(--dogo-primary)] uppercase italic">Transaction Complete</h4>
-              <p class="text-xs font-bold text-[var(--dogo-muted)] mt-2">₦{{ transactionAmount() | number }} has been added to your wallet.</p>
+              <h4 class="text-xl font-black text-[var(--dogo-primary)] uppercase italic">
+                {{ selectedSource() === 'manual' ? 'Transaction Submitted' : 'Transaction Complete' }}
+              </h4>
+              <p class="text-xs font-bold text-[var(--dogo-muted)] mt-2">
+                {{ selectedSource() === 'manual' ? 'Payment awaiting admin approval' : '₦' + (transactionAmount() | number) + ' has been added to your wallet.' }}
+              </p>
             </div>
 
           </div>
@@ -992,14 +985,22 @@
 <!-- Dashboard Investment Modal -->
 @if(showInvestModal()) {
     <div class="fixed inset-0 z-[1000] flex items-center justify-center p-4 animate-fade-in shadow-2xl">
-        <div class="absolute inset-0 bg-[var(--dogo-dark)]/80 backdrop-blur-xl" (click)="showInvestModal.set(false)"></div>
+        <div class="absolute inset-0 bg-[var(--dogo-dark)]/80 backdrop-blur-xl"></div>
         <div class="relative bg-white rounded-[40px] shadow-2xl w-full max-w-md transform transition-all animate-slide-up flex flex-col max-h-[90vh] overflow-hidden border border-[var(--dogo-primary)]/5">
-            <div class="p-8 md:p-10 overflow-y-auto custom-scrollbar-h flex-grow text-center">
-                <div class="w-16 h-16 rounded-3xl bg-[var(--dogo-secondary)]/20 text-[var(--dogo-secondary)] flex items-center justify-center mx-auto mb-6 shadow-pill shrink-0">
-                <i class="ri-copper-coin-line text-3xl"></i>
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between px-8 pt-8 pb-4 shrink-0">
+                <div class="w-10 h-10"></div>
+                <div class="text-center">
+                    <div class="w-12 h-12 rounded-2xl bg-[var(--dogo-secondary)]/20 text-[var(--dogo-secondary)] flex items-center justify-center mx-auto mb-2 shadow-pill shrink-0">
+                        <i class="ri-copper-coin-line text-2xl"></i>
+                    </div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">Choose your principal amount for <br><span class="text-[var(--dogo-primary)] font-black">{{ selectedPortfolio()?.name }}</span></p>
+                </div>
+                <button (click)="showInvestModal.set(false)" class="w-10 h-10 rounded-full bg-[var(--dogo-cream)] flex items-center justify-center text-[var(--dogo-primary)] hover:bg-red-50 hover:text-red-500 transition-all shrink-0">
+                    <i class="ri-close-line text-xl"></i>
+                </button>
             </div>
-            <!-- <h3 class="text-2xl font-black text-[var(--dogo-dark)] tracking-tight mb-2">Initialize Investment</h3> -->
-            <p class="text-[10px] font-bold text-slate-400 mb-8 uppercase tracking-widest leading-relaxed">Choose your principal amount for <br><span class="text-[var(--dogo-primary)] font-black">{{ selectedPortfolio()?.name }}</span></p>
+            <div class="p-8 md:p-10 overflow-y-auto custom-scrollbar-h flex-grow text-center">
             
             <div class="space-y-6 text-left mb-10">
                 @if(investStep() === 'amount') {
@@ -1047,6 +1048,12 @@
                            </p>
                         }
                     </div>
+                    <!-- Invest Max -->
+                    @if(availableNaira() > 0) {
+                        <button (click)="investAmount.set(availableNaira().toString())" class="w-full py-3 rounded-2xl bg-[var(--dogo-primary)]/5 border border-[var(--dogo-primary)]/10 text-[10px] font-black text-[var(--dogo-primary)] uppercase hover:bg-[var(--dogo-primary)]/10 transition-all flex items-center justify-center gap-2">
+                            <i class="ri-arrow-up-circle-line"></i> Invest Max (₦{{ formatWithCommas(availableNaira().toString()) }})
+                        </button>
+                    }
                 }
 
                 @if(investStep() === 'bvn') {
@@ -1112,7 +1119,7 @@
                         <button (click)="quickFund()" 
                                 type="button"
                                 class="w-full py-4 bg-gradient-to-r from-[var(--dogo-secondary)] to-[var(--dogo-secondary-soft)] hover:scale-[1.02] active:scale-95 text-white text-[10px] font-black uppercase tracking-widest rounded-2xl transition-all shadow-lg shadow-[var(--dogo-secondary)]/20 flex items-center justify-center gap-2">
-                            <i class="ri-add-circle-fill text-sm"></i> Fund Wallet (₦{{ formatWithCommas(investAmount()) }})
+                            <i class="ri-add-circle-fill text-sm"></i> Fund Wallet (₦{{ formatWithCommas((+investAmount().replace(/,/g, '') - availableNaira()).toString()) }})
                         </button>
                     </div>
                 }

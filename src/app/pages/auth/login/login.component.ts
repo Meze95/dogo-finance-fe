@@ -49,12 +49,13 @@ export class LoginComponent {
             this.authService.setCurrentUser(response.data);
             
             // Redirect based on role
-            //const user = response.data;
             const role = user.role || user.Role || user.userRole || user.UserRole;
-            const isStaff = String(role).toLowerCase() !== 'customer' && String(role).toLowerCase() !== 'user';
+            const isStaff = !['customer', 'user', 'corporatesignatory'].includes(String(role).toLowerCase());
             
             if (isStaff) {
               this.router.navigate(['/admin/dashboard']);
+            } else if (String(role).toLowerCase() === 'corporatesignatory') {
+              this.router.navigate(['/signatory/dashboard']);
             } else {
               const customerType = user.CustomerTypeId || user.customerTypeId || 1;
               if (customerType === 2) {

@@ -96,4 +96,12 @@ export class TransactionService {
     
     return this.http.post<ApiResponse>(`${this.apiUrl}/manual-funding`, formData);
   }
+
+  getPendingApprovals(): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.apiUrl}/pending-approvals`);
+  }
+
+  processApproval(transactionId: number, isApproved: boolean, pin: string): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`${this.apiUrl}/process-approval`, { transactionId, isApproved, pin });
+  }
 }
