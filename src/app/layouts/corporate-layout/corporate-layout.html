@@ -2,25 +2,24 @@
 
   <!-- Sidebar Overlay (Mobile) -->
   @if(isMobileMenuOpen()) {
-  <div (click)="toggleMobileMenu()" class="fixed inset-0 bg-[var(--dogo-dark)]/60 backdrop-blur-md z-[60] lg:hidden"></div>
+    <div (click)="toggleMobileMenu()" class="fixed inset-0 bg-[var(--dogo-dark)]/60 backdrop-blur-md z-[60] lg:hidden"></div>
   }
 
-  <!-- Logout Process Overlay -->
+  <!-- Logout Overlay -->
   @if(isLoggingOut()) {
-  <div class="fixed inset-0 bg-[var(--dogo-dark)]/80 backdrop-blur-sm z-[100] flex flex-col items-center justify-center zoom-in">
-    <div
-      class="w-16 h-16 rounded-2xl bg-[var(--dogo-primary)] border border-[var(--dogo-secondary)]/30 flex items-center justify-center mb-4 shadow-2xl shadow-[var(--dogo-secondary)]/20">
-      <i class="ri-logout-circle-r-line text-3xl text-[var(--dogo-secondary)] animate-pulse"></i>
+    <div class="fixed inset-0 bg-[var(--dogo-dark)]/80 backdrop-blur-sm z-[100] flex flex-col items-center justify-center zoom-in">
+      <div class="w-16 h-16 rounded-2xl bg-[var(--dogo-primary)] border border-[var(--dogo-secondary)]/30 flex items-center justify-center mb-4 shadow-2xl shadow-[var(--dogo-secondary)]/20">
+        <i class="ri-logout-circle-r-line text-3xl text-[var(--dogo-secondary)] animate-pulse"></i>
+      </div>
+      <h3 class="text-xl font-black text-white tracking-widest uppercase italic">Securely Logging Out</h3>
+      <p class="text-sm font-medium text-white/50 mt-2 flex items-center gap-2">
+        <i class="ri-loader-4-line animate-spin text-[var(--dogo-secondary)]"></i> Committing session logs...
+      </p>
     </div>
-    <h3 class="text-xl font-black text-white tracking-widest uppercase italic">Securely Logging Out</h3>
-    <p class="text-sm font-medium text-white/50 mt-2 flex items-center gap-2">
-      <i class="ri-loader-4-line animate-spin text-[var(--dogo-secondary)]"></i> Committing session logs...
-    </p>
-  </div>
   }
 
   <!-- SIDEBAR -->
-  <aside 
+  <aside
     [style.width]="isSidebarOpen() ? '18rem' : '5rem'"
     [style.minWidth]="isSidebarOpen() ? '18rem' : '5rem'"
     [class.translate-x-0]="isMobileMenuOpen()"
@@ -31,15 +30,12 @@
     <!-- Brand Header -->
     <div class="h-20 flex items-center px-6 shrink-0 border-b border-white/5 bg-[var(--dogo-primary)]/20">
       <div class="relative flex flex-col justify-center w-full h-full">
-        <!-- Icon only (fades in when collapsed) -->
-        <div class="absolute left-0 top-1/2 -translate-y-1/2 flex items-center transition-opacity duration-300" 
+        <div class="absolute left-0 top-1/2 -translate-y-1/2 flex items-center transition-opacity duration-300"
              [class.opacity-0]="isSidebarOpen() || isMobileMenuOpen()"
              [class.pointer-events-none]="isSidebarOpen() || isMobileMenuOpen()">
           <img src="/brand/D LOGO W.png" alt="Dogo Icon" class="w-8 h-8 object-contain">
         </div>
-        
-        <!-- Full Logo + Text (fades out when collapsed) -->
-        <div class="flex flex-col min-w-max transition-opacity duration-300" 
+        <div class="flex flex-col min-w-max transition-opacity duration-300"
              [class.opacity-0]="!isSidebarOpen() && !isMobileMenuOpen()">
           <img src="/brand/D LOGO FW.png" alt="Dogo" class="h-6 md:h-7 w-auto object-contain object-left">
           <span class="text-[9px] font-bold text-white/60 tracking-[0.2em] uppercase mt-1.5 whitespace-nowrap">Corporate Reserve</span>
@@ -47,45 +43,43 @@
       </div>
     </div>
 
-    <!-- Navigation Area -->
+    <!-- Navigation -->
     <div class="flex-grow flex flex-col py-8 overflow-y-auto custom-scrollbar px-3 space-y-2">
       <p class="px-5 text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-4 transition-opacity shrink-0 whitespace-nowrap"
         [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">Corporate System</p>
 
       @for(item of menuItems(); track item.label) {
-      <a [routerLink]="item.link" routerLinkActive="bg-white/10 text-white shadow-lg border-l-4 border-[var(--dogo-secondary)]"
-        (click)="isMobileMenuOpen() ? toggleMobileMenu() : null"
-        class="flex items-center space-x-4 h-12 rounded-2xl transition-all group px-4 hover:bg-[var(--dogo-primary)]/40 text-white/60 hover:text-white border-l-4 border-transparent">
-        <div class="w-6 flex justify-center shrink-0">
-          <i [class]="item.icon" class="text-2xl transition-transform group-hover:scale-110"></i>
-        </div>
-        <span class="font-bold text-sm tracking-wide whitespace-nowrap transition-opacity duration-300"
-          [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">
-          {{ item.label }}
-        </span>
-      </a>
-      }
-
-      <!-- Management Divider -->
-      <div class="mt-8 pt-8 border-t border-white/5 space-y-2">
-        <p class="px-5 text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-4 transition-opacity shrink-0 whitespace-nowrap"
-          [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">Management</p>
-
-        @for(item of managementItems(); track item.label) {
-        <a [routerLink]="item.link" routerLinkActive="bg-white/10 text-[var(--dogo-secondary)]"
+        <a [routerLink]="item.link" routerLinkActive="bg-white/10 text-white shadow-lg border-l-4 border-[var(--dogo-secondary)]"
           (click)="isMobileMenuOpen() ? toggleMobileMenu() : null"
-          class="flex items-center space-x-4 h-12 rounded-2xl transition-all group px-4 hover:bg-white/5 text-white/60 hover:text-white">
+          class="flex items-center space-x-4 h-12 rounded-2xl transition-all group px-4 hover:bg-[var(--dogo-primary)]/40 text-white/60 hover:text-white border-l-4 border-transparent">
           <div class="w-6 flex justify-center shrink-0">
-            <i [class]="item.icon" class="text-xl"></i>
+            <i [class]="item.icon" class="text-2xl transition-transform group-hover:scale-110"></i>
           </div>
           <span class="font-bold text-sm tracking-wide whitespace-nowrap transition-opacity duration-300"
             [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">
             {{ item.label }}
           </span>
         </a>
+      }
+
+      <div class="mt-8 pt-8 border-t border-white/5 space-y-2">
+        <p class="px-5 text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-4 transition-opacity shrink-0 whitespace-nowrap"
+          [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">Management</p>
+
+        @for(item of managementItems(); track item.label) {
+          <a [routerLink]="item.link" routerLinkActive="bg-white/10 text-[var(--dogo-secondary)]"
+            (click)="isMobileMenuOpen() ? toggleMobileMenu() : null"
+            class="flex items-center space-x-4 h-12 rounded-2xl transition-all group px-4 hover:bg-white/5 text-white/60 hover:text-white">
+            <div class="w-6 flex justify-center shrink-0">
+              <i [class]="item.icon" class="text-xl"></i>
+            </div>
+            <span class="font-bold text-sm tracking-wide whitespace-nowrap transition-opacity duration-300"
+              [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">
+              {{ item.label }}
+            </span>
+          </a>
         }
 
-        <!-- Logout -->
         <button (click)="handleLogout()" [disabled]="isLoggingOut()"
           class="flex items-center space-x-4 h-12 w-full rounded-2xl transition-all group px-4 hover:bg-red-500/10 text-white/60 hover:text-red-400">
           <div class="w-6 flex justify-center shrink-0">
@@ -101,7 +95,6 @@
           </span>
         </button>
 
-        <!-- Toggle button -->
         <button (click)="toggleSidebar()"
           class="hidden lg:flex items-center space-x-4 h-12 w-full rounded-2xl hover:bg-white/5 px-4 text-white/30 transition-all mt-4">
           <div class="w-6 flex justify-center shrink-0">
@@ -117,95 +110,108 @@
   <!-- MAIN CONTENT WRAPPER -->
   <div class="min-w-0 flex-grow flex flex-col h-screen overflow-hidden relative">
 
-    <!-- CLIENT HEADER -->
-    <header
-      class="h-20 shrink-0 bg-white/80 backdrop-blur-md border-b border-[var(--dogo-primary)]/10 flex items-center justify-between px-4 md:px-10 z-[40]">
+    <!-- HEADER — dark on mobile, white on desktop -->
+    <header class="h-16 sm:h-20 shrink-0 flex items-center justify-between px-4 md:px-10 z-[40]
+                   bg-[var(--dogo-dark)] lg:bg-white/80 lg:backdrop-blur-md
+                   border-b border-white/5 lg:border-[var(--dogo-primary)]/10">
 
-      <!-- Mobile Toggle -->
-      <button (click)="toggleMobileMenu()"
-        class="lg:hidden w-12 h-12 flex items-center justify-center text-[var(--dogo-primary)] bg-[var(--dogo-primary)]/5 rounded-xl">
-        <i class="ri-menu-unfold-fill text-2xl"></i>
-      </button>
+      <!-- Left: hamburger + logo (mobile only) -->
+      <div class="flex items-center gap-3 lg:hidden">
+        <button (click)="toggleMobileMenu()"
+          class="w-10 h-10 flex items-center justify-center text-white/80 hover:text-white bg-white/10 hover:bg-white/15 rounded-xl transition-all">
+          <i class="ri-menu-unfold-fill text-xl"></i>
+        </button>
+        <img src="/brand/D LOGO FW.png" alt="Dogo" class="h-5 w-auto object-contain opacity-90">
+      </div>
 
-      <!-- Welcome Text (Desktop) -->
-      <div class="hidden md:block">
+      <!-- Left: welcome text (desktop only) -->
+      <div class="hidden lg:block">
         <h1 class="text-xl font-black text-[var(--dogo-dark)] tracking-tight">Salaam, {{ userName() }} 👋</h1>
         <p class="text-[11px] font-bold text-[var(--dogo-primary)]/60 uppercase tracking-widest mt-0.5 flex items-center">
-          <span class="w-2 h-2 rounded-full bg-[var(--dogo-secondary)] mr-2 shadow-sm animate-pulse"></span> Build corporate reserves the halal way
+          <span class="w-2 h-2 rounded-full bg-[var(--dogo-secondary)] mr-2 shadow-sm animate-pulse"></span>
+          Build corporate reserves the halal way
         </p>
       </div>
 
-      <!-- Actions -->
-      <div class="flex items-center space-x-2 md:space-x-6">
+      <!-- Right: actions -->
+      <div class="flex items-center gap-2 md:gap-4">
 
-        <!-- Search bar (Desktop) -->
-        <div
-          class="hidden sm:flex items-center bg-[var(--dogo-cream)] rounded-2xl px-4 py-2 border border-[var(--dogo-primary)]/5 group focus-within:border-[var(--dogo-secondary)] transition-all">
+        <!-- Search (desktop only) -->
+        <div class="hidden sm:flex items-center bg-[var(--dogo-cream)] rounded-2xl px-4 py-2 border border-[var(--dogo-primary)]/5 group focus-within:border-[var(--dogo-secondary)] transition-all">
           <i class="ri-search-line text-[var(--dogo-muted)]"></i>
           <input type="text" placeholder="Search..."
             class="bg-transparent border-none focus:outline-none px-3 text-sm font-medium w-24 md:w-48 text-[var(--dogo-dark)]">
-          <span
-            class="hidden xl:block text-[10px] font-black bg-white px-2 py-0.5 border border-[var(--dogo-primary)]/10 rounded-md text-[var(--dogo-muted)]">ALT
-            + S</span>
+          <span class="hidden xl:block text-[10px] font-black bg-white px-2 py-0.5 border border-[var(--dogo-primary)]/10 rounded-md text-[var(--dogo-muted)]">ALT + S</span>
         </div>
 
+        <!-- Bell + Notifications -->
         <div class="relative">
           <button (click)="toggleNotifications()"
-            class="w-10 h-10 rounded-xl bg-white border border-[var(--dogo-primary)]/10 flex items-center justify-center text-[var(--dogo-primary)] hover:bg-white hover:shadow-xl transition-all relative group">
-            <i class="ri-notification-3-line text-xl group-hover:text-[var(--dogo-secondary)]"></i>
+            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-all relative group
+                   bg-white/10 text-white/70 hover:text-white hover:bg-white/20
+                   lg:bg-white lg:text-[var(--dogo-primary)] lg:border lg:border-[var(--dogo-primary)]/10 lg:hover:shadow-xl">
+            <i class="ri-notification-3-line text-lg group-hover:text-[var(--dogo-secondary)]"></i>
             @if(unreadCount() > 0) {
-            <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border border-white"></span>
+              <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[var(--dogo-dark)] lg:border-white"></span>
             }
           </button>
 
           <!-- Notifications Popover -->
           @if(showNotifications()) {
-          <div class="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-2xl border border-[var(--dogo-primary)]/10 z-[100] overflow-hidden">
-            <div class="px-4 py-3 border-b border-[var(--dogo-primary)]/10 flex items-center justify-between bg-[var(--dogo-cream)]">
-              <h3 class="font-black text-[var(--dogo-dark)] uppercase tracking-tight">Notifications</h3>
-              <span class="text-xs font-bold text-[var(--dogo-primary)]">{{ unreadCount() }} New</span>
-            </div>
-            <div class="max-h-[300px] overflow-y-auto custom-scrollbar">
-              @if(notifications().length === 0) {
-                <div class="p-6 text-center text-[var(--dogo-muted)] text-sm">No notifications yet.</div>
-              }
-              @for(n of notifications(); track n.notificationId) {
-                <div class="p-4 border-b border-[var(--dogo-primary)]/5 hover:bg-[var(--dogo-cream)] transition-colors cursor-pointer"
-                     [class.bg-[var(--dogo-primary)]/5]="!n.isRead"
-                     (click)="markAsRead(n.notificationId)">
-                  <div class="flex justify-between items-start">
-                    <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ n.title }}</p>
-                    @if(!n.isRead) {
-                      <span class="w-2 h-2 rounded-full bg-[var(--dogo-secondary)] mt-1"></span>
-                    }
+            <div class="absolute right-0 mt-2 w-[calc(100vw-2rem)] sm:w-80 bg-white rounded-2xl shadow-2xl border border-[var(--dogo-primary)]/10 z-[100] overflow-hidden">
+              <div class="px-4 py-3 border-b border-[var(--dogo-primary)]/10 flex items-center justify-between bg-[var(--dogo-cream)]">
+                <h3 class="font-black text-[var(--dogo-dark)] uppercase tracking-tight text-sm">Notifications</h3>
+                <span class="text-xs font-bold text-[var(--dogo-primary)]">{{ unreadCount() }} New</span>
+              </div>
+              <div class="max-h-[300px] overflow-y-auto custom-scrollbar">
+                @if(notifications().length === 0) {
+                  <div class="p-6 text-center text-[var(--dogo-muted)] text-sm">No notifications yet.</div>
+                }
+                @for(n of notifications(); track n.notificationId) {
+                  <div class="p-4 border-b border-[var(--dogo-primary)]/5 hover:bg-[var(--dogo-cream)] transition-colors cursor-pointer"
+                       [class.bg-[var(--dogo-primary)]/5]="!n.isRead"
+                       (click)="markAsRead(n.notificationId)">
+                    <div class="flex justify-between items-start gap-2">
+                      <p class="text-sm font-bold text-[var(--dogo-dark)]">{{ n.title }}</p>
+                      @if(!n.isRead) {
+                        <span class="w-2 h-2 rounded-full bg-[var(--dogo-secondary)] mt-1 shrink-0"></span>
+                      }
+                    </div>
+                    <p class="text-xs text-[var(--dogo-muted)] mt-1 leading-relaxed">{{ n.message }}</p>
+                    <p class="text-[10px] text-[var(--dogo-primary)]/60 mt-2 font-semibold tracking-wider uppercase">{{ n.createdAt }}</p>
                   </div>
-                  <p class="text-xs text-[var(--dogo-muted)] mt-1 leading-relaxed">{{ n.message }}</p>
-                  <p class="text-[10px] text-[var(--dogo-primary)]/60 mt-2 font-semibold tracking-wider uppercase">{{ n.createdAt }}</p>
-                </div>
-              }
+                }
+              </div>
             </div>
-          </div>
           }
         </div>
 
-        <!-- Client Profile Pill -->
+        <!-- Profile Pill -->
         <div [routerLink]="isSignatory() ? '/signatory/profile' : '/corporate/profile'"
-          class="flex items-center bg-white p-1.5 rounded-2xl shadow-sm border border-[var(--dogo-primary)]/5 group cursor-pointer hover:border-[var(--dogo-secondary)] hover:shadow-xl transition-all">
-          <div
-            class="w-8 lg:w-9 h-8 lg:h-9 bg-[var(--dogo-cream)] rounded-xl flex items-center justify-center font-black text-[var(--dogo-primary)] group-hover:bg-[var(--dogo-primary)] group-hover:text-white transition-all">
+          class="flex items-center gap-2 cursor-pointer transition-all rounded-2xl group
+                 bg-white/10 hover:bg-white/20 p-1.5
+                 lg:bg-white lg:shadow-sm lg:border lg:border-[var(--dogo-primary)]/5 lg:hover:border-[var(--dogo-secondary)] lg:hover:shadow-xl">
+          <div class="w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm transition-all
+                      bg-white/20 text-white
+                      lg:bg-[var(--dogo-cream)] lg:text-[var(--dogo-primary)] lg:group-hover:bg-[var(--dogo-primary)] lg:group-hover:text-white">
             {{ userInitials() }}
           </div>
-          <div class="px-3 hidden md:block">
-            <p class="text-[11px] font-black text-[var(--dogo-dark)] leading-none uppercase tracking-tighter group-hover:text-[var(--dogo-primary)] transition-colors">{{ userName() }}</p>
-            <p class="text-[9px] font-bold text-[var(--dogo-secondary)] leading-none mt-1 uppercase tracking-widest">{{ isSignatory() ? 'Signatory Profile' : 'Corporate Profile' }}</p>
+          <div class="pr-1.5 hidden md:block">
+            <p class="text-[11px] font-black leading-none uppercase tracking-tighter transition-colors
+                      text-white/90 lg:text-[var(--dogo-dark)] lg:group-hover:text-[var(--dogo-primary)]">
+              {{ userName() }}
+            </p>
+            <p class="text-[9px] font-bold leading-none mt-1 uppercase tracking-widest text-[var(--dogo-secondary)]">
+              {{ isSignatory() ? 'Signatory Profile' : 'Corporate Profile' }}
+            </p>
           </div>
         </div>
+
       </div>
     </header>
 
-    <!-- CONTENT DISPLAY -->
-    <main class="flex-grow overflow-y-auto p-6 md:p-10 custom-scrollbar relative">
-      <!-- Geometric pattern background decoration -->
+    <!-- CONTENT -->
+    <main class="flex-grow overflow-y-auto p-4 sm:p-6 md:p-10 custom-scrollbar relative">
       <div class="absolute inset-0 dogo-pattern opacity-[0.02] pointer-events-none"></div>
       <div class="relative">
         <router-outlet></router-outlet>

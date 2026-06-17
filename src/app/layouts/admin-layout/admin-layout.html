@@ -2,40 +2,39 @@
 
   <!-- Sidebar Overlay (Mobile) -->
   @if(isMobileMenuOpen()) {
-  <div (click)="toggleMobileMenu()" class="fixed inset-0 bg-[var(--dogo-dark)]/60 backdrop-blur-md z-[60] lg:hidden"></div>
+    <div (click)="toggleMobileMenu()" class="fixed inset-0 bg-[var(--dogo-dark)]/60 backdrop-blur-md z-[60] lg:hidden"></div>
   }
 
-  <!-- Logout Process Overlay -->
+  <!-- Logout Overlay -->
   @if(isLoggingOut()) {
-  <div class="fixed inset-0 bg-[var(--dogo-dark)]/80 backdrop-blur-sm z-[100] flex flex-col items-center justify-center zoom-in">
-    <div
-      class="w-16 h-16 rounded-2xl bg-[var(--dogo-primary)] border border-[var(--dogo-secondary)]/30 flex items-center justify-center mb-4 shadow-2xl shadow-[var(--dogo-secondary)]/20">
-      <i class="ri-logout-circle-r-line text-3xl text-[var(--dogo-secondary)] animate-pulse"></i>
+    <div class="fixed inset-0 bg-[var(--dogo-dark)]/80 backdrop-blur-sm z-[100] flex flex-col items-center justify-center zoom-in">
+      <div class="w-16 h-16 rounded-2xl bg-[var(--dogo-primary)] border border-[var(--dogo-secondary)]/30 flex items-center justify-center mb-4 shadow-2xl shadow-[var(--dogo-secondary)]/20">
+        <i class="ri-logout-circle-r-line text-3xl text-[var(--dogo-secondary)] animate-pulse"></i>
+      </div>
+      <h3 class="text-xl font-black text-white tracking-widest uppercase">Securely Logging Out</h3>
+      <p class="text-sm font-medium text-white/50 mt-2 flex items-center gap-2">
+        <i class="ri-loader-4-line animate-spin text-[var(--dogo-secondary)]"></i> Committing session logs...
+      </p>
     </div>
-    <h3 class="text-xl font-black text-white tracking-widest uppercase">Securely Logging Out</h3>
-    <p class="text-sm font-medium text-white/50 mt-2 flex items-center gap-2">
-      <i class="ri-loader-4-line animate-spin text-[var(--dogo-secondary)]"></i> Committing session logs...
-    </p>
-  </div>
   }
 
-  <!-- SIDEBAR (Elevated Dark Admin Variation) -->
-  <aside [class.w-72]="isSidebarOpen()" [class.w-20]="!isSidebarOpen()" [class.translate-x-0]="isMobileMenuOpen()"
+  <!-- SIDEBAR -->
+  <aside
+    [class.w-72]="isSidebarOpen()"
+    [class.w-20]="!isSidebarOpen()"
+    [class.translate-x-0]="isMobileMenuOpen()"
     [class.-translate-x-full]="!isMobileMenuOpen()"
     class="fixed lg:static inset-y-0 left-0 bg-[var(--dogo-dark)] text-white transition-all duration-500 z-[70] flex flex-col border-r border-[var(--dogo-primary)]/20 shadow-2xl overflow-hidden lg:translate-x-0">
 
-    <!-- Admin Header -->
+    <!-- Brand Header -->
     <div class="h-20 flex items-center px-6 shrink-0 border-b border-white/5 bg-[var(--dogo-primary)]/20">
       <div class="relative flex flex-col justify-center w-full h-full">
-        <!-- Icon only (fades in when collapsed) -->
-        <div class="absolute left-0 top-1/2 -translate-y-1/2 flex items-center transition-opacity duration-300" 
+        <div class="absolute left-0 top-1/2 -translate-y-1/2 flex items-center transition-opacity duration-300"
              [class.opacity-0]="isSidebarOpen() || isMobileMenuOpen()"
              [class.pointer-events-none]="isSidebarOpen() || isMobileMenuOpen()">
           <img src="/brand/D LOGO W.png" alt="Dogo Icon" class="w-8 h-8 object-contain">
         </div>
-        
-        <!-- Full Logo + Text (fades out when collapsed) -->
-        <div class="flex flex-col min-w-max transition-opacity duration-300" 
+        <div class="flex flex-col min-w-max transition-opacity duration-300"
              [class.opacity-0]="!isSidebarOpen() && !isMobileMenuOpen()">
           <img src="/brand/D LOGO FW.png" alt="Dogo" class="h-6 md:h-7 w-auto object-contain object-left">
           <span class="text-[9px] font-bold text-white/60 tracking-[0.2em] uppercase mt-1.5 whitespace-nowrap">Admin System</span>
@@ -43,108 +42,99 @@
       </div>
     </div>
 
-    <!-- Navigation Area -->
+    <!-- Navigation -->
     <div class="flex-grow flex flex-col py-8 overflow-y-auto custom-scrollbar px-3 space-y-2">
       <p class="px-5 text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-4 transition-opacity shrink-0 whitespace-nowrap overflow-hidden text-ellipsis"
         [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">Main System</p>
 
       @for(item of menuItems; track item.label) {
-      @if(hasPermission(item.permission)) {
-      <a [routerLink]="item.link" routerLinkActive="bg-white/10 text-white shadow-lg border-l-4 border-[var(--dogo-secondary)]"
-        (click)="isMobileMenuOpen() ? toggleMobileMenu() : null"
-        class="flex items-center space-x-4 h-12 rounded-2xl transition-all group px-4 hover:bg-[var(--dogo-primary)]/40 text-white/60 hover:text-white border-l-4 border-transparent">
-        <div class="w-6 flex justify-center shrink-0">
-          <i [class]="item.icon" class="text-2xl transition-transform group-hover:scale-110"></i>
-        </div>
-        <span class="font-bold text-sm tracking-wide whitespace-nowrap transition-opacity duration-300"
-          [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">
-          {{ item.label }}
-        </span>
-      </a>
-      }
+        @if(hasPermission(item.permission)) {
+          <a [routerLink]="item.link" routerLinkActive="bg-white/10 text-white shadow-lg border-l-4 border-[var(--dogo-secondary)]"
+            (click)="isMobileMenuOpen() ? toggleMobileMenu() : null"
+            class="flex items-center space-x-4 h-12 rounded-2xl transition-all group px-4 hover:bg-[var(--dogo-primary)]/40 text-white/60 hover:text-white border-l-4 border-transparent">
+            <div class="w-6 flex justify-center shrink-0">
+              <i [class]="item.icon" class="text-2xl transition-transform group-hover:scale-110"></i>
+            </div>
+            <span class="font-bold text-sm tracking-wide whitespace-nowrap transition-opacity duration-300"
+              [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">
+              {{ item.label }}
+            </span>
+          </a>
+        }
       }
 
-      <!-- Management Divider -->
       <div class="mt-8 pt-8 border-t border-white/5 space-y-2 shrink-0">
         <p class="px-5 text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-4 transition-opacity shrink-0 whitespace-nowrap overflow-hidden text-ellipsis"
           [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">Management</p>
 
         @for(item of managementItems; track item.label) {
-        @if(hasPermission(item.permission)) {
-        @if(item.subItems) {
-        <!-- Accordion item -->
-        <div class="flex flex-col w-full">
-          <button (click)="toggleSubMenu(item.label)"
-            class="flex items-center justify-between w-full h-12 rounded-2xl transition-all group px-4 hover:bg-white/5 text-white/60 hover:text-white"
-            [ngClass]="{'bg-white/10 text-white': openMenu() === item.label}">
-            <div class="flex items-center space-x-4">
-              <div class="w-6 flex justify-center shrink-0">
-                <i [class]="item.icon" class="text-xl"></i>
-              </div>
-              <span class="font-bold text-sm tracking-wide whitespace-nowrap transition-opacity duration-300"
-                [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">
-                {{ item.label }}
-              </span>
-            </div>
-            <i class="ri-arrow-down-s-line transition-transform duration-300"
-              [class.rotate-180]="openMenu() === item.label" [class.opacity-0]="!isSidebarOpen()"
-              [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()"></i>
-          </button>
+          @if(hasPermission(item.permission)) {
+            @if(item.subItems) {
+              <div class="flex flex-col w-full">
+                <button (click)="toggleSubMenu(item.label)"
+                  class="flex items-center justify-between w-full h-12 rounded-2xl transition-all group px-4 hover:bg-white/5 text-white/60 hover:text-white"
+                  [ngClass]="{'bg-white/10 text-white': openMenu() === item.label}">
+                  <div class="flex items-center space-x-4">
+                    <div class="w-6 flex justify-center shrink-0">
+                      <i [class]="item.icon" class="text-xl"></i>
+                    </div>
+                    <span class="font-bold text-sm tracking-wide whitespace-nowrap transition-opacity duration-300"
+                      [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">
+                      {{ item.label }}
+                    </span>
+                  </div>
+                  <i class="ri-arrow-down-s-line transition-transform duration-300"
+                    [class.rotate-180]="openMenu() === item.label"
+                    [class.opacity-0]="!isSidebarOpen()"
+                    [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()"></i>
+                </button>
 
-          <div class="flex flex-col ml-12 space-y-1 overflow-hidden transition-all duration-300"
-            [class.max-h-0]="openMenu() !== item.label || (!isSidebarOpen() && !isMobileMenuOpen())"
-            [class.max-h-[500px]]="openMenu() === item.label && (isSidebarOpen() || isMobileMenuOpen())"
-            [class.opacity-0]="openMenu() !== item.label || (!isSidebarOpen() && !isMobileMenuOpen())"
-            [class.mt-1]="openMenu() === item.label && (isSidebarOpen() || isMobileMenuOpen())">
-            @for(sub of item.subItems; track sub.label) {
-            @if(hasPermission(sub.permission)) {
-            @if (sub.link === '/admin/logout') {
-            <button (click)="handleLogout()" [disabled]="isLoggingOut()"
-              class="group w-full text-left h-10 flex items-center text-sm font-medium text-white/50 hover:text-[#ff4d4f] transition-colors relative">
-              <div class="absolute -left-4 w-[1px] h-full bg-white/10 group-hover:bg-[#ff4d4f]/30 transition-colors">
+                <div class="flex flex-col ml-12 space-y-1 overflow-hidden transition-all duration-300"
+                  [class.max-h-0]="openMenu() !== item.label || (!isSidebarOpen() && !isMobileMenuOpen())"
+                  [class.max-h-[500px]]="openMenu() === item.label && (isSidebarOpen() || isMobileMenuOpen())"
+                  [class.opacity-0]="openMenu() !== item.label || (!isSidebarOpen() && !isMobileMenuOpen())"
+                  [class.mt-1]="openMenu() === item.label && (isSidebarOpen() || isMobileMenuOpen())">
+                  @for(sub of item.subItems; track sub.label) {
+                    @if(hasPermission(sub.permission)) {
+                      @if(sub.link === '/admin/logout') {
+                        <button (click)="handleLogout()" [disabled]="isLoggingOut()"
+                          class="group w-full text-left h-10 flex items-center text-sm font-medium text-white/50 hover:text-red-400 transition-colors relative">
+                          <div class="absolute -left-4 w-[1px] h-full bg-white/10 group-hover:bg-red-400/30 transition-colors"></div>
+                          <div class="absolute -left-4 top-1/2 w-3 h-[1px] bg-white/10 group-hover:bg-red-400/30 transition-colors"></div>
+                          <span class="pl-2 flex items-center gap-2">
+                            {{ sub.label }}
+                            @if(isLoggingOut()) { <i class="ri-loader-4-line animate-spin text-sm"></i> }
+                          </span>
+                        </button>
+                      } @else {
+                        <a [routerLink]="sub.link" routerLinkActive="text-[var(--dogo-secondary)] font-bold"
+                          (click)="isMobileMenuOpen() ? toggleMobileMenu() : null"
+                          class="group h-10 flex items-center text-sm font-medium text-white/50 hover:text-white transition-colors relative">
+                          <div class="absolute -left-4 w-[1px] h-full bg-white/10 group-hover:bg-white/30 transition-colors"></div>
+                          <div class="absolute -left-4 top-1/2 w-3 h-[1px] bg-white/10 group-hover:bg-white/30 transition-colors"></div>
+                          <span class="pl-2">{{ sub.label }}</span>
+                        </a>
+                      }
+                    }
+                  }
+                </div>
               </div>
-              <div
-                class="absolute -left-4 top-1/2 w-3 h-[1px] bg-white/10 group-hover:bg-[#ff4d4f]/30 transition-colors">
-              </div>
-              <span class="pl-2 flex items-center gap-2">
-                {{ sub.label }}
-                @if(isLoggingOut()) {
-                <i class="ri-loader-4-line animate-spin text-sm"></i>
-                }
-              </span>
-            </button>
             } @else {
-            <a [routerLink]="sub.link" routerLinkActive="text-[var(--dogo-secondary)] font-bold"
-              (click)="isMobileMenuOpen() ? toggleMobileMenu() : null"
-              class="group h-10 flex items-center text-sm font-medium text-white/50 hover:text-white transition-colors relative">
-              <!-- Subtle line indicators -->
-              <div class="absolute -left-4 w-[1px] h-full bg-white/10 group-hover:bg-white/30 transition-colors"></div>
-              <div class="absolute -left-4 top-1/2 w-3 h-[1px] bg-white/10 group-hover:bg-white/30 transition-colors">
-              </div>
-              <span class="pl-2">{{ sub.label }}</span>
-            </a>
+              <a [routerLink]="item.link" routerLinkActive="bg-white/10 text-[var(--dogo-secondary)]"
+                (click)="isMobileMenuOpen() ? toggleMobileMenu() : null"
+                class="flex items-center space-x-4 h-12 rounded-2xl transition-all group px-4 hover:bg-white/5 text-white/60 hover:text-white">
+                <div class="w-6 flex justify-center shrink-0">
+                  <i [class]="item.icon" class="text-xl"></i>
+                </div>
+                <span class="font-bold text-sm tracking-wide whitespace-nowrap transition-opacity duration-300"
+                  [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">
+                  {{ item.label }}
+                </span>
+              </a>
             }
-            }
-            }
-          </div>
-        </div>
-        } @else {
-        <a [routerLink]="item.link" routerLinkActive="bg-white/10 text-[var(--dogo-secondary)]"
-          (click)="isMobileMenuOpen() ? toggleMobileMenu() : null"
-          class="flex items-center space-x-4 h-12 rounded-2xl transition-all group px-4 hover:bg-white/5 text-white/60 hover:text-white">
-          <div class="w-6 flex justify-center shrink-0">
-            <i [class]="item.icon" class="text-xl"></i>
-          </div>
-          <span class="font-bold text-sm tracking-wide whitespace-nowrap transition-opacity duration-300"
-            [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">
-            {{ item.label }}
-          </span>
-        </a>
-        }
-        }
+          }
         }
 
-        <!-- Toggle button (Sidebar) -->
         <button (click)="toggleSidebar()"
           class="hidden lg:flex items-center space-x-4 h-12 w-full rounded-2xl hover:bg-white/5 px-4 text-white/30 transition-all mt-4">
           <div class="w-6 flex justify-center shrink-0">
@@ -158,59 +148,72 @@
   </aside>
 
   <!-- MAIN CONTENT WRAPPER -->
-  <div class="flex-grow flex flex-col h-screen overflow-hidden relative">
+  <div class="flex-grow flex flex-col h-screen overflow-hidden relative min-w-0">
 
-    <!-- ADMIN GLASS HEADER -->
-    <header
-      class="h-20 shrink-0 bg-white/80 backdrop-blur-md border-b border-[var(--dogo-primary)]/10 flex items-center justify-between px-4 lg:px-10 z-[40]">
+    <!-- HEADER — dark on mobile, white on desktop -->
+    <header class="h-16 sm:h-20 shrink-0 flex items-center justify-between px-4 lg:px-10 z-[40]
+                   bg-[var(--dogo-dark)] lg:bg-white/80 lg:backdrop-blur-md
+                   border-b border-white/5 lg:border-[var(--dogo-primary)]/10">
 
-      <!-- Mobile Toggle -->
-      <button (click)="toggleMobileMenu()"
-        class="lg:hidden w-12 h-12 flex items-center justify-center text-[var(--dogo-primary)] bg-[var(--dogo-primary)]/5 rounded-xl">
-        <i class="ri-menu-unfold-fill text-2xl"></i>
-      </button>
+      <!-- Left: hamburger + logo (mobile only) -->
+      <div class="flex items-center gap-3 lg:hidden">
+        <button (click)="toggleMobileMenu()"
+          class="w-10 h-10 flex items-center justify-center text-white/80 hover:text-white bg-white/10 hover:bg-white/15 rounded-xl transition-all">
+          <i class="ri-menu-unfold-fill text-xl"></i>
+        </button>
+        <img src="/brand/D LOGO FW.png" alt="Dogo" class="h-5 w-auto object-contain opacity-90">
+      </div>
 
-      <!-- Welcome Admin -->
-      <div class="hidden md:block">
+      <!-- Left: system info (desktop only) -->
+      <div class="hidden lg:block">
         <h1 class="text-xl font-black text-[var(--dogo-dark)] tracking-tight uppercase">System Overview</h1>
         <p class="text-[11px] font-bold text-[var(--dogo-primary)]/60 uppercase tracking-widest mt-0.5 flex items-center">
-          <span class="w-2 h-2 rounded-full bg-green-500 mr-2 shadow-sm animate-pulse"></span> Service Nodes: 12 Active
-          · 100% Secure
+          <span class="w-2 h-2 rounded-full bg-green-500 mr-2 shadow-sm animate-pulse"></span>
+          Service Nodes: 12 Active · 100% Secure
         </p>
       </div>
 
-      <!-- Actions -->
-      <div class="flex items-center space-x-4 lg:space-x-6">
+      <!-- Right: actions -->
+      <div class="flex items-center gap-2 sm:gap-4 lg:gap-6">
 
-        <!-- Total AUM quick info (Desktop) -->
-        <div class="hidden sm:flex flex-col items-end px-6 border-r border-[var(--dogo-primary)]/10">
+        <!-- AUM stat (desktop only) -->
+        <div class="hidden lg:flex flex-col items-end px-6 border-r border-[var(--dogo-primary)]/10">
           <span class="text-[9px] font-black uppercase tracking-widest text-slate-400">Total System AUM</span>
           <span class="text-lg font-black text-[var(--dogo-primary)]">₦14.2 Billion</span>
         </div>
 
-        <button
-          class="w-10 h-10 rounded-xl bg-white border border-[var(--dogo-primary)]/10 flex items-center justify-center text-[var(--dogo-primary)] hover:bg-white hover:shadow-xl transition-all relative group">
-          <i class="ri-mail-send-line text-xl group-hover:text-[var(--dogo-secondary)]"></i>
+        <!-- Mail button -->
+        <button class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-all group
+                       bg-white/10 text-white/70 hover:text-white hover:bg-white/20
+                       lg:bg-white lg:text-[var(--dogo-primary)] lg:border lg:border-[var(--dogo-primary)]/10 lg:hover:shadow-xl">
+          <i class="ri-mail-send-line text-lg group-hover:text-[var(--dogo-secondary)]"></i>
         </button>
 
         <!-- Admin Profile Pill -->
-        <div
-          class="flex items-center bg-white p-1.5 rounded-2xl shadow-sm border border-[var(--dogo-primary)]/5 group cursor-pointer hover:border-[var(--dogo-secondary)] hover:shadow-xl transition-all">
-          <div
-            class="w-8 lg:w-9 h-8 lg:h-9 bg-[var(--dogo-cream)] rounded-xl flex items-center justify-center font-black text-[var(--dogo-primary)] group-hover:bg-[var(--dogo-primary)] group-hover:text-white transition-all">
+        <div class="flex items-center gap-2 cursor-pointer transition-all rounded-2xl group
+                    bg-white/10 hover:bg-white/20 p-1.5
+                    lg:bg-white lg:shadow-sm lg:border lg:border-[var(--dogo-primary)]/5 lg:hover:border-[var(--dogo-secondary)] lg:hover:shadow-xl">
+          <div class="w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm transition-all
+                      bg-white/20 text-white
+                      lg:bg-[var(--dogo-cream)] lg:text-[var(--dogo-primary)] lg:group-hover:bg-[var(--dogo-primary)] lg:group-hover:text-white">
             {{ staffProfile().initials }}
           </div>
-          <div class="px-3 hidden md:block">
-            <p class="text-[11px] font-black text-[var(--dogo-dark)] leading-none uppercase tracking-tighter group-hover:text-[var(--dogo-primary)] transition-colors">{{ staffProfile().fullName }}</p>
-            <p class="text-[9px] font-bold text-[var(--dogo-secondary)] leading-none mt-1 uppercase tracking-widest">{{ staffProfile().roleName }}</p>
+          <div class="pr-1.5 hidden md:block">
+            <p class="text-[11px] font-black leading-none uppercase tracking-tighter transition-colors
+                      text-white/90 lg:text-[var(--dogo-dark)] lg:group-hover:text-[var(--dogo-primary)]">
+              {{ staffProfile().fullName }}
+            </p>
+            <p class="text-[9px] font-bold leading-none mt-1 uppercase tracking-widest text-[var(--dogo-secondary)]">
+              {{ staffProfile().roleName }}
+            </p>
           </div>
         </div>
+
       </div>
     </header>
 
-    <!-- CONTENT DISPLAY -->
-    <main class="flex-grow overflow-y-auto p-4 md:p-10 custom-scrollbar relative">
-      <!-- Geometric pattern background decoration -->
+    <!-- CONTENT -->
+    <main class="flex-grow overflow-y-auto p-4 sm:p-6 md:p-10 custom-scrollbar relative">
       <div class="absolute inset-0 dogo-pattern opacity-[0.02] pointer-events-none"></div>
       <div class="relative">
         <router-outlet></router-outlet>
