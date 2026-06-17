@@ -159,6 +159,15 @@ export class TransactionsComponent implements OnInit {
       default: return 'info';
     }
   }
+
+  // In transactions.component.ts
+  filterTabs: { key: 'all' | 'deposit' | 'withdrawal' | 'investment' | 'liquidation' | 'profit', label: string }[] = [
+    { key: 'all', label: 'All' },
+    { key: 'deposit', label: 'Deposits' },
+    { key: 'withdrawal', label: 'Withdrawals' },
+    { key: 'investment', label: 'Investments' },
+    { key: 'liquidation', label: 'Liquidations' },
+  ];
 }
 
 
