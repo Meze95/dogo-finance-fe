@@ -246,6 +246,15 @@ export class CorporateSettingsComponent implements OnInit {
   natureOfBusinesses = signal<any[]>([]);
   sourceOfFunds = signal<any[]>([]);
 
+  isProfileCompleted = computed(() => {
+    const p = this.companyProfile();
+    return !!(p.companyName && p.registrationNumber && p.dateOfIncorporation && 
+              p.natureOfBusinessId && p.countryId && p.stateId && p.city && 
+              p.address && p.entityType && (p.entityType !== 'Others' || p.otherEntityType) &&
+              p.phone && p.tin && p.email && p.annualTurnover && p.sourceOfFunds && 
+              p.clientSegmentation);
+  });
+
   countriesOptions = computed<DropdownOption[]>(() => 
     this.countries().map(c => ({ value: c.id, label: c.name, icon: 'ri-global-line' }))
   );
