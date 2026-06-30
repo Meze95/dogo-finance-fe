@@ -226,9 +226,6 @@
                 <button [routerLink]="type.name === 'Corporate' ? '/register/corporate' : '/register'" (click)="toggleMenu()" class="w-full py-3.5 bg-white text-[var(--dogo-dark)] font-black rounded-xl border-2 border-[var(--dogo-primary)]/10 flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:shadow-md transition-all">
                   <i [class]="type.name === 'Corporate' ? 'ri-briefcase-fill text-sm text-[var(--dogo-muted)]' : 'ri-user-3-fill text-sm text-[var(--dogo-secondary)]'"></i> 
                   {{type.name}} Account 
-                  @if(type.name === 'Corporate') {
-                    <span class="text-[9px] font-extrabold uppercase bg-[var(--dogo-cream)] text-[var(--dogo-secondary)] px-2 py-0.5 rounded-full shrink-0">Soon</span>
-                  }
                 </button>
               }
             </div>
