@@ -1,5 +1,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import 'tailwindcss';
+
+.font-serif {
+  font-family: 'Lora', Georgia, serif !important;
+}
+
+/* Footer-specific exact Figma typography values */
+.footer-col-header {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 1.2 !important;
+  color: #FDFDFD !important;
+}
+
+.footer-col-link {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  /* Proportional smaller menu links under headings */
+  font-weight: 300 !important;
+  line-height: 1.2 !important;
+  color: #E6E6E6 !important;
+  text-decoration: none;
+}
+
+.footer-col-link:hover {
+  color: #ffffff !important;
+}
+
+.footer-disclaimer {
+  font-family: 'Be Vietnam Pro', sans-serif !important;
+  font-size: 13px !important;
+  /* Proportional copyright disclaimer size */
+  font-weight: 400 !important;
+  line-height: 1.7 !important;
+  color: #E6E6E6 !important;
+}
 
 /* DOGO Finance — Global Design System */
 /* Brand: Forest Green + Gold/Amber, Islamic geometric aesthetic */
@@ -9,37 +47,41 @@
    ============================================ */
 :root {
   /* Brand Colours (Blue/Twilight Theme) */
-  --dogo-primary:      #030E65; /* Deep Twilight */
+  --dogo-primary: #030E65;
+  /* Deep Twilight */
   --dogo-primary-soft: #051A9A;
-  --dogo-secondary:    #023E8A; /* French Blue */
-  --dogo-secondary-soft:#0077B6;
-  --dogo-accent:       #023E8A;
-  
+  --dogo-secondary: #023E8A;
+  /* French Blue */
+  --dogo-secondary-soft: #0077B6;
+  --dogo-accent: #023E8A;
+
   /* Backgrounds & Surfaces */
-  --dogo-cream:        #f0f4f8;
-  --dogo-surface:      #ffffff;
-  --dogo-dark:         #01052d;
-  
+  --dogo-cream: #f0f4f8;
+  --dogo-surface: #ffffff;
+  --dogo-dark: #01052d;
+
   /* Text & Feedback */
-  --dogo-text:         #030E65;
-  --dogo-muted:        #64748b;
-  --dogo-success:      #10b981;
-  --dogo-error:        #ef4444;
-  --dogo-white:        #ffffff;
-  --dogo-on-primary:   #ffffff;
+  --dogo-text: #030E65;
+  --dogo-muted: #64748b;
+  --dogo-success: #10b981;
+  --dogo-error: #ef4444;
+  --dogo-white: #ffffff;
+  --dogo-on-primary: #ffffff;
 
   /* Legacy Aliases (to be phased out) */
-  --dogo-green:        var(--dogo-primary);
-  --dogo-gold:         var(--dogo-secondary);
+  --dogo-green: var(--dogo-primary);
+  --dogo-gold: var(--dogo-secondary);
 
   /* Geometric pattern opacity */
-  --pattern-opacity:   0.04;
+  --pattern-opacity: 0.04;
 }
 
 /* ============================================
    BASE RESET & TYPOGRAPHY
    ============================================ */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -78,14 +120,14 @@ body {
     size: A4;
     margin: 10mm;
   }
-  
+
   body {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     background-color: white !important;
     color: black !important;
   }
-  
+
   /* Hide all regular dashboard UI */
   .no-print,
   .sidebar,
@@ -93,18 +135,26 @@ body {
   .main-dashboard-ui {
     display: none !important;
   }
-  
+
   /* Reset margins for print */
-  main, .main-content, .p-4, .p-6, .p-8 {
+  main,
+  .main-content,
+  .p-4,
+  .p-6,
+  .p-8 {
     margin: 0 !important;
     padding: 0 !important;
     width: 100% !important;
     height: auto !important;
     overflow: visible !important;
   }
-  
+
   /* Prevent scrolling truncation */
-  div, main, body, html, app-admin-layout {
+  div,
+  main,
+  body,
+  html,
+  app-admin-layout {
     height: auto !important;
     overflow: visible !important;
     position: static !important;
@@ -118,13 +168,13 @@ body {
     font-size: 11px;
     color: #000;
   }
-  
+
   .print-header-center {
     text-align: center;
     margin-bottom: 30px;
     font-weight: bold;
   }
-  
+
   .print-header-title {
     font-size: 16px;
     text-transform: uppercase;
@@ -138,13 +188,14 @@ body {
     margin-bottom: 20px;
     page-break-inside: auto;
   }
-  
+
   .print-table tr {
     page-break-inside: avoid;
     page-break-after: auto;
   }
 
-  .print-table th, .print-table td {
+  .print-table th,
+  .print-table td {
     border: 1px solid #333;
     padding: 6px 8px;
     text-align: left;
@@ -152,7 +203,8 @@ body {
   }
 
   .print-table th {
-    background-color: #e2e8f0 !important; /* Slate 200 */
+    background-color: #e2e8f0 !important;
+    /* Slate 200 */
     color: #000;
     font-weight: bold;
     text-transform: uppercase;
@@ -163,9 +215,11 @@ body {
     margin-left: auto;
     margin-top: 0;
   }
+
   .print-table.summary-table th {
     width: 150px;
   }
+
   .print-table.summary-table td {
     text-align: right;
     min-width: 120px;
@@ -173,16 +227,38 @@ body {
 }
 
 /* Brand utility backgrounds & text */
-.bg-dogo-primary  { background-color: var(--dogo-primary); }
-.bg-dogo-secondary { background-color: var(--dogo-secondary); }
-.text-dogo-primary { color: var(--dogo-primary); }
-.text-dogo-secondary { color: var(--dogo-secondary); }
+.bg-dogo-primary {
+  background-color: var(--dogo-primary);
+}
+
+.bg-dogo-secondary {
+  background-color: var(--dogo-secondary);
+}
+
+.text-dogo-primary {
+  color: var(--dogo-primary);
+}
+
+.text-dogo-secondary {
+  color: var(--dogo-secondary);
+}
 
 /* Compatibility with legacy classes */
-.bg-dogo-green  { background-color: var(--dogo-primary); }
-.bg-dogo-cream  { background-color: var(--dogo-cream); }
-.text-dogo-gold { color: var(--dogo-secondary); }
-.text-dogo-green { color: var(--dogo-primary); }
+.bg-dogo-green {
+  background-color: var(--dogo-primary);
+}
+
+.bg-dogo-cream {
+  background-color: var(--dogo-cream);
+}
+
+.text-dogo-gold {
+  color: var(--dogo-secondary);
+}
+
+.text-dogo-green {
+  color: var(--dogo-primary);
+}
 
 /* Premium section padding */
 .section-pad {
@@ -226,6 +302,7 @@ body {
 .product-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .product-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 40px 80px -20px rgba(3, 14, 101, 0.18);
@@ -233,35 +310,65 @@ body {
 
 /* Smooth fade-in animation */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
 .anim-fade-up {
   animation: fadeUp 0.8s ease-out forwards;
 }
 
 /* Float animation */
 @keyframes floatY {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-16px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-16px);
+  }
 }
+
 .anim-float {
   animation: floatY 6s ease-in-out infinite;
 }
 
 /* Spin slow */
 @keyframes spinSlow {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
+
 .anim-spin-slow {
   animation: spinSlow 20s linear infinite;
 }
 
 /* Stagger delays */
-.delay-100 { animation-delay: 0.1s; }
-.delay-200 { animation-delay: 0.2s; }
-.delay-300 { animation-delay: 0.3s; }
+.delay-100 {
+  animation-delay: 0.1s;
+}
+
+.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.delay-300 {
+  animation-delay: 0.3s;
+}
 
 /* Line-clamp utility */
 .line-clamp-2 {
@@ -271,6 +378,7 @@ body {
   line-clamp: 2;
   overflow: hidden;
 }
+
 .line-clamp-3 {
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -285,11 +393,11 @@ body {
 
 .mesh-gradient-premium {
   background-color: var(--dogo-primary);
-  background-image: 
-    radial-gradient(at 0% 0%, hsla(230, 95%, 25%, 1) 0, transparent 50%), 
-    radial-gradient(at 50% 0%, hsla(215, 95%, 35%, 0.4) 0, transparent 50%), 
-    radial-gradient(at 100% 0%, hsla(220, 95%, 45%, 0.6) 0, transparent 50%), 
-    radial-gradient(at 0% 100%, hsla(210, 95%, 55%, 0.1) 0, transparent 50%), 
+  background-image:
+    radial-gradient(at 0% 0%, hsla(230, 95%, 25%, 1) 0, transparent 50%),
+    radial-gradient(at 50% 0%, hsla(215, 95%, 35%, 0.4) 0, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(220, 95%, 45%, 0.6) 0, transparent 50%),
+    radial-gradient(at 0% 100%, hsla(210, 95%, 55%, 0.1) 0, transparent 50%),
     radial-gradient(at 100% 100%, hsla(235, 95%, 15%, 1) 0, transparent 50%);
   position: relative;
 }
@@ -310,8 +418,16 @@ body {
 }
 
 @keyframes pulseGold {
-  0%, 100% { opacity: 0.8; }
-  50% { opacity: 1; transform: scale(1.05); }
+
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
 }
 
 .animate-pulse-gold {
@@ -319,8 +435,13 @@ body {
 }
 
 @keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 .shimmer-effect::after {
@@ -330,11 +451,9 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.05),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.05),
+      transparent);
   animation: shimmer 3s infinite;
 }

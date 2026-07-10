@@ -6,7 +6,6 @@ import { LandingComponent } from './pages/landing/landing.component';
 import { FAQComponent } from './pages/faq/faq.component';
 import { BlogComponent } from './pages/resources/blog/blog.component';
 import { BlogDetailComponent } from './pages/resources/blog-detail/blog-detail.component';
-import { CalculatorComponent } from './pages/resources/calculator/calculator.component';
 import { ReportsComponent } from './pages/resources/reports/reports.component';
 import { EbookComponent } from './pages/resources/ebook/ebook.component';
 
@@ -154,8 +153,6 @@ export const routes: Routes = [
         path: 'goals',
         loadComponent: () => import('./pages/goals/goals.component').then(m => m.GoalsComponent)
       },
-      { path: 'savings-calculator', component: CalculatorComponent },
-
       // ---- COMPANY / TRUST ----
       {
         path: 'shariah',

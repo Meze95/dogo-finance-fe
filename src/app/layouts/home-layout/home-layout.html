@@ -4,236 +4,400 @@
   <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-[var(--dogo-primary)]/8">
     <div class="max-w-7xl mx-auto px-6 md:px-12 py-4 flex items-center justify-between">
 
-      <!-- Logo -->
-      <a routerLink="/" class="flex items-center space-x-3 shrink-0">
-        <img src="/brand/logo.png" alt="Dogo Finance" class="h-10 w-auto">
-      </a>
-
-      <!-- Desktop Navigation -->
-      <nav class="hidden lg:flex items-center space-x-8">
-
-        <!-- Products Dropdown -->
-        <div class="group relative">
-          <button class="flex items-center space-x-1 py-1 text-[var(--dogo-primary)] font-bold hover:text-[var(--dogo-secondary)] transition-colors text-[15px]">
-            <span>Products</span>
-            <i class="ri-arrow-down-s-line text-base transition-transform group-hover:rotate-180 duration-300"></i>
-          </button>
-          <div class="absolute top-full left-1/2 -translate-x-1/2 pt-4 hidden group-hover:block z-[100]">
-            <div class="w-[580px] bg-white shadow-[0_20px_50px_rgba(27,67,50,0.15)] rounded-[28px] grid grid-cols-2 gap-6 p-8 border border-[var(--dogo-primary)]/8">
-
-              <a routerLink="/products/mudarabah" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-[var(--dogo-cream)] transition-all group/item">
-                <div class="w-11 h-11 bg-[var(--dogo-cream)] rounded-xl flex items-center justify-center shrink-0 group-hover/item:bg-[var(--dogo-primary)] transition-colors">
-                  <i class="ri-seedling-line text-[var(--dogo-primary)] text-xl group-hover/item:text-[var(--dogo-secondary)] transition-colors"></i>
-                </div>
-                <div>
-                  <p class="font-black text-[var(--dogo-dark)] text-[15px]">Mudarabah</p>
-                  <p class="text-[11px] text-[var(--dogo-muted)] font-medium">Profit-sharing · Up to 18% p.a.</p>
-                </div>
-              </a>
-
-              <a routerLink="/products/sukuk" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-[var(--dogo-cream)] transition-all group/item">
-                <div class="w-11 h-11 bg-[var(--dogo-cream)] rounded-xl flex items-center justify-center shrink-0 group-hover/item:bg-[var(--dogo-primary)] transition-colors">
-                  <i class="ri-bank-line text-[var(--dogo-secondary)] text-xl group-hover/item:text-[var(--dogo-secondary)] transition-colors"></i>
-                </div>
-                <div>
-                  <p class="font-black text-[var(--dogo-dark)] text-[15px]">Sukuk</p>
-                  <p class="text-[11px] text-[var(--dogo-muted)] font-medium">Islamic bonds · From 12% p.a.</p>
-                </div>
-              </a>
-
-              <a routerLink="/products/halal-equity" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-[var(--dogo-cream)] transition-all group/item">
-                <div class="w-11 h-11 bg-[var(--dogo-cream)] rounded-xl flex items-center justify-center shrink-0 group-hover/item:bg-[var(--dogo-primary)] transition-colors">
-                  <i class="ri-line-chart-line text-[var(--dogo-primary)] text-xl group-hover/item:text-[var(--dogo-secondary)] transition-colors"></i>
-                </div>
-                <div>
-                  <p class="font-black text-[var(--dogo-dark)] text-[15px]">Halal Equity</p>
-                  <p class="text-[11px] text-[var(--dogo-muted)] font-medium">Shariah-screened stocks & ETFs</p>
-                </div>
-              </a>
-
-              <a routerLink="/products/wakala" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-[var(--dogo-cream)] transition-all group/item">
-                <div class="w-11 h-11 bg-[var(--dogo-cream)] rounded-xl flex items-center justify-center shrink-0 group-hover/item:bg-[var(--dogo-primary)] transition-colors">
-                  <i class="ri-shield-star-line text-[var(--dogo-secondary)] text-xl group-hover/item:text-[var(--dogo-secondary)] transition-colors"></i>
-                </div>
-                <div>
-                  <p class="font-black text-[var(--dogo-dark)] text-[15px]">Wakala</p>
-                  <p class="text-[11px] text-[var(--dogo-muted)] font-medium">Agency deposits · 13% p.a.</p>
-                </div>
-              </a>
-
-              <a routerLink="/products/musharakah" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-[var(--dogo-cream)] transition-all group/item">
-                <div class="w-11 h-11 bg-[var(--dogo-cream)] rounded-xl flex items-center justify-center shrink-0 group-hover/item:bg-[var(--dogo-primary)] transition-colors">
-                  <i class="ri-team-line text-[var(--dogo-primary)] text-xl group-hover/item:text-[var(--dogo-secondary)] transition-colors"></i>
-                </div>
-                <div>
-                  <p class="font-black text-[var(--dogo-dark)] text-[15px]">Musharakah</p>
-                  <p class="text-[11px] text-[var(--dogo-muted)] font-medium">Joint venture funds</p>
-                </div>
-              </a>
-
-              <a routerLink="/products/ijarah" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-[var(--dogo-cream)] transition-all group/item">
-                <div class="w-11 h-11 bg-[var(--dogo-cream)] rounded-xl flex items-center justify-center shrink-0 group-hover/item:bg-[var(--dogo-primary)] transition-colors">
-                  <i class="ri-building-2-line text-[var(--dogo-secondary)] text-xl group-hover/item:text-[var(--dogo-secondary)] transition-colors"></i>
-                </div>
-                <div>
-                  <p class="font-black text-[var(--dogo-dark)] text-[15px]">Ijarah</p>
-                  <p class="text-[11px] text-[var(--dogo-muted)] font-medium">Asset-leasing instruments</p>
-                </div>
-              </a>
-
-            </div>
-          </div>
+      <!-- Left Side Group: Logo + Navigation (removes separator & matches Figma spacing) -->
+      <div class="flex items-center space-x-12">
+        <!-- Logo -->
+        <div class="shrink-0">
+          <a routerLink="/" class="flex items-center">
+            <img src="/brand/logo.png" alt="Dogo Finance" class="h-8 w-auto">
+          </a>
         </div>
 
-        <!-- <a routerLink="/zakat" routerLinkActive="text-[var(--dogo-secondary)]" class="text-[var(--dogo-primary)] font-bold hover:text-[var(--dogo-secondary)] transition-colors text-[15px]">Zakat</a> -->
-        <!-- <a routerLink="/goals" routerLinkActive="text-[var(--dogo-secondary)]" class="text-[var(--dogo-primary)] font-bold hover:text-[var(--dogo-secondary)] transition-colors text-[15px]">Goals</a> -->
-        <a routerLink="/shariah" routerLinkActive="text-[var(--dogo-secondary)]" class="text-[var(--dogo-primary)] font-bold hover:text-[var(--dogo-secondary)] transition-colors text-[15px]">Shariah</a>
-        <a routerLink="/about" routerLinkActive="text-[var(--dogo-secondary)]" class="text-[var(--dogo-primary)] font-bold hover:text-[var(--dogo-secondary)] transition-colors text-[15px]">About Us</a>
+        <!-- Desktop Navigation -->
+        <nav class="hidden lg:flex items-center space-x-8">
 
-        <!-- Resources Dropdown -->
-        <div class="group relative">
-          <button class="flex items-center space-x-1 py-1 text-[var(--dogo-primary)] font-bold hover:text-[var(--dogo-secondary)] transition-colors text-[15px]">
-            <span>Resources</span>
-            <i class="ri-arrow-down-s-line text-base transition-transform group-hover:rotate-180 duration-300"></i>
-          </button>
-          <div class="absolute top-full left-1/2 -translate-x-1/2 pt-4 hidden group-hover:block z-[100]">
-            <div class="w-[420px] bg-white shadow-[0_20px_50px_rgba(27,67,50,0.15)] rounded-[28px] grid grid-cols-2 gap-4 p-8 border border-[var(--dogo-primary)]/8">
-              <a routerLink="/blog" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-[var(--dogo-cream)] transition-all">
-                <div class="w-10 h-10 bg-[var(--dogo-cream)] rounded-xl flex items-center justify-center shrink-0">
-                  <i class="ri-article-line text-[var(--dogo-primary)] text-lg"></i>
-                </div>
-                <div>
-                  <p class="font-black text-[var(--dogo-dark)] text-[14px]">Blog</p>
-                  <p class="text-[11px] text-[var(--dogo-muted)] font-medium">Halal finance insights</p>
-                </div>
-              </a>
-              <a routerLink="/savings-calculator" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-[var(--dogo-cream)] transition-all">
-                <div class="w-10 h-10 bg-[var(--dogo-cream)] rounded-xl flex items-center justify-center shrink-0">
-                  <i class="ri-calculator-line text-[var(--dogo-primary)] text-lg"></i>
-                </div>
-                <div>
-                  <p class="font-black text-[var(--dogo-dark)] text-[14px]">Calculator</p>
-                  <p class="text-[11px] text-[var(--dogo-muted)] font-medium">Profit estimator</p>
-                </div>
-              </a>
-              <a routerLink="/reports" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-[var(--dogo-cream)] transition-all">
-                <div class="w-10 h-10 bg-[var(--dogo-cream)] rounded-xl flex items-center justify-center shrink-0">
-                  <i class="ri-file-chart-line text-[var(--dogo-secondary)] text-lg"></i>
-                </div>
-                <div>
-                  <p class="font-black text-[var(--dogo-dark)] text-[14px]">Reports</p>
-                  <p class="text-[11px] text-[var(--dogo-muted)] font-medium">Transparency reports</p>
-                </div>
-              </a>
-              <a routerLink="/faq" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-[var(--dogo-cream)] transition-all">
-                <div class="w-10 h-10 bg-[var(--dogo-cream)] rounded-xl flex items-center justify-center shrink-0">
-                  <i class="ri-questionnaire-line text-[var(--dogo-secondary)] text-lg"></i>
-                </div>
-                <div>
-                  <p class="font-black text-[var(--dogo-dark)] text-[14px]">Help Centre</p>
-                  <p class="text-[11px] text-[var(--dogo-muted)] font-medium">FAQs & support</p>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
-
-      </nav>
-
-      <!-- Desktop CTA Buttons -->
-      <div class="hidden lg:flex items-center space-x-3">
-        @if (!isLoggedIn()) {
-          <button routerLink="/login" class="px-6 py-2.5 font-black text-[var(--dogo-primary)] border-2 border-[var(--dogo-primary)]/20 rounded-xl hover:border-[var(--dogo-primary)] transition-all text-[14px]">
-            Sign in
-          </button>
+          <!-- Product Dropdown -->
           <div class="group relative">
-            <button class="px-7 py-3 bg-[var(--dogo-primary)] text-white font-black rounded-xl hover:bg-[var(--dogo-primary-soft)] transition-all shadow-lg shadow-[var(--dogo-primary)]/20 text-[14px] flex items-center space-x-1.5 cursor-pointer">
-              <span>Create Free Account</span>
-              <i class="ri-arrow-down-s-line text-base transition-transform group-hover:rotate-180 duration-300"></i>
+            <button
+              class="flex items-center space-x-1 py-1 text-[#737373] font-normal hover:text-[#030E65] group-hover:text-[#030E65] group-hover:font-semibold transition-all text-[12px] cursor-pointer">
+              <span>Product</span>
+              <i
+                class="ri-arrow-down-s-line text-sm transition-transform group-hover:rotate-180 duration-200 text-[#737373] group-hover:text-[#030E65]"></i>
             </button>
-            <div class="absolute top-full right-0 pt-3 hidden group-hover:block z-[100] min-w-[240px]">
-              <div class="bg-white shadow-[0_20px_50px_rgba(3,14,101,0.18)] rounded-2xl p-4 border border-[var(--dogo-primary)]/8 flex flex-col gap-2">
-                @for(type of customerTypes(); track type.id) {
-                  <a [routerLink]="type.name === 'Corporate' ? '/register/corporate' : '/register'" class="flex items-center space-x-3 p-2.5 rounded-xl hover:bg-[var(--dogo-cream)] transition-all group/item text-left">
-                    <div class="w-9 h-9 bg-[var(--dogo-cream)] rounded-lg flex items-center justify-center shrink-0">
-                      <i [class]="type.name === 'Corporate' ? 'ri-briefcase-line' : 'ri-user-3-line'" class="text-[var(--dogo-primary)] text-lg"></i>
-                    </div>
-                    <div>
-                      <p class="font-black text-[var(--dogo-dark)] text-[13px]">{{type.name}} Account</p>
-                      <p class="text-[9px] text-[var(--dogo-muted)] font-bold uppercase tracking-wider">
-                        {{type.description}}
-                      </p>
-                    </div>
-                  </a> 
-                }
+            <div class="absolute top-full left-0 pt-4 hidden group-hover:block z-[100]">
+              <div
+                class="w-[480px] bg-white shadow-[0_12px_30px_rgba(0,0,0,0.06)] rounded-[16px] grid grid-cols-2 gap-x-4 gap-y-2.5 p-4 border border-slate-100/80">
+
+                <a routerLink="/products/mudarabah"
+                  class="flex items-center space-x-3 p-1.5 rounded-lg hover:bg-slate-50 transition-all">
+                  <div class="w-8.5 h-8.5 bg-[#FFF5F5] rounded-lg flex items-center justify-center shrink-0">
+                    <i class="ri-hand-coin-line text-[#FF5E5E] text-base"></i>
+                  </div>
+                  <div>
+                    <p class="font-normal text-slate-900 text-[11.5px] leading-none">Mudarabah</p>
+                    <p class="text-[10px] text-slate-400 font-light mt-1">Profit sharing up to 18% p.a</p>
+                  </div>
+                </a>
+
+                <a routerLink="/products/sukuk"
+                  class="flex items-center space-x-3 p-1.5 rounded-lg hover:bg-slate-50 transition-all">
+                  <div class="w-8.5 h-8.5 bg-[#FFFBE6] rounded-lg flex items-center justify-center shrink-0">
+                    <i class="ri-coupon-line text-[#E3A813] text-base"></i>
+                  </div>
+                  <div>
+                    <p class="font-normal text-slate-900 text-[11.5px] leading-none">Sukuk</p>
+                    <p class="text-[10px] text-slate-400 font-light mt-1">Islamic bonds, from 12% p.a</p>
+                  </div>
+                </a>
+
+                <a routerLink="/products/halal-equity"
+                  class="flex items-center space-x-3 p-1.5 rounded-lg hover:bg-slate-50 transition-all">
+                  <div class="w-8.5 h-8.5 bg-[#F0F4FF] rounded-lg flex items-center justify-center shrink-0">
+                    <i class="ri-line-chart-line text-[#3B82F6] text-base"></i>
+                  </div>
+                  <div>
+                    <p class="font-normal text-slate-900 text-[11.5px] leading-none">Halal Equity</p>
+                    <p class="text-[10px] text-slate-400 font-light mt-1">Shariah-screened stocks & ETFs</p>
+                  </div>
+                </a>
+
+                <a routerLink="/products/wakala"
+                  class="flex items-center space-x-3 p-1.5 rounded-lg hover:bg-slate-50 transition-all">
+                  <div class="w-8.5 h-8.5 bg-[#EBF9FF] rounded-lg flex items-center justify-center shrink-0">
+                    <i class="ri-money-dollar-box-line text-[#06B6D4] text-base"></i>
+                  </div>
+                  <div>
+                    <p class="font-normal text-slate-900 text-[11.5px] leading-none">Wakala</p>
+                    <p class="text-[10px] text-slate-400 font-light mt-1">Agency deposits, 13% p.a</p>
+                  </div>
+                </a>
+
+                <a routerLink="/products/musharakah"
+                  class="flex items-center space-x-3 p-1.5 rounded-lg hover:bg-slate-50 transition-all">
+                  <div class="w-8.5 h-8.5 bg-[#FBF0FF] rounded-lg flex items-center justify-center shrink-0">
+                    <i class="ri-team-line text-[#A855F7] text-base"></i>
+                  </div>
+                  <div>
+                    <p class="font-normal text-slate-900 text-[11.5px] leading-none">Musharakah</p>
+                    <p class="text-[10px] text-slate-400 font-light mt-1">joint venture funds</p>
+                  </div>
+                </a>
+
+                <a routerLink="/products/ijarah"
+                  class="flex items-center space-x-3 p-1.5 rounded-lg hover:bg-slate-50 transition-all">
+                  <div class="w-8.5 h-8.5 bg-[#F0F0FF] rounded-lg flex items-center justify-center shrink-0">
+                    <i class="ri-briefcase-line text-[#6366F1] text-base"></i>
+                  </div>
+                  <div>
+                    <p class="font-normal text-slate-900 text-[11.5px] leading-none">Ijarah</p>
+                    <p class="text-[10px] text-slate-400 font-light mt-1">Asset-leasing instruments</p>
+                  </div>
+                </a>
+
               </div>
             </div>
           </div>
+
+          <a routerLink="/shariah" routerLinkActive="text-[#030E65] font-semibold"
+            class="text-[#737373] font-normal hover:text-[#030E65] transition-all text-[12px]">Shariah</a>
+          <a routerLink="/about" routerLinkActive="text-[#030E65] font-semibold"
+            class="text-[#737373] font-normal hover:text-[#030E65] transition-all text-[12px]">About Us</a>
+
+          <!-- Resources Dropdown -->
+          <div class="group relative">
+            <button
+              class="flex items-center space-x-1 py-1 text-[#737373] font-normal hover:text-[#030E65] group-hover:text-[#030E65] group-hover:font-semibold transition-all text-[12px] cursor-pointer">
+              <span>Resources</span>
+              <i
+                class="ri-arrow-down-s-line text-sm transition-transform group-hover:rotate-180 duration-200 text-[#737373] group-hover:text-[#030E65]"></i>
+            </button>
+            <div class="absolute top-full left-0 pt-4 hidden group-hover:block z-[100]">
+              <div
+                class="w-[220px] bg-white shadow-[0_12px_30px_rgba(0,0,0,0.06)] rounded-[16px] flex flex-col gap-1.5 p-3.5 border border-slate-100/80">
+                <a routerLink="/blog"
+                  class="flex items-center space-x-3 p-1.5 rounded-lg hover:bg-slate-50 transition-all">
+                  <div class="w-7.5 h-7.5 bg-[#EEFBF3] rounded-lg flex items-center justify-center shrink-0">
+                    <i class="ri-article-line text-[#22C55E] text-sm"></i>
+                  </div>
+                  <div>
+                    <p class="font-normal text-slate-900 text-[13px] leading-none">Blogs</p>
+                    <p class="text-[10.5px] text-slate-400 font-light mt-1">Halal finance insights</p>
+                  </div>
+                </a>
+                <a routerLink="/reports"
+                  class="flex items-center space-x-3 p-1.5 rounded-lg hover:bg-slate-50 transition-all">
+                  <div class="w-7.5 h-7.5 bg-[#FFF0F3] rounded-lg flex items-center justify-center shrink-0">
+                    <i class="ri-file-chart-line text-[#EC4899] text-sm"></i>
+                  </div>
+                  <div>
+                    <p class="font-normal text-slate-900 text-[13px] leading-none">Reports</p>
+                    <p class="text-[10.5px] text-slate-400 font-light mt-1">Transparency reports</p>
+                  </div>
+                </a>
+                <a routerLink="/faq"
+                  class="flex items-center space-x-3 p-1.5 rounded-lg hover:bg-slate-50 transition-all">
+                  <div class="w-7.5 h-7.5 bg-[#FFFBE6] rounded-lg flex items-center justify-center shrink-0">
+                    <i class="ri-question-line text-[#E3A813] text-sm"></i>
+                  </div>
+                  <div>
+                    <p class="font-normal text-slate-900 text-[13px] leading-none">Help Centre</p>
+                    <p class="text-[10.5px] text-slate-400 font-light mt-1">FAQs & support</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </nav>
+      </div>
+
+      <!-- Desktop CTA Buttons -->
+      <div class="hidden lg:flex items-center space-x-3.5">
+        @if (!isLoggedIn()) {
+        <button routerLink="/login"
+          class="px-4 py-1.5 font-normal text-[#030E65] bg-[#F5F6FF] hover:bg-[#EBEEFF] rounded-lg transition-all text-[12px] cursor-pointer">
+          Log In
+        </button>
+        <div class="group relative">
+          <button
+            class="px-4 py-1.5 bg-[#030E65] text-white font-normal rounded-lg hover:bg-[#030E65]/90 transition-all text-[12px] flex items-center space-x-1 cursor-pointer">
+            <span>Register</span>
+            <i class="ri-arrow-down-s-line text-sm transition-transform group-hover:rotate-180 duration-200"></i>
+          </button>
+          <div class="absolute top-full right-0 pt-4 hidden group-hover:block z-[100] min-w-[250px]">
+            <div
+              class="bg-white shadow-[0_12px_30px_rgba(0,0,0,0.06)] rounded-[16px] p-3 border border-slate-100/80 flex flex-col gap-1.5">
+              @for(type of customerTypes(); track type.id) {
+              <a [routerLink]="type.name === 'Corporate' ? '/register/corporate' : '/register'"
+                class="flex items-center space-x-3 p-2 rounded-lg hover:bg-slate-50 transition-all text-left">
+                <div class="w-8.5 h-8.5 rounded-lg flex items-center justify-center shrink-0"
+                  [ngClass]="type.name === 'Corporate' ? 'bg-[#F0F0FF]' : 'bg-[#F0F4FF]'">
+                  <i [class]="type.name === 'Corporate' ? 'ri-briefcase-line text-[#6366F1]' : 'ri-user-3-line text-[#3B82F6]'"
+                    class="text-base"></i>
+                </div>
+                <div>
+                  <p class="font-normal text-slate-900 text-[12px] leading-none">{{type.name}} Account</p>
+                  <p class="text-[9.5px] text-slate-400 font-light mt-1.5 uppercase tracking-wide">
+                    {{type.description}}
+                  </p>
+                </div>
+              </a>
+              }
+            </div>
+          </div>
+        </div>
         } @else {
-          <button [routerLink]="dashboardLink()" class="px-7 py-3 bg-[var(--dogo-primary)] text-white font-black rounded-xl hover:bg-[var(--dogo-primary-soft)] transition-all shadow-lg shadow-[var(--dogo-primary)]/20 text-[14px]">
-            Dashboard
-          </button>
-          <button (click)="handleLogout()" class="px-6 py-2.5 font-black text-red-600 border-2 border-red-500/20 rounded-xl hover:bg-red-50 hover:border-red-500 transition-all text-[14px]">
-            Logout
-          </button>
+        <button [routerLink]="dashboardLink()"
+          class="px-4 py-1.5 bg-[#030E65] text-white font-medinormalum rounded-lg hover:bg-[#030E65]/90 transition-all text-[12px] cursor-pointer">
+          Dashboard
+        </button>
+        <button (click)="handleLogout()"
+          class="px-4 py-1.5 font-normal text-red-600 border border-red-100 rounded-lg hover:bg-red-50 hover:border-red-200 transition-all text-[12px] cursor-pointer">
+          Logout
+        </button>
         }
       </div>
- 
+
       <!-- Mobile Menu Button -->
       <button class="lg:hidden text-2xl text-[var(--dogo-primary)]" (click)="toggleMenu()">
         <i [class]="isMenuOpen ? 'ri-close-line' : 'ri-menu-3-line'"></i>
       </button>
     </div>
- 
+
     <!-- Mobile Navigation Menu -->
     <div class="lg:hidden" *ngIf="isMenuOpen">
-      <div class="px-6 py-6 border-t border-[var(--dogo-primary)]/8 space-y-2 bg-white">
- 
-        <div class="pb-4 mb-2 border-b border-gray-50">
-          <p class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-secondary)] mb-3">Investment Products</p>
-          <div class="grid grid-cols-2 gap-2">
-            <a routerLink="/products/mudarabah" (click)="toggleMenu()" class="block py-2 text-[13px] font-black text-[var(--dogo-primary)]">Mudarabah</a>
-            <a routerLink="/products/sukuk" (click)="toggleMenu()" class="block py-2 text-[13px] font-black text-[var(--dogo-primary)]">Sukuk</a>
-            <a routerLink="/products/halal-equity" (click)="toggleMenu()" class="block py-2 text-[13px] font-black text-[var(--dogo-primary)]">Halal Equity</a>
-            <a routerLink="/products/wakala" (click)="toggleMenu()" class="block py-2 text-[13px] font-black text-[var(--dogo-primary)]">Wakala</a>
-            <a routerLink="/products/musharakah" (click)="toggleMenu()" class="block py-2 text-[13px] font-black text-[var(--dogo-primary)]">Musharakah</a>
-            <a routerLink="/products/ijarah" (click)="toggleMenu()" class="block py-2 text-[13px] font-black text-[var(--dogo-primary)]">Ijarah</a>
+      <div class="bg-white border-t border-slate-100 overflow-y-auto max-h-[calc(100dvh-64px)]">
+
+        <!-- Nav Links -->
+        <div class="px-5 py-4 space-y-1">
+
+          <!-- Product Collapsible -->
+          <div>
+            <button (click)="isMobileProductOpen = !isMobileProductOpen"
+              class="w-full flex items-center justify-between py-3 text-[#737373] font-normal text-[15px] cursor-pointer">
+              <span>Product</span>
+              <i class="ri-arrow-down-s-line text-base transition-transform duration-200"
+                [class.rotate-180]="isMobileProductOpen"></i>
+            </button>
+            <div *ngIf="isMobileProductOpen" class="pb-2 space-y-0.5">
+              <a routerLink="/products/mudarabah" (click)="toggleMenu()"
+                class="flex items-center space-x-3 px-2 py-2.5 rounded-xl hover:bg-slate-50 transition-all">
+                <div class="w-9 h-9 bg-[#FFF5F5] rounded-lg flex items-center justify-center shrink-0">
+                  <i class="ri-hand-coin-line text-[#FF5E5E] text-base"></i>
+                </div>
+                <div>
+                  <p class="font-normal text-slate-800 text-[14px] leading-none">Mudarabah</p>
+                  <p class="text-[10px] text-slate-400 font-light mt-1">Profit sharing up to 18% p.a</p>
+                </div>
+                <i class="ri-arrow-right-s-line text-slate-300 text-lg ml-auto"></i>
+              </a>
+              <a routerLink="/products/halal-equity" (click)="toggleMenu()"
+                class="flex items-center space-x-3 px-2 py-2.5 rounded-xl hover:bg-slate-50 transition-all">
+                <div class="w-9 h-9 bg-[#F0F4FF] rounded-lg flex items-center justify-center shrink-0">
+                  <i class="ri-line-chart-line text-[#3B82F6] text-base"></i>
+                </div>
+                <div>
+                  <p class="font-normal text-slate-800 text-[14px] leading-none">Halal Equity</p>
+                  <p class="text-[10px] text-slate-400 font-light mt-1">Shariah-screened stocks &amp; ETFs</p>
+                </div>
+                <i class="ri-arrow-right-s-line text-slate-300 text-lg ml-auto"></i>
+              </a>
+              <a routerLink="/products/musharakah" (click)="toggleMenu()"
+                class="flex items-center space-x-3 px-2 py-2.5 rounded-xl hover:bg-slate-50 transition-all">
+                <div class="w-9 h-9 bg-[#FBF0FF] rounded-lg flex items-center justify-center shrink-0">
+                  <i class="ri-team-line text-[#A855F7] text-base"></i>
+                </div>
+                <div>
+                  <p class="font-normal text-slate-800 text-[14px] leading-none">Musharakah</p>
+                  <p class="text-[10px] text-slate-400 font-light mt-1">Joint venture funds</p>
+                </div>
+                <i class="ri-arrow-right-s-line text-slate-300 text-lg ml-auto"></i>
+              </a>
+              <a routerLink="/products/sukuk" (click)="toggleMenu()"
+                class="flex items-center space-x-3 px-2 py-2.5 rounded-xl hover:bg-slate-50 transition-all">
+                <div class="w-9 h-9 bg-[#FFFBE6] rounded-lg flex items-center justify-center shrink-0">
+                  <i class="ri-coupon-line text-[#E3A813] text-base"></i>
+                </div>
+                <div>
+                  <p class="font-normal text-slate-800 text-[14px] leading-none">Sukuk</p>
+                  <p class="text-[10px] text-slate-400 font-light mt-1">Islamic bonds, from 12% p.a</p>
+                </div>
+                <i class="ri-arrow-right-s-line text-slate-300 text-lg ml-auto"></i>
+              </a>
+              <a routerLink="/products/wakala" (click)="toggleMenu()"
+                class="flex items-center space-x-3 px-2 py-2.5 rounded-xl hover:bg-slate-50 transition-all">
+                <div class="w-9 h-9 bg-[#EBF9FF] rounded-lg flex items-center justify-center shrink-0">
+                  <i class="ri-money-dollar-box-line text-[#06B6D4] text-base"></i>
+                </div>
+                <div>
+                  <p class="font-normal text-slate-800 text-[14px] leading-none">Wakala</p>
+                  <p class="text-[10px] text-slate-400 font-light mt-1">Agency deposits, 13% p.a</p>
+                </div>
+                <i class="ri-arrow-right-s-line text-slate-300 text-lg ml-auto"></i>
+              </a>
+              <a routerLink="/products/ijarah" (click)="toggleMenu()"
+                class="flex items-center space-x-3 px-2 py-2.5 rounded-xl hover:bg-slate-50 transition-all">
+                <div class="w-9 h-9 bg-[#F0F0FF] rounded-lg flex items-center justify-center shrink-0">
+                  <i class="ri-briefcase-line text-[#6366F1] text-base"></i>
+                </div>
+                <div>
+                  <p class="font-normal text-slate-800 text-[14px] leading-none">Ijarah</p>
+                  <p class="text-[10px] text-slate-400 font-light mt-1">Asset-leasing instruments</p>
+                </div>
+                <i class="ri-arrow-right-s-line text-slate-300 text-lg ml-auto"></i>
+              </a>
+            </div>
           </div>
+
+          <!-- Shariah -->
+          <a routerLink="/shariah" (click)="toggleMenu()"
+            class="flex items-center justify-between py-3 text-[#737373] font-normal text-[15px]">
+            Shariah
+          </a>
+
+          <!-- About Us -->
+          <a routerLink="/about" (click)="toggleMenu()"
+            class="flex items-center justify-between py-3 text-[#737373] font-normal text-[15px]">
+            About Us
+          </a>
+
+          <!-- Resources Collapsible -->
+          <div>
+            <button (click)="isMobileResourcesOpen = !isMobileResourcesOpen"
+              class="w-full flex items-center justify-between py-3 text-[#737373] font-normal text-[15px] cursor-pointer">
+              <span>Resources</span>
+              <i class="ri-arrow-down-s-line text-base transition-transform duration-200"
+                [class.rotate-180]="isMobileResourcesOpen"></i>
+            </button>
+            <div *ngIf="isMobileResourcesOpen" class="pb-2 space-y-0.5">
+              <a routerLink="/blog" (click)="toggleMenu()"
+                class="flex items-center space-x-3 px-2 py-2.5 rounded-xl hover:bg-slate-50 transition-all">
+                <div class="w-9 h-9 bg-[#EEFBF3] rounded-lg flex items-center justify-center shrink-0">
+                  <i class="ri-article-line text-[#22C55E] text-base"></i>
+                </div>
+                <div>
+                  <p class="font-normal text-slate-800 text-[14px] leading-none">Blogs</p>
+                  <p class="text-[10px] text-slate-400 font-light mt-1">Halal finance insights</p>
+                </div>
+                <i class="ri-arrow-right-s-line text-slate-300 text-lg ml-auto"></i>
+              </a>
+              <a routerLink="/reports" (click)="toggleMenu()"
+                class="flex items-center space-x-3 px-2 py-2.5 rounded-xl hover:bg-slate-50 transition-all">
+                <div class="w-9 h-9 bg-[#FFF0F3] rounded-lg flex items-center justify-center shrink-0">
+                  <i class="ri-file-chart-line text-[#EC4899] text-base"></i>
+                </div>
+                <div>
+                  <p class="font-normal text-slate-800 text-[14px] leading-none">Reports</p>
+                  <p class="text-[10px] text-slate-400 font-light mt-1">Transparency reports</p>
+                </div>
+                <i class="ri-arrow-right-s-line text-slate-300 text-lg ml-auto"></i>
+              </a>
+              <a routerLink="/faq" (click)="toggleMenu()"
+                class="flex items-center space-x-3 px-2 py-2.5 rounded-xl hover:bg-slate-50 transition-all">
+                <div class="w-9 h-9 bg-[#FFFBE6] rounded-lg flex items-center justify-center shrink-0">
+                  <i class="ri-question-line text-[#E3A813] text-base"></i>
+                </div>
+                <div>
+                  <p class="font-normal text-slate-800 text-[14px] leading-none">Help Centre</p>
+                  <p class="text-[10px] text-slate-400 font-light mt-1">FAQs &amp; support</p>
+                </div>
+                <i class="ri-arrow-right-s-line text-slate-300 text-lg ml-auto"></i>
+              </a>
+            </div>
+          </div>
+
         </div>
- 
-        <!-- <a routerLink="/zakat" (click)="toggleMenu()" class="flex justify-between items-center py-3 border-b border-gray-50 font-bold text-[var(--dogo-primary)]">
-          Zakat Calculator <i class="ri-arrow-right-line text-[var(--dogo-secondary)]"></i>
-        </a>
-        <a routerLink="/goals" (click)="toggleMenu()" class="flex justify-between items-center py-3 border-b border-gray-50 font-bold text-[var(--dogo-primary)]">
-          Savings Goals <i class="ri-arrow-right-line text-[var(--dogo-secondary)]"></i>
-        </a> -->
-        <a routerLink="/shariah" (click)="toggleMenu()" class="flex justify-between items-center py-3 border-b border-gray-50 font-bold text-[var(--dogo-primary)]">
-          Shariah Compliance <i class="ri-arrow-right-line text-[var(--dogo-secondary)]"></i>
-        </a>
-        <a routerLink="/about" (click)="toggleMenu()" class="flex justify-between items-center py-3 border-b border-gray-50 font-bold text-[var(--dogo-primary)]">
-          About Us <i class="ri-arrow-right-line text-[var(--dogo-secondary)]"></i>
-        </a>
-        <a routerLink="/faq" (click)="toggleMenu()" class="flex justify-between items-center py-3 border-b border-gray-50 font-bold text-[var(--dogo-primary)]">
-          Help Centre <i class="ri-arrow-right-line text-[var(--dogo-secondary)]"></i>
-        </a>
- 
-        <div class="pt-6 flex flex-col space-y-4">
+
+        <!-- Sticky Bottom CTA -->
+        <div class="px-5 py-5 border-t border-slate-100 space-y-3 bg-white">
           @if (!isLoggedIn()) {
-            <button routerLink="/login" (click)="toggleMenu()" class="w-full py-4 border-2 border-[var(--dogo-primary)] text-[var(--dogo-primary)] font-black rounded-xl">Sign In</button>
-            <div class="border border-[var(--dogo-primary)]/8 rounded-2xl p-4 bg-[var(--dogo-cream)]/50 space-y-3">
-              <p class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Create Free Account</p>
+          <!-- Log In -->
+          <button routerLink="/login" (click)="toggleMenu()"
+            class="w-full py-3 text-center text-[#030E65] font-bold text-[15px] bg-[#F5F6FF] hover:bg-[#EBEEFF] rounded-xl transition-all cursor-pointer">
+            Log In
+          </button>
+
+          <!-- Register dropdown -->
+          <div>
+            <button (click)="isMobileRegisterOpen = !isMobileRegisterOpen"
+              class="w-full py-3 bg-[#030E65] text-white font-bold text-[15px] rounded-xl flex items-center justify-center space-x-2 cursor-pointer hover:bg-[#030E65]/90 transition-all">
+              <span>Register</span>
+              <i class="ri-arrow-down-s-line text-base transition-transform duration-200"
+                [class.rotate-180]="isMobileRegisterOpen"></i>
+            </button>
+            <div *ngIf="isMobileRegisterOpen" class="mt-2 space-y-2">
               @for(type of customerTypes(); track type.id) {
-                <button [routerLink]="type.name === 'Corporate' ? '/register/corporate' : '/register'" (click)="toggleMenu()" class="w-full py-3.5 bg-white text-[var(--dogo-dark)] font-black rounded-xl border-2 border-[var(--dogo-primary)]/10 flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:shadow-md transition-all">
-                  <i [class]="type.name === 'Corporate' ? 'ri-briefcase-fill text-sm text-[var(--dogo-muted)]' : 'ri-user-3-fill text-sm text-[var(--dogo-secondary)]'"></i> 
-                  {{type.name}} Account 
-                </button>
+              <a [routerLink]="type.name === 'Corporate' ? '/register/corporate' : '/register'" (click)="toggleMenu()"
+                class="flex items-center space-x-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition-all">
+                <div class="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
+                  [ngClass]="type.name === 'Corporate' ? 'bg-[#F0F0FF]' : 'bg-[#F0F4FF]'">
+                  <i [class]="type.name === 'Corporate' ? 'ri-briefcase-line text-[#6366F1]' : 'ri-user-3-line text-[#3B82F6]'"
+                    class="text-base"></i>
+                </div>
+                <div>
+                  <p class="font-normal text-slate-900 text-[14px] leading-none">{{type.name}} Account</p>
+                  <p class="text-[10px] text-slate-400 font-light mt-1.5 uppercase tracking-wide">{{type.description}}
+                  </p>
+                </div>
+                <i class="ri-arrow-right-s-line text-slate-300 text-lg ml-auto"></i>
+              </a>
               }
             </div>
+          </div>
+
           } @else {
-            <button [routerLink]="dashboardLink()" (click)="toggleMenu()" class="w-full py-4 bg-[var(--dogo-primary)] text-white font-black rounded-xl shadow-lg">Go to Dashboard</button>
-            <button (click)="handleLogout(); toggleMenu()" class="w-full py-4 border-2 border-red-500 text-red-600 font-black rounded-xl">Logout Session</button>
+          <!-- Dashboard + Logout -->
+          <button [routerLink]="dashboardLink()" (click)="toggleMenu()"
+            class="w-full py-3 bg-[#030E65] text-white font-bold text-[15px] rounded-xl hover:bg-[#030E65]/90 transition-all cursor-pointer">
+            Go to Dashboard
+          </button>
+          <button (click)="handleLogout(); toggleMenu()"
+            class="w-full py-3 border border-red-200 text-red-600 font-bold text-[15px] rounded-xl hover:bg-red-50 transition-all cursor-pointer">
+            Logout
+          </button>
           }
         </div>
+
       </div>
     </div>
   </header>
@@ -244,137 +408,92 @@
   </main>
 
   <!-- ======= FOOTER ======= -->
-  <footer class="bg-[var(--dogo-dark)] text-white relative overflow-hidden">
+  <footer class="bg-[#030E65] text-white relative overflow-hidden py-12 md:py-16">
     <!-- Islamic Pattern Overlay -->
     <div class="absolute inset-0 dogo-pattern opacity-[0.03] pointer-events-none"></div>
 
-    <!-- CTA Strip -->
-    <div class="relative z-10 border-b border-white/5">
-      <div class="max-w-7xl mx-auto px-6 md:px-12 py-20 text-center">
-        <div class="halal-badge mx-auto mb-8">
-          <i class="ri-verified-badge-fill"></i>
-          <!-- CBN Licensed · SEC Registered · --> SSB Certified
-        </div>
-        <h2 class="text-4xl md:text-6xl font-black mb-6 max-w-3xl mx-auto leading-tight tracking-tight">
-          Start your Halal wealth journey today.
-        </h2>
-        <p class="text-white/60 text-xl font-medium mb-10 max-w-xl mx-auto">
-          Join thousands of Nigerians building real wealth — the Shariah-compliant way.
-        </p>
-        <div class="flex flex-wrap justify-center gap-4">
-          <button class="flex items-center space-x-3 bg-white text-[var(--dogo-dark)] px-10 py-4 rounded-2xl font-black hover:bg-gray-200 transition-all shadow-xl">
-            <i class="ri-apple-fill text-2xl"></i>
-            <div class="text-left">
-              <p class="text-[9px] uppercase font-bold leading-none opacity-70">Download on the</p>
-              <p class="text-[16px] font-black leading-tight">App Store</p>
-            </div>
-          </button>
-          <button class="flex items-center space-x-3 bg-white/5 border border-white/10 px-10 py-4 rounded-2xl font-black hover:bg-white/10 transition-all">
-            <i class="ri-google-play-fill text-2xl text-[var(--dogo-secondary)]"></i>
-            <div class="text-left">
-              <p class="text-[9px] uppercase font-bold leading-none opacity-60">Get it on</p>
-              <p class="text-[16px] font-black leading-tight">Google Play</p>
-            </div>
-          </button>
-        </div>
-      </div>
-    </div>
+    <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
+      <div class="grid grid-cols-2 md:grid-cols-6 lg:grid-cols-6 gap-y-10 gap-x-6 md:gap-x-8 pb-2">
 
-    <!-- Links Grid -->
-    <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12 py-16">
-      <div class="grid grid-cols-2 md:grid-cols-5 gap-y-12 gap-x-8">
-
-        <!-- Brand -->
-        <div class="col-span-2 md:col-span-1">
-          <a routerLink="/" class="flex flex-col items-start mb-6 w-max">
-            <img src="/brand/D LOGO FW.png" alt="Dogo Finance" class="h-7 w-auto object-contain object-left mb-1.5">
-            <span class="text-[10px] font-bold text-white/60 tracking-[0.2em] uppercase">Halal Finance</span>
+        <!-- Brand / Newsletter -->
+        <div class="col-span-2">
+          <a routerLink="/" class="flex items-center mb-6">
+            <img src="/brand/D LOGO FW.png" alt="Dogo Finance" class="h-8 w-auto object-contain object-left">
           </a>
-          <p class="text-white/50 text-[13px] font-medium leading-relaxed">
-            Nigeria's first Shariah-compliant digital investment bank. 100% Riba-free.
-          </p>
-          <div class="flex space-x-3 mt-6">
-            <a href="#" class="w-9 h-9 bg-white/5 rounded-xl flex items-center justify-center hover:bg-[var(--dogo-secondary)] hover:text-[var(--dogo-dark)] transition-all"><i class="ri-twitter-x-line text-sm"></i></a>
-            <a href="#" class="w-9 h-9 bg-white/5 rounded-xl flex items-center justify-center hover:bg-[var(--dogo-secondary)] hover:text-[var(--dogo-dark)] transition-all"><i class="ri-instagram-line text-sm"></i></a>
-            <a href="#" class="w-9 h-9 bg-white/5 rounded-xl flex items-center justify-center hover:bg-[var(--dogo-secondary)] hover:text-[var(--dogo-dark)] transition-all"><i class="ri-linkedin-fill text-sm"></i></a>
+          <p class="font-bold text-[15px] text-white mb-3">Stay updated</p>
+          <div class="flex max-w-[340px] items-center rounded-2xl bg-[#C2C6DB] p-1 border border-white/10 shadow-inner">
+            <input type="email" placeholder="Enter email address"
+              class="w-full bg-transparent px-4 py-2 text-xs md:text-sm text-[#030E65] placeholder-[#030E65]/50 outline-none font-medium">
+            <button
+              class="rounded-xl bg-[#023E8A] hover:bg-[#030E65]/90 text-white px-5 py-2 text-xs md:text-sm font-bold transition-all shrink-0 cursor-pointer">Subscribe</button>
           </div>
         </div>
 
         <!-- Products -->
-        <div>
-          <h4 class="font-black text-[13px] uppercase tracking-widest text-[var(--dogo-secondary)] mb-5">Products</h4>
-          <ul class="space-y-3 text-[13px] font-medium text-white/50">
-            <li><a routerLink="/products/mudarabah" class="hover:text-[var(--dogo-secondary)] transition-colors">Mudarabah</a></li>
-            <li><a routerLink="/products/sukuk" class="hover:text-[var(--dogo-secondary)] transition-colors">Sukuk</a></li>
-            <li><a routerLink="/products/halal-equity" class="hover:text-[var(--dogo-secondary)] transition-colors">Halal Equity</a></li>
-            <li><a routerLink="/products/wakala" class="hover:text-[var(--dogo-secondary)] transition-colors">Wakala</a></li>
-            <li><a routerLink="/products/musharakah" class="hover:text-[var(--dogo-secondary)] transition-colors">Musharakah</a></li>
-            <li><a routerLink="/products/ijarah" class="hover:text-[var(--dogo-secondary)] transition-colors">Ijarah</a></li>
+        <div class="col-span-1">
+          <h4 class="footer-col-header mb-4">Products</h4>
+          <ul class="space-y-2">
+            <li><a routerLink="/products/mudarabah" class="footer-col-link transition-colors">Mudarabah</a></li>
+            <li><a routerLink="/products/sukuk" class="footer-col-link transition-colors">Sukuk</a></li>
+            <li><a routerLink="/products/halal-equity" class="footer-col-link transition-colors">Halal Equity</a></li>
+            <li><a routerLink="/products/wakala" class="footer-col-link transition-colors">Wakala</a></li>
+            <li><a routerLink="/products/musharakah" class="footer-col-link transition-colors">Musharakah</a></li>
+            <li><a routerLink="/products/ijarah" class="footer-col-link transition-colors">Ijarah</a></li>
           </ul>
         </div>
 
         <!-- Tools -->
-        <div>
-          <h4 class="font-black text-[13px] uppercase tracking-widest text-[var(--dogo-secondary)] mb-5">Tools</h4>
-          <ul class="space-y-3 text-[13px] font-medium text-white/50">
-            <li><a routerLink="/zakat" class="hover:text-[var(--dogo-secondary)] transition-colors">Zakat Calculator</a></li>
-            <li><a routerLink="/goals" class="hover:text-[var(--dogo-secondary)] transition-colors">Savings Goals</a></li>
-            <li><a routerLink="/savings-calculator" class="hover:text-[var(--dogo-secondary)] transition-colors">Profit Calculator</a></li>
+        <div class="col-span-1">
+          <h4 class="footer-col-header mb-4">Tools</h4>
+          <ul class="space-y-2">
+            <li><a routerLink="/zakat" class="footer-col-link transition-colors">Zakat Calculator</a></li>
+            <li><a routerLink="/goals" class="footer-col-link transition-colors">Savings Goals</a></li>
+            <li><a routerLink="/savings-calculator" class="footer-col-link transition-colors">Profit Calculator</a></li>
           </ul>
         </div>
 
         <!-- Company -->
-        <div>
-          <h4 class="font-black text-[13px] uppercase tracking-widest text-[var(--dogo-secondary)] mb-5">Company</h4>
-          <ul class="space-y-3 text-[13px] font-medium text-white/50">
-            <li><a routerLink="/about" class="hover:text-[var(--dogo-secondary)] transition-colors">About Us</a></li>
-            <li><a routerLink="/shariah" class="hover:text-[var(--dogo-secondary)] transition-colors">Shariah Compliance</a></li>
-            <li><a routerLink="/regulatory" class="hover:text-[var(--dogo-secondary)] transition-colors">Regulatory</a></li>
-            <li><a routerLink="/blog" class="hover:text-[var(--dogo-secondary)] transition-colors">Blog</a></li>
-            <li><a routerLink="/reports" class="hover:text-[var(--dogo-secondary)] transition-colors">Reports</a></li>
+        <div class="col-span-1">
+          <h4 class="footer-col-header mb-4">Company</h4>
+          <ul class="space-y-2">
+            <li><a routerLink="/about" class="footer-col-link transition-colors">About Us</a></li>
+            <li><a routerLink="/shariah" class="footer-col-link transition-colors">Shariah</a></li>
+            <li><a routerLink="/regulatory" class="footer-col-link transition-colors">Compliance<br>Regulatory</a></li>
+            <li><a routerLink="/blog" class="footer-col-link transition-colors">Blog</a></li>
+            <li><a routerLink="/reports" class="footer-col-link transition-colors">Reports</a></li>
           </ul>
         </div>
 
         <!-- Support -->
-        <div>
-          <h4 class="font-black text-[13px] uppercase tracking-widest text-[var(--dogo-secondary)] mb-5">Support</h4>
-          <ul class="space-y-3 text-[13px] font-medium text-white/50">
-            <li><a routerLink="/faq" class="hover:text-[var(--dogo-secondary)] transition-colors">Help Centre</a></li>
-            <li><a routerLink="/contact" class="hover:text-[var(--dogo-secondary)] transition-colors">Contact Us</a></li>
-            <li><a routerLink="/security" class="hover:text-[var(--dogo-secondary)] transition-colors">Security</a></li>
-            <li><a href="#" class="hover:text-[var(--dogo-secondary)] transition-colors">Privacy Policy</a></li>
-            <li><a href="#" class="hover:text-[var(--dogo-secondary)] transition-colors">Terms of Service</a></li>
+        <div class="col-span-1">
+          <h4 class="footer-col-header mb-4">Support</h4>
+          <ul class="space-y-2">
+            <li><a routerLink="/faq" class="footer-col-link transition-colors">Help Centre</a></li>
+            <li><a routerLink="/contact" class="footer-col-link transition-colors">Contact Us</a></li>
+            <li><a routerLink="/security" class="footer-col-link transition-colors">Security</a></li>
+            <li><a href="#" class="footer-col-link transition-colors">Privacy Policy</a></li>
+            <li><a href="#" class="footer-col-link transition-colors">Terms of Service</a></li>
           </ul>
         </div>
 
       </div>
 
-      <!-- Regulatory footer bar -->
-      <div class="border-t border-white/5 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
-        <div class="text-white/30 text-[12px] font-medium text-center md:text-left">
-          <p>© 2026 Dogo Finance Ltd. All rights reserved.</p>
-          <p class="mt-1">RC No. 9525545 <!-- · CBN NIFI No. [DUMMY] · SEC Registration No. [DUMMY] --></p>
+      <!-- Footer Bottom Bar -->
+      <div class="mt-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="footer-disclaimer leading-relaxed">
+          <p>Copyright © 2026. All right reserved.</p>
+          <p>Nigeria's first Shariah-compliant digital investment bank. 100% Riba-free.</p>
+          <p>Copyright © 2026. All right reserved.</p>
         </div>
-        <div class="flex flex-wrap gap-3 justify-center">
-          <!--
-          <span class="flex items-center gap-1.5 text-[11px] font-bold bg-white/5 px-3 py-1.5 rounded-full text-white/50">
-            <i class="ri-verified-badge-line text-[var(--dogo-secondary)]"></i> CBN Licensed
-          </span>
-          <span class="flex items-center gap-1.5 text-[11px] font-bold bg-white/5 px-3 py-1.5 rounded-full text-white/50">
-            <i class="ri-government-line text-[var(--dogo-secondary)]"></i> SEC Registered
-          </span>
-          -->
-          <span class="flex items-center gap-1.5 text-[11px] font-bold bg-white/5 px-3 py-1.5 rounded-full text-white/50">
-            <i class="ri-shield-check-line text-[var(--dogo-secondary)]"></i> NDPR Compliant
-          </span>
+        <div class="flex items-center space-x-4 pr-12">
+          <a href="#" class="text-white/40 hover:text-white transition-colors text-lg"><i
+              class="ri-instagram-line"></i></a>
+          <a href="#" class="text-white/40 hover:text-white transition-colors text-lg"><i
+              class="ri-twitter-x-line"></i></a>
+          <a href="#" class="text-white/40 hover:text-white transition-colors text-lg"><i
+              class="ri-facebook-fill"></i></a>
         </div>
       </div>
-
-      <p class="text-white/20 text-[11px] font-medium text-center mt-8 max-w-3xl mx-auto leading-relaxed">
-        Dogo Finance investments are Shariah-compliant and approved by our Shariah Supervisory Board. 
-        As with all investments, capital is at risk. Past performance is not indicative of future results. 
-        <!-- Regulated by the Central Bank of Nigeria (CBN) and the Securities and Exchange Commission (SEC) Nigeria. -->
-      </p>
     </div>
   </footer>
 

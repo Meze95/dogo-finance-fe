@@ -19,3 +19,53 @@ section:first-of-type .halal-badge      { animation-delay: 0s;    }
 section:first-of-type h1                { animation-delay: 0.1s;  }
 section:first-of-type p                 { animation-delay: 0.25s; }
 section:first-of-type .flex.flex-wrap   { animation-delay: 0.35s; }
+
+/* Scroll animations base classes */
+.scroll-animate {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.scroll-animate-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.scroll-animate-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.scroll-animate-visible {
+  opacity: 1 !important;
+  transform: translate(0) !important;
+}
+
+/* Staggered delays using transition-delay */
+.delay-75 {
+  transition-delay: 75ms;
+}
+.delay-100 {
+  transition-delay: 100ms;
+}
+.delay-150 {
+  transition-delay: 150ms;
+}
+.delay-200 {
+  transition-delay: 200ms;
+}
+.delay-300 {
+  transition-delay: 300ms;
+}
+.delay-400 {
+  transition-delay: 400ms;
+}
+.delay-500 {
+  transition-delay: 500ms;
+}

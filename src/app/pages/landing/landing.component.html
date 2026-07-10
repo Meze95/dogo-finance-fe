@@ -1,157 +1,200 @@
 <!-- ======================================================
-  DOGO FINANCE — HOME PAGE
-  Nigeria's First Shariah-Compliant Digital Investment Bank
+  DOGO FINANCE — HOME PAGE Redesign
   ====================================================== -->
 
-<!-- ===== HERO SECTION ===== -->
-<section class="relative bg-[var(--dogo-cream)] dogo-pattern overflow-hidden pt-10 pb-0 lg:pt-14">
-  <!-- Decorative gold orbs -->
-  <div class="absolute top-20 right-20 w-96 h-96 rounded-full blur-[120px] opacity-20" style="background: radial-gradient(circle, var(--dogo-secondary), transparent)"></div>
-  <div class="absolute -bottom-20 left-10 w-64 h-64 rounded-full blur-[100px] opacity-10" style="background: radial-gradient(circle, var(--dogo-primary), transparent)"></div>
+<style>
+  .hero-bg-gradient {
+    position: absolute;
+    bottom: 44px;
+    /* Ends exactly above stats bar */
+    left: 0;
+    width: 100%;
+    height: 380px;
+    pointer-events: none;
+    z-index: 0;
+    background: linear-gradient(to top, #D0D4EE 0%, #DDE0F3 50%, #ECEEF8 85%, transparent 100%);
+  }
 
-  <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-    <div class="grid lg:grid-cols-12 gap-16 items-center">
+  @media (min-width: 768px) {
+    .hero-bg-gradient {
+      height: 420px;
+    }
+  }
 
-      <!-- Text Content -->
-      <div class="pt-4 lg:pt-0 lg:col-span-7">
-        <!-- Trust Badge -->
-        <div class="halal-badge mb-5">
-          <i class="ri-verified-badge-fill text-sm"></i>
-          100% Riba-Free
-        </div>
+  @media (min-width: 1024px) {
+    .hero-bg-gradient {
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: auto;
+      width: 38%;
+      height: 100%;
+      background: linear-gradient(to left, #D0D4EE 0%, #DDE0F3 50%, #ECEEF8 85%, transparent 100%);
+    }
+  }
+</style>
 
-        <h1 class="text-[46px] md:text-[80px] xl:text-[96px] font-black leading-[0.9] tracking-tighter text-[var(--dogo-dark)] mb-6 md:mb-8">
-          Grow Your <br>
-          Wealth. <br>
-          <span class="text-[var(--dogo-primary)]">The Halal </span><span class="text-[var(--dogo-secondary)]">Way.</span>
-        </h1>
+<!-- ===== HERO + STATS WRAPPER (single positioning context so phone can span both) ===== -->
+<div class="relative bg-white">
 
-        <p class="text-xl text-[var(--dogo-muted)] font-medium mb-10 max-w-lg leading-relaxed">
-          Nigeria's first fully Shariah-compliant digital investment bank. 
-          Earn real returns on Mudarabah, Sukuk, and Halal Equities — 
-          all in Naira, all Riba-free.
-        </p>
+  <!-- Layer 1: Lavender background — responsive helper class -->
+  <div class="hero-bg-gradient"></div>
 
-        <div class="flex flex-col sm:flex-row flex-wrap gap-4 mb-10 md:mb-14 w-full">
-          @if (!isLoggedIn()) {
-            <div class="group relative inline-block w-full sm:w-auto">
-              <button class="w-full sm:w-auto justify-center px-6 py-4 md:px-10 md:py-5 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] transition-all shadow-xl shadow-[var(--dogo-primary)]/25 text-base md:text-lg flex items-center gap-2 cursor-pointer">
-                <span>Create Free Account</span>
-                <i class="ri-arrow-down-s-line text-xl transition-transform group-hover:rotate-180 duration-300"></i>
+  <!-- HERO SECTION -->
+  <section class="relative z-20">
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+      <div class="grid lg:grid-cols-2 gap-0 items-stretch">
+
+        <!-- Left: Text Content -->
+        <div class="text-left pt-14 pb-10 md:pt-16 lg:pt-20 lg:pb-14">
+          <h1 class="text-4xl md:text-5xl lg:text-[54px] font-black text-[#030E65] leading-[1.08] tracking-tight">
+            Grow your wealth.<br>
+            <span
+              class="font-serif italic font-normal text-3xl md:text-4xl lg:text-[44px] mt-1.5 block text-[#030E65] lowercase">the
+              halal way.</span>
+          </h1>
+
+          <p class="text-slate-500 text-sm md:text-base leading-relaxed mt-4 max-w-md">
+            Nigeria's first fully Shariah-compliant digital investment bank. Earn real returns on Mudarabah, Sukuk, and
+            Halal Equities — all in Naira, all Riba-free.
+          </p>
+
+          <div class="flex flex-wrap gap-3.5 mt-6">
+            @if (!isLoggedIn()) {
+            <div class="group relative">
+              <button
+                class="px-4 py-2 bg-[#030E65] text-white font-normal rounded-lg hover:bg-[#030E65]/90 transition-all text-[12px] flex items-center space-x-1 cursor-pointer">
+                <span>Register</span>
+                <i class="ri-arrow-down-s-line text-sm transition-transform group-hover:rotate-180 duration-200"></i>
               </button>
-              <div class="absolute top-full left-0 pt-3 hidden group-hover:block z-[100] min-w-[260px]">
-                <div class="bg-white shadow-[0_30px_60px_rgba(3,14,101,0.2)] rounded-3xl p-5 border border-[var(--dogo-primary)]/8 flex flex-col gap-3">
-                  <!-- Individual Account -->
-                  <a routerLink="/register" class="flex items-center space-x-3.5 p-3 rounded-2xl hover:bg-[var(--dogo-cream)] transition-all group/item text-left">
-                    <div class="w-10 h-10 bg-[var(--dogo-cream)] rounded-xl flex items-center justify-center shrink-0">
-                      <i class="ri-user-3-line text-[var(--dogo-primary)] text-xl"></i>
+              <div class="absolute top-full left-0 pt-3 hidden group-hover:block z-[100] min-w-[250px]">
+                <div
+                  class="bg-white shadow-[0_12px_30px_rgba(0,0,0,0.06)] rounded-[16px] p-3 border border-slate-100/80 flex flex-col gap-1.5">
+                  @for(type of customerTypes(); track type.id) {
+                  <a [routerLink]="type.name === 'Corporate' ? '/register/corporate' : '/register'"
+                    class="flex items-center space-x-3 p-2 rounded-lg hover:bg-slate-50 transition-all text-left">
+                    <div class="w-8.5 h-8.5 rounded-lg flex items-center justify-center shrink-0"
+                      [ngClass]="type.name === 'Corporate' ? 'bg-[#F0F0FF]' : 'bg-[#F0F4FF]'">
+                      <i [class]="type.name === 'Corporate' ? 'ri-briefcase-line text-[#6366F1]' : 'ri-user-3-line text-[#3B82F6]'"
+                        class="text-base"></i>
                     </div>
                     <div>
-                      <p class="font-black text-[var(--dogo-dark)] text-[14px]">Individual Account</p>
-                      <p class="text-[10px] text-[var(--dogo-muted)] font-bold uppercase tracking-wider">Invest for yourself</p>
+                      <p class="font-normal text-slate-900 text-[12px] leading-none">{{type.name}} Account</p>
+                      <p class="text-[9.5px] text-slate-400 font-light mt-1.5 uppercase tracking-wide">
+                        {{type.description}}
+                      </p>
                     </div>
                   </a>
-                  
-                  <!-- Corporate Account -->
-                  <a routerLink="/register/corporate" class="flex items-center space-x-3.5 p-3 rounded-2xl hover:bg-[var(--dogo-cream)] transition-all group/item text-left">
-                    <div class="w-10 h-10 bg-[var(--dogo-cream)] rounded-xl flex items-center justify-center shrink-0">
-                      <i class="ri-briefcase-line text-[var(--dogo-primary)] text-xl"></i>
-                    </div>
-                    <div>
-                      <p class="font-black text-[var(--dogo-dark)] text-[14px]">Corporate Account</p>
-                      <p class="text-[10px] text-[var(--dogo-secondary)] font-extrabold uppercase tracking-wider">Registered Businesses</p>
-                    </div>
-                  </a>
+                  }
                 </div>
               </div>
             </div>
-          } @else {
-            <button [routerLink]="dashboardLink()" class="w-full sm:w-auto justify-center px-6 py-4 md:px-10 md:py-5 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] transition-all shadow-xl shadow-[var(--dogo-primary)]/25 text-base md:text-lg">
+            } @else {
+            <button [routerLink]="dashboardLink()"
+              class="px-4 py-2 bg-[#030E65] text-white font-normal rounded-lg hover:bg-[#030E65]/90 transition-all text-[12px] cursor-pointer">
               Go to Dashboard
             </button>
-          }
-          <a routerLink="/how-it-works" class="w-full sm:w-auto justify-center px-6 py-4 md:px-10 md:py-5 border-2 border-[var(--dogo-primary)]/20 text-[var(--dogo-primary)] font-black rounded-2xl hover:border-[var(--dogo-primary)] hover:bg-[var(--dogo-cream)] transition-all text-base md:text-lg flex items-center gap-2">
-            How It Works <i class="ri-arrow-right-line"></i>
-          </a>
+            }
+            <button routerLink="/how-it-works"
+              class="px-4 py-2 bg-white text-[#030E65] font-normal rounded-lg border border-slate-200 hover:bg-slate-50 transition-all text-[12px] cursor-pointer">
+              How it works
+            </button>
+          </div>
         </div>
 
-        <!-- Social Proof Numbers -->
-        <div class="flex items-center justify-between sm:justify-start gap-2 sm:gap-4 lg:gap-8 pb-10 w-full">
-          <div>
-            <p class="text-lg sm:text-2xl lg:text-3xl font-black text-[var(--dogo-primary)]">₦10B+</p>
-            <p class="text-[8px] sm:text-[9px] lg:text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest leading-tight">Target AUM <span class="hidden sm:inline">Year 1</span></p>
-          </div>
-          <div class="border-l border-[var(--dogo-primary)]/10 pl-2 sm:pl-4 lg:pl-8">
-            <p class="text-lg sm:text-2xl lg:text-3xl font-black text-[var(--dogo-primary)]">50K+</p>
-            <p class="text-[8px] sm:text-[9px] lg:text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest leading-tight">Target Users <span class="hidden lg:inline">(6 mo)</span></p>
-          </div>
-          <div class="border-l border-[var(--dogo-primary)]/10 pl-2 sm:pl-4 lg:pl-8">
-            <p class="text-lg sm:text-2xl lg:text-3xl font-black text-[var(--dogo-primary)]">0</p>
-            <p class="text-[8px] sm:text-[9px] lg:text-[11px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest leading-tight">Shariah Violations</p>
+        <!-- Right: Phone visual — stacks on mobile/tablet, side-by-side on lg -->
+        <div class="relative block w-full h-[380px] md:h-[420px] lg:h-auto mt-6 lg:mt-0">
+          <!-- Container matches left column height, cards/phone all anchor from bottom -->
+          <div class="relative w-full h-full">
+
+            <!-- Layer 2: Gray card — BEHIND phone, peeking LEFT -->
+            <div class="absolute pointer-events-none" style="width: 180px; height: 85%; background: #C3C9E8; border-radius: 36px 36px 0 0;
+                     bottom: 0; left: calc(50% - 170px); transform: rotate(-5deg); z-index: 1;">
+            </div>
+
+            <!-- Layer 3: White card — BEHIND phone, peeking RIGHT -->
+            <div class="absolute pointer-events-none" style="width: 180px; height: 85%; background: #FFFFFF; border-radius: 36px 36px 0 0;
+                     bottom: 0; left: calc(50% - 5px); transform: rotate(5deg);
+                     box-shadow: 0 8px 30px rgba(0,0,0,0.10); z-index: 1;">
+            </div>
+
+            <!-- Layer 4: Phone mockup — reduced size, bottom-anchored -->
+            <img src="/images/assets/image 2.png" alt="Dogo App Mockup"
+              class="absolute select-none object-contain object-bottom"
+              style="height: 95%; width: auto; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 2;">
           </div>
         </div>
+
       </div>
+    </div>
+  </section>
 
-      <!-- Hero Visual -->
-      <div class="flex justify-center items-end lg:items-end relative lg:col-span-5">
-        <!-- Phone Mockup -->
-        <div class="relative anim-float">
-          <!-- Main phone image -->
-          <img src="/images/dogo-app.png" alt="Dogo App Mockup" class="w-[280px] sm:w-[320px] md:w-[360px] lg:w-[380px] h-auto object-contain drop-shadow-[0_45px_90px_rgba(3,14,101,0.35)] select-none">
-        </div>
+  <!-- STATS BAR — sits below hero, phone overflows into this -->
+  <div class="relative z-10 w-full bg-[#F5F6FF] py-3.5">
+    <div
+      class="max-w-7xl mx-auto px-6 md:px-12 flex flex-wrap justify-center items-center gap-x-12 gap-y-3.5 text-center text-xs md:text-sm text-slate-500 font-medium">
+      <div class="flex items-center gap-1.5">
+        <span class="font-bold text-[#030E65] text-sm md:text-base">₦10B+</span> Target AUM Year 1
+      </div>
+      <div class="flex items-center gap-1.5">
+        <span class="font-bold text-[#030E65] text-sm md:text-base">50k+</span> Target Users (6 mon)
+      </div>
+      <div class="flex items-center gap-1.5">
+        <span class="font-bold text-[#030E65] text-sm md:text-base">0</span> Shariah Violations
       </div>
     </div>
   </div>
 
-  <!-- Bottom wave -->
-  <div class="h-16 bg-white mt-16 relative">
-    <div class="absolute -top-1 left-0 right-0 h-20 bg-[var(--dogo-cream)]" style="clip-path: ellipse(55% 100% at 50% 100%)"></div>
-  </div>
-</section>
+</div>
 
 <!-- ===== WHY DOGO FINANCE? ===== -->
-<section class="py-24 bg-white">
+<section class="py-12 md:py-16 bg-white overflow-hidden">
   <div class="max-w-7xl mx-auto px-6 md:px-12">
-    <div class="text-center mb-20">
-      <div class="halal-badge mx-auto mb-6">
-        <i class="ri-star-fill"></i> Why DOGO Finance?
-      </div>
-      <h2 class="text-5xl md:text-6xl font-black text-[var(--dogo-dark)] tracking-tighter leading-tight">
-        Banking that respects <br><span class="text-[var(--dogo-primary)]">your faith</span> and <span class="text-[var(--dogo-secondary)]">your future.</span>
+    <div class="text-center mb-12 scroll-animate">
+      <p class="text-sm font-sans text-slate-400 mb-1.5">Why <span class="font-serif italic text-slate-500">DOGO
+          Finance?</span></p>
+      <h2 class="text-2xl md:text-3xl font-bold text-black tracking-tight max-w-2xl mx-auto leading-tight">
+        Banking that respects your faith and your future.
       </h2>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-10">
+    <div class="grid md:grid-cols-3 gap-10 md:gap-12 lg:gap-16">
       <!-- Pillar 1 -->
-      <div class="group p-10 rounded-[40px] bg-[var(--dogo-cream)] hover:bg-[var(--dogo-primary)] transition-all duration-500 product-card">
-        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:bg-[var(--dogo-secondary)]/20 transition-colors">
-          <i class="ri-verified-badge-fill text-[var(--dogo-primary)] text-3xl group-hover:text-[var(--dogo-secondary)] transition-colors"></i>
+      <div class="flex flex-col items-center text-center px-4 scroll-animate delay-100">
+        <div class="h-16 flex items-center justify-center mb-4">
+          <img src="/images/why icon/01 fluent-mdl2_certified-database.png" alt="100% Halal-Certified"
+            class="h-14 w-auto object-contain select-none">
         </div>
-        <h3 class="text-2xl font-black text-[var(--dogo-dark)] mb-4 group-hover:text-white transition-colors">100% Halal-Certified</h3>
-        <p class="text-[var(--dogo-muted)] font-medium leading-relaxed text-justify group-hover:text-white/70 transition-colors">
-          Every product is approved by our Shariah Supervisory Board and reviewed against AAOIFI standards. No hidden interest, no Gharar, no Maysir — guaranteed.
+        <h3 class="text-[18px] font-bold text-[#252525] mb-2.5">100% Halal-Certified</h3>
+        <p class="text-sm text-slate-500 leading-relaxed font-normal">
+          Every product is approved by our Shariah Supervisory Board and reviewed against AAOIFI standards. No hidden
+          interest, no Gharar, no Maysir — guaranteed.
         </p>
       </div>
 
       <!-- Pillar 2 -->
-      <div class="group p-10 rounded-[40px] bg-[var(--dogo-cream)] hover:bg-[var(--dogo-primary)] transition-all duration-500 product-card">
-        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:bg-[var(--dogo-secondary)]/20 transition-colors">
-          <i class="ri-map-pin-user-fill text-[var(--dogo-primary)] text-3xl group-hover:text-[var(--dogo-secondary)] transition-colors"></i>
+      <div class="flex flex-col items-center text-center px-4 scroll-animate delay-200">
+        <div class="h-16 flex items-center justify-center mb-4">
+          <img src="/images/why icon/02 streamline-freehand_worldwide-web-users.png" alt="Built for Nigerians"
+            class="h-14 w-auto object-contain select-none">
         </div>
-        <h3 class="text-2xl font-black text-[var(--dogo-dark)] mb-4 group-hover:text-white transition-colors">Built for Nigerians</h3>
-        <p class="text-[var(--dogo-muted)] font-medium leading-relaxed text-justify group-hover:text-white/70 transition-colors">
-          All investments are ₦ denominated. Fund your account via Paystack, NIBSS bank transfer, or USSD. Full BVN and NIN verified KYC. Your data stays in Nigeria under NDPR.
+        <h3 class="text-[18px] font-bold text-[#252525] mb-2.5">Built for Nigerians</h3>
+        <p class="text-sm text-slate-500 leading-relaxed font-normal">
+          All investments are ₦ denominated. Fund your account via Paystack, NIBSS bank transfer, or USSD. Full BVN and
+          NIN verified KYC. Your data stays in Nigeria under NDPR.
         </p>
       </div>
 
       <!-- Pillar 3 -->
-      <div class="group p-10 rounded-[40px] bg-[var(--dogo-cream)] hover:bg-[var(--dogo-primary)] transition-all duration-500 product-card">
-        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:bg-[var(--dogo-secondary)]/20 transition-colors">
-          <i class="ri-funds-box-fill text-[var(--dogo-primary)] text-3xl group-hover:text-[var(--dogo-secondary)] transition-colors"></i>
+      <div class="flex flex-col items-center text-center px-4 scroll-animate delay-300">
+        <div class="h-16 flex items-center justify-center mb-4">
+          <img src="/images/why icon/03 qlementine-icons_money-16.png" alt="Real Returns, Real Impact"
+            class="h-14 w-auto object-contain select-none">
         </div>
-        <h3 class="text-2xl font-black text-[var(--dogo-dark)] mb-4 group-hover:text-white transition-colors">Real Returns, Real Impact</h3>
-        <p class="text-[var(--dogo-muted)] font-medium leading-relaxed text-justify group-hover:text-white/70 transition-colors">
-          Earn competitive profit-sharing returns on Mudarabah, Sukuk and Halal equities — all while your Zakat is automatically calculated and disbursed to CBN-approved charities.
+        <h3 class="text-[18px] font-bold text-[#252525] mb-2.5">Real Returns, Real Impact</h3>
+        <p class="text-sm text-slate-500 leading-relaxed font-normal">
+          Earn competitive profit-sharing returns on Mudarabah, Sukuk and Halal equities — all while your Zakat is
+          automatically calculated and disbursed to CBN-approved charities.
         </p>
       </div>
     </div>
@@ -159,213 +202,283 @@
 </section>
 
 <!-- ===== PRODUCTS SHOWCASE ===== -->
-<section class="py-24 bg-[var(--dogo-dark)] relative overflow-hidden">
-  <div class="absolute inset-0 dogo-pattern opacity-[0.06] pointer-events-none"></div>
-  <!-- Gold glow -->
-  <div class="absolute top-0 right-0 w-[600px] h-[600px] rounded-full blur-[200px] opacity-10" style="background: radial-gradient(circle, var(--dogo-secondary), transparent)"></div>
+<section class="py-12 md:py-16 bg-white border-t border-slate-100 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-end mb-8 scroll-animate">
+    <div>
+      <p class="text-sm font-serif italic text-slate-400 mb-1.5">Our <span
+          class="font-serif italic text-slate-500">Products</span></p>
+      <h2 class="text-2xl md:text-3xl font-bold text-black tracking-tight">Invest the Halal way.</h2>
+    </div>
+    <a routerLink="/products/mudarabah"
+      class="inline-flex items-center gap-0.5 text-xs md:text-sm font-bold text-black bg-[#F5F6FF] hover:bg-[#EBEBFF] rounded-lg px-4 py-2 transition-colors">
+      Explore all Products <i class="ri-arrow-right-s-line"></i>
+    </a>
+  </div>
 
-  <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-    <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-20 gap-8">
+  <div class="grid md:grid-cols-2 gap-6 max-w-7xl mx-auto px-6 md:px-12">
+    <!-- Card 1: Mudarabah -->
+    <div class="bg-[#FFFDF9] border border-[#FBEECA] rounded-2xl p-7 flex flex-col justify-between min-h-[350px] scroll-animate delay-75">
       <div>
-        <div class="halal-badge mb-6">
-          <i class="ri-price-tag-3-fill"></i> Our Products
-        </div>
-        <h2 class="text-5xl md:text-6xl font-black text-white tracking-tighter leading-tight italic">
-          Invest the <br><span class="text-[var(--dogo-secondary)] drop-shadow-[0_0_20px_var(--dogo-secondary)]/30">Halal way.</span>
-        </h2>
+        <h3 class="text-lg font-bold text-black mb-1.5">Mudarabah</h3>
+        <p class="text-xs md:text-sm text-slate-500 leading-relaxed mb-2">You provide capital, we manage it expertly.
+          Profit
+          shared - no Riba, ever</p>
+        <p class="text-xs md:text-sm font-bold text-green-600 mb-4">Up to 18% p.a.</p>
+        <a routerLink="/products/mudarabah"
+          class="inline-flex items-center text-xs font-bold text-black border border-slate-200 bg-white rounded-lg px-3.5 py-1.5 hover:bg-slate-50 w-max transition-all">
+          Start Investing <i class="ri-arrow-right-s-line ml-0.5"></i>
+        </a>
       </div>
-      <a routerLink="/products/mudarabah" class="flex items-center gap-2 text-white hover:text-[var(--dogo-secondary)] font-black hover:gap-4 transition-all text-lg shrink-0">
-        Explore all products <i class="ri-arrow-right-line"></i>
-      </a>
+      <div class="flex justify-end mt-4">
+        <img src="/images/assets/265_money_jar_flatline.png" alt="Mudarabah jar"
+          class="h-28 md:h-32 w-auto object-contain select-none">
+      </div>
     </div>
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-      @for(p of products(); track p.id) {
-        <a [routerLink]="p.route" 
-           class="group relative block bg-white/5 border border-white/10 rounded-[32px] p-8 transition-all duration-500 hover:bg-white/[0.08] hover:-translate-y-3 hover:shadow-2xl overflow-hidden shimmer-effect"
-           [style.boxShadow]="'0 20px 40px -20px ' + p.color + '20'">
-          
-          <!-- Background Glow Effect -->
-          <div class="absolute -top-24 -right-24 w-48 h-48 rounded-full blur-[80px] opacity-0 group-hover:opacity-20 transition-opacity duration-700"
-               [style.background]="p.color"></div>
+    <!-- Card 2: Sukuk -->
+    <div class="bg-[#FFFDF5] border border-[#FFF0D0] rounded-2xl p-7 flex flex-col justify-between min-h-[350px] scroll-animate delay-150">
+      <div>
+        <h3 class="text-lg font-bold text-black mb-1.5">Sukuk</h3>
+        <p class="text-xs md:text-sm text-slate-500 leading-relaxed mb-2">Asset-backed Islamic bonds giving you
+          predictable,
+          Shariah-certified returns in Naira.</p>
+        <p class="text-xs md:text-sm font-bold text-green-600 mb-4">From 12% p.a.</p>
+      </div>
+      <a routerLink="/products/sukuk"
+        class="inline-flex items-center text-xs font-bold text-black border border-slate-200 bg-white rounded-lg px-3.5 py-1.5 hover:bg-slate-50/50 w-max transition-all mb-4">
+        Start Investing <i class="ri-arrow-right-s-line ml-0.5"></i>
+      </a>
+      <div class="flex justify-end mt-auto">
+        <img src="/images/assets/Group.png" alt="Sukuk vault" class="h-28 md:h-32 w-auto object-contain select-none">
+      </div>
+    </div>
 
-          <!-- Icon Wrapper -->
-          <div class="w-16 h-16 rounded-[22px] flex items-center justify-center mb-10 transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 shadow-xl"
-               [style.background]="'linear-gradient(135deg, ' + p.color + '20, ' + p.color + '05)'"
-               [style.border]="'1px solid ' + p.color + '30'">
-            <i [class]="p.icon + ' text-3xl'" [style.color]="p.color"></i>
-          </div>
-
-          <div class="relative z-10">
-            <h3 class="text-2xl font-black text-white mb-3 group-hover:text-[var(--dogo-secondary)] transition-colors">{{ p.name }}</h3>
-            <p class="text-white/40 font-medium leading-relaxed text-sm mb-10 group-hover:text-white/60 transition-colors">{{ p.desc }}</p>
-          </div>
-
-          <!-- Footer with Return Info -->
-          <div class="relative z-10 flex items-center justify-between mt-auto pt-6 border-t border-white/5">
-            <div>
-              <p class="text-[10px] font-black uppercase tracking-[0.2em] text-white/20 mb-1">Returns</p>
-              <p class="font-black text-white text-lg tracking-tight group-hover:text-[var(--dogo-secondary)] transition-colors">{{ p.return }}</p>
-            </div>
-            <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[var(--dogo-secondary)] group-hover:text-[var(--dogo-primary)] transition-all duration-500">
-              <i class="ri-arrow-right-up-line text-white/30 group-hover:text-inherit text-xl"></i>
-            </div>
-          </div>
+    <!-- Card 3: Halal Equity -->
+    <div class="bg-[#F5F8FF] border border-[#E2EAFF] rounded-2xl p-7 flex flex-col justify-between min-h-[350px] scroll-animate delay-200">
+      <div>
+        <h3 class="text-lg font-bold text-black mb-1.5">Halal Equity</h3>
+        <p class="text-xs md:text-sm text-slate-500 leading-relaxed mb-2">Shariah-screened stocks and ETFs. Our AI
+          removes every
+          Haram element automatically.</p>
+        <p class="text-xs md:text-sm font-bold text-green-600 mb-4">Market returns</p>
+        <a routerLink="/products/halal-equity"
+          class="inline-flex items-center text-xs font-bold text-black border border-slate-200 bg-white rounded-lg px-3.5 py-1.5 hover:bg-slate-50/50 w-max transition-all">
+          Start Investing <i class="ri-arrow-right-s-line ml-0.5"></i>
         </a>
-      }
+      </div>
+      <div class="flex justify-end mt-4">
+        <img src="/images/assets/Chart.png" alt="Halal Equity chart"
+          class="h-28 md:h-32 w-auto object-contain select-none">
+      </div>
+    </div>
+
+    <!-- Card 4: Wakala -->
+    <div
+      class="bg-[#F8FCF9] border border-[#E3F2E6] rounded-2xl p-7 flex flex-col justify-between min-h-[350px] relative overflow-hidden scroll-animate delay-300">
+      <!-- decorative sparkles -->
+      <svg class="absolute top-6 left-[58%] w-3 h-3 text-emerald-300 z-10" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 0l2.4 9.6L24 12l-9.6 2.4L12 24l-2.4-9.6L0 12l9.6-2.4z" />
+      </svg>
+      <svg class="absolute top-16 left-[70%] w-2.5 h-2.5 text-sky-300 z-10" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 0l2.4 9.6L24 12l-9.6 2.4L12 24l-2.4-9.6L0 12l9.6-2.4z" />
+      </svg>
+      <svg class="absolute top-8 right-6 w-2 h-2 text-violet-300 z-10" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 0l2.4 9.6L24 12l-9.6 2.4L12 24l-2.4-9.6L0 12l9.6-2.4z" />
+      </svg>
+      <div>
+        <h3 class="text-lg font-bold text-black mb-1.5">Wakala</h3>
+        <p class="text-xs md:text-sm text-slate-500 leading-relaxed mb-2">Appoint DOGO Finance as your trusted agent. We
+          invest
+          on your behalf with full transparency.</p>
+        <p class="text-xs md:text-sm font-bold text-green-600 mb-4">13% p.a.</p>
+        <a routerLink="/products/wakala"
+          class="inline-flex items-center text-xs font-bold text-black border border-slate-200 bg-white rounded-lg px-3.5 py-1.5 hover:bg-slate-50/50 w-max transition-all">
+          Start Investing <i class="ri-arrow-right-s-line ml-0.5"></i>
+        </a>
+      </div>
+      <div class="flex justify-end mt-4">
+        <img src="/images/assets/555_piggy_bank_outline.png" alt="Wakala piggy bank"
+          class="h-28 md:h-32 w-auto object-contain select-none">
+      </div>
     </div>
   </div>
 </section>
 
 <!-- ===== HOW IT WORKS ===== -->
-<section class="py-24 bg-white">
+<section class="py-12 md:py-16 bg-gradient-to-b from-indigo-50/40 via-indigo-50/10 to-white border-t border-slate-100 overflow-hidden">
   <div class="max-w-7xl mx-auto px-6 md:px-12">
-    <div class="text-center mb-20">
-      <div class="halal-badge mx-auto mb-6">
-        <i class="ri-map-pin-2-fill"></i> From Zero to Halal Wealth
-      </div>
-      <h2 class="text-5xl md:text-6xl font-black text-[var(--dogo-dark)] tracking-tighter">
-        4 steps. That's all.
-      </h2>
+    <div class="text-center mb-12 scroll-animate">
+      <p class="text-xs font-semibold text-slate-500 mb-1.5">From Zero to <span
+          class="font-serif italic text-slate-600">Halal Wealth</span></p>
+      <h2 class="text-2xl md:text-3xl font-semibold text-slate-800">4 steps. That's all.</h2>
     </div>
 
-    <div class="grid md:grid-cols-4 gap-8 relative">
-      <!-- Connector line -->
-      <div class="absolute top-10 left-[12%] right-[12%] h-px bg-gradient-to-r from-[var(--dogo-cream)] via-[var(--dogo-primary)] to-[var(--dogo-cream)] hidden md:block"></div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+      <!-- single continuous connector line, sits BEHIND the cards -->
+      <div class="hidden lg:block absolute left-0 right-0 top-[164px] h-px bg-[#D6DCFB] z-0"></div>
 
-      @for(step of [
-        { num: '01', icon: 'ri-user-add-line', title: 'Create Your Account', desc: 'Sign up with Google, Apple, or email/phone in under 5 minutes.'},
-        { num: '02', icon: 'ri-fingerprint-line', title: 'Nigerian KYC', desc: 'Verify securely with your BVN and NIN. A quick liveness selfie confirms your identity.'},
-        { num: '03', icon: 'ri-questionnaire-line', title: 'Your Risk Profile', desc: 'Answer 5 short questions. We recommend Halal products tailored to your goals.'},
-        { num: '04', icon: 'ri-funds-box-fill', title: 'Invest & Earn', desc: 'Fund via Paystack or NIBSS. Track your Halal returns live on your dashboard.'}
-      ]; track step.num) {
-        <div class="flex flex-col items-center text-center relative z-10">
-          <div class="w-20 h-20 rounded-full bg-[var(--dogo-primary)] flex items-center justify-center mb-6 shadow-xl shadow-[var(--dogo-primary)]/25 relative">
-            <i [class]="step.icon + ' text-2xl text-white'"></i>
-            <div class="absolute -top-2 -right-2 w-7 h-7 bg-[var(--dogo-secondary)] text-white text-[10px] font-black rounded-full flex items-center justify-center">{{ step.num }}</div>
-          </div>
-          <h3 class="text-lg font-black text-[var(--dogo-dark)] mb-3">{{ step.title }}</h3>
-          <p class="text-[var(--dogo-muted)] font-medium leading-relaxed text-sm">{{ step.desc }}</p>
+      <!-- Step 1 -->
+      <div
+        class="bg-white border border-slate-100 rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[260px] z-10 scroll-animate delay-75">
+        <div class="relative z-10">
+          <h3 class="text-sm md:text-base font-semibold text-slate-800 mb-2">Create Your Account</h3>
+          <p class="text-sm text-slate-500 leading-relaxed">Sign up with Google, Apple, or email/phone in under 5
+            minutes.</p>
         </div>
-      }
-    </div>
+        <div
+          class="absolute -bottom-12 left-0 right-0 text-center text-[11rem] font-black text-slate-100/80 pointer-events-none select-none z-0 leading-none">
+          1</div>
+      </div>
 
-    <div class="text-center mt-16">
-      <a routerLink="/how-it-works" class="inline-flex items-center gap-2 bg-[var(--dogo-primary)] text-white px-10 py-5 rounded-2xl font-black hover:bg-[var(--dogo-primary-soft)] transition-all shadow-xl shadow-[var(--dogo-primary)]/20 text-lg">
-        See Full Journey <i class="ri-arrow-right-line"></i>
-      </a>
+      <!-- Step 2 -->
+      <div
+        class="bg-white border border-slate-100 rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[260px] z-10 scroll-animate delay-150">
+        <div class="relative z-10">
+          <h3 class="text-sm md:text-base font-semibold text-slate-800 mb-2">Nigerian KYC</h3>
+          <p class="text-sm text-slate-500 leading-relaxed">Verify securely with your BVN and NIN. A quick liveness
+            selfie confirms your identity.</p>
+        </div>
+        <div
+          class="absolute -bottom-12 left-0 right-0 text-center text-[11rem] font-black text-slate-100/80 pointer-events-none select-none z-0 leading-none">
+          2</div>
+      </div>
+
+      <!-- Step 3 -->
+      <div
+        class="bg-white border border-slate-100 rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[260px] z-10 scroll-animate delay-200">
+        <div class="relative z-10">
+          <h3 class="text-sm md:text-base font-semibold text-slate-800 mb-2">Your Risk Profile</h3>
+          <p class="text-sm text-slate-500 leading-relaxed">Answer 5 short questions. We recommend Halal products
+            tailored to your goals.</p>
+        </div>
+        <div
+          class="absolute -bottom-12 left-0 right-0 text-center text-[11rem] font-black text-slate-100/80 pointer-events-none select-none z-0 leading-none">
+          3</div>
+      </div>
+
+      <!-- Step 4 -->
+      <div
+        class="bg-white border border-slate-100 rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[260px] z-10 scroll-animate delay-300">
+        <div class="relative z-10">
+          <h3 class="text-sm md:text-base font-semibold text-slate-800 mb-2">Invest & Earn</h3>
+          <p class="text-sm text-slate-500 leading-relaxed">Fund via Paystack or NIBSS. Track your Halal returns live on
+            your dashboard.</p>
+        </div>
+        <div
+          class="absolute -bottom-12 left-0 right-0 text-center text-[11rem] font-black text-slate-100/80 pointer-events-none select-none z-0 leading-none">
+          4</div>
+      </div>
+
     </div>
   </div>
 </section>
 
 <!-- ===== SHARIAH TRUST SECTION ===== -->
-<section class="py-24 bg-[var(--dogo-cream)] dogo-pattern">
+<section class="py-12 md:py-16 bg-white border-t border-slate-100 overflow-hidden">
   <div class="max-w-7xl mx-auto px-6 md:px-12">
-    <div class="grid lg:grid-cols-2 gap-20 items-center">
+    <div class="grid lg:grid-cols-2 gap-12 items-start">
       <!-- Left: Content -->
-      <div>
-        <div class="halal-badge mb-8">
-          <i class="ri-mosque-fill"></i> Shariah Compliance
-        </div>
-        <h2 class="text-5xl font-black text-[var(--dogo-dark)] tracking-tighter leading-tight mb-8">
-          Your Iman.<br>Your Investment.<br><span class="text-[var(--dogo-primary)]">Fully Protected.</span>
+      <div class="scroll-animate-left">
+        <p class="text-[13px] font-sans text-slate-400 mb-1.5">Shariah <span
+            class="font-serif italic text-slate-500">Compliance</span></p>
+        <h2 class="text-3xl md:text-4xl font-bold text-black tracking-tight leading-tight mb-4">
+          Your Iman.<br>Your Investment.<br>Fully Protected.
         </h2>
-        <p class="text-[var(--dogo-muted)] font-medium leading-relaxed text-lg mb-10">
-          Every product, every transaction, every line of code at DOGO Finance is built around Shariah compliance — certified by our independent Shariah Supervisory Board (SSB) and reviewed against AAOIFI international standards.
+        <p class="text-slate-700 text-xs md:text-sm leading-relaxed mb-6">
+          Every product, every transaction, every line of code at DOGO Finance is built around Shariah compliance —
+          certified by our independent Shariah Supervisory Board (SSB) and reviewed against AAOIFI international
+          standards.
         </p>
-
-        <div class="space-y-5 mb-10">
-          @for(item of ['Haram sector automated screening (alcohol, Riba, weapons, adult content)', 'AAOIFI standards compliance on all products', 'Quarterly SSB audit reports published publicly', 'Automatic income purification routed to Nigerian Islamic charities']; track item) {
-            <div class="flex items-start gap-4">
-              <div class="w-7 h-7 rounded-full bg-[var(--dogo-primary)] flex items-center justify-center shrink-0 mt-0.5">
-                <i class="ri-check-line text-white text-sm"></i>
-              </div>
-              <p class="font-medium text-[#374151]">{{ item }}</p>
-            </div>
-          }
-        </div>
-
-        <a routerLink="/shariah" class="inline-flex items-center gap-2 border-2 border-[var(--dogo-primary)] text-[var(--dogo-primary)] px-8 py-4 rounded-2xl font-black hover:bg-[var(--dogo-primary)] hover:text-[var(--dogo-secondary)] transition-all">
-          Read Our Shariah Framework <i class="ri-arrow-right-line"></i>
-        </a>
       </div>
 
-      <!-- Right: SSB card + screening breakdown -->
-      <div class="relative">
-        <div class="bg-[var(--dogo-primary)] rounded-[50px] p-12 text-white relative overflow-hidden shadow-premium">
-          <div class="absolute top-0 right-0 w-72 h-72 rounded-full blur-[80px] opacity-10" style="background: radial-gradient(circle, var(--dogo-secondary), transparent)"></div>
-          <div class="relative z-10">
-            <div class="w-16 h-16 rounded-full bg-white/10 border border-white/20 flex items-center justify-center mb-8">
-              <i class="ri-verified-badge-fill text-white text-3xl shadow-sm"></i>
-            </div>
-            <h3 class="text-3xl font-black mb-4">What We Screen Out</h3>
-            <p class="text-white/60 font-medium mb-8">Our AI engine auto-removes all Haram elements from every portfolio, in real-time.</p>
-            <div class="space-y-4">
-              @for(item of [
-                { icon: 'ri-close-circle-fill', label: 'Riba (Conventional banking)', color: 'text-red-400'},
-                { icon: 'ri-close-circle-fill', label: 'Alcohol & Tobacco', color: 'text-red-400'},
-                { icon: 'ri-close-circle-fill', label: 'Weapons & Defence', color: 'text-red-400'},
-                { icon: 'ri-close-circle-fill', label: 'Maysir (Speculation/Gambling)', color: 'text-red-400'},
-                { icon: 'ri-close-circle-fill', label: 'Gharar (Excessive uncertainty)', color: 'text-red-400'}
-              ]; track item.label) {
-                <div class="flex items-center gap-3">
-                  <i [class]="item.icon + ' text-xl ' + item.color"></i>
-                  <p class="font-medium text-white/80">{{ item.label }}</p>
-                </div>
-              }
-            </div>
+      <!-- Right: SSB features grid -->
+      <div class="grid sm:grid-cols-2 gap-x-8 gap-y-10">
+        <div class="flex flex-col items-start gap-2.5 scroll-animate delay-75">
+          <div class="relative overflow-visible rounded-full bg-[#EAEFFE] shrink-0"
+            style="width: 44px; height: 36px; min-width: 44px; min-height: 36px;">
+            <img src="/images/icons/01lets-icons_scan-alt-light.png" alt="Screening icon"
+              class="absolute top-1/2 left-1/2 -translate-x-[24%] -translate-y-[24%] object-contain select-none"
+              style="width: 34px; height: 34px;">
           </div>
+          <p class="text-[13px] text-[#252525] font-normal leading-relaxed">Haram sector automated screening (alcohol,
+            Riba, weapons, adult content)</p>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ===== ZAKAT TEASER ===== -->
-<section class="py-24 bg-white">
-  <div class="max-w-7xl mx-auto px-6 md:px-12">
-    <div class="bg-[var(--dogo-primary)] rounded-[40px] md:rounded-[60px] p-8 md:p-12 lg:p-20 relative overflow-hidden shadow-2xl">
-      <!-- Pattern -->
-      <div class="absolute inset-0 dogo-pattern opacity-10"></div>
-      <!-- Glow -->
-      <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-[var(--dogo-secondary)] rounded-full blur-[100px] opacity-50"></div>
-
-      <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center relative z-10">
-        <div>
-          <div class="halal-badge bg-[var(--dogo-secondary)] text-white mb-8 border-none">
-            <i class="ri-hand-heart-fill"></i> Zakat Made Easy
+        <div class="flex flex-col items-start gap-2.5 scroll-animate delay-150">
+          <div class="relative overflow-visible rounded-full bg-[#EAEFFE] shrink-0"
+            style="width: 44px; height: 36px; min-width: 44px; min-height: 36px;">
+            <img src="/images/icons/02carbon_ibm-cloud-security-compliance-center-workload-protection.png"
+              alt="Compliance icon"
+              class="absolute top-1/2 left-1/2 -translate-x-[24%] -translate-y-[24%] object-contain select-none"
+              style="width: 34px; height: 34px;">
           </div>
-          <h2 class="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tighter leading-tight mb-6">
-            Calculate your Zakat.<br><span class="text-white/90">Fulfill your obligation.</span>
-          </h2>
-          <p class="text-white/70 font-medium leading-relaxed text-lg mb-10 max-w-lg">
-            Nigeria's most accurate Naira-based Zakat calculator. Built on current gold nisab thresholds. Pay directly to CBN-approved Islamic charities with one tap.
+          <p class="text-[13px] text-[#252525] font-normal leading-relaxed">AAOIFI standards compliance on all products
           </p>
-          <a routerLink="/zakat" class="inline-flex items-center justify-center gap-3 w-full sm:w-auto bg-white text-[var(--dogo-primary)] px-10 py-5 rounded-2xl font-black hover:bg-slate-100 transition-all shadow-xl text-lg">
-            <i class="ri-calculator-2-fill text-xl"></i> Calculate My Zakat
-          </a>
         </div>
 
-        <div class="bg-[var(--dogo-secondary)]/40 backdrop-blur-md rounded-[32px] md:rounded-[40px] p-8 md:p-10 border border-white/10 shadow-2xl">
-          <p class="text-[11px] font-black uppercase tracking-widest text-white/60 mb-2">Your Zakat Summary</p>
-          <p class="text-4xl md:text-5xl font-black text-white mb-8">₦ — ,— —</p>
-          <div class="space-y-4">
-            <div class="flex justify-between items-center py-3 border-b border-white/10">
-              <span class="text-white/70 font-medium text-sm md:text-base">Cash & Savings</span>
-              <span class="text-white font-black text-lg">₦ 0</span>
-            </div>
-            <div class="flex justify-between items-center py-3 border-b border-white/10">
-              <span class="text-white/70 font-medium text-sm md:text-base">Investments</span>
-              <span class="text-white font-black text-lg">₦ 0</span>
-            </div>
-            <div class="flex justify-between items-center py-3 border-b border-white/10">
-              <span class="text-white/70 font-medium text-sm md:text-base">Gold Value</span>
-              <span class="text-white font-black text-lg">₦ 0</span>
-            </div>
+        <div class="flex flex-col items-start gap-2.5 scroll-animate delay-200">
+          <div class="relative overflow-visible rounded-full bg-[#EAEFFE] shrink-0"
+            style="width: 44px; height: 36px; min-width: 44px; min-height: 36px;">
+            <img src="/images/icons/03Vector.png" alt="Audit icon"
+              class="absolute top-1/2 left-1/2 -translate-x-[24%] -translate-y-[24%] object-contain select-none"
+              style="width: 34px; height: 34px;">
           </div>
-          <button class="w-full mt-8 py-4 md:py-5 bg-[var(--dogo-primary)] text-white rounded-2xl font-black hover:bg-[var(--dogo-primary)]/80 transition-all shadow-xl flex items-center justify-center gap-2 border border-white/5">
-            Start Calculator <i class="ri-arrow-right-line text-lg"></i>
-          </button>
+          <p class="text-[13px] text-[#252525] font-normal leading-relaxed">Quarterly SSB audit reports published
+            publicly
+          </p>
+        </div>
+
+        <div class="flex flex-col items-start gap-2.5 scroll-animate delay-300">
+          <div class="relative overflow-visible rounded-full bg-[#EAEFFE] shrink-0"
+            style="width: 44px; height: 36px; min-width: 44px; min-height: 36px;">
+            <img src="/images/icons/04money vessle.png" alt="Purification icon"
+              class="absolute top-1/2 left-1/2 -translate-x-[24%] -translate-y-[24%] object-contain select-none"
+              style="width: 34px; height: 34px;">
+          </div>
+          <p class="text-[13px] text-[#252525] font-normal leading-relaxed">Automatic income purification routed to
+            Nigerian Islamic charities</p>
+        </div>
+      </div>
+
+      <!-- Screen Out breakdown -->
+      <div
+        class="lg:col-span-2 bg-[#FAFBFF] rounded-lg py-8 px-4 grid grid-cols-1 md:grid-cols-12 items-center gap-6 relative overflow-hidden scroll-animate delay-100">
+        <div class="md:col-span-8">
+          <h3 class="text-xl font-bold text-black mb-1.5">What We Screen Out</h3>
+          <p class="text-xs text-slate-500 mb-4">Our AI engine auto-removes all Haram elements from every portfolio, in
+            real-time.</p>
+
+          <div class="flex flex-wrap gap-2.5">
+            <span
+              class="bg-[#F2F2F2] text-[#252525] px-4 py-2 rounded-full text-sm font-medium flex items-center space-x-2">
+              <i class="ri-close-circle-fill text-rose-500 text-base"></i>
+              <span>Riba (Conventional banking)</span>
+            </span>
+            <span
+              class="bg-[#F2F2F2] text-[#252525] px-4 py-2 rounded-full text-sm font-medium flex items-center space-x-2">
+              <i class="ri-close-circle-fill text-rose-500 text-base"></i>
+              <span>Alcohol & Tobacco</span>
+            </span>
+            <span
+              class="bg-[#F2F2F2] text-[#252525] px-4 py-2 rounded-full text-sm font-medium flex items-center space-x-2">
+              <i class="ri-close-circle-fill text-rose-500 text-base"></i>
+              <span>Weapons & Defence</span>
+            </span>
+            <span
+              class="bg-[#F2F2F2] text-[#252525] px-4 py-2 rounded-full text-sm font-medium flex items-center space-x-2">
+              <i class="ri-close-circle-fill text-rose-500 text-base"></i>
+              <span>Maysir (Speculation/Gambling)</span>
+            </span>
+            <span
+              class="bg-[#F2F2F2] text-[#252525] px-4 py-2 rounded-full text-sm font-medium flex items-center space-x-2">
+              <i class="ri-close-circle-fill text-rose-500 text-base"></i>
+              <span>Gharar (Excessive uncertainty)</span>
+            </span>
+          </div>
+        </div>
+        <div class="md:col-span-4 flex justify-end">
+          <img src="/images/assets/Group 18290.png" alt="Screening illustration"
+            class="h-28 w-auto object-contain select-none">
         </div>
       </div>
     </div>
@@ -373,70 +486,78 @@
 </section>
 
 <!-- ===== TESTIMONIALS ===== -->
-<section class="py-24 bg-[var(--dogo-cream)]">
+<section class="py-12 md:py-16 bg-[#FCFCFC] border-t border-slate-100 overflow-hidden">
   <div class="max-w-7xl mx-auto px-6 md:px-12">
-    <div class="text-center mb-16">
-      <div class="halal-badge mx-auto mb-6">
-        <i class="ri-star-smile-fill"></i> Community Stories
-      </div>
-      <h2 class="text-5xl font-black text-[var(--dogo-dark)] tracking-tighter">Our members speak for us.</h2>
+    <div class="text-center mb-12 scroll-animate">
+      <p class="text-sm font-serif italic text-[#737373] mb-1.5">Community Stories</p>
+      <h2 class="text-2xl md:text-3xl font-bold text-[#252525] tracking-tight">Our members speak for us.</h2>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-8">
-      @for(t of testimonials(); track t.name; let i = $index) {
-        <div class="bg-white rounded-[36px] p-10 shadow-xl shadow-[var(--dogo-primary)]/5 border border-[var(--dogo-primary)]/5 flex flex-col">
-          <div class="flex mb-4">
-            @for(s of [1,2,3,4,5]; track s) {
-              <i class="ri-star-fill text-[var(--dogo-secondary)]"></i>
-            }
-          </div>
-          <p class="text-[#374151] font-medium leading-relaxed mb-8 flex-grow text-lg">"{{ t.text }}"</p>
-          <div class="flex items-center gap-4 pt-6 border-t border-gray-50">
-            <img [src]="t.avatar" [alt]="t.name" class="w-12 h-12 rounded-full object-cover">
-            <div>
-              <p class="font-black text-[var(--dogo-dark)]">{{ t.name }}</p>
-              <p class="text-[11px] font-bold text-[var(--dogo-muted)]">{{ t.location }} · {{ t.product }}</p>
-            </div>
-          </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      @for(t of testimonials(); track t.name; let idx = $index) {
+      <div [style.transition-delay.ms]="idx * 150"
+        class="bg-white border border-slate-100/90 rounded-sm p-6 flex flex-col gap-3 shadow-sm min-h-[240px] text-left scroll-animate">
+        <!-- Top: Avatar -->
+        <div class="flex items-center">
+          <img [src]="t.avatar" [alt]="t.name" class="w-10 h-10 rounded-full object-cover select-none">
         </div>
+
+        <!-- Middle: Quote Text -->
+        <p class="text-[#252525] text-[14px] leading-relaxed">"{{ t.text }}"</p>
+
+        <!-- Bottom: Author Info -->
+        <div class="mt-auto pt-2">
+          <p class="font-normal text-[#252525] text-[14px] leading-tight mb-1 italic">{{ t.name }}</p>
+          <p class="text-[10px] text-[#737373]">
+            {{ t.location }} - {{ t.product }}
+          </p>
+        </div>
+      </div>
       }
     </div>
   </div>
 </section>
 
 <!-- ===== DOWNLOAD CTA ===== -->
-<section class="py-24 bg-[var(--dogo-cream)] relative overflow-hidden">
-  <div class="absolute inset-0 dogo-pattern opacity-[0.03] pointer-events-none"></div>
-  <div class="max-w-4xl mx-auto px-6 md:px-12 text-center relative z-10">
-    <!-- Logo icon -->
-    <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-[0_20px_50px_rgba(3,14,101,0.15)] mx-auto mb-10 border border-[var(--dogo-primary)]/5">
-      <img src="/brand/icon.png" alt="Dogo" class="w-14 h-14 object-contain">
-    </div>
+<section class="py-12 md:py-16 bg-white border-t border-slate-100 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6 md:px-12">
+    <!-- Main Container with overflow-hidden to keep the image inside the box -->
+    <div
+      class="relative rounded-[28px] overflow-hidden min-h-[300px] flex flex-col md:flex-row items-center justify-between p-8 pb-0 md:p-12 lg:p-14 gap-8 scroll-animate">
 
-    <h2 class="text-5xl md:text-7xl font-black text-[var(--dogo-dark)] tracking-tighter mb-8 leading-tight">
-      Download <span class="text-[var(--dogo-primary)]">Dogo Finance</span> today.
-    </h2>
-    <p class="text-xl text-[var(--dogo-muted)] font-medium mb-14 max-w-xl mx-auto">
-      Free on iOS and Android. Start your Halal wealth journey in minutes.
-    </p>
+      <!-- Gradient Background Layer -->
+      <div class="absolute inset-0 z-0 bg-cover bg-center"
+        style="background-image: url('/images/assets/Ellipse 27.png');"></div>
 
-    <div class="flex flex-wrap justify-center gap-6">
-      <button class="flex items-center space-x-4 bg-[var(--dogo-primary)] text-white px-10 py-5 rounded-2xl hover:bg-[var(--dogo-primary-soft)] transition-all shadow-xl shadow-[var(--dogo-primary)]/25">
-        <i class="ri-apple-fill text-3xl text-white"></i>
-        <div class="text-left">
-          <p class="text-[10px] uppercase font-bold text-white/60 leading-tight">Download on the</p>
-          <p class="text-xl font-black leading-tight">App Store</p>
+      <!-- Left Content -->
+      <div class="relative z-10 flex-grow max-w-xl text-left scroll-animate-left delay-100">
+        <h2 class="text-3xl md:text-4xl lg:text-[40px] font-black text-[#030E65] leading-tight tracking-tight mb-2">
+          Download Dogo Finance today.
+        </h2>
+        <p class="text-slate-500 text-xs md:text-sm leading-relaxed mb-6 font-medium">
+          Free on iOS and Android. Start your Halal wealth journey in minutes.
+        </p>
+
+        <div class="flex flex-wrap gap-3">
+          <a href="#" class="inline-block hover:scale-102 transition-transform">
+            <img src="/images/assets/Mobile app store badge.png" alt="Get it on Google Play" class="h-9 w-auto">
+          </a>
+          <a href="#" class="inline-block hover:scale-102 transition-transform">
+            <img src="/images/assets/Mobile app store badge (1).png" alt="Download on the App Store" class="h-9 w-auto">
+          </a>
         </div>
-      </button>
-      <button class="flex items-center space-x-4 border-2 border-[var(--dogo-primary)]/20 text-[var(--dogo-primary)] px-10 py-5 rounded-2xl hover:bg-[var(--dogo-cream)] transition-all">
-        <i class="ri-google-play-fill text-3xl text-[var(--dogo-primary)]"></i>
-        <div class="text-left">
-          <p class="text-[10px] uppercase font-bold text-[var(--dogo-primary)]/60 leading-tight">Get it on</p>
-          <p class="text-xl font-black leading-tight">Google Play</p>
-        </div>
-      </button>
+      </div>
+
+      <!-- Right Visual: Phone Mockup positioned flush with bottom and fully inside the card container -->
+      <img src="/images/assets/image 2.png" alt="Dogo App Mockup"
+        class="absolute bottom-0 right-8 lg:right-16 h-[92%] w-auto object-contain z-10 hidden md:block pointer-events-none scroll-animate-right delay-200">
+
+      <!-- Mobile Mockup (positioned at the bottom flush with card edge) -->
+      <div class="block md:hidden relative z-10 w-full h-[220px] overflow-hidden mt-6 scroll-animate delay-200">
+        <img src="/images/assets/image 2.png" alt="Dogo App Mockup"
+          class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[180px] h-auto object-contain z-10">
+      </div>
+
     </div>
   </div>
 </section>
-
-

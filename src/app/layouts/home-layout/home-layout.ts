@@ -15,6 +15,9 @@ export class HomeLayout implements OnInit {
   private router = inject(Router);
 
   isMenuOpen = false;
+  isMobileProductOpen = false;
+  isMobileResourcesOpen = false;
+  isMobileRegisterOpen = false;
   isLoggedIn = computed(() => this.authService.currentUser() !== null);
 
   dashboardLink = computed(() => {
@@ -30,6 +33,11 @@ export class HomeLayout implements OnInit {
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
+    if (!this.isMenuOpen) {
+      this.isMobileProductOpen = false;
+      this.isMobileResourcesOpen = false;
+      this.isMobileRegisterOpen = false;
+    }
   }
 
   customerTypes = signal<any[]>([

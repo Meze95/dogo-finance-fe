@@ -1,6 +1,7 @@
-import { Component, signal, inject, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, signal, inject, computed, OnInit, AfterViewInit, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../shared/services/auth.service';
 import { UserRole } from '../../shared/models/user-role.enum';
 
@@ -25,16 +26,17 @@ interface Testimonial {
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.css'
 })
-export class LandingComponent {
+export class LandingComponent implements OnInit, AfterViewInit {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private platformId = inject(PLATFORM_ID);
 
   isLoggedIn = computed(() => this.authService.currentUser() !== null);
-  
+
   dashboardLink = computed(() => {
     const user = this.authService.currentUser();
     if (!user) return '/login';
@@ -90,21 +92,21 @@ export class LandingComponent {
       name: 'Abdullahi M.',
       location: 'Kano State',
       text: 'I have tried every savings app out there. None gave me the peace of mind that DOGO Finance does. I know my money is growing and my faith is protected.',
-      avatar: 'https://i.pravatar.cc/100?img=12',
+      avatar: '/images/testimonial/avatar-2.png',
       product: 'Mudarabah Account'
     },
     {
       name: 'Fatima O.',
       location: 'Lagos, Nigeria',
       text: 'The Zakat calculator alone is worth downloading the app. It auto-calculated my entire portfolio and sent the payment to charity in seconds.',
-      avatar: 'https://i.pravatar.cc/100?img=47',
+      avatar: '/images/testimonial/avatar-1.png',
       product: 'Zakat Module'
     },
     {
       name: 'Ibrahim K.',
       location: 'Abuja, FCT',
       text: 'As a business owner, I needed a Shariah-compliant investment platform. DOGO Finance\'s Sukuk marketplace has given me returns I never thought were possible while staying Halal.',
-      avatar: 'https://i.pravatar.cc/100?img=33',
+      avatar: '/images/testimonial/avatar-3.png',
       product: 'Sukuk Marketplace'
     }
   ]);
@@ -113,6 +115,71 @@ export class LandingComponent {
 
   setTestimonial(i: number) {
     this.activeTestimonial.set(i);
+  }
+
+  // Zakat Calculator
+  cashSavings = signal<number | null>(null);
+  investments = signal<number | null>(null);
+  goldValue = signal<number | null>(null);
+  zakatResult = signal<number>(0);
+
+  calculateZakat() {
+    const cash = this.cashSavings() || 0;
+    const inv = this.investments() || 0;
+    const gold = this.goldValue() || 0;
+    const total = cash + inv + gold;
+    this.zakatResult.set(total * 0.025);
+  }
+
+  clearZakat() {
+    this.cashSavings.set(null);
+    this.investments.set(null);
+    this.goldValue.set(null);
+    this.zakatResult.set(0);
+  }
+
+  customerTypes = signal<any[]>([
+    { id: 1, name: 'Individual', description: 'For personal wealth' },
+    { id: 2, name: 'Corporate', description: 'For registered businesses' }
+  ]);
+
+  ngOnInit() {
+    this.authService.getCustomerTypes().subscribe({
+      next: (res) => {
+        if (res && res.data) {
+          this.customerTypes.set(res.data);
+        }
+      },
+      error: (err) => console.error('Failed to load customer types', err)
+    });
+  }
+
+  ngAfterViewInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.initScrollAnimations();
+    }
+  }
+
+  private initScrollAnimations() {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('scroll-animate-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -40px 0px'
+      }
+    );
+
+    const animatedElements = document.querySelectorAll(
+      '.scroll-animate, .scroll-animate-left, .scroll-animate-right'
+    );
+    animatedElements.forEach((el) => observer.observe(el));
   }
 }
 
