@@ -1,63 +1,83 @@
 @if(post(); as p) {
   <article class="bg-white min-h-screen">
+    
     <!-- Article Header -->
-    <header class="pt-40 pb-20 bg-[var(--dogo-cream)] dogo-pattern relative overflow-hidden">
-      <!-- Decor -->
-      <div class="absolute top-0 right-0 w-[400px] h-[400px] rounded-full blur-[100px] opacity-10" style="background: radial-gradient(circle, var(--dogo-secondary), transparent)"></div>
+    <header class="relative bg-white overflow-hidden pt-10 pb-16 md:pb-20">
+      <!-- Dot-grid pattern -->
+      <div class="absolute inset-0 hero-dot-pattern pointer-events-none"></div>
 
-      <div class="max-w-4xl mx-auto px-6 md:px-12 text-center relative z-10">
-        <a routerLink="/blog" class="inline-flex items-center space-x-2 text-[var(--dogo-secondary)] font-black mb-8 hover:translate-x-[-10px] transition-transform">
-          <i class="ri-arrow-left-line"></i>
-          <span>Back to Blog</span>
-        </a>
-        <div class="flex items-center justify-center space-x-4 mb-6">
-           <span class="bg-[var(--dogo-primary)] text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-xl">{{ p.category }}</span>
-           <span class="text-[var(--dogo-muted)] font-bold ml-4">•</span>
-           <span class="text-[var(--dogo-muted)] font-bold text-sm">{{ p.readTime }}</span>
-        </div>
-        <h1 class="text-4xl md:text-6xl font-black text-[var(--dogo-dark)] mb-10 leading-[1.1] tracking-tighter">
-          {{ p.title }}
-        </h1>
-        <div class="flex items-center justify-center space-x-4">
-           <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center overflow-hidden border-2 border-[var(--dogo-primary)]/10 shadow-xl">
-             <i class="ri-user-smile-fill text-3xl text-[var(--dogo-primary)]/40"></i>
-           </div>
-           <div class="text-left">
-              <p class="font-black text-[var(--dogo-dark)] leading-tight">{{ p.author }}</p>
-              <p class="text-[12px] font-bold text-[var(--dogo-muted)] uppercase tracking-widest mt-0.5">{{ p.date }}</p>
-           </div>
+      <!-- Soft lavender gradient background -->
+      <div class="detail-hero-gradient"></div>
+
+      <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+        <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          
+          <!-- Left Content -->
+          <div class="lg:col-span-7 text-left scroll-animate-left">
+            <!-- Back to Blog Link -->
+            <a routerLink="/blog" class="inline-flex items-center gap-1 text-[12px] font-bold text-[#030E65] hover:text-[#4361EE] mb-6 hover:-translate-x-1 transition-all cursor-pointer">
+              <i class="ri-arrow-left-line"></i>
+              <span>Back to Blog</span>
+            </a>
+
+            <!-- Metadata badges -->
+            <div class="flex items-center gap-3 mb-6">
+              <span class="bg-[#F0F3FF] text-[#030E65] text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-md border border-[#D8DEEF]">{{ p.category }}</span>
+              <span class="text-slate-300 font-bold">•</span>
+              <span class="text-slate-400 font-semibold text-xs">{{ p.readTime }}</span>
+            </div>
+
+            <!-- Title -->
+            <h1 class="text-3xl md:text-4xl lg:text-[44px] font-black text-[#030E65] mb-8 leading-[1.15] tracking-tight">
+              {{ p.title }}
+            </h1>
+
+            <!-- Author card -->
+            <div class="flex items-center gap-3.5 mt-6">
+              <div class="w-11 h-11 bg-[#F0F3FF] rounded-full flex items-center justify-center border border-[#D8DEEF] shadow-sm">
+                <i class="ri-user-smile-line text-xl text-[#4361EE]"></i>
+              </div>
+              <div class="text-left">
+                <p class="font-bold text-[#030E65] text-sm leading-tight">{{ p.author }}</p>
+                <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mt-1">{{ p.date }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Content: Featured Image -->
+          <div class="lg:col-span-5 scroll-animate-right delay-100">
+            <div class="relative w-full h-[280px] md:h-[360px] rounded-2xl overflow-hidden border border-slate-100 shadow-xl bg-slate-50">
+              <img [src]="p.image" [alt]="p.title" class="w-full h-full object-cover">
+            </div>
+          </div>
+
         </div>
       </div>
     </header>
 
     <!-- Content Area -->
-    <div class="max-w-4xl mx-auto px-6 md:px-12 py-24">
-       <!-- Hero Image Overlay -->
-       <div class="relative w-full h-[500px] mb-24 rounded-[60px] overflow-hidden shadow-[0_40px_80px_-20px_rgba(27,67,50,0.2)] bg-[var(--dogo-cream)]">
-          <img [src]="p.image" [alt]="p.title" class="w-full h-full object-cover">
-          <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-[60px]"></div>
-       </div>
+    <div class="max-w-4xl mx-auto px-6 md:px-12 pb-20 pt-12 md:pt-16">
 
        <!-- Article Text (Dynamic Content) -->
-       <div class="blog-content" [innerHTML]="p.content"></div>
+       <div class="blog-content scroll-animate" [innerHTML]="p.content"></div>
 
        <!-- Share/Footer -->
-       <div class="mt-24 pt-16 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-12 text-center md:text-left">
-          <div>
-             <h4 class="text-2xl font-black text-[var(--dogo-dark)] mb-4">Loved this article?</h4>
-             <p class="text-[var(--dogo-muted)] font-medium">Share it with your network and help them build Halal wealth.</p>
+       <div class="mt-16 pt-10 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6 scroll-animate">
+          <div class="text-center md:text-left">
+             <h4 class="text-lg font-bold text-[#030E65] mb-1">Loved this article?</h4>
+             <p class="text-slate-500 text-sm font-medium">Share it with your network and help them build Halal wealth.</p>
           </div>
-          <div class="flex items-center space-x-4">
-             <button class="w-14 h-14 bg-[var(--dogo-cream)] rounded-2xl flex items-center justify-center text-2xl hover:bg-[var(--dogo-primary)] hover:text-[var(--dogo-secondary)] transition-all text-[var(--dogo-primary)]">
+          <div class="flex items-center gap-2">
+             <button class="w-10 h-10 bg-[#F5F6FF] text-[#030E65] rounded-lg flex items-center justify-center text-lg hover:bg-[#030E65] hover:text-white transition-all cursor-pointer">
                 <i class="ri-facebook-fill"></i>
              </button>
-             <button class="w-14 h-14 bg-[var(--dogo-cream)] rounded-2xl flex items-center justify-center text-2xl hover:bg-[var(--dogo-primary)] hover:text-[var(--dogo-secondary)] transition-all text-[var(--dogo-primary)]">
+             <button class="w-10 h-10 bg-[#F5F6FF] text-[#030E65] rounded-lg flex items-center justify-center text-lg hover:bg-[#030E65] hover:text-white transition-all cursor-pointer">
                 <i class="ri-twitter-x-line"></i>
              </button>
-             <button class="w-14 h-14 bg-[var(--dogo-cream)] rounded-2xl flex items-center justify-center text-2xl hover:bg-[var(--dogo-primary)] hover:text-[var(--dogo-secondary)] transition-all text-[var(--dogo-primary)]">
+             <button class="w-10 h-10 bg-[#F5F6FF] text-[#030E65] rounded-lg flex items-center justify-center text-lg hover:bg-[#030E65] hover:text-white transition-all cursor-pointer">
                 <i class="ri-linkedin-fill"></i>
              </button>
-             <button class="w-14 h-14 bg-[var(--dogo-cream)] rounded-2xl flex items-center justify-center text-2xl hover:bg-[var(--dogo-primary)] hover:text-[var(--dogo-secondary)] transition-all text-[var(--dogo-primary)]">
+             <button class="w-10 h-10 bg-[#F5F6FF] text-[#030E65] rounded-lg flex items-center justify-center text-lg hover:bg-[#030E65] hover:text-white transition-all cursor-pointer">
                 <i class="ri-link-m"></i>
              </button>
           </div>
@@ -65,27 +85,24 @@
     </div>
   </article>
 
+  <!-- Related Posts -->
   @if(relatedPosts().length > 0) {
-    <!-- Related Posts -->
-    <section class="py-24 bg-[var(--dogo-dark)] text-white overflow-hidden relative">
-       <div class="absolute inset-0 dogo-pattern opacity-[0.06] pointer-events-none"></div>
-       <div class="absolute -top-40 right-0 w-[500px] h-[500px] rounded-full blur-[150px] opacity-10" style="background: radial-gradient(circle, var(--dogo-secondary), transparent)"></div>
-
+    <section class="py-12 md:py-16 bg-[#F5F6FF] border-t border-slate-100 overflow-hidden">
        <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-          <h2 class="text-3xl font-black text-white mb-12 flex items-center">
-             <i class="ri-bookmark-fill mr-4 text-[var(--dogo-secondary)]"></i> Related to {{ p.category }}
+          <h2 class="text-xl md:text-2xl font-bold text-[#030E65] mb-8 flex items-center gap-2 scroll-animate">
+             <i class="ri-bookmark-fill text-[#4361EE]"></i> Related Articles
           </h2>
-          <div class="grid md:grid-cols-3 gap-10">
-             @for(rel of relatedPosts(); track rel.id) {
-                <a [routerLink]="['/blog', rel.id]" class="group bg-white/5 rounded-[40px] overflow-hidden border border-white/10 transition-all hover:bg-white/10 hover:-translate-y-2">
-                   <div class="h-48 overflow-hidden relative">
-                      <img [src]="rel.image" [alt]="rel.title" class="w-full h-full object-cover">
-                      <div class="absolute inset-0 bg-black/20"></div>
+          
+          <div class="grid md:grid-cols-3 gap-6">
+             @for(rel of relatedPosts(); track rel.id; let i = $index) {
+                <a [routerLink]="['/blog', rel.id]" class="bg-white border border-slate-100 rounded-xl p-5 flex flex-col justify-between hover:shadow-lg transition-all scroll-animate" [style.transition-delay.ms]="i * 75">
+                   <div>
+                      <span class="text-[#4361EE] text-[10px] font-bold uppercase tracking-wider mb-2 block">{{ rel.category }}</span>
+                      <h3 class="text-sm md:text-base font-bold text-[#030E65] mb-4 leading-snug hover:text-[#4361EE] transition-colors line-clamp-2">{{ rel.title }}</h3>
                    </div>
-                   <div class="p-8">
-                      <h3 class="text-lg font-black text-white mb-6 group-hover:text-[var(--dogo-secondary)] transition-colors line-clamp-2 leading-tight">{{ rel.title }}</h3>
-                      <span class="text-[12px] font-black text-[var(--dogo-secondary)] uppercase tracking-widest flex items-center group-hover:translate-x-2 transition-transform">Read Now <i class="ri-arrow-right-line ml-2"></i></span>
-                   </div>
+                   <span class="text-xs font-bold text-[#030E65] flex items-center gap-1 pt-4 border-t border-slate-50 mt-auto">
+                     Read Article <i class="ri-arrow-right-line"></i>
+                   </span>
                 </a>
              }
           </div>
@@ -93,16 +110,14 @@
     </section>
   }
 } @else {
-  <div class="min-h-[80vh] flex items-center justify-center text-center p-20 bg-[var(--dogo-cream)] dogo-pattern">
-     <div class="max-w-md">
-        <div class="w-24 h-24 bg-[var(--dogo-cream)] rounded-full flex items-center justify-center mx-auto mb-8">
-          <i class="ri-error-warning-fill text-5xl text-[var(--dogo-primary)] animate-bounce"></i>
+  <div class="min-h-[80vh] flex items-center justify-center text-center p-6 bg-white">
+     <div class="max-w-md scroll-animate">
+        <div class="w-16 h-16 bg-[#F5F6FF] rounded-full flex items-center justify-center mx-auto mb-6 border border-[#D8DEEF]">
+          <i class="ri-error-warning-line text-3xl text-[#4361EE]"></i>
         </div>
-        <h2 class="text-4xl font-black text-[var(--dogo-dark)] mb-4">Article Not Found.</h2>
-        <p class="text-[var(--dogo-muted)] font-medium mb-10 leading-relaxed text-lg">The Halal finance post you are looking for might have been moved or deleted.</p>
-        <button routerLink="/blog" class="bg-[var(--dogo-primary)] text-white px-10 py-5 rounded-2xl font-black shadow-xl shadow-[var(--dogo-primary)]/20 hover:bg-[var(--dogo-primary-soft)] transition-all">Back to Articles</button>
+        <h2 class="text-2xl font-black text-[#030E65] mb-3">Article Not Found</h2>
+        <p class="text-slate-500 text-sm leading-relaxed mb-6">The Halal finance post you are looking for might have been moved or deleted.</p>
+        <button routerLink="/blog" class="bg-[#030E65] text-white px-5 py-2.5 rounded-lg text-xs md:text-sm font-semibold hover:bg-[#030E65]/90 transition-all cursor-pointer">Back to Articles</button>
      </div>
   </div>
 }
-
-

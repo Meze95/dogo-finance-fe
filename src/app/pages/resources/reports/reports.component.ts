@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface ReportYear {
@@ -13,7 +13,7 @@ const REPORTS_DATA: ReportYear[] = [
     year: '2026',
     title: 'Q1 Halal Fund Performance',
     summary: 'A detailed review of our Mudarabah and Sukuk portfolios, outlining actual returns versus expected profit.',
-    image: 'https://images.unsplash.com/photo-1551288049-bbbda536639a?auto=format&fit=crop&q=80&w=800'
+    image: 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&q=80&w=800'
   },
   {
     year: '2025',
@@ -36,6 +36,28 @@ const REPORTS_DATA: ReportYear[] = [
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.css'
 })
-export class ReportsComponent {
+export class ReportsComponent implements AfterViewInit {
   reports = signal<ReportYear[]>(REPORTS_DATA);
+
+  ngAfterViewInit(): void {
+    this.initScrollAnimations();
+  }
+
+  private initScrollAnimations(): void {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('scroll-animate-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    document.querySelectorAll(
+      '.scroll-animate, .scroll-animate-left, .scroll-animate-right'
+    ).forEach((el) => observer.observe(el));
+  }
 }

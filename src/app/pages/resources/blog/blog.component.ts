@@ -1,4 +1,4 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -9,7 +9,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './blog.component.html',
   styleUrl: './blog.component.css'
 })
-export class BlogComponent {
+export class BlogComponent implements AfterViewInit {
   
   posts = signal([
     {
@@ -84,5 +84,29 @@ export class BlogComponent {
 
   setCategory(cat: string) {
     this.selectedCategory.set(cat);
+    // Re-init animations on category change to animate filtered items
+    setTimeout(() => this.initScrollAnimations(), 50);
+  }
+
+  ngAfterViewInit(): void {
+    this.initScrollAnimations();
+  }
+
+  private initScrollAnimations(): void {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('scroll-animate-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    document.querySelectorAll(
+      '.scroll-animate, .scroll-animate-left, .scroll-animate-right'
+    ).forEach((el) => observer.observe(el));
   }
 }

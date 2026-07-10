@@ -1,90 +1,182 @@
-<section class="pt-32 pb-24 bg-[var(--dogo-cream)] relative overflow-hidden dogo-pattern">
-  <div class="max-w-7xl mx-auto px-6 md:px-12 text-center relative z-10">
-    <div class="halal-badge mb-8 mx-auto">
-      <i class="ri-book-open-line"></i>
-      <span>Dogo Finance Knowledge Centre</span>
-    </div>
-    <h1 class="text-5xl md:text-[80px] font-black leading-[0.95] mb-8 tracking-tighter text-[var(--dogo-dark)]">
-      Your path to <br><span class="text-[var(--dogo-primary)]">Halal wealth.</span>
-    </h1>
-    <p class="text-xl text-[var(--dogo-dark)]/60 mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
-      Learn how to save, invest, and grow your wealth with expert insights and Shariah-compliant practical financial advice.
-    </p>
+<!-- ===== BLOG HERO ===== -->
+<section class="relative bg-white overflow-hidden pt-10 pb-16 md:pb-20 lg:pb-24">
 
-    <!-- Category Filter -->
-    <div class="flex flex-wrap justify-center gap-4 mt-12 mb-20 animate-fade-in">
-      @for(cat of categories; track cat) {
-        <button (click)="setCategory(cat)" 
-                class="px-8 py-4 rounded-full font-black text-sm transition-all shadow-lg hover:-translate-y-1"
-                [class]="selectedCategory() === cat ? 'bg-[var(--dogo-primary)] text-white' : 'bg-white text-[var(--dogo-primary)] hover:bg-[var(--dogo-cream)] border border-gray-100'">
-           {{ cat }}
-        </button>
-      }
-    </div>
+  <!-- Dot-grid pattern -->
+  <div class="absolute inset-0 hero-dot-pattern pointer-events-none"></div>
 
-    <!-- Blog Grid -->
-    <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-10 text-left">
-      @for(post of filteredPosts(); track post.id) {
-        <a [routerLink]="['/blog', post.id]" class="group bg-white rounded-[40px] overflow-hidden shadow-2xl shadow-[var(--dogo-primary)]/5 border border-gray-100 transition-all hover:-translate-y-4">
-          <div class="h-64 overflow-hidden relative">
-             <img [src]="post.image" [alt]="post.title" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-             <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-8">
-                <span class="bg-[var(--dogo-secondary)] text-[var(--dogo-dark)] px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">{{ post.category }}</span>
-             </div>
-          </div>
-          <div class="p-10">
-             <div class="flex items-center space-x-3 mb-4 text-xs font-bold text-[var(--dogo-muted)] uppercase tracking-widest">
-                <span>{{ post.author }}</span>
+  <!-- Soft lavender gradient background -->
+  <div class="blog-hero-gradient"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
+    <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+      
+      <!-- Left: Header Content -->
+      <div class="lg:col-span-7 text-left scroll-animate-left">
+        <!-- Badge -->
+        <div class="blog-badge mb-6">
+          <i class="ri-book-open-line text-[#4361EE]"></i>
+          <span>Dogo Knowledge Hub</span>
+        </div>
+
+        <!-- Title -->
+        <h1 class="text-4xl md:text-5xl lg:text-[54px] font-black text-[#030E65] leading-[1.08] tracking-tight mb-4">
+          Grow your knowledge.<br>
+          <span class="font-serif italic font-normal text-3xl md:text-4xl lg:text-[44px] text-[#4361EE] lowercase">the halal way.</span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="text-slate-500 text-sm md:text-base leading-relaxed mt-4 max-w-xl">
+          Learn how to save, invest, and grow your wealth with expert insights and Shariah-compliant practical financial advice from our advisors.
+        </p>
+
+        <!-- Category Filter -->
+        <div class="flex flex-wrap gap-2 mt-8 md:mt-10">
+          @for(cat of categories; track cat) {
+            <button (click)="setCategory(cat)" 
+                    class="px-5 py-2.5 rounded-lg text-[12px] font-semibold transition-all border cursor-pointer"
+                    [class]="selectedCategory() === cat 
+                      ? 'bg-[#030E65] text-white border-[#030E65]' 
+                      : 'bg-white text-[#030E65] border-slate-200 hover:bg-slate-50'">
+               {{ cat }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Right: Featured Post Card -->
+      <div class="lg:col-span-5 scroll-animate-right delay-100">
+        @if(filteredPosts().length > 0) {
+          @let featured = filteredPosts()[0];
+          <a [routerLink]="['/blog', featured.id]" class="group block bg-white border border-[#D8DEEF] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all hover:-translate-y-1">
+            <div class="h-48 overflow-hidden relative bg-slate-100">
+              <img [src]="featured.image" [alt]="featured.title" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+              <div class="absolute top-4 left-4 flex gap-2">
+                <span class="bg-[#030E65] text-white text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded">Featured</span>
+                <span class="bg-[#EEF1FB] text-[#030E65] text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded border border-[#D8DEEF]">{{ featured.category }}</span>
+              </div>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center gap-2 mb-2 text-[10px] font-semibold text-slate-400">
+                <span>{{ featured.author }}</span>
                 <span>•</span>
-                <span>{{ post.date }}</span>
-             </div>
-             <h3 class="text-2xl font-black text-[var(--dogo-dark)] mb-4 leading-tight group-hover:text-[var(--dogo-primary)] transition-colors">{{ post.title }}</h3>
-             <p class="text-[var(--dogo-muted)] font-medium mb-8 leading-relaxed line-clamp-3">
-                {{ post.excerpt }}
-             </p>
-             <div class="flex items-center justify-between pt-8 border-t border-gray-100">
-                <span class="text-sm font-black text-[var(--dogo-primary)] flex items-center group-hover:translate-x-2 transition-transform">
-                   Read Full Article <i class="ri-arrow-right-line ml-2"></i>
+                <span>{{ featured.date }}</span>
+              </div>
+              <h3 class="text-base font-bold text-[#030E65] mb-2 leading-snug group-hover:text-[#4361EE] transition-colors line-clamp-2">
+                {{ featured.title }}
+              </h3>
+              <p class="text-slate-500 text-xs leading-relaxed line-clamp-2">
+                {{ featured.excerpt }}
+              </p>
+              <div class="flex items-center justify-between pt-4 border-t border-slate-100 mt-4">
+                <span class="text-xs font-bold text-[#030E65] flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                  Read Article <i class="ri-arrow-right-line"></i>
                 </span>
-                <span class="text-xs font-bold text-[var(--dogo-muted)]">{{ post.readTime }}</span>
+                <span class="text-[10px] font-semibold text-slate-400">{{ featured.readTime }}</span>
+              </div>
+            </div>
+          </a>
+        }
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== BLOG GRID ===== -->
+<section class="py-12 md:py-16 bg-white border-t border-slate-100 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6 md:px-12">
+    
+    <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-6">
+      <!-- Exclude the first (featured) post when showing the grid catalog -->
+      @for(post of filteredPosts().slice(1); track post.id; let i = $index) {
+        <a [routerLink]="['/blog', post.id]" class="blog-card scroll-animate" [style.transition-delay.ms]="(i % 3) * 75">
+          
+          <!-- Image -->
+          <div class="h-52 overflow-hidden relative bg-slate-100">
+             <img [src]="post.image" [alt]="post.title" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+             <div class="absolute top-4 left-4">
+                <span class="bg-[#F0F3FF] text-[#030E65] text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-md border border-[#D8DEEF]">{{ post.category }}</span>
              </div>
           </div>
+
+          <!-- Body -->
+          <div class="p-6 flex flex-col flex-grow justify-between">
+             <div>
+                <!-- Metadata -->
+                <div class="flex items-center gap-2 mb-3 text-[11px] font-semibold text-slate-400">
+                   <span>{{ post.author }}</span>
+                   <span>•</span>
+                   <span>{{ post.date }}</span>
+                </div>
+                
+                <!-- Title -->
+                <h3 class="text-lg font-bold text-[#030E65] mb-3 leading-snug hover:text-[#4361EE] transition-colors line-clamp-2">
+                  {{ post.title }}
+                </h3>
+                
+                <!-- Excerpt -->
+                <p class="text-slate-500 text-sm mb-6 leading-relaxed line-clamp-3">
+                   {{ post.excerpt }}
+                </p>
+             </div>
+
+             <!-- Footer -->
+             <div class="flex items-center justify-between pt-4 border-t border-slate-100 mt-auto">
+                <span class="text-[12px] font-bold text-[#030E65] flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                   Read Full Article <i class="ri-arrow-right-line"></i>
+                </span>
+                <span class="text-[11px] font-semibold text-slate-400">{{ post.readTime }}</span>
+             </div>
+          </div>
+
         </a>
       }
     </div>
 
+    <!-- Empty State -->
     @if(filteredPosts().length === 0) {
-      <div class="text-center py-40 border-2 border-dashed border-gray-200 rounded-[50px]">
-         <i class="ri-search-2-line text-6xl text-gray-300 mb-8 block"></i>
-         <p class="text-2xl font-black text-gray-400">No matching posts found in this category.</p>
+      <div class="text-center py-20 border-2 border-dashed border-slate-200 rounded-2xl scroll-animate">
+         <i class="ri-search-2-line text-4xl text-slate-300 mb-4 block"></i>
+         <p class="text-lg font-bold text-[#030E65]">No matching posts found in this category.</p>
       </div>
     }
-  </div>
 
-  <!-- Decorative circles -->
-  <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-[100px] opacity-20" style="background: radial-gradient(circle, var(--dogo-secondary), transparent)"></div>
-  <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full blur-[100px] opacity-10" style="background: radial-gradient(circle, var(--dogo-primary), transparent)"></div>
+  </div>
 </section>
 
-<!-- Stats Booster Newsletter -->
-<section class="py-24 bg-[var(--dogo-dark)] text-white overflow-hidden relative">
-   <div class="absolute inset-0 dogo-pattern opacity-[0.06] pointer-events-none"></div>
-   <div class="absolute top-0 right-0 w-[500px] h-[500px] rounded-full blur-[150px] opacity-10" style="background: radial-gradient(circle, var(--dogo-secondary), transparent)"></div>
+<!-- ===== NEWSLETTER SECTION ===== -->
+<section class="py-12 md:py-16 bg-white overflow-hidden">
+   <div class="max-w-7xl mx-auto px-6 md:px-12">
+     <div class="relative rounded-[28px] overflow-hidden min-h-[260px] flex flex-col md:flex-row items-center justify-between p-8 md:p-12 lg:p-14 gap-8 scroll-animate">
+       <!-- Gradient background layer -->
+       <div class="absolute inset-0 z-0 bg-cover bg-center"
+         style="background-image: url('/images/assets/Ellipse 27.png');"></div>
 
-   <div class="max-w-7xl mx-auto px-6 md:px-12 grid md:grid-cols-2 gap-20 items-center relative z-10">
-      <div>
-         <h2 class="text-4xl md:text-5xl font-black mb-8 leading-tight tracking-tighter">Stay updated with our weekly <span class="text-[var(--dogo-secondary)]">finance insights.</span></h2>
-         <div class="flex flex-col sm:flex-row gap-4 max-w-lg">
-            <input type="email" placeholder="Email address" class="flex-grow bg-white/5 border border-white/10 rounded-2xl px-8 py-5 focus:outline-none focus:border-[var(--dogo-secondary)] text-white font-medium">
-            <button class="bg-[var(--dogo-secondary)] text-[var(--dogo-dark)] px-10 py-5 rounded-2xl font-black hover:bg-[#f0d98b] transition-all shadow-xl shadow-[var(--dogo-secondary)]/20">Subscribe</button>
+       <!-- Left Content -->
+       <div class="relative z-10 flex-grow max-w-xl text-left scroll-animate-left delay-100">
+         <h2 class="text-3xl md:text-4xl lg:text-[36px] font-black text-[#030E65] leading-tight tracking-tight mb-2">
+           Finance insights in your inbox.
+         </h2>
+         <p class="text-slate-500 text-xs md:text-sm leading-relaxed mb-6 font-medium">
+           No spam, just quality Halal finance insights once a week. Unsubscribe anytime.
+         </p>
+         
+         <div class="flex flex-col sm:flex-row gap-2 max-w-md">
+            <input type="email" placeholder="Email address" 
+                   class="flex-grow bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-xs md:text-sm text-[#030E65] placeholder-slate-400 outline-none font-medium focus:border-[#4361EE]">
+            <button class="bg-[#030E65] text-white px-6 py-2.5 rounded-lg text-xs md:text-sm font-semibold hover:bg-[#030E65]/90 transition-all cursor-pointer whitespace-nowrap">
+              Subscribe
+            </button>
          </div>
-         <p class="text-xs text-white/50 mt-6 font-medium">No spam, just quality Halal finance insights once a week. Unsubscribe anytime.</p>
-      </div>
-      <div class="hidden md:flex justify-end">
-         <div class="w-80 h-80 bg-[var(--dogo-primary)]/20 rounded-[60px] border border-[var(--dogo-secondary)]/20 flex items-center justify-center relative anim-float">
-            <i class="ri-mail-send-line text-[150px] text-[var(--dogo-secondary)]/50"></i>
-         </div>
-      </div>
+       </div>
+
+       <!-- Right visual -->
+       <div class="hidden md:flex relative z-10 justify-end scroll-animate-right delay-200">
+          <div class="w-48 h-48 bg-[#F0F3FF] rounded-[24px] border border-[#D8DEEF] flex items-center justify-center anim-float">
+             <i class="ri-mail-send-line text-8xl text-[#4361EE]/40"></i>
+          </div>
+       </div>
+
+     </div>
    </div>
 </section>
-

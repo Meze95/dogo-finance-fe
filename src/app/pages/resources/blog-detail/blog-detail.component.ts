@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, computed, inject } from '@angular/core';
+import { Component, OnInit, signal, computed, inject, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 
@@ -9,7 +9,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
   templateUrl: './blog-detail.component.html',
   styleUrl: './blog-detail.component.css'
 })
-export class BlogDetailComponent implements OnInit {
+export class BlogDetailComponent implements OnInit, AfterViewInit {
   private route = inject(ActivatedRoute);
 
   allPosts = [
@@ -139,7 +139,31 @@ export class BlogDetailComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.postId.set(params['id']);
       window.scrollTo(0, 0);
+      // Re-init animations on route change to detail post
+      setTimeout(() => this.initScrollAnimations(), 50);
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.initScrollAnimations();
+  }
+
+  private initScrollAnimations(): void {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('scroll-animate-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    document.querySelectorAll(
+      '.scroll-animate, .scroll-animate-left, .scroll-animate-right'
+    ).forEach((el) => observer.observe(el));
   }
 }
 

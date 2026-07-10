@@ -1,4 +1,4 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 interface FAQItem {
@@ -82,7 +82,7 @@ const FAQ_DATA: FAQCategory[] = [
   templateUrl: './faq.component.html',
   styleUrl: './faq.component.css'
 })
-export class FAQComponent {
+export class FAQComponent implements AfterViewInit {
   // Original state from CMS
   private _categories = signal<FAQCategory[]>(FAQ_DATA);
   
@@ -140,5 +140,27 @@ export class FAQComponent {
         return cat;
       });
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.initScrollAnimations();
+  }
+
+  private initScrollAnimations(): void {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('scroll-animate-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    document.querySelectorAll(
+      '.scroll-animate, .scroll-animate-left, .scroll-animate-right'
+    ).forEach((el) => observer.observe(el));
   }
 }
