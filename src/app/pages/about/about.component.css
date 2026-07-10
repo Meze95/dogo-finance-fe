@@ -31,3 +31,147 @@
     background: linear-gradient(to left, #D0D4EE 0%, #DDE0F3 50%, #ECEEF8 85%, transparent 100%);
   }
 }
+
+/* Section background helper — matches landing page lavender-blue tint */
+.about-tinted-bg {
+  background: #F5F6FF;
+}
+
+/* Intersection callout card gradient */
+.about-navy-card {
+  background: linear-gradient(135deg, #030E65 0%, #023E8A 100%);
+}
+
+/* Timeline connector line for principles section */
+.step-connector {
+  position: absolute;
+  top: 22px;
+  left: calc(50% + 20px);
+  width: calc(100% - 40px);
+  height: 1px;
+  background: #E2E8F0;
+}
+
+@media (max-width: 767px) {
+  .step-connector {
+    display: none;
+  }
+}
+
+/* Animate in on scroll */
+.scroll-animate {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-animate-left {
+  opacity: 0;
+  transform: translateX(-32px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-animate-right {
+  opacity: 0;
+  transform: translateX(32px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-animate-visible {
+  opacity: 1 !important;
+  transform: translate(0) !important;
+}
+
+.delay-75 {
+  transition-delay: 75ms;
+}
+
+.delay-100 {
+  transition-delay: 100ms;
+}
+
+.delay-150 {
+  transition-delay: 150ms;
+}
+
+.delay-200 {
+  transition-delay: 200ms;
+}
+
+.delay-300 {
+  transition-delay: 300ms;
+}
+
+.delay-400 {
+  transition-delay: 400ms;
+}
+
+/* Subtle card hover */
+.about-card-hover {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.about-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px -8px rgba(3, 14, 101, 0.12);
+}
+
+/* Hero: subtle dot-grid pattern overlay */
+.hero-dot-pattern {
+  background-image: radial-gradient(circle, #030E65 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0.04;
+}
+
+/* Hero phone mockup dashed orbit ring */
+.hero-orbit-ring {
+  position: absolute;
+  border: 1.5px dashed rgba(3, 14, 101, 0.12);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Accent badge — matches image pill style */
+.about-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #EEF0FD;
+  color: #030E65;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(3, 14, 101, 0.10);
+}
+
+.about-badge i {
+  color: #030E65;
+  font-size: 11px;
+}
+
+/* Mission & Vision number watermark */
+.mv-number {
+  position: absolute;
+  bottom: 12px;
+  right: 20px;
+  font-size: 96px;
+  font-weight: 900;
+  line-height: 1;
+  color: rgba(3, 14, 101, 0.06);
+  user-select: none;
+  pointer-events: none;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Who We Are illustration container */
+.wwa-illustration {
+  margin-top: 24px;
+  height: 160px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  overflow: hidden;
+}

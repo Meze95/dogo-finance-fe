@@ -1,149 +1,3 @@
-<style>
-  /* Section background helper — matches landing page lavender-blue tint */
-  .about-tinted-bg {
-    background: #F5F6FF;
-  }
-
-  /* Intersection callout card gradient */
-  .about-navy-card {
-    background: linear-gradient(135deg, #030E65 0%, #023E8A 100%);
-  }
-
-  /* Timeline connector line for principles section */
-  .step-connector {
-    position: absolute;
-    top: 22px;
-    left: calc(50% + 20px);
-    width: calc(100% - 40px);
-    height: 1px;
-    background: #E2E8F0;
-  }
-
-  @media (max-width: 767px) {
-    .step-connector {
-      display: none;
-    }
-  }
-
-  /* Animate in on scroll */
-  .scroll-animate {
-    opacity: 0;
-    transform: translateY(28px);
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .scroll-animate-left {
-    opacity: 0;
-    transform: translateX(-32px);
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .scroll-animate-right {
-    opacity: 0;
-    transform: translateX(32px);
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .scroll-animate-visible {
-    opacity: 1 !important;
-    transform: translate(0) !important;
-  }
-
-  .delay-75 {
-    transition-delay: 75ms;
-  }
-
-  .delay-100 {
-    transition-delay: 100ms;
-  }
-
-  .delay-150 {
-    transition-delay: 150ms;
-  }
-
-  .delay-200 {
-    transition-delay: 200ms;
-  }
-
-  .delay-300 {
-    transition-delay: 300ms;
-  }
-
-  .delay-400 {
-    transition-delay: 400ms;
-  }
-
-  /* Subtle card hover */
-  .about-card-hover {
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-  }
-
-  .about-card-hover:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px -8px rgba(3, 14, 101, 0.12);
-  }
-
-  /* Hero: subtle dot-grid pattern overlay */
-  .hero-dot-pattern {
-    background-image: radial-gradient(circle, #030E65 1px, transparent 1px);
-    background-size: 28px 28px;
-    opacity: 0.04;
-  }
-
-  /* Hero phone mockup dashed orbit ring */
-  .hero-orbit-ring {
-    position: absolute;
-    border: 1.5px dashed rgba(3, 14, 101, 0.12);
-    border-radius: 50%;
-    pointer-events: none;
-  }
-
-  /* Accent badge — matches image pill style */
-  .about-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: #EEF0FD;
-    color: #030E65;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 5px 14px;
-    border-radius: 999px;
-    border: 1px solid rgba(3, 14, 101, 0.10);
-  }
-
-  .about-badge i {
-    color: #030E65;
-    font-size: 11px;
-  }
-
-  /* Mission & Vision number watermark */
-  .mv-number {
-    position: absolute;
-    bottom: 12px;
-    right: 20px;
-    font-size: 96px;
-    font-weight: 900;
-    line-height: 1;
-    color: rgba(3, 14, 101, 0.06);
-    user-select: none;
-    pointer-events: none;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-  }
-
-  /* Who We Are illustration container */
-  .wwa-illustration {
-    margin-top: 24px;
-    height: 160px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-start;
-    overflow: hidden;
-  }
-</style>
-
 <!-- ===== HERO ===== -->
 <section class="relative bg-white overflow-hidden">
 
@@ -171,7 +25,8 @@
         </h1>
 
         <p class="text-slate-500 text-sm md:text-base leading-relaxed mt-4 max-w-md">
-          A digital Islamic asset management and financial services company — redefining how Muslims in Nigeria access modern finance.
+          A digital Islamic asset management and financial services company — redefining how Muslims in Nigeria access
+          modern finance.
         </p>
 
         <div class="flex flex-wrap gap-3.5 mt-6">
@@ -187,14 +42,14 @@
       </div>
 
       <!-- Right: Phone mockup -->
-      <div class="relative block w-full h-[380px] md:h-[420px] lg:h-auto mt-6 lg:mt-0 scroll-animate-right">
+      <div class="relative block w-full h-[330px] md:h-[370px] lg:h-auto mt-6 lg:mt-0 scroll-animate-right">
         <div class="relative w-full h-full">
 
           <!-- Dashed orbit rings -->
           <div class="hero-orbit-ring"
-            style="width: 340px; height: 340px; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
+            style="width: 290px; height: 290px; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
           <div class="hero-orbit-ring"
-            style="width: 460px; height: 460px; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.6;">
+            style="width: 410px; height: 410px; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.6;">
           </div>
 
           <!-- Phone image -->
@@ -267,14 +122,14 @@
         </div>
 
         <!-- Mosque illustration -->
-        <div class="mt-8 flex justify-center lg:justify-start">
+        <div class="mt-4 flex justify-center lg:justify-start overflow-hidden">
           <img src="/images/assets/mosque-illustration.png" alt="Islamic finance illustration"
-            class="w-full max-h-[380px] object-contain object-center lg:object-left"
+            class="w-full max-h-[380px] object-contain object-center lg:object-left -mt-8 -mb-20"
             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
 
           <!-- Illustration fallback -->
           <div
-            class="hidden h-[380px] w-full items-end justify-center rounded-[32px] bg-gradient-to-b from-[#FFF8EF] to-[#F1F5FF] p-8">
+            class="hidden h-[300px] w-full items-end justify-center rounded-[32px] bg-gradient-to-b from-[#FFF8EF] to-[#F1F5FF] p-8">
             <div class="text-center">
               <div class="mx-auto flex h-24 w-24 items-center justify-center rounded-t-full bg-[#C5D5FF] text-5xl">
                 🕌
@@ -301,8 +156,7 @@
               d="M10 14H28V32C28 43.046 19.046 52 8 52V42C13.523 42 18 37.523 18 32H10V14ZM36 14H54V32C54 43.046 45.046 52 34 52V42C39.523 42 44 37.523 44 32H36V14Z" />
           </svg>
 
-          <p
-            class="relative mt-5 max-w-xl text-2xl font-black leading-[1.22] tracking-[-0.025em] text-[#06144E] md:text-3xl">
+          <p class="relative mt-5 max-w-md text-lg md:text-xl font-medium leading-snug tracking-tight text-[#06144E]">
             We believe finance should be built on trust, clarity, and purpose.
             Every product we design reflects this belief.
           </p>
@@ -310,7 +164,7 @@
 
         <!-- Africa infrastructure card -->
         <article
-          class="relative min-h-[280px] overflow-hidden rounded-2xl border border-[#CAE0FA] bg-gradient-to-br from-[#F4FAFF] to-[#EAF7FF] p-8 sm:p-10">
+          class="relative min-h-[260px] overflow-hidden rounded-2xl border border-[#CAE0FA] bg-gradient-to-br from-[#F4FAFF] to-[#EAF7FF] p-8 sm:p-10">
 
           <!-- Decorative map-like dots -->
           <div class="pointer-events-none absolute right-6 top-7 grid grid-cols-12 gap-1 opacity-20">
@@ -328,12 +182,12 @@
             🌍
           </div>
 
-          <div class="relative mt-14 max-w-md">
-            <p class="text-xl font-black leading-snug text-[#06144E]">
+          <div class="relative mt-10 max-w-sm">
+            <p class="text-sm md:text-base font-bold leading-snug text-[#06144E]">
               We are building more than an application.
             </p>
 
-            <p class="mt-2 text-xl font-black leading-snug text-[#2457E6] md:text-2xl">
+            <p class="mt-1.5 text-sm md:text-base font-medium leading-snug text-[#2457E6] md:text-md">
               We are creating foundational infrastructure for Islamic finance
               in Africa.
             </p>
@@ -379,7 +233,7 @@
 
       <!-- Mission -->
       <article
-        class="scroll-animate delay-100 group relative min-h-[270px] overflow-hidden rounded-2xl border border-[#D8E1FF] bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_60px_rgba(28,62,160,0.10)] sm:p-9">
+        class="scroll-animate delay-100 group relative overflow-hidden rounded-2xl border border-[#D8E1FF] bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_60px_rgba(28,62,160,0.10)] sm:p-9">
 
         <div class="relative z-10 flex items-start gap-5">
           <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#E8EEFF] text-[#2454E6]">
@@ -403,16 +257,11 @@
             </p>
           </div>
         </div>
-
-        <span
-          class="pointer-events-none absolute bottom-[-20px] right-5 text-[88px] font-black leading-none text-[#E3E9FD]">
-          01
-        </span>
       </article>
 
       <!-- Vision -->
       <article
-        class="scroll-animate delay-200 group relative min-h-[270px] overflow-hidden rounded-2xl border border-[#D8E1FF] bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_60px_rgba(28,62,160,0.10)] sm:p-9">
+        class="scroll-animate delay-200 group relative overflow-hidden rounded-2xl border border-[#D8E1FF] bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_60px_rgba(28,62,160,0.10)] sm:p-9">
 
         <div class="relative z-10 flex items-start gap-5">
           <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#E8EEFF] text-[#2454E6]">
@@ -437,11 +286,6 @@
             </p>
           </div>
         </div>
-
-        <span
-          class="pointer-events-none absolute bottom-[-20px] right-5 text-[88px] font-black leading-none text-[#E3E9FD]">
-          02
-        </span>
       </article>
 
     </div>
