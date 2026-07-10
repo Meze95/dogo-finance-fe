@@ -161,7 +161,7 @@ export const routes: Routes = [
       {
         path: 'about',
         loadComponent: () => import('./pages/about/about.component').then(m => m.AboutComponent)
-      },
+      },      
       {
         path: 'regulatory',
         loadComponent: () => import('./pages/regulatory/regulatory.component').then(m => m.RegulatoryComponent)
