@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -9,20 +9,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './about.component.html',
   styleUrl: './about.component.css'
 })
-export class AboutComponent {
-
-  heroValues = [
-    { icon: 'ri-scales-3-fill', label: 'Shariah-First by Design', sub: 'Every product SSB-certified before release' },
-    { icon: 'ri-hand-coin-fill', label: '0% Riba. Always.', sub: 'No interest in any layer of the platform' },
-    { icon: 'ri-nigeria-fill', label: 'Nigeria-Native', sub: 'NGN-denominated, BVN + NIN KYC, NIBSS payments' },
-    { icon: 'ri-global-fill', label: 'Africa\'s Future', sub: 'Building Islamic finance infrastructure for the continent' }
-  ];
-
-  heroStats = [
-    { value: '100M+', label: 'Nigerian Muslims' },
-    { value: '₦10B', label: 'Target AUM Y1' },
-    { value: '0%', label: 'Riba. Ever.' }
-  ];
+export class AboutComponent implements AfterViewInit {
 
   existPoints = [
     {
@@ -114,4 +101,32 @@ export class AboutComponent {
       desc: 'Nigerian KYC standards fully implemented — BVN via NIBSS and NIN via NIMC, with liveness checks and NDPR compliance.'
     }
   ];
+
+  ngAfterViewInit(): void {
+    this.initScrollAnimations();
+  }
+
+  private initScrollAnimations(): void {
+    const animClasses = ['.scroll-animate', '.scroll-animate-left', '.scroll-animate-right'];
+    const elements: Element[] = [];
+    animClasses.forEach(cls => {
+      document.querySelectorAll(cls).forEach(el => elements.push(el));
+    });
+
+    if (!elements.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('scroll-animate-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    elements.forEach(el => observer.observe(el));
+  }
 }

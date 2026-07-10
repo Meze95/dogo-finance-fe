@@ -1,433 +1,627 @@
-<!-- ======================================================
-  DOGO FINANCE — ABOUT US PAGE
-  ====================================================== -->
+<style>
+  /* Section background helper — matches landing page lavender-blue tint */
+  .about-tinted-bg {
+    background: #F5F6FF;
+  }
+
+  /* Intersection callout card gradient */
+  .about-navy-card {
+    background: linear-gradient(135deg, #030E65 0%, #023E8A 100%);
+  }
+
+  /* Timeline connector line for principles section */
+  .step-connector {
+    position: absolute;
+    top: 22px;
+    left: calc(50% + 20px);
+    width: calc(100% - 40px);
+    height: 1px;
+    background: #E2E8F0;
+  }
+
+  @media (max-width: 767px) {
+    .step-connector {
+      display: none;
+    }
+  }
+
+  /* Animate in on scroll */
+  .scroll-animate {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .scroll-animate-left {
+    opacity: 0;
+    transform: translateX(-32px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .scroll-animate-right {
+    opacity: 0;
+    transform: translateX(32px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .scroll-animate-visible {
+    opacity: 1 !important;
+    transform: translate(0) !important;
+  }
+
+  .delay-75 {
+    transition-delay: 75ms;
+  }
+
+  .delay-100 {
+    transition-delay: 100ms;
+  }
+
+  .delay-150 {
+    transition-delay: 150ms;
+  }
+
+  .delay-200 {
+    transition-delay: 200ms;
+  }
+
+  .delay-300 {
+    transition-delay: 300ms;
+  }
+
+  .delay-400 {
+    transition-delay: 400ms;
+  }
+
+  /* Subtle card hover */
+  .about-card-hover {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .about-card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px -8px rgba(3, 14, 101, 0.12);
+  }
+
+  /* Hero: subtle dot-grid pattern overlay */
+  .hero-dot-pattern {
+    background-image: radial-gradient(circle, #030E65 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.04;
+  }
+
+  /* Hero phone mockup dashed orbit ring */
+  .hero-orbit-ring {
+    position: absolute;
+    border: 1.5px dashed rgba(3, 14, 101, 0.12);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  /* Accent badge — matches image pill style */
+  .about-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #EEF0FD;
+    color: #030E65;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(3, 14, 101, 0.10);
+  }
+
+  .about-badge i {
+    color: #030E65;
+    font-size: 11px;
+  }
+
+  /* Mission & Vision number watermark */
+  .mv-number {
+    position: absolute;
+    bottom: 12px;
+    right: 20px;
+    font-size: 96px;
+    font-weight: 900;
+    line-height: 1;
+    color: rgba(3, 14, 101, 0.06);
+    user-select: none;
+    pointer-events: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  /* Who We Are illustration container */
+  .wwa-illustration {
+    margin-top: 24px;
+    height: 160px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    overflow: hidden;
+  }
+</style>
 
 <!-- ===== HERO ===== -->
-<section class="relative overflow-hidden bg-[var(--dogo-dark)] pt-24 pb-24">
-  <div class="absolute inset-0 dogo-pattern opacity-[0.06] pointer-events-none"></div>
-  <!-- Glow orbs — more visible -->
-  <div class="absolute top-0 right-0 w-[700px] h-[700px] rounded-full blur-[180px] opacity-30 pointer-events-none"
-    style="background: radial-gradient(circle, var(--dogo-secondary), transparent)"></div>
-  <div class="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full blur-[120px] opacity-15 pointer-events-none"
-    style="background: radial-gradient(circle, var(--dogo-primary-soft), transparent)"></div>
+<section class="relative bg-white overflow-hidden">
 
-  <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-    <div class="grid lg:grid-cols-2 gap-16 items-center">
+  <!-- Dot-grid pattern -->
+  <div class="absolute inset-0 hero-dot-pattern pointer-events-none"></div>
 
-      <!-- Left: Headline -->
-      <div>
-        <div class="halal-badge mb-8">
+  <!-- Soft lavender gradient panel — right side desktop, bottom mobile -->
+  <div class="about-hero-gradient"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
+    <div class="grid lg:grid-cols-2 gap-0 items-stretch">
+
+      <!-- Left: Text Content -->
+      <div class="text-left pt-14 pb-10 md:pt-16 lg:pt-20 lg:pb-14 scroll-animate-left">
+        <!-- Badge -->
+        <div class="about-badge mb-6">
           <i class="ri-verified-badge-fill"></i>
           About DOGO Finance
         </div>
-        <h1 class="text-5xl md:text-6xl lg:text-7xl font-black leading-[0.9] tracking-tighter text-white mb-8">
+
+        <h1 class="text-4xl md:text-5xl lg:text-[54px] font-black text-[#030E65] leading-[1.08] tracking-tight">
           Built for<br>
-          <span class="text-[var(--dogo-secondary)]">Muslim Nigeria.</span><br>
-          <span class="text-white/40">By design.</span>
+          Muslim Nigeria.<br>
+          <span class="text-[#4361EE]">By design.</span>
         </h1>
-        <p class="text-xl text-white/60 font-medium max-w-lg leading-relaxed">
-          A digital Islamic asset management and financial services company — redefining how Muslims in Nigeria access
-          modern finance.
+
+        <p class="text-slate-500 text-sm md:text-base leading-relaxed mt-4 max-w-md">
+          A digital Islamic asset management and financial services company — redefining how Muslims in Nigeria access modern finance.
         </p>
+
+        <div class="flex flex-wrap gap-3.5 mt-6">
+          <a routerLink="/register"
+            class="px-4 py-2 bg-[#030E65] text-white font-normal rounded-lg hover:bg-[#030E65]/90 transition-all text-[12px] flex items-center justify-center cursor-pointer">
+            Get Started
+          </a>
+          <a routerLink="/how-it-works"
+            class="px-4 py-2 bg-white text-[#030E65] font-normal rounded-lg border border-slate-200 hover:bg-slate-50 transition-all text-[12px] flex items-center gap-1 cursor-pointer">
+            Learn More <i class="ri-arrow-right-line"></i>
+          </a>
+        </div>
       </div>
 
-      <!-- Right: Brand identity card -->
-      <div class="hidden lg:flex flex-col gap-5">
-        <!-- Top card: Key identity -->
-        <div class="bg-white/6 backdrop-blur-sm border border-white/10 rounded-[36px] p-8">
-          <p class="text-[10px] font-black uppercase tracking-widest text-white/30 mb-6">What We Stand For</p>
-          <div class="space-y-5">
-            @for(value of heroValues; track value.label) {
-            <div class="flex items-center gap-4">
-              <div
-                class="w-10 h-10 rounded-2xl bg-white/8 border border-white/10 flex items-center justify-center shrink-0">
-                <i [class]="value.icon + ' text-[var(--dogo-secondary)] text-lg'"></i>
+      <!-- Right: Phone mockup -->
+      <div class="relative block w-full h-[380px] md:h-[420px] lg:h-auto mt-6 lg:mt-0 scroll-animate-right">
+        <div class="relative w-full h-full">
+
+          <!-- Dashed orbit rings -->
+          <div class="hero-orbit-ring"
+            style="width: 340px; height: 340px; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
+          <div class="hero-orbit-ring"
+            style="width: 460px; height: 460px; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.6;">
+          </div>
+
+          <!-- Phone image -->
+          <img src="/images/assets/about-hero-phone.png" alt="DOGO Finance App"
+            class="absolute select-none object-contain object-bottom drop-shadow-2xl"
+            style="height: 95%; width: auto; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 2;">
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ========  WHO WE ARE ===== -->
+<section class="py-12 md:py-16 overflow-hidden bg-white ">
+
+  <!-- Decorations -->
+  <div class="pointer-events-none absolute bottom-8 left-8 hidden grid-cols-7 gap-2 opacity-30 lg:grid">
+    @for(dot of [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]; track dot) {
+    <span class="h-1.5 w-1.5 rounded-full bg-[#8DA7FF]"></span>
+    }
+  </div>
+
+  <div class="relative mx-auto max-w-7xl px-6 md:px-12">
+
+    <!-- Section heading -->
+    <div class="mb-14 text-center scroll-animate">
+      <div
+        class="mx-auto mb-5 inline-flex items-center gap-2 rounded-full bg-[#F1F4FF] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.12em] text-[#3458C8]">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 7H16M8 11H16M8 15H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+          <rect x="4" y="3" width="16" height="18" rx="4" stroke="currentColor" stroke-width="1.8" />
+        </svg>
+
+        Who We Are
+      </div>
+
+      <h2 class="mx-auto max-w-2xl text-3xl font-black leading-tight tracking-[-0.035em] text-[#06144E] md:text-4xl">
+        Redefining how Muslims in Nigeria
+        <br class="hidden sm:block">
+        <span class="text-[#2A57E5]">access finance.</span>
+      </h2>
+    </div>
+
+    <div class="grid items-start gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+
+      <!-- Left content -->
+      <div class="scroll-animate-left">
+        <div class="space-y-5 text-sm font-medium leading-6 text-[#5F6885] md:text-base md:leading-7">
+          <p class="font-bold text-[#06144E]">
+            DOGO Finance is a digital Islamic asset management and financial
+            services company created to redefine how Muslims in Nigeria access
+            modern finance.
+          </p>
+
+          <p>
+            We exist to make halal wealth creation
+            <strong class="font-bold text-[#2450DC]">
+              simple, transparent, and accessible
+            </strong>
+            through technology.
+          </p>
+
+          <p>
+            Our platform brings together Shariah-compliant investments,
+            profit-generating wallets, digital payments, and global market
+            access in one secure place — for everyday users and institutional
+            partners alike.
+          </p>
+        </div>
+
+        <!-- Mosque illustration -->
+        <div class="mt-8 flex justify-center lg:justify-start">
+          <img src="/images/assets/mosque-illustration.png" alt="Islamic finance illustration"
+            class="w-full max-h-[380px] object-contain object-center lg:object-left"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+
+          <!-- Illustration fallback -->
+          <div
+            class="hidden h-[380px] w-full items-end justify-center rounded-[32px] bg-gradient-to-b from-[#FFF8EF] to-[#F1F5FF] p-8">
+            <div class="text-center">
+              <div class="mx-auto flex h-24 w-24 items-center justify-center rounded-t-full bg-[#C5D5FF] text-5xl">
+                🕌
               </div>
-              <div>
-                <p class="font-black text-white text-sm">{{ value.label }}</p>
-                <p class="text-white/40 font-medium text-xs mt-0.5">{{ value.sub }}</p>
-              </div>
+              <div class="mx-auto h-3 w-52 rounded-full bg-[#7594EC]"></div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right cards -->
+      <div class="space-y-6 scroll-animate-right">
+
+        <!-- Quote card -->
+        <article
+          class="relative overflow-hidden rounded-2xl border border-[#F1E4C8] bg-gradient-to-br from-[#FFFDF7] to-[#FFF8E9] p-8 sm:p-10">
+
+          <div class="absolute -right-10 -top-10 h-36 w-36 rounded-full bg-white/70 blur-2xl">
+          </div>
+
+          <svg class="relative h-12 w-12 text-[#4B72EB]" viewBox="0 0 64 64" fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M10 14H28V32C28 43.046 19.046 52 8 52V42C13.523 42 18 37.523 18 32H10V14ZM36 14H54V32C54 43.046 45.046 52 34 52V42C39.523 42 44 37.523 44 32H36V14Z" />
+          </svg>
+
+          <p
+            class="relative mt-5 max-w-xl text-2xl font-black leading-[1.22] tracking-[-0.025em] text-[#06144E] md:text-3xl">
+            We believe finance should be built on trust, clarity, and purpose.
+            Every product we design reflects this belief.
+          </p>
+        </article>
+
+        <!-- Africa infrastructure card -->
+        <article
+          class="relative min-h-[280px] overflow-hidden rounded-2xl border border-[#CAE0FA] bg-gradient-to-br from-[#F4FAFF] to-[#EAF7FF] p-8 sm:p-10">
+
+          <!-- Decorative map-like dots -->
+          <div class="pointer-events-none absolute right-6 top-7 grid grid-cols-12 gap-1 opacity-20">
+            @for(dot of [
+            1,2,3,4,5,6,7,8,9,10,11,12,
+            13,14,15,16,17,18,19,20,21,22,23,24,
+            25,26,27,28,29,30,31,32,33,34,35,36,
+            37,38,39,40,41,42,43,44,45,46,47,48
+            ]; track dot) {
+            <span class="h-1.5 w-1.5 rounded-full bg-[#3285E8]"></span>
             }
           </div>
-        </div>
 
-        <!-- Bottom row: Stats -->
-        <div class="grid grid-cols-3 gap-4">
-          @for(stat of heroStats; track stat.value) {
-          <div class="bg-white/6 backdrop-blur-sm border border-white/10 rounded-3xl p-6 text-center">
-            <p class="text-3xl font-black text-white">{{ stat.value }}</p>
-            <p class="text-[10px] font-bold uppercase tracking-widest text-white/35 mt-1 leading-tight">{{ stat.label }}
+          <div class="relative flex h-14 w-14 items-center justify-center rounded-full bg-white text-2xl shadow-sm">
+            🌍
+          </div>
+
+          <div class="relative mt-14 max-w-md">
+            <p class="text-xl font-black leading-snug text-[#06144E]">
+              We are building more than an application.
+            </p>
+
+            <p class="mt-2 text-xl font-black leading-snug text-[#2457E6] md:text-2xl">
+              We are creating foundational infrastructure for Islamic finance
+              in Africa.
             </p>
           </div>
-          }
-        </div>
-      </div>
+        </article>
 
-    </div>
-  </div>
-</section>
-
-<!-- ===== WHO WE ARE — OFFICIAL BRAND STATEMENT ===== -->
-<section class="py-28 bg-white relative overflow-hidden">
-  <div class="absolute inset-0 dogo-pattern opacity-[0.02] pointer-events-none"></div>
-  <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-    <div class="halal-badge mb-10">
-      <i class="ri-information-2-fill"></i>
-      Who We Are
-    </div>
-
-    <div class="grid lg:grid-cols-2 gap-20 items-start">
-      <div>
-        <h2 class="text-5xl md:text-6xl font-black text-[var(--dogo-dark)] tracking-tighter leading-tight mb-8">
-          Redefining how<br>
-          Muslims in Nigeria<br>
-          <span class="text-[var(--dogo-primary)]">access finance.</span>
-        </h2>
-        <p class="text-xl text-[var(--dogo-dark)] font-semibold leading-relaxed mb-6">
-          DOGO Finance is a digital Islamic asset management and financial services company created to redefine how
-          Muslims in Nigeria access modern finance.
-        </p>
-        <p class="text-lg text-[var(--dogo-muted)] font-medium leading-relaxed mb-6">
-          We exist to make halal wealth creation <strong class="text-[var(--dogo-dark)]">simple, transparent, and
-            accessible</strong> through technology.
-        </p>
-        <p class="text-lg text-[var(--dogo-muted)] font-medium leading-relaxed">
-          Our platform brings together Shariah-compliant investments, profit-generating wallets, digital payments, and
-          global market access in one secure place — for everyday users and institutional partners alike.
-        </p>
-      </div>
-
-      <div class="space-y-6">
-        <div class="bg-[var(--dogo-cream)] rounded-[36px] p-10 border border-[var(--dogo-primary)]/6">
-          <i class="ri-double-quotes-l text-5xl text-[var(--dogo-primary)]/20 block mb-4"></i>
-          <p class="text-2xl font-black text-[var(--dogo-dark)] leading-snug tracking-tight">
-            We believe finance should be built on trust, clarity, and purpose. Every product we design reflects this
-            belief.
-          </p>
-        </div>
-        <div
-          class="bg-gradient-to-br from-[var(--dogo-primary)] to-[var(--dogo-secondary)] rounded-[36px] p-10 relative overflow-hidden">
-          <div class="absolute inset-0 dogo-pattern opacity-10 pointer-events-none"></div>
-          <div class="relative z-10">
-            <i class="ri-global-fill text-4xl text-white/30 block mb-4"></i>
-            <p class="text-xl font-black text-white leading-snug">We are building more than an application.</p>
-            <p class="text-xl font-black text-[var(--dogo-secondary-soft)] leading-snug mt-1">
-              We are creating foundational infrastructure for Islamic finance in Africa.
-            </p>
-          </div>
-        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== MISSION & VISION ===== -->
-<section class="py-28 bg-[var(--dogo-cream)] relative overflow-hidden">
-  <div class="max-w-7xl mx-auto px-6 md:px-12">
-    <div class="halal-badge mb-10">
-      <i class="ri-flag-2-fill"></i>
-      Mission & Vision
+<!-- ========  MISSION & VISION ========== -->
+<section class="py-12 md:py-16 overflow-hidden bg-white">
+
+  <div class=" pointer-events-none absolute left-[7%] top-16 hidden grid-cols-7 gap-2 opacity-30 lg:grid">
+    @for(dot of [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]; track dot) {
+    <span class="h-1.5 w-1.5 rounded-full bg-[#8DA7FF]"></span>
+    }
+  </div>
+
+  <div class="relative mx-auto max-w-7xl px-6 md:px-12">
+
+    <!-- Heading -->
+    <div class="mb-10 text-center scroll-animate">
+      <div
+        class="mx-auto mb-5 inline-flex items-center gap-2 rounded-full bg-[#F1F4FF] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.12em] text-[#3458C8]">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 4H18V20H6V4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+          <path d="M9 8H15M9 12H15M9 16H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+        </svg>
+
+        Mission &amp; Vision
+      </div>
+
+      <h2 class="text-3xl font-black tracking-[-0.035em] text-[#06144E] md:text-4xl">
+        Our Purpose.
+        <span class="text-[#315EE8]">Our Promise.</span>
+      </h2>
     </div>
-    <div class="grid lg:grid-cols-2 gap-8">
+
+    <!-- Cards -->
+    <div class="grid gap-6 md:grid-cols-2">
 
       <!-- Mission -->
-      <div
-        class="bg-white rounded-[40px] p-12 border border-[var(--dogo-primary)]/6 shadow-xl shadow-[var(--dogo-primary)]/4">
-        <div class="w-14 h-14 rounded-2xl bg-[var(--dogo-primary)] flex items-center justify-center mb-8">
-          <i class="ri-focus-3-fill text-2xl text-white"></i>
-        </div>
-        <p class="text-[11px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/50 mb-4">Our Mission</p>
-        <p class="text-2xl font-black text-[var(--dogo-dark)] leading-snug tracking-tight">
-          To deliver a regulated, technology-driven ecosystem that enables individuals and institutions to save, invest,
-          transact, and grow wealth in full alignment with Shariah principles.
-        </p>
-      </div>
+      <article
+        class="scroll-animate delay-100 group relative min-h-[270px] overflow-hidden rounded-2xl border border-[#D8E1FF] bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_60px_rgba(28,62,160,0.10)] sm:p-9">
 
-      <!-- Vision -->
-      <div
-        class="bg-gradient-to-br from-[var(--dogo-primary)] to-[var(--dogo-secondary)] rounded-[40px] p-12 relative overflow-hidden">
-        <div class="absolute inset-0 dogo-pattern opacity-10 pointer-events-none"></div>
-        <div class="relative z-10">
-          <div class="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center mb-8">
-            <i class="ri-eye-2-fill text-2xl text-white"></i>
+        <div class="relative z-10 flex items-start gap-5">
+          <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#E8EEFF] text-[#2454E6]">
+
+            <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8" />
+              <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8" />
+              <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+            </svg>
           </div>
-          <p class="text-[11px] font-black uppercase tracking-widest text-white/40 mb-4">Our Vision</p>
-          <p class="text-2xl font-black text-white leading-snug tracking-tight">
-            To become Africa's most trusted digital Islamic finance platform, empowering millions with ethical
-            wealth-building tools and seamless access to halal financial opportunities.
-          </p>
-        </div>
-      </div>
 
-    </div>
-  </div>
-</section>
+          <div>
+            <h3 class="text-lg font-black text-[#06144E]">
+              Our Mission
+            </h3>
 
-<!-- ===== WHY WE EXIST NOW ===== -->
-<section class="py-28 bg-white">
-  <div class="max-w-7xl mx-auto px-6 md:px-12">
-    <div class="grid lg:grid-cols-2 gap-20 items-center">
-      <div>
-        <div class="halal-badge mb-8">
-          <i class="ri-time-fill"></i>
-          Why Now
-        </div>
-        <h2 class="text-5xl md:text-6xl font-black text-[var(--dogo-dark)] tracking-tighter leading-tight mb-8">
-          Why we<br>
-          <span class="text-[var(--dogo-primary)]">exist now.</span>
-        </h2>
-        <div class="space-y-5 text-lg text-[var(--dogo-muted)] font-medium leading-relaxed">
-          <p>Nigeria is experiencing a rapid shift toward digital finance, driven by widespread mobile adoption, a
-            youthful population, and growing demand for accessible financial services.</p>
-          <p>Islamic finance in Nigeria is gaining momentum through sukuk issuances, regulatory engagement, and rising
-            awareness of Shariah-compliant products. Yet access to modern halal wealth tools remains limited and
-            fragmented — leaving millions of Muslims underserved.</p>
-          <p class="text-[var(--dogo-dark)] font-semibold">Globally, Islamic fintech is advancing rapidly across the
-            Middle East and Southeast Asia, while Nigeria has yet to participate in this transformation fully.</p>
-        </div>
-      </div>
-
-      <!-- The intersection callout -->
-      <div
-        class="bg-gradient-to-br from-[var(--dogo-dark)] to-[var(--dogo-primary)] rounded-[48px] p-12 relative overflow-hidden">
-        <div class="absolute inset-0 dogo-pattern opacity-10 pointer-events-none"></div>
-        <div class="relative z-10 space-y-6">
-          <p class="text-[11px] font-black uppercase tracking-widest text-white/30">The Intersection We Occupy</p>
-          @for(point of existPoints; track point.label) {
-          <div class="flex items-start gap-4">
-            <div class="w-2 h-2 rounded-full bg-[var(--dogo-secondary-soft)] mt-2.5 shrink-0"></div>
-            <div>
-              <p class="font-black text-white text-lg">{{ point.label }}</p>
-              <p class="text-white/50 font-medium text-sm mt-0.5">{{ point.sub }}</p>
-            </div>
-          </div>
-          }
-          <div class="pt-4 border-t border-white/10">
-            <p class="text-white/80 font-semibold leading-relaxed text-lg">
-              We exist at the intersection of these realities. Technology is ready. Regulation is evolving. <span
-                class="text-[var(--dogo-secondary-soft)] font-black">Demand for ethical finance is rising.</span>
+            <p class="mt-4 text-sm font-medium leading-6 text-[#68718D]">
+              To deliver a regulated, technology-driven ecosystem that enables
+              individuals and institutions to save, invest, transact, and grow
+              wealth in full alignment with Shariah principles.
             </p>
           </div>
         </div>
-      </div>
+
+        <span
+          class="pointer-events-none absolute bottom-[-20px] right-5 text-[88px] font-black leading-none text-[#E3E9FD]">
+          01
+        </span>
+      </article>
+
+      <!-- Vision -->
+      <article
+        class="scroll-animate delay-200 group relative min-h-[270px] overflow-hidden rounded-2xl border border-[#D8E1FF] bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_60px_rgba(28,62,160,0.10)] sm:p-9">
+
+        <div class="relative z-10 flex items-start gap-5">
+          <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#E8EEFF] text-[#2454E6]">
+
+            <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M2.5 12C4.7 7.8 8 5.5 12 5.5C16 5.5 19.3 7.8 21.5 12C19.3 16.2 16 18.5 12 18.5C8 18.5 4.7 16.2 2.5 12Z"
+                stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+              <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8" />
+            </svg>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-black text-[#06144E]">
+              Our Vision
+            </h3>
+
+            <p class="mt-4 text-sm font-medium leading-6 text-[#68718D]">
+              To become Africa's most trusted digital Islamic finance platform,
+              empowering millions with ethical wealth-building tools and
+              seamless access to halal financial opportunities.
+            </p>
+          </div>
+        </div>
+
+        <span
+          class="pointer-events-none absolute bottom-[-20px] right-5 text-[88px] font-black leading-none text-[#E3E9FD]">
+          02
+        </span>
+      </article>
+
     </div>
   </div>
 </section>
 
 <!-- ===== OUR PHILOSOPHY ===== -->
-<section class="py-28 bg-[var(--dogo-cream)] relative overflow-hidden">
-  <div class="absolute inset-0 dogo-pattern opacity-[0.03] pointer-events-none"></div>
-  <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-    <div class="text-center mb-16">
-      <div class="halal-badge mx-auto mb-8">
-        <i class="ri-compass-3-fill"></i>
-        Our Philosophy
-      </div>
-      <h2 class="text-5xl md:text-6xl font-black text-[var(--dogo-dark)] tracking-tighter mb-6">
-        Financial growth should never<br>
-        <span class="text-[var(--dogo-primary)]">compromise faith.</span>
-      </h2>
-    </div>
+<section class="py-12 md:py-16 about-tinted-bg border-t border-slate-100 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6 md:px-12">
 
-    <div class="grid lg:grid-cols-2 gap-16 items-center">
-      <!-- Philosophy text -->
-      <div class="space-y-6 text-lg text-[var(--dogo-muted)] font-medium leading-relaxed">
-        <p>At DOGO Finance, our work is guided by a simple principle: <strong class="text-[var(--dogo-dark)]">financial
-            growth should never come at the expense of faith, integrity, or transparency.</strong></p>
-        <p>We approach Islamic finance with discipline, structure, and long-term thinking — combining modern technology
-          with Shariah governance to deliver practical wealth-building solutions.</p>
-        <p>Our products are designed to simplify financial life while upholding the highest standards of compliance,
-          security, and accountability. We focus on building systems that last — <strong
-            class="text-[var(--dogo-dark)]">prioritising trust over trends, clarity over complexity, and sustainable
-            value over short-term gains.</strong></p>
-        <p>Every decision we make is rooted in responsibility to our clients, our communities, and the future of ethical
-          finance in Africa.</p>
+    <div class="grid lg:grid-cols-2 gap-10 items-center">
+
+      <!-- Left: Philosophy text -->
+      <div class="scroll-animate-left">
+        <p class="text-sm font-serif italic text-slate-400 mb-3">Our <span
+            class="font-serif italic text-slate-500">Philosophy</span></p>
+        <h2 class="text-2xl md:text-3xl font-bold text-black tracking-tight leading-tight mb-6">
+          Financial growth should never compromise faith.
+        </h2>
+        <div class="space-y-4 text-sm md:text-base text-slate-600 leading-relaxed">
+          <p>At DOGO Finance, our work is guided by a simple principle: <strong
+              class="text-[#030E65] font-semibold">financial growth should never come at the expense of faith,
+              integrity, or transparency.</strong></p>
+          <p>We approach Islamic finance with discipline, structure, and long-term thinking — combining modern
+            technology with Shariah governance to deliver practical wealth-building solutions.</p>
+          <p>Our products are designed to simplify financial life while upholding the highest standards of compliance,
+            security, and accountability. We focus on building systems that last — <strong
+              class="text-[#030E65] font-semibold">prioritising trust over trends, clarity over complexity, and
+              sustainable value over short-term gains.</strong></p>
+          <p>Every decision we make is rooted in responsibility to our clients, our communities, and the future of
+            ethical finance in Africa.</p>
+        </div>
       </div>
 
-      <!-- Concentric circles visual -->
-      <div class="flex items-center justify-center">
-        <div class="relative w-80 h-80">
+      <!-- Right: Concentric philosophy visual -->
+      <div class="flex items-center justify-center scroll-animate-right">
+        <div class="relative w-72 h-72">
           <!-- Outer ring -->
-          <div
-            class="absolute inset-0 rounded-full border-2 border-[var(--dogo-primary)]/15 flex items-center justify-center">
+          <div class="absolute inset-0 rounded-full border border-[#030E65]/10 flex items-center justify-center">
             <span
-              class="absolute top-4 left-1/2 -translate-x-1/2 text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 whitespace-nowrap">Trust
+              class="absolute top-3 left-1/2 -translate-x-1/2 text-[9px] font-black uppercase tracking-widest text-[#030E65]/30 whitespace-nowrap">Trust
               & Institutional Credibility</span>
           </div>
           <!-- Middle ring -->
-          <div
-            class="absolute inset-10 rounded-full border-2 border-[var(--dogo-primary)]/25 flex items-center justify-center">
+          <div class="absolute inset-9 rounded-full border border-[#030E65]/15 flex items-center justify-center">
             <span
-              class="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/55 whitespace-nowrap">Everyday
-              Financial Convenience</span>
+              class="absolute -top-3 left-1/2 -translate-x-1/2 text-[9px] font-black uppercase tracking-widest text-[#030E65]/40 whitespace-nowrap">Everyday
+              Convenience</span>
           </div>
           <!-- Inner ring -->
-          <div
-            class="absolute inset-20 rounded-full border-2 border-[var(--dogo-primary)]/40 flex items-center justify-center">
-          </div>
+          <div class="absolute inset-[72px] rounded-full border border-[#030E65]/20"></div>
           <!-- Core -->
           <div class="absolute inset-0 flex items-center justify-center">
             <div
-              class="w-28 h-28 rounded-full bg-[var(--dogo-primary)] flex flex-col items-center justify-center text-center shadow-2xl shadow-[var(--dogo-primary)]/40">
-              <i class="ri-islamic-line text-white/80 text-xl mb-1"></i>
-              <p class="text-white font-black text-[9px] uppercase tracking-wider leading-tight px-2">
+              class="w-24 h-24 rounded-full bg-[#030E65] flex flex-col items-center justify-center text-center shadow-[0_8px_32px_rgba(3,14,101,0.25)]">
+              <i class="ri-islamic-line text-white/70 text-lg mb-1"></i>
+              <p class="text-white font-black text-[8px] uppercase tracking-wider leading-tight px-2">
                 Shariah<br>Compliant</p>
             </div>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </section>
 
-<!-- ===== OUR APPROACH ===== -->
-<section class="py-28 bg-white">
+<!-- ===== OUR APPROACH — 4 PRINCIPLES ===== -->
+<section class="py-12 md:py-16 bg-white border-t border-slate-100 overflow-hidden">
   <div class="max-w-7xl mx-auto px-6 md:px-12">
-    <div class="text-center mb-16">
-      <div class="halal-badge mx-auto mb-8">
-        <i class="ri-map-2-fill"></i>
-        Our Approach
-      </div>
-      <h2 class="text-5xl md:text-6xl font-black text-[var(--dogo-dark)] tracking-tighter mb-4">
-        Four principles that shape<br>
-        <span class="text-[var(--dogo-primary)]">how we operate.</span>
+
+    <div class="text-center mb-12 scroll-animate">
+      <p class="text-sm font-serif italic text-slate-400 mb-1.5">Our <span
+          class="font-serif italic text-slate-500">Approach</span></p>
+      <h2 class="text-2xl md:text-3xl font-bold text-black tracking-tight max-w-xl mx-auto leading-tight">
+        Four principles that shape how we operate.
       </h2>
-      <p class="text-xl text-[var(--dogo-muted)] font-medium max-w-xl mx-auto">
+      <p class="text-sm text-slate-500 mt-3 max-w-md mx-auto leading-relaxed">
         Our platform is guided by four principles that define how we serve our clients.
       </p>
     </div>
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-      @for(principle of principles; track principle.title) {
-      <div
-        class="rounded-[36px] p-10 bg-[var(--dogo-cream)] border border-[var(--dogo-primary)]/6 product-card flex flex-col">
-        <div class="w-16 h-16 rounded-2xl bg-[var(--dogo-primary)] flex items-center justify-center mb-8">
-          <i [class]="principle.icon + ' text-2xl text-white'"></i>
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+      @for(principle of principles; track principle.title; let i = $index) {
+      <div class="bg-[#F5F6FF] rounded-2xl p-6 border border-slate-200 flex flex-col scroll-animate about-card-hover"
+        [class]="'delay-' + [75, 150, 200, 300][i]">
+        <div class="w-10 h-10 rounded-lg bg-[#030E65] flex items-center justify-center mb-5">
+          <i [class]="principle.icon + ' text-lg text-white'"></i>
         </div>
-        <h3 class="text-lg font-black text-[var(--dogo-dark)] mb-3 leading-snug">{{ principle.title }}</h3>
-        <p class="text-[var(--dogo-muted)] font-medium leading-relaxed text-sm flex-grow">{{ principle.desc }}</p>
+        <h3 class="text-sm font-bold text-[#030E65] mb-2 leading-snug">{{ principle.title }}</h3>
+        <p class="text-slate-500 font-normal leading-relaxed text-xs flex-grow">{{ principle.desc }}</p>
       </div>
       }
     </div>
+
   </div>
 </section>
 
 <!-- ===== THE PEOPLE WE SERVE ===== -->
-<section class="py-28 bg-gradient-to-br from-[var(--dogo-primary)] to-[var(--dogo-secondary)] relative overflow-hidden">
-  <div class="absolute inset-0 dogo-pattern opacity-10 pointer-events-none"></div>
-  <div class="absolute top-0 right-0 w-[400px] h-[400px] rounded-full blur-[160px] opacity-20 pointer-events-none"
-    style="background: radial-gradient(circle, #0077B6, transparent)"></div>
+<section class="py-12 md:py-16 about-tinted-bg border-t border-slate-100 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6 md:px-12">
 
-  <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-    <div class="text-center mb-16">
-      <div class="halal-badge mx-auto mb-8">
-        <i class="ri-group-3-fill"></i>
-        The People We Serve
+    <div class="flex justify-between items-end mb-10 scroll-animate flex-wrap gap-4">
+      <div>
+        <p class="text-sm font-serif italic text-slate-400 mb-1.5">The People <span
+            class="font-serif italic text-slate-500">We Serve</span></p>
+        <h2 class="text-2xl md:text-3xl font-bold text-black tracking-tight max-w-xl leading-tight">
+          Built for every stage of your journey.
+        </h2>
       </div>
-      <h2 class="text-5xl md:text-6xl font-black text-white tracking-tighter mb-4">
-        Built for every<br>
-        <span class="text-[var(--dogo-secondary-soft)]">stage of your journey.</span>
-      </h2>
+      <a routerLink="/register"
+        class="inline-flex items-center gap-0.5 text-xs font-bold text-black bg-white hover:bg-slate-50 rounded-lg px-4 py-2 border border-slate-200 transition-colors">
+        Get Started <i class="ri-arrow-right-s-line"></i>
+      </a>
     </div>
 
-    <div class="grid md:grid-cols-2 gap-6">
-      @for(segment of segments; track segment.title) {
-      <div class="bg-white/8 backdrop-blur-sm rounded-[36px] p-10 border border-white/10 product-card">
-        <div class="flex items-start gap-6">
-          <div class="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center shrink-0">
-            <i [class]="segment.icon + ' text-2xl text-white'"></i>
+    <div class="grid md:grid-cols-2 gap-5">
+      @for(segment of segments; track segment.title; let i = $index) {
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 scroll-animate about-card-hover"
+        [class]="'delay-' + [75, 150, 200, 300][i]">
+        <div class="flex items-start gap-4">
+          <div class="w-9 h-9 rounded-lg bg-[#F5F6FF] flex items-center justify-center shrink-0">
+            <i [class]="segment.icon + ' text-[#030E65] text-base'"></i>
           </div>
           <div>
-            <p class="text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">{{ segment.tag }}</p>
-            <h3 class="text-xl font-black text-white mb-3 leading-snug">{{ segment.title }}</h3>
-            <p class="text-white/60 font-medium leading-relaxed text-sm">{{ segment.desc }}</p>
+            <p class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1.5">{{ segment.tag }}</p>
+            <h3 class="text-sm font-bold text-[#030E65] mb-1.5 leading-snug">{{ segment.title }}</h3>
+            <p class="text-slate-500 font-normal leading-relaxed text-xs">{{ segment.desc }}</p>
           </div>
         </div>
       </div>
       }
     </div>
+
   </div>
 </section>
 
 <!-- ===== TRUST & GOVERNANCE ===== -->
-<section class="py-28 bg-[var(--dogo-cream)]">
+<section class="py-12 md:py-16 bg-white border-t border-slate-100 overflow-hidden">
   <div class="max-w-7xl mx-auto px-6 md:px-12">
-    <div class="grid lg:grid-cols-2 gap-20 items-center">
-      <div>
-        <div class="halal-badge mb-8">
-          <i class="ri-shield-star-fill"></i>
-          Trust & Governance
-        </div>
-        <h2 class="text-5xl md:text-6xl font-black text-[var(--dogo-dark)] tracking-tighter leading-tight mb-8">
-          Strong governance<br>
-          is not optional.<br>
-          <span class="text-[var(--dogo-primary)]">It is foundational.</span>
+    <div class="grid lg:grid-cols-2 gap-10 items-center">
+
+      <!-- Left: Text -->
+      <div class="scroll-animate-left">
+        <p class="text-sm font-serif italic text-slate-400 mb-3">Trust & <span
+            class="font-serif italic text-slate-500">Governance</span></p>
+        <h2 class="text-2xl md:text-3xl font-bold text-black tracking-tight leading-tight mb-5">
+          Strong governance is not optional. It is foundational.
         </h2>
-        <p class="text-lg text-[var(--dogo-muted)] font-medium leading-relaxed mb-6">
+        <p class="text-sm md:text-base text-slate-600 leading-relaxed mb-4">
           Trust is central to everything we do. We are committed to building a platform that operates with the highest
           standards of compliance, integrity, and accountability.
         </p>
         <!-- TODO: Uncomment when SEC & CBN licensing is complete
-        <p class="text-lg text-[var(--dogo-muted)] font-medium leading-relaxed mb-6">
+        <p class="text-sm md:text-base text-slate-600 leading-relaxed mb-4">
           Our platform is structured to meet Nigeria's regulatory requirements, including engagement with the Securities and Exchange Commission and the Central Bank of Nigeria.
         </p>
         -->
-        <p class="text-lg text-[var(--dogo-muted)] font-medium leading-relaxed">
-          We operate under an <strong class="text-[var(--dogo-dark)]">independent Shariah Advisory Board</strong> that
-          reviews products, monitors compliance, and conducts regular audits.
+        <p class="text-sm md:text-base text-slate-600 leading-relaxed">
+          We operate under an <strong class="text-[#030E65] font-semibold">independent Shariah Advisory Board</strong>
+          that reviews products, monitors compliance, and conducts regular audits.
         </p>
       </div>
 
-      <div class="space-y-4">
-        @for(gov of governance; track gov.label) {
-        <div
-          class="flex items-start gap-5 bg-white rounded-3xl p-7 border border-[var(--dogo-primary)]/6 shadow-lg shadow-[var(--dogo-primary)]/3 product-card">
-          <div class="w-12 h-12 rounded-2xl bg-[var(--dogo-primary)]/8 flex items-center justify-center shrink-0">
-            <i [class]="gov.icon + ' text-xl text-[var(--dogo-primary)]'"></i>
+      <!-- Right: Governance cards -->
+      <div class="space-y-3.5 scroll-animate-right">
+        @for(gov of governance; track gov.label; let i = $index) {
+        <div class="flex items-start gap-4 bg-[#F5F6FF] rounded-2xl p-5 border border-slate-200 about-card-hover"
+          [class]="'delay-' + [75, 150, 300][i]">
+          <div class="w-9 h-9 rounded-lg bg-white flex items-center justify-center shrink-0 border border-slate-200">
+            <i [class]="gov.icon + ' text-base text-[#030E65]'"></i>
           </div>
           <div>
-            <p class="font-black text-[var(--dogo-dark)] mb-1">{{ gov.label }}</p>
-            <p class="text-[var(--dogo-muted)] font-medium text-sm leading-relaxed">{{ gov.desc }}</p>
+            <p class="font-bold text-[#030E65] text-sm leading-none">{{ gov.label }}</p>
+            <p class="text-slate-500 font-normal text-xs leading-relaxed mt-1.5">{{ gov.desc }}</p>
           </div>
         </div>
         }
       </div>
-    </div>
-  </div>
-</section>
 
-<!-- ===== CTA ===== -->
-<section class="py-28 bg-white relative overflow-hidden">
-  <div class="absolute inset-0 dogo-pattern opacity-[0.02] pointer-events-none"></div>
-  <div class="max-w-4xl mx-auto px-6 md:px-12 text-center relative z-10">
-    <div
-      class="w-24 h-24 bg-[var(--dogo-cream)] rounded-full flex items-center justify-center shadow-[0_20px_50px_rgba(3,14,101,0.10)] mx-auto mb-10 border border-[var(--dogo-primary)]/6">
-      <img src="/brand/icon.png" alt="Dogo Finance" class="w-14 h-14 object-contain"
-        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-      <div class="hidden w-14 h-14 items-center justify-center">
-        <i class="ri-bank-fill text-3xl text-[var(--dogo-primary)]"></i>
-      </div>
-    </div>
-    <h2 class="text-5xl md:text-7xl font-black text-[var(--dogo-dark)] tracking-tighter mb-8 leading-tight">
-      Start your<br>
-      <span class="text-[var(--dogo-primary)]">Halal</span> wealth<br>
-      journey today.
-    </h2>
-    <p class="text-xl text-[var(--dogo-muted)] font-medium mb-14 max-w-xl mx-auto">
-      Join thousands of Nigerian Muslims growing their wealth the right way — Riba-free, SSB-certified, and fully in
-      Naira.
-    </p>
-    <div class="flex flex-wrap justify-center gap-6">
-      <a routerLink="/register"
-        class="px-10 py-5 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] transition-all shadow-xl shadow-[var(--dogo-primary)]/25 text-lg flex items-center gap-2">
-        <i class="ri-user-add-fill"></i>
-        Create Free Account
-      </a>
-      <a routerLink="/how-it-works"
-        class="px-10 py-5 border-2 border-[var(--dogo-primary)]/20 text-[var(--dogo-primary)] font-black rounded-2xl hover:border-[var(--dogo-primary)] hover:bg-[var(--dogo-cream)] transition-all text-lg flex items-center gap-2">
-        How It Works <i class="ri-arrow-right-line"></i>
-      </a>
     </div>
   </div>
 </section>

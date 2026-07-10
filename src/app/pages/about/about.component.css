@@ -1,1 +1,33 @@
-﻿:host { display: block; }
+:host { display: block; }
+
+/* =====================================================
+   Hero: lavender gradient panel — mirrors landing page
+   ===================================================== */
+.about-hero-gradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 380px;
+  pointer-events: none;
+  z-index: 0;
+  background: linear-gradient(to top, #D0D4EE 0%, #DDE0F3 50%, #ECEEF8 85%, transparent 100%);
+}
+
+@media (min-width: 768px) {
+  .about-hero-gradient {
+    height: 420px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-hero-gradient {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: auto;
+    width: 38%;
+    height: 100%;
+    background: linear-gradient(to left, #D0D4EE 0%, #DDE0F3 50%, #ECEEF8 85%, transparent 100%);
+  }
+}
