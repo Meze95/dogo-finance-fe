@@ -1,1 +1,168 @@
 :host { display: block; }
+
+/* =============================================
+   HERO BACKGROUND — matches landing page exactly
+   ============================================= */
+.product-hero-gradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 380px;
+  pointer-events: none;
+  z-index: 0;
+  background: linear-gradient(to top, #D0D4EE 0%, #DDE0F3 50%, #ECEEF8 85%, transparent 100%);
+}
+
+@media (min-width: 768px) {
+  .product-hero-gradient {
+    height: 420px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .product-hero-gradient {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: auto;
+    width: 38%;
+    height: 100%;
+    background: linear-gradient(to left, #D0D4EE 0%, #DDE0F3 50%, #ECEEF8 85%, transparent 100%);
+  }
+}
+
+/* Hero dot-grid pattern */
+.hero-dot-pattern {
+  background-image: radial-gradient(circle, #c7cef0 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* =============================================
+   SCROLL ANIMATIONS — mirrors landing page
+   ============================================= */
+.scroll-animate {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.scroll-animate-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.scroll-animate-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.scroll-animate-visible {
+  opacity: 1 !important;
+  transform: translate(0) !important;
+}
+
+/* Staggered transition delays */
+.delay-75  { transition-delay: 75ms; }
+.delay-100 { transition-delay: 100ms; }
+.delay-150 { transition-delay: 150ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+.delay-400 { transition-delay: 400ms; }
+
+/* =============================================
+   PRODUCT BADGE — matches about-badge style
+   ============================================= */
+.product-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #EEF1FB;
+  color: #030E65;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid #D8DEEF;
+}
+
+/* =============================================
+   STATS CARD — right side of hero
+   ============================================= */
+.stats-card {
+  background: #01052d;
+  border-radius: 28px;
+  padding: 2rem 2rem 1.75rem;
+  box-shadow: 0 40px 80px -20px rgba(1, 5, 45, 0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-card::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(67, 97, 238, 0.25), transparent 70%);
+  pointer-events: none;
+}
+
+/* =============================================
+   FEATURE CARDS
+   ============================================= */
+.feature-card {
+  background: #fff;
+  border: 1px solid #E8ECF5;
+  border-radius: 20px;
+  padding: 1.75rem;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+
+.feature-card:hover {
+  box-shadow: 0 20px 40px -10px rgba(3, 14, 101, 0.1);
+  border-color: transparent;
+  transform: translateY(-3px);
+}
+
+
+/* =============================================
+   FAQ ACCORDION
+   ============================================= */
+.faq-item {
+  border: 1px solid #E8ECF5;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.faq-item:hover {
+  box-shadow: 0 4px 16px rgba(3, 14, 101, 0.06);
+}
+
+/* =============================================
+   PRODUCT EXPLORE CARD
+   ============================================= */
+.explore-card {
+  background: #fff;
+  border: 1px solid #E8ECF5;
+  border-radius: 20px;
+  padding: 1.75rem;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  display: block;
+}
+
+.explore-card:hover {
+  box-shadow: 0 20px 40px -10px rgba(3, 14, 101, 0.12);
+  border-color: transparent;
+  transform: translateY(-4px);
+}

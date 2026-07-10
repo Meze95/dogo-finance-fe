@@ -1,4 +1,4 @@
-import { Component, signal, computed, inject } from '@angular/core';
+import { Component, signal, computed, inject, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 
@@ -205,9 +205,9 @@ export const PRODUCTS_DATA: Record<string, ProductData> = {
   templateUrl: './products.component.html',
   styleUrl: './products.component.css'
 })
-export class ProductsComponent {
+export class ProductsComponent implements AfterViewInit {
   private route = inject(ActivatedRoute);
-  
+
   planId = signal<string>('mudarabah');
   openFaq = signal<number | null>(null);
 
@@ -223,7 +223,31 @@ export class ProductsComponent {
       this.planId.set(plan);
       this.openFaq.set(null);
       window.scrollTo(0, 0);
+      // Re-init animations after route change
+      setTimeout(() => this.initScrollAnimations(), 50);
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.initScrollAnimations();
+  }
+
+  private initScrollAnimations(): void {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('scroll-animate-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    document.querySelectorAll(
+      '.scroll-animate, .scroll-animate-left, .scroll-animate-right'
+    ).forEach((el) => observer.observe(el));
   }
 
   toggleFaq(i: number) {

@@ -1,87 +1,121 @@
 @if(product(); as p) {
-<!-- ===== PRODUCT HERO ===== -->
-<section class="relative pt-32 pb-20 overflow-hidden" [style.background]="'linear-gradient(135deg, ' + p.accentLight + ' 0%, #ffffff 100%)'">
-  <!-- Geometric pattern overlay -->
-  <div class="absolute inset-0 dogo-pattern opacity-[0.04] pointer-events-none"></div>
 
-  <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-    <div class="grid lg:grid-cols-2 gap-16 items-center">
-      <!-- Text -->
-      <div>
-        <nav class="flex items-center gap-2 text-sm font-medium mb-8" aria-label="Breadcrumb">
-          <a routerLink="/" class="text-[var(--dogo-muted)] hover:text-[var(--dogo-primary)]">Home</a>
-          <i class="ri-arrow-right-s-line text-[var(--dogo-muted)]"></i>
-          <span class="font-black" [style.color]="p.accentColor">{{ p.name }}</span>
+<!-- ===== HERO ===== -->
+<section class="relative bg-white overflow-hidden">
+
+  <!-- Dot-grid pattern -->
+  <div class="absolute inset-0 hero-dot-pattern pointer-events-none"></div>
+
+  <!-- Soft lavender gradient panel -->
+  <div class="product-hero-gradient"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
+    <div class="grid lg:grid-cols-2 gap-0 items-stretch">
+
+      <!-- Left: Text Content -->
+      <div class="text-left pt-6 pb-10 md:pt-8 lg:pt-10 lg:pb-14 scroll-animate-left">
+
+        <!-- Breadcrumb -->
+        <nav class="flex items-center gap-2 text-[11px] font-medium mb-5" aria-label="Breadcrumb">
+          <a routerLink="/" class="text-slate-400 hover:text-[#030E65] transition-colors">Home</a>
+          <i class="ri-arrow-right-s-line text-slate-300"></i>
+          <a routerLink="/products/mudarabah" class="text-slate-400 hover:text-[#030E65] transition-colors">Products</a>
+          <i class="ri-arrow-right-s-line text-slate-300"></i>
+          <span class="text-[#030E65] font-semibold">{{ p.name }}</span>
         </nav>
 
-        <div class="halal-badge mb-8">
-          <i class="ri-verified-badge-fill"></i> {{ p.tagline }}
+        <!-- Badge -->
+        <div class="product-badge mb-6">
+          <i class="ri-verified-badge-fill text-[#4361EE]"></i>
+          {{ p.tagline }}
         </div>
 
-        <h1 class="text-[56px] md:text-[70px] font-black leading-[0.9] tracking-tighter text-[var(--dogo-dark)] mb-8">
+        <h1 class="text-4xl md:text-5xl lg:text-[54px] font-black text-[#030E65] leading-[1.08] tracking-tight">
           {{ p.headline }}
         </h1>
-        <p class="text-xl text-[var(--dogo-muted)] font-medium leading-relaxed mb-10 max-w-lg">
+
+        <p class="text-slate-500 text-sm md:text-base leading-relaxed mt-4 max-w-md">
           {{ p.subheadline }}
         </p>
 
-        <button class="px-10 py-5 text-white font-black rounded-2xl hover:opacity-90 transition-all shadow-xl text-lg"
-                [style.background]="p.accentColor">
-          Open {{ p.name }} Account
-        </button>
+        <div class="flex flex-wrap gap-3.5 mt-6">
+          <a routerLink="/register"
+            class="px-4 py-2 bg-[#030E65] text-white font-normal rounded-lg hover:bg-[#030E65]/90 transition-all text-[12px] flex items-center justify-center cursor-pointer">
+            Open {{ p.name }} Account
+          </a>
+        </div>
       </div>
 
-      <!-- Stats card -->
-      <div class="bg-[var(--dogo-dark)] rounded-[50px] p-12 text-white shadow-[0_50px_100px_-20px_rgba(13,26,15,0.5)] relative overflow-hidden">
-        <div class="absolute -top-10 -right-10 w-60 h-60 rounded-full blur-[80px] opacity-20" [style.background]="'radial-gradient(circle, ' + p.accentColor + ', transparent)'"></div>
-        <div class="relative z-10">
-          <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-10" [style.background]="p.accentColor + '33'">
-            <i [class]="p.icon + ' text-3xl'" [style.color]="p.accentColor"></i>
-          </div>
+      <!-- Right: Stats visual -->
+      <div class="relative block w-full h-[340px] md:h-[400px] lg:h-auto mt-6 lg:mt-0 scroll-animate-right">
+        <div class="relative w-full h-full flex items-center justify-center lg:items-end lg:pb-10">
 
-          <h2 class="text-4xl font-black mb-2" [style.color]="p.accentColor">{{ p.returnRate }}</h2>
-          <p class="text-white/40 text-sm font-bold uppercase tracking-widest mb-10">Expected Annual Returns</p>
+          <!-- Decorative orbit rings -->
+          <div class="absolute pointer-events-none"
+            style="width:260px;height:260px;top:50%;left:50%;transform:translate(-50%,-50%);
+                   border:1.5px dashed #C5CBEA;border-radius:50%;opacity:0.6;"></div>
+          <div class="absolute pointer-events-none"
+            style="width:380px;height:380px;top:50%;left:50%;transform:translate(-50%,-50%);
+                   border:1.5px dashed #C5CBEA;border-radius:50%;opacity:0.35;"></div>
 
-          <div class="grid grid-cols-2 gap-6 pt-8 border-t border-white/10">
-            <div>
-              <p class="text-[10px] font-black uppercase tracking-widest text-white/30 mb-1">Min. Investment</p>
-              <p class="font-black text-white text-xl">{{ p.minInvestment }}</p>
+          <!-- Stats card -->
+          <div class="stats-card w-[300px] md:w-[320px] relative z-10">
+            <!-- Icon -->
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 bg-white/10">
+              <i [class]="p.icon + ' text-2xl text-white'"></i>
             </div>
-            <div>
-              <p class="text-[10px] font-black uppercase tracking-widest text-white/30 mb-1">Tenor</p>
-              <p class="font-black text-white text-xl">{{ p.tenor }}</p>
-            </div>
-          </div>
 
-          <div class="mt-8 flex items-center gap-3 bg-white/5 rounded-2xl p-4">
-            <i class="ri-verified-badge-fill text-[var(--dogo-secondary)] text-xl shrink-0"></i>
-            <p class="text-white/70 text-sm font-medium">Shariah Supervisory Board (SSB) Certified</p>
+            <!-- Return rate -->
+            <p class="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-1">Expected Annual Return</p>
+            <h2 class="text-3xl font-black text-white mb-5">{{ p.returnRate }}</h2>
+
+            <!-- Divider -->
+            <div class="border-t border-white/10 pt-5 grid grid-cols-2 gap-4 mb-5">
+              <div>
+                <p class="text-[9px] font-bold uppercase tracking-widest text-white/30 mb-1.5">Min. Investment</p>
+                <p class="text-base font-black text-white">{{ p.minInvestment }}</p>
+              </div>
+              <div>
+                <p class="text-[9px] font-bold uppercase tracking-widest text-white/30 mb-1.5">Tenor</p>
+                <p class="text-base font-black text-white">{{ p.tenor }}</p>
+              </div>
+            </div>
+
+            <!-- SSB badge -->
+            <div class="flex items-center gap-2.5 bg-white/5 rounded-xl p-3">
+              <i class="ri-verified-badge-fill text-[#4361EE] text-lg shrink-0"></i>
+              <p class="text-white/60 text-[11px] font-medium leading-snug">Shariah Supervisory Board (SSB) Certified</p>
+            </div>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </section>
 
+
 <!-- ===== KEY FEATURES ===== -->
-<section class="py-24 bg-white">
+<section class="py-12 md:py-16 bg-white overflow-hidden">
   <div class="max-w-7xl mx-auto px-6 md:px-12">
-    <div class="text-center mb-20">
-      <div class="halal-badge mx-auto mb-6"><i class="ri-star-fill"></i> Key Features</div>
-      <h2 class="text-4xl md:text-5xl font-black text-[var(--dogo-dark)] tracking-tighter">
-        What makes <span [style.color]="p.accentColor">{{ p.name }}</span> different?
+    <div class="text-center mb-12 scroll-animate">
+      <p class="text-sm font-serif italic text-slate-400 mb-1.5">What makes <span class="font-serif italic text-slate-500">{{ p.name }}</span> different?</p>
+      <h2 class="text-2xl md:text-3xl font-bold text-black tracking-tight max-w-2xl mx-auto leading-tight">
+        Built for your faith. Designed for your growth.
       </h2>
     </div>
-    <div class="grid md:grid-cols-2 gap-8">
-      @for(f of p.features; track f.title) {
-        <div class="flex gap-6 p-8 rounded-[32px] border border-gray-100 hover:border-transparent hover:shadow-xl transition-all group">
-          <div class="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-colors"
-               [style.background]="p.accentLight">
-            <i [class]="f.icon + ' text-2xl'" [style.color]="p.accentColor"></i>
-          </div>
-          <div>
-            <h3 class="text-xl font-black text-[var(--dogo-dark)] mb-3">{{ f.title }}</h3>
-            <p class="text-[var(--dogo-muted)] font-medium leading-relaxed">{{ f.desc }}</p>
+
+    <div class="grid md:grid-cols-2 gap-5">
+      @for(f of p.features; track f.title; let i = $index) {
+        <div class="feature-card scroll-animate" [style.transition-delay.ms]="i * 75">
+          <div class="flex gap-5">
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 bg-[#F0F3FF]">
+              <i [class]="f.icon + ' text-xl text-[#030E65]'"></i>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-[#030E65] mb-1.5">{{ f.title }}</h3>
+              <p class="text-sm text-slate-500 leading-relaxed">{{ f.desc }}</p>
+            </div>
           </div>
         </div>
       }
@@ -90,67 +124,98 @@
 </section>
 
 <!-- ===== HOW IT WORKS ===== -->
-<section class="py-24" [style.background]="p.accentLight">
+<section class="py-12 md:py-16 bg-gradient-to-b from-indigo-50/40 via-indigo-50/10 to-white border-t border-slate-100 overflow-hidden">
   <div class="max-w-7xl mx-auto px-6 md:px-12">
-    <div class="text-center mb-20">
-      <div class="halal-badge mx-auto mb-6"><i class="ri-map-pin-line"></i> How It Works</div>
-      <h2 class="text-4xl md:text-5xl font-black text-[var(--dogo-dark)] tracking-tighter">Start in 4 simple steps.</h2>
+    <div class="text-center mb-12 scroll-animate">
+      <p class="text-xs font-semibold text-slate-500 mb-1.5">From sign-up to <span class="font-serif italic text-slate-600">profit</span></p>
+      <h2 class="text-2xl md:text-3xl font-semibold text-slate-800">4 steps. That's all.</h2>
     </div>
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-      @for(s of p.howItWorks; track s.step) {
-        <div class="bg-white rounded-[32px] p-8 shadow-lg border border-white relative">
-          <div class="text-[64px] font-black leading-none mb-6 opacity-10" [style.color]="p.accentColor">{{ s.step }}</div>
-          <h3 class="text-lg font-black text-[var(--dogo-dark)] mb-4">{{ s.title }}</h3>
-          <p class="text-[var(--dogo-muted)] font-medium leading-relaxed text-sm">{{ s.desc }}</p>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+      <!-- single continuous connector line, sits BEHIND the cards -->
+      <div class="hidden lg:block absolute left-0 right-0 top-[164px] h-px bg-[#D6DCFB] z-0"></div>
+
+      @for(s of p.howItWorks; track s.step; let i = $index) {
+        <div class="bg-white border border-slate-100 rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[260px] z-10 scroll-animate" [style.transition-delay.ms]="i * 75">
+          <div class="relative z-10">
+            <h3 class="text-sm md:text-base font-semibold text-slate-800 mb-2">{{ s.title }}</h3>
+            <p class="text-sm text-slate-500 leading-relaxed">{{ s.desc }}</p>
+          </div>
+          <!-- Big background number -->
+          <div class="absolute -bottom-12 left-0 right-0 text-center text-[11rem] font-black text-slate-100/80 pointer-events-none select-none z-0 leading-none">
+            {{ i + 1 }}
+          </div>
         </div>
       }
     </div>
   </div>
 </section>
 
+
 <!-- ===== FAQ ===== -->
 @if(p.faqs.length > 0) {
-  <section class="py-24 bg-white">
-    <div class="max-w-3xl mx-auto px-6 md:px-12">
-      <h2 class="text-4xl font-black text-[var(--dogo-dark)] tracking-tighter text-center mb-16">Common Questions</h2>
-      <div class="space-y-4">
-        @for(faq of p.faqs; track faq.q; let i = $index) {
-          <div class="border border-gray-100 rounded-[24px] overflow-hidden">
-            <button (click)="toggleFaq(i)" class="w-full flex items-center justify-between px-8 py-6 text-left hover:bg-gray-50 transition-colors">
-              <span class="font-black text-[var(--dogo-dark)] pr-8">{{ faq.q }}</span>
-              <i [class]="openFaq() === i ? 'ri-subtract-line' : 'ri-add-line'" class="shrink-0 text-xl" [style.color]="p.accentColor"></i>
-            </button>
-            @if(openFaq() === i) {
-              <div class="px-8 pb-6 text-[var(--dogo-muted)] font-medium leading-relaxed border-t border-gray-50">
-                {{ faq.a }}
-              </div>
-            }
-          </div>
-        }
-      </div>
+<section class="py-12 md:py-16 bg-white border-t border-slate-100 overflow-hidden">
+  <div class="max-w-3xl mx-auto px-6 md:px-12">
+    <div class="text-center mb-10 scroll-animate">
+      <p class="text-sm font-serif italic text-slate-400 mb-1.5">Got <span class="font-serif italic text-slate-500">questions?</span></p>
+      <h2 class="text-2xl md:text-3xl font-bold text-black tracking-tight">Common Questions</h2>
     </div>
-  </section>
-}
 
-<!-- ===== OTHER PRODUCTS ===== -->
-<section class="py-24 bg-[var(--dogo-cream)]">
-  <div class="max-w-7xl mx-auto px-6 md:px-12">
-    <h2 class="text-4xl font-black text-[var(--dogo-dark)] tracking-tighter text-center mb-16">Explore more products</h2>
-    <div class="grid md:grid-cols-3 gap-8">
-      @for(op of otherProducts().slice(0, 3); track op.id) {
-        <a [routerLink]="['/products', op.id]" class="group bg-white rounded-[32px] p-8 border border-gray-100 hover:border-transparent hover:shadow-xl transition-all">
-          <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-6" [style.background]="op.accentLight">
-            <i [class]="op.icon + ' text-2xl'" [style.color]="op.accentColor"></i>
-          </div>
-          <h3 class="text-xl font-black text-[var(--dogo-dark)] mb-2 group-hover:text-[var(--dogo-primary)] transition-colors">{{ op.name }}</h3>
-          <p class="text-[var(--dogo-muted)] font-medium text-sm mb-6">{{ op.tagline }}</p>
-          <span class="font-black text-sm flex items-center gap-1" [style.color]="op.accentColor">
-            {{ op.returnRate }} <i class="ri-arrow-right-line"></i>
-          </span>
-        </a>
+    <div class="space-y-3">
+      @for(faq of p.faqs; track faq.q; let i = $index) {
+        <div class="faq-item scroll-animate" [style.transition-delay.ms]="i * 75">
+          <button (click)="toggleFaq(i)"
+            class="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-slate-50 transition-colors">
+            <span class="font-semibold text-[#030E65] text-sm md:text-base pr-6">{{ faq.q }}</span>
+            <div class="w-7 h-7 rounded-full bg-[#F0F3FF] flex items-center justify-center shrink-0">
+              <i [class]="openFaq() === i ? 'ri-subtract-line' : 'ri-add-line'" class="text-[#030E65] text-sm"></i>
+            </div>
+          </button>
+          @if(openFaq() === i) {
+            <div class="px-6 pb-5 text-slate-500 text-sm leading-relaxed border-t border-slate-100 pt-4">
+              {{ faq.a }}
+            </div>
+          }
+        </div>
       }
     </div>
   </div>
 </section>
 }
 
+
+<!-- ===== OTHER PRODUCTS ===== -->
+<section class="py-12 md:py-16 bg-white border-t border-slate-100 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6 md:px-12">
+    <div class="flex justify-between items-end mb-8 scroll-animate">
+      <div>
+        <p class="text-sm font-serif italic text-slate-400 mb-1.5">Our <span class="font-serif italic text-slate-500">Products</span></p>
+        <h2 class="text-2xl md:text-3xl font-bold text-black tracking-tight">Explore more products.</h2>
+      </div>
+      <a routerLink="/products/mudarabah"
+        class="inline-flex items-center gap-0.5 text-xs md:text-sm font-bold text-black bg-[#F5F6FF] hover:bg-[#EBEBFF] rounded-lg px-4 py-2 transition-colors whitespace-nowrap">
+        View all <i class="ri-arrow-right-s-line"></i>
+      </a>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-5">
+      @for(op of otherProducts().slice(0, 3); track op.id; let i = $index) {
+        <a [routerLink]="['/products', op.id]" class="explore-card scroll-animate" [style.transition-delay.ms]="i * 75">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-5 bg-[#F0F3FF]">
+            <i [class]="op.icon + ' text-xl text-[#030E65]'"></i>
+          </div>
+          <h3 class="text-base font-bold text-[#030E65] mb-1.5 group-hover:text-[#4361EE] transition-colors">{{ op.name }}</h3>
+          <p class="text-slate-500 text-sm mb-4 leading-relaxed">{{ op.tagline }}</p>
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-green-600">{{ op.returnRate }}</span>
+            <span class="text-xs font-bold text-[#030E65] flex items-center gap-1 bg-[#F0F3FF] px-3 py-1.5 rounded-lg">
+              Learn more <i class="ri-arrow-right-line"></i>
+            </span>
+          </div>
+        </a>
+      }
+    </div>
+  </div>
+</section>
+
+}
