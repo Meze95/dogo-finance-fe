@@ -1,219 +1,245 @@
-<app-auth-layout
-  sidebarTitle="Build wealth"
-  sidebarHighlight="without compromise."
+<app-auth-layout sidebarTitle="Build wealth" sidebarHighlight="without compromise."
   sidebarSubtext="Join Nigeria’s premier Shariah-compliant digital investment platform. No Riba, full transparency."
-  pageTitle="Create your account"
-  pageSubtext="Start your Halal investment journey today."
-  backLink="/"
+  pageTitle="Create your account" pageSubtext="Start your Halal investment journey today." backLink="/"
   backText="Back Home">
 
   <div sidebarContent class="flex flex-wrap gap-6 items-center">
     <div class="flex items-center space-x-3 bg-white/5 py-3 px-5 rounded-xl border border-white/10">
-      <i class="ri-shield-check-fill text-[var(--dogo-secondary)] text-2xl"></i>
+      <i class="ri-shield-check-fill text-[#4361EE] text-2xl"></i>
       <span class="font-bold text-sm tracking-widest uppercase text-white/50">100% Halal</span>
     </div>
     <div class="flex items-center space-x-3 bg-white/5 py-3 px-5 rounded-xl border border-white/10">
-      <i class="ri-verified-badge-fill text-[var(--dogo-secondary)] text-2xl"></i>
+      <i class="ri-verified-badge-fill text-[#4361EE] text-2xl"></i>
       <span class="font-bold text-sm tracking-widest uppercase text-white/50">SSB Audited</span>
     </div>
   </div>
 
   @if(isSuccess()) {
-    <!-- Success Screen -->
-    <div class="animate-in fade-in zoom-in duration-700 flex flex-col items-center text-center">
-       <div class="w-24 h-24 bg-green-50 border-2 border-green-200 rounded-full flex items-center justify-center mb-8 relative">
-          <i class="ri-mail-send-fill text-5xl text-green-600"></i>
-          <div class="absolute -top-2 -right-2 w-8 h-8 bg-[var(--dogo-secondary)] rounded-full flex items-center justify-center border-4 border-white">
-            <i class="ri-check-line text-white font-black"></i>
-          </div>
-       </div>
-       
-       <h1 class="text-3xl md:text-5xl font-black text-[var(--dogo-dark)] mb-6 tracking-tighter">Registration <br><span class="text-[var(--dogo-primary)]">Successful!</span></h1>
-       
-       <div class="bg-white/40 backdrop-blur-sm border-2 border-dashed border-[var(--dogo-primary)]/10 p-8 rounded-[32px] mb-12">
-         <p class="text-lg text-[var(--dogo-muted)] font-medium leading-relaxed">
-           We've sent a verification link to your email. Please click the link to activate your account and start your Halal investment journey.
-         </p>
-       </div>
-       
-       <div class="space-y-4 w-full">
-         <button routerLink="/login" class="w-full h-14 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] hover:shadow-xl hover:shadow-[var(--dogo-primary)]/20 transition-all uppercase tracking-widest text-sm flex items-center justify-center gap-2">
-           <i class="ri-login-box-line"></i> Back to Login
-         </button>
-         <p class="text-xs font-bold uppercase tracking-widest text-[var(--dogo-dark)]/40 pt-4">Didn't receive any mail? Check your spam folder.</p>
-       </div>
+  <!-- Success Screen -->
+  <div class="animate-in fade-in zoom-in duration-700 flex flex-col items-center text-center">
+    <div
+      class="w-24 h-24 bg-green-50 border-2 border-green-200 rounded-full flex items-center justify-center mb-8 relative">
+      <i class="ri-mail-send-fill text-5xl text-green-600"></i>
+      <div
+        class="absolute -top-2 -right-2 w-8 h-8 bg-[var(--dogo-secondary)] rounded-full flex items-center justify-center border-4 border-white">
+        <i class="ri-check-line text-white font-black"></i>
+      </div>
     </div>
-  } @else {
-    <!-- Registration Form -->
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-6 animate-in fade-in duration-500">
-      
-      <!-- Error Message -->
-      @if (errorMessage()) {
-        <div class="p-4 bg-red-50 border-l-4 border-red-500 rounded-xl flex items-center gap-3 animate-shake">
-          <i class="ri-error-warning-fill text-red-500 text-xl"></i>
-          <p class="text-red-700 text-sm font-bold">{{ errorMessage() }}</p>
-        </div>
-      }
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- First Name -->
-        <div>
-          <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">First Name</label>
-          <div class="relative">
-            <input type="text" formControlName="firstName" class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl px-5 pl-12 font-medium text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:ring-4 focus:ring-[var(--dogo-secondary)]/10 transition-all placeholder:text-gray-400" placeholder="Ado" />
-            <i class="ri-user-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"></i>
-          </div>
-          @if(registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched) {
-            <span class="text-red-500 text-xs font-bold mt-2 block">First name is required.</span>
-          }
-        </div>
 
-        <!-- Last Name -->
-        <div>
-          <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Last Name</label>
-          <div class="relative">
-            <input type="text" formControlName="lastName" class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl px-5 pl-12 font-medium text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:ring-4 focus:ring-[var(--dogo-secondary)]/10 transition-all placeholder:text-gray-400" placeholder="Bayero" />
-            <i class="ri-user-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"></i>
-          </div>
-          @if(registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched) {
-            <span class="text-red-500 text-xs font-bold mt-2 block">Last name is required.</span>
-          }
+    <h1 class="text-3xl md:text-5xl font-black text-[var(--dogo-dark)] mb-6 tracking-tighter">Registration <br><span
+        class="text-[var(--dogo-primary)]">Successful!</span></h1>
+
+    <div
+      class="bg-white/40 backdrop-blur-sm border-2 border-dashed border-[var(--dogo-primary)]/10 p-8 rounded-[32px] mb-12">
+      <p class="text-lg text-[var(--dogo-muted)] font-medium leading-relaxed">
+        We've sent a verification link to your email. Please click the link to activate your account and start your
+        Halal investment journey.
+      </p>
+    </div>
+
+    <div class="space-y-4 w-full">
+      <button routerLink="/login"
+        class="w-full h-14 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] hover:shadow-xl hover:shadow-[var(--dogo-primary)]/20 transition-all uppercase tracking-widest text-sm flex items-center justify-center gap-2">
+        <i class="ri-login-box-line"></i> Back to Login
+      </button>
+      <p class="text-xs font-bold uppercase tracking-widest text-[var(--dogo-dark)]/40 pt-4">Didn't receive any mail?
+        Check your spam folder.</p>
+    </div>
+  </div>
+  } @else { <!-- Registration Form -->
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-4 animate-in fade-in duration-500">
+
+    <!-- Error Message -->
+    @if (errorMessage()) {
+    <div class="p-4 bg-red-50 border-l-4 border-red-500 rounded-lg flex items-center gap-3 animate-shake">
+      <i class="ri-error-warning-fill text-red-500 text-xl"></i>
+      <p class="text-red-700 text-sm font-bold">{{ errorMessage() }}</p>
+    </div>
+    }
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- First Name -->
+      <div>
+        <label class="block text-xs font-bold text-[#030E65] mb-1.5">First Name</label>
+        <div class="relative">
+          <input type="text" formControlName="firstName"
+            class="w-full py-3 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all placeholder:text-slate-400"
+            placeholder="Ado" />
+          <i class="ri-user-line absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
         </div>
+        @if(registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched) {
+        <span class="text-red-500 text-[10px] font-semibold mt-1 block">First name is required.</span>
+        }
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Date of Birth -->
-        <div>
-          <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Date of Birth</label>
-          <div class="relative group">
-            <input type="date" formControlName="dob" class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl px-5 pl-12 font-medium text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:ring-4 focus:ring-[var(--dogo-secondary)]/10 transition-all text-gray-400 focus:text-[var(--dogo-dark)]" />
-            <i class="ri-calendar-event-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[var(--dogo-secondary)] transition-colors"></i>
-          </div>
-          @if(registerForm.get('dob')?.invalid && registerForm.get('dob')?.touched) {
-            <span class="text-red-500 text-xs font-bold mt-2 block">Valid DOB is required.</span>
-          }
+      <!-- Last Name -->
+      <div>
+        <label class="block text-xs font-bold text-[#030E65] mb-1.5">Last Name</label>
+        <div class="relative">
+          <input type="text" formControlName="lastName"
+            class="w-full py-3 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all placeholder:text-slate-400"
+            placeholder="Bayero" />
+          <i class="ri-user-line absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
         </div>
+        @if(registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched) {
+        <span class="text-red-500 text-[10px] font-semibold mt-1 block">Last name is required.</span>
+        }
+      </div>
+    </div>
 
-        <!-- Gender -->
-        <div>
-          <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Gender</label>
-          <div class="relative group">
-            <div (click)="isGenderDropdownOpen.set(!isGenderDropdownOpen())" 
-                 class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl px-5 pl-12 flex items-center cursor-pointer transition-all hover:border-[var(--dogo-secondary)]"
-                 [class.border-[var(--dogo-secondary)]]="isGenderDropdownOpen()"
-                 [class.ring-4]="isGenderDropdownOpen()"
-                 [class.ring-[var(--dogo-secondary)]/10]="isGenderDropdownOpen()">
-              <span class="font-medium" [class.text-gray-400]="!registerForm.get('genderId')?.value" [class.text-[var(--dogo-dark)]]="registerForm.get('genderId')?.value">
-                {{ getSelectedGenderName() }}
-              </span>
-              <i class="ri-parent-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-[var(--dogo-secondary)] transition-colors" [class.text-[var(--dogo-secondary)]]="isGenderDropdownOpen()"></i>
-              <i class="ri-arrow-down-s-line absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 transition-transform duration-300" [class.rotate-180]="isGenderDropdownOpen()"></i>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Date of Birth -->
+      <div>
+        <label class="block text-xs font-bold text-[#030E65] mb-1.5">Date of Birth</label>
+        <div class="relative group">
+          <input type="date" formControlName="dob"
+            class="w-full py-3 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all text-slate-400 focus:text-[#030E65]" />
+          <i
+            class="ri-calendar-event-line absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#4361EE] transition-colors"></i>
+        </div>
+        @if(registerForm.get('dob')?.invalid && registerForm.get('dob')?.touched) {
+        <span class="text-red-500 text-[10px] font-semibold mt-1 block">Valid DOB is required.</span>
+        }
+      </div>
+
+      <!-- Gender -->
+      <div>
+        <label class="block text-xs font-bold text-[#030E65] mb-1.5">Gender</label>
+        <div class="relative group">
+          <div (click)="isGenderDropdownOpen.set(!isGenderDropdownOpen())"
+            class="w-full py-3 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 flex items-center cursor-pointer transition-all hover:border-[#4361EE]"
+            [class.border-[#4361EE]]="isGenderDropdownOpen()" [class.ring-4]="isGenderDropdownOpen()"
+            [class.ring-[#4361EE]/10]="isGenderDropdownOpen()">
+            <span class="text-sm font-medium" [class.text-slate-400]='!registerForm.get("genderId")?.value'
+              [class.text-[#030E65]]='registerForm.get("genderId")?.value'>
+              {{ getSelectedGenderName() }}
+            </span>
+            <i class="ri-parent-line absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-hover:text-[#4361EE] transition-colors"
+              [class.text-[#4361EE]]="isGenderDropdownOpen()"></i>
+            <i class="ri-arrow-down-s-line absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 transition-transform duration-300"
+              [class.rotate-180]="isGenderDropdownOpen()"></i>
+          </div>
+
+          @if (isGenderDropdownOpen()) {
+          <div
+            class="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-lg z-50 overflow-hidden animate-in fade-in slide-in-from-top-1 duration-200">
+            @for(g of genders(); track g.id) {
+            <div (click)="selectGender(g.id)"
+              class="px-4 py-2.5 hover:bg-slate-50 cursor-pointer transition-colors flex items-center justify-between group/opt">
+              <span class="text-xs font-semibold text-[#030E65]">{{ g.name }}</span>
+              @if (registerForm.get('genderId')?.value == g.id) {
+              <i class="ri-check-line text-[#4361EE] font-bold"></i>
+              }
             </div>
-            
-            @if (isGenderDropdownOpen()) {
-              <div class="absolute top-full left-0 right-0 mt-2 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-                @for(g of genders(); track g.id) {
-                  <div (click)="selectGender(g.id)" 
-                       class="px-5 py-4 hover:bg-[var(--dogo-cream)] cursor-pointer transition-colors flex items-center justify-between group/opt">
-                    <span class="text-sm font-bold text-[var(--dogo-dark)] group-hover/opt:text-[var(--dogo-primary)]">{{ g.name }}</span>
-                    @if (registerForm.get('genderId')?.value == g.id) {
-                      <i class="ri-check-line text-[var(--dogo-secondary)] font-black"></i>
-                    }
-                  </div>
-                }
-              </div>
             }
           </div>
-          @if(registerForm.get('genderId')?.invalid && registerForm.get('genderId')?.touched) {
-            <span class="text-red-500 text-xs font-bold mt-2 block">Gender is required.</span>
           }
         </div>
+        @if(registerForm.get('genderId')?.invalid && registerForm.get('genderId')?.touched) {
+        <span class="text-red-500 text-[10px] font-semibold mt-1 block">Gender is required.</span>
+        }
       </div>
+    </div>
 
-      <!-- Email -->
+    <!-- Email -->
+    <div>
+      <label class="block text-xs font-bold text-[#030E65] mb-1.5">Email Address</label>
+      <div class="relative group">
+        <input type="email" formControlName="email"
+          class="w-full py-3 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all placeholder:text-slate-400"
+          placeholder="ado.bayero@example.com" />
+        <i
+          class="ri-mail-line absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#4361EE] transition-colors"></i>
+      </div>
+      @if(registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+      <span class="text-red-500 text-[10px] font-semibold mt-1 block">Enter a valid email.</span>
+      }
+    </div>
+
+    <!-- Phone Number -->
+    <div>
+      <label class="block text-xs font-bold text-[#030E65] mb-1.5">Phone Number</label>
+      <div class="relative group">
+        <input type="tel" formControlName="phone"
+          class="w-full py-3 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all placeholder:text-slate-400"
+          placeholder="0801 234 5678" />
+        <i
+          class="ri-phone-line absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#4361EE] transition-colors"></i>
+      </div>
+      @if(registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched) {
+      <span class="text-red-500 text-[10px] font-semibold mt-1 block">Phone number is required.</span>
+      }
+    </div>
+
+    <!-- Password Fields Wrapper -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Password -->
       <div>
-        <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Email Address</label>
+        <label class="block text-xs font-bold text-[#030E65] mb-1.5">Password</label>
         <div class="relative group">
-          <input type="email" formControlName="email" class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl px-5 pl-12 font-medium text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:ring-4 focus:ring-[var(--dogo-secondary)]/10 transition-all placeholder:text-gray-400" placeholder="ado.bayero@example.com" />
-          <i class="ri-mail-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[var(--dogo-secondary)] transition-colors"></i>
+          <input [type]="showPassword() ? 'text' : 'password'" formControlName="password"
+            class="w-full py-3 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 pr-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all placeholder:text-slate-400"
+            placeholder="••••••••" />
+          <i
+            class="ri-lock-line absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#4361EE] transition-colors"></i>
+          <button type="button" (click)="togglePassword()"
+            class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#030E65] transition-colors text-lg">
+            <i [class]="showPassword() ? 'ri-eye-line' : 'ri-eye-off-line'"></i>
+          </button>
         </div>
-        @if(registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
-          <span class="text-red-500 text-xs font-bold mt-2 block">Enter a valid email.</span>
+        @if(registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
+        <span class="text-red-500 text-[10px] font-semibold mt-1 block">At least 8 characters.</span>
         }
       </div>
 
-      <!-- Phone Number -->
+      <!-- Confirm Password -->
       <div>
-        <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Phone Number</label>
+        <label class="block text-xs font-bold text-[#030E65] mb-1.5">Confirm Password</label>
         <div class="relative group">
-          <input type="tel" formControlName="phone" class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl px-5 pl-12 font-medium text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:ring-4 focus:ring-[var(--dogo-secondary)]/10 transition-all placeholder:text-gray-400" placeholder="0801 234 5678" />
-          <i class="ri-phone-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[var(--dogo-secondary)] transition-colors"></i>
+          <input [type]="showPassword() ? 'text' : 'password'" formControlName="confirmPassword"
+            class="w-full py-3 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all placeholder:text-slate-400"
+            placeholder="••••••••" />
+          <i
+            class="ri-lock-check-line absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#4361EE] transition-colors"></i>
         </div>
-        @if(registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched) {
-          <span class="text-red-500 text-xs font-bold mt-2 block">Phone number is required.</span>
+        @if(registerForm.hasError('mismatch') && registerForm.get('confirmPassword')?.touched) {
+        <span class="text-red-500 text-[10px] font-semibold mt-1 block">Passwords do not match.</span>
         }
       </div>
+    </div>
 
-      <!-- Password Fields Wrapper -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Password -->
-        <div>
-          <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Password</label>
-          <div class="relative group">
-            <input [type]="showPassword() ? 'text' : 'password'" formControlName="password" class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl px-5 pl-12 pr-12 font-medium text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:ring-4 focus:ring-[var(--dogo-secondary)]/10 transition-all placeholder:text-gray-400" placeholder="••••••••" />
-            <i class="ri-lock-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[var(--dogo-secondary)] transition-colors"></i>
-            <button type="button" (click)="togglePassword()" class="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[var(--dogo-primary)] transition-colors text-xl">
-              <i [class]="showPassword() ? 'ri-eye-line' : 'ri-eye-off-line'"></i>
-            </button>
-          </div>
-          @if(registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
-            <span class="text-red-500 text-xs font-bold mt-2 block">At least 8 characters.</span>
-          }
+    <!-- PEP Checkbox -->
+    <div class="p-3 bg-slate-50 border border-slate-100 rounded-xl">
+      <label class="flex items-start space-x-3 cursor-pointer group">
+        <div class="relative flex items-center mt-0.5">
+          <input type="checkbox" formControlName="isPep"
+            class="peer h-5 w-5 appearance-none rounded border border-slate-300 bg-white checked:bg-[#030E65] checked:border-[#030E65] transition-all cursor-pointer" />
+          <i
+            class="ri-check-line absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-xs opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"></i>
         </div>
-
-        <!-- Confirm Password -->
-        <div>
-          <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Confirm Password</label>
-          <div class="relative group">
-            <input [type]="showPassword() ? 'text' : 'password'" formControlName="confirmPassword" class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl px-5 pl-12 font-medium text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:ring-4 focus:ring-[var(--dogo-secondary)]/10 transition-all placeholder:text-gray-400" placeholder="••••••••" />
-            <i class="ri-lock-check-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[var(--dogo-secondary)] transition-colors"></i>
-          </div>
-          @if(registerForm.hasError('mismatch') && registerForm.get('confirmPassword')?.touched) {
-            <span class="text-red-500 text-xs font-bold mt-2 block">Passwords do not match.</span>
-          }
+        <div class="flex-1">
+          <span class="block text-xs font-bold text-[#030E65] leading-tight">Politically Exposed Person (PEP)</span>
+          <p class="text-[9px] font-medium text-slate-400 leading-normal mt-0.5">
+            Tick this box if you or a close associate hold a prominent public office or are related to someone who does.
+          </p>
         </div>
-      </div>
+      </label>
+    </div>
 
-      <!-- PEP Checkbox -->
-      <div class="p-4 bg-white/50 border border-[var(--dogo-primary)]/5 rounded-2xl">
-        <label class="flex items-start space-x-4 cursor-pointer group">
-          <div class="relative flex items-center mt-1">
-            <input type="checkbox" formControlName="isPep" class="peer h-6 w-6 appearance-none rounded-lg border-2 border-[var(--dogo-primary)]/10 bg-white checked:bg-[var(--dogo-primary)] checked:border-[var(--dogo-primary)] transition-all cursor-pointer" />
-            <i class="ri-check-line absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"></i>
-          </div>
-          <div class="flex-1">
-            <span class="block text-sm font-black text-[var(--dogo-dark)] leading-tight">Politically Exposed Person (PEP)</span>
-            <p class="text-[10px] font-medium text-[var(--dogo-muted)] leading-normal mt-1">
-              Tick this box if you or a close associate hold a prominent public office or are related to someone who does.
-            </p>
-          </div>
-        </label>
-      </div>
+    <button type="submit" [disabled]="isProcessing()"
+      class="w-full py-3 bg-[#030E65] text-white font-bold rounded-lg hover:bg-[#030E65]/90 hover:shadow-lg transition-all text-xs tracking-wide mt-4 disabled:opacity-70 flex items-center justify-center gap-2 cursor-pointer">
+      @if(isProcessing()) {
+      <i class="ri-loader-4-line animate-spin text-sm"></i> Creating Account...
+      } @else {
+      Create Account
+      }
+    </button>
+  </form>
 
-
-      <button type="submit" [disabled]="isProcessing()" class="w-full h-14 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] hover:shadow-xl hover:shadow-[var(--dogo-primary)]/20 transition-all uppercase tracking-widest text-sm mt-6 disabled:opacity-70 flex items-center justify-center gap-2">
-        @if(isProcessing()) {
-          <i class="ri-loader-4-line animate-spin text-lg"></i> Creating Account...
-        } @else {
-          Create Account
-        }
-      </button>
-    </form>
-
-    <p class="text-center font-medium text-[var(--dogo-muted)] mt-10">
-      Already have an account? 
-      <a routerLink="/login" class="text-[var(--dogo-primary)] font-black hover:underline">Log in</a>
-    </p>
+  <p class="text-center text-xs font-medium text-slate-400 mt-8">
+    Already have an account?
+    <a routerLink="/login" class="text-[#4361EE] font-bold hover:underline">Log in</a>
+  </p>
   }
 
 </app-auth-layout>

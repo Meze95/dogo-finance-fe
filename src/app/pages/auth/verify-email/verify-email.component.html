@@ -1,10 +1,6 @@
-<app-auth-layout
-  sidebarTitle="Security"
-  sidebarHighlight="First."
+<app-auth-layout sidebarTitle="Security" sidebarHighlight="First."
   sidebarSubtext="We've sent a 6-digit verification code to your inbox. This extra step ensures only you can access your shariah-compliant wealth dashboard."
-  pageTitle="Verify your email"
-  pageSubtext="Enter the 6-digit code sent to your inbox."
-  backLink="/register"
+  pageTitle="Verify your email" pageSubtext="Enter the 6-digit code sent to your inbox." backLink="/register"
   backText="Back to Sign Up">
 
   <div sidebarContent class="flex flex-wrap gap-6 items-center">
@@ -19,110 +15,100 @@
   </div>
 
   @if(isSuccess()) {
-    <!-- Success State -->
-    <div class="success-card flex flex-col items-center text-center py-10">
-       <div class="w-32 h-32 bg-green-50 rounded-full flex items-center justify-center mb-10 check-animation shadow-2xl shadow-green-200">
-          <i class="ri-checkbox-circle-fill text-6xl text-green-500"></i>
-       </div>
-       
-       <h2 class="text-4xl md:text-6xl font-black text-[var(--dogo-dark)] mb-6 tracking-tighter italic">Verified!</h2>
-       
-       <div class="bg-white/60 backdrop-blur-md border border-white p-8 rounded-[40px] mb-12 shadow-xl">
-         <p class="text-lg text-[var(--dogo-muted)] font-medium leading-relaxed">
-            Identity confirmed. Welcome to the future of <span class="text-[var(--dogo-primary)] font-black">Halal Banking.</span>
-         </p>
-       </div>
-       
-       <button routerLink="/login" class="w-full h-16 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] hover:shadow-2xl hover:shadow-[var(--dogo-primary)]/20 transition-all uppercase tracking-[0.2em] text-sm flex items-center justify-center gap-3">
-         Proceed to Login <i class="ri-login-box-line text-xl"></i>
-       </button>
+  <!-- Success State -->
+  <div class="success-card flex flex-col items-center text-center py-6">
+    <div class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mb-6 shadow-sm">
+      <i class="ri-checkbox-circle-fill text-3xl text-green-500"></i>
     </div>
+
+    <h2 class="text-2xl md:text-3xl font-black text-[#030E65] mb-2 tracking-tight">Verified!</h2>
+
+    <div class="bg-white border border-slate-100 p-6 rounded-2xl mb-8 shadow-sm">
+      <p class="text-sm text-slate-500 font-medium leading-relaxed">
+        Identity confirmed. Welcome to the future of <span class="text-[#4361EE] font-bold">Halal Banking.</span>
+      </p>
+    </div>
+
+    <button routerLink="/login"
+      class="w-full py-3 bg-[#030E65] text-white font-bold rounded-lg hover:bg-[#030E65]/90 hover:shadow-lg transition-all text-xs flex items-center justify-center gap-2 cursor-pointer">
+      Proceed to Login <i class="ri-login-box-line text-sm"></i>
+    </button>
+  </div>
   } @else if(isAutoVerifying() && isProcessing()) {
-    <!-- Loading State -->
-    <div class="flex flex-col items-center justify-center py-20 text-center animate-in fade-in duration-700">
-       <div class="relative w-24 h-24 mb-10">
-         <div class="absolute inset-0 border-4 border-[var(--dogo-primary)]/10 rounded-full"></div>
-         <div class="absolute inset-0 border-4 border-t-[var(--dogo-secondary)] border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin"></div>
-         <div class="absolute inset-0 flex items-center justify-center">
-            <i class="ri-shield-flash-fill text-3xl text-[var(--dogo-secondary)]"></i>
-         </div>
-       </div>
-       <h3 class="text-3xl font-black text-[var(--dogo-dark)] tracking-tighter uppercase">Securing your identity</h3>
-       <p class="text-[var(--dogo-muted)] font-medium mt-3 italic opacity-70">Validating encrypted token...</p>
+  <!-- Loading State -->
+  <div class="flex flex-col items-center justify-center py-12 text-center animate-in fade-in duration-700">
+    <div class="relative w-16 h-16 mb-6">
+      <div class="absolute inset-0 border-4 border-slate-100 rounded-full"></div>
+      <div
+        class="absolute inset-0 border-4 border-t-[#4361EE] border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin">
+      </div>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <i class="ri-shield-flash-fill text-xl text-[#4361EE]"></i>
+      </div>
     </div>
+    <h3 class="text-lg font-bold text-[#030E65] tracking-tight uppercase">Securing your identity</h3>
+    <p class="text-slate-400 text-xs font-semibold mt-1">Validating encrypted token...</p>
+  </div>
   } @else {
-    <!-- Verification Input -->
-    <div class="animate-in fade-in slide-in-from-bottom-8 duration-700">
-      <div class="space-y-12">
-        <!-- Code Inputs -->
-        <div class="otp-container flex gap-3 sm:gap-4 justify-between" (paste)="pasteCode($event)">
-          @for(digit of code(); track $index) {
-            <input 
-              [id]="'code-' + $index"
-              type="text" 
-              inputmode="numeric"
-              [value]="digit"
-              (input)="onInput($event, $index)"
-              (keydown)="onKeyDown($event, $index)"
-              maxlength="1"
-              [class.filled]="digit"
-              class="otp-input naira-bg w-full aspect-square text-center text-4xl font-black rounded-3xl text-[var(--dogo-primary)] focus:outline-none transition-all" />
-          }
-        </div>
- 
-        <!-- Error Message -->
-        @if(errorMessage()) {
-          <div class="p-5 bg-red-50 border border-red-100 rounded-2xl flex items-center gap-4 animate-shake">
-            <div class="w-10 h-10 bg-red-500 text-white rounded-full flex items-center justify-center shrink-0">
-              <i class="ri-error-warning-line text-xl"></i>
-            </div>
-            <p class="text-red-700 text-sm font-bold leading-tight">{{ errorMessage() }}</p>
-          </div>
+  <!-- Verification Input -->
+  <div class="animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div class="space-y-8">
+      <!-- Code Inputs -->
+      <div class="otp-container flex gap-2 justify-between" (paste)="pasteCode($event)">
+        @for(digit of code(); track $index) {
+        <input [id]="'code-' + $index" type="text" inputmode="numeric" [value]="digit" (input)="onInput($event, $index)"
+          (keydown)="onKeyDown($event, $index)" maxlength="1" [class.filled]="digit"
+          class="otp-input naira-bg w-12 h-12 text-center text-xl font-bold rounded-lg text-[#030E65] focus:outline-none transition-all" />
         }
+      </div>
 
-        <div class="space-y-6">
-          <button 
-            (click)="verify()" 
-            [disabled]="isProcessing() || code().join('').length < 6"
-            class="w-full h-16 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] hover:shadow-2xl hover:shadow-[var(--dogo-primary)]/20 transition-all uppercase tracking-[0.2em] text-sm disabled:opacity-50 flex items-center justify-center gap-2">
-            @if(isProcessing()) {
-              <i class="ri-loader-4-line animate-spin text-xl"></i> Verifying...
-            } @else {
-              Verify Account
-            }
-          </button>
+      <!-- Error Message -->
+      @if(errorMessage()) {
+      <div class="p-3.5 bg-red-50 border border-red-100 rounded-lg flex items-center gap-3 animate-shake">
+        <i class="ri-error-warning-line text-red-500 text-lg"></i>
+        <p class="text-red-700 text-xs font-bold leading-tight">{{ errorMessage() }}</p>
+      </div>
+      }
 
-          <div class="flex flex-col items-center gap-4">
-            <button 
-              (click)="resendCode()" 
-              [disabled]="isResending() || countdown() > 0" 
-              class="group relative py-2 px-6">
-              <div class="flex flex-col items-center transition-transform group-hover:-translate-y-1">
-                <span class="text-[11px] font-black uppercase tracking-[0.3em] text-[var(--dogo-primary)] opacity-40 group-hover:opacity-100 transition-opacity">
-                  @if(countdown() > 0) {
-                    Security cooldown: {{ countdown() }}s
-                  } @else {
-                    Didn't get it?
-                  }
-                </span>
-                @if(countdown() <= 0) {
-                  <span class="text-sm font-black text-[var(--dogo-secondary)] uppercase tracking-tight">Resend Verification Code</span>
+      <div class="space-y-4">
+        <button (click)="verify()" [disabled]="isProcessing() || code().join('').length < 6"
+          class="w-full py-3 bg-[#030E65] text-white font-bold rounded-lg hover:bg-[#030E65]/90 hover:shadow-lg transition-all text-xs tracking-wide disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer">
+          @if(isProcessing()) {
+          <i class="ri-loader-4-line animate-spin text-sm"></i> Verifying...
+          } @else {
+          Verify Account
+          }
+        </button>
+
+        <div class="flex flex-col items-center gap-2">
+          <button (click)="resendCode()" [disabled]="isResending() || countdown() > 0"
+            class="group relative py-1 px-4 cursor-pointer">
+            <div class="flex flex-col items-center transition-transform group-hover:-translate-y-0.5">
+              <span
+                class="text-[10px] font-bold uppercase tracking-wider text-slate-400 group-hover:text-slate-600 transition-colors">
+                @if(countdown() > 0) {
+                Security cooldown: {{ countdown() }}s
+                } @else {
+                Didn't get it?
                 }
-              </div>
-            </button>
-          </div>
+              </span>
+              @if(countdown() <= 0) { <span
+                class="text-xs font-bold text-[#4361EE] uppercase tracking-tight hover:underline mt-0.5">Resend
+                Verification Code</span>
+                }
+            </div>
+          </button>
         </div>
       </div>
     </div>
+  </div>
   }
 
   @if(!isSuccess()) {
-    <p class="text-center font-medium text-[var(--dogo-muted)] mt-10">
-      Already verified? 
-      <a routerLink="/login" class="text-[var(--dogo-primary)] font-black hover:underline">Sign in</a>
-    </p>
+  <p class="text-center text-xs font-medium text-slate-400 mt-8">
+    Already verified?
+    <a routerLink="/login" class="text-[#4361EE] font-bold hover:underline">Sign in</a>
+  </p>
   }
 
 </app-auth-layout>
-
-

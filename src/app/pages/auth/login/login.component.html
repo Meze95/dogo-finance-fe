@@ -1,70 +1,70 @@
-<app-auth-layout
-  sidebarTitle="Welcome"
-  sidebarHighlight="back."
+<app-auth-layout sidebarTitle="Welcome" sidebarHighlight="back."
   sidebarSubtext="Log in to track your Halal portfolio, review active Mudarabah contracts, and access Nigerian Sukuk markets."
-  sidebarNoticeTitle="Bank-Grade Encryption"
-  sidebarNoticeBody="256-bit Secure Login"
-  sidebarNoticeIcon="ri-lock-2-fill"
-  pageTitle="Log in securely"
-  pageSubtext="Access your Halal wealth dashboard."
-  backLink="/"
-  backText="Back Home">
+  sidebarNoticeTitle="Bank-Grade Encryption" sidebarNoticeBody="256-bit Secure Login" sidebarNoticeIcon="ri-lock-2-fill"
+  pageTitle="Log in securely" pageSubtext="Access your Halal wealth dashboard." backLink="/" backText="Back Home">
 
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
-    
+
     <!-- Error Message -->
     @if (errorMessage()) {
-      <div class="p-4 bg-red-50 border-l-4 border-red-500 rounded-2xl flex items-center gap-3 mb-6 animate-shake">
-        <i class="ri-error-warning-fill text-red-500 text-xl"></i>
-        <p class="text-red-700 text-sm font-bold">{{ errorMessage() }}</p>
-      </div>
+    <div class="p-4 bg-red-50 border-l-4 border-red-500 rounded-2xl flex items-center gap-3 mb-6 animate-shake">
+      <i class="ri-error-warning-fill text-red-500 text-xl"></i>
+      <p class="text-red-700 text-sm font-bold">{{ errorMessage() }}</p>
+    </div>
     }
 
     <!-- Email -->
     <div>
-      <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Email Address</label>
+      <label class="block text-xs font-bold text-[#030E65] mb-2">Email Address</label>
       <div class="relative group">
-        <input type="email" formControlName="email" class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl px-5 pl-12 font-medium text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:ring-4 focus:ring-[var(--dogo-secondary)]/10 transition-all placeholder:text-gray-400" placeholder="your.email@example.com" />
-        <i class="ri-mail-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[var(--dogo-secondary)] transition-colors"></i>
+        <input type="email" formControlName="email"
+          class="w-full py-3 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all placeholder:text-slate-400"
+          placeholder="your.email@example.com" />
+        <i
+          class="ri-mail-line absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#4361EE] transition-colors"></i>
       </div>
       @if(loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
-        <span class="text-red-500 text-[10px] font-bold mt-2 block uppercase tracking-widest px-2">Enter a valid email.</span>
+      <span class="text-red-500 text-[10px] font-semibold mt-1.5 block">Enter a valid email.</span>
       }
     </div>
 
     <!-- Password -->
     <div>
-      <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2">Password</label>
-      <div class="relative group mb-3">
-        <input [type]="showPassword() ? 'text' : 'password'" formControlName="password" class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl px-5 pl-12 pr-12 font-medium text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:ring-4 focus:ring-[var(--dogo-secondary)]/10 transition-all placeholder:text-gray-400" placeholder="••••••••" />
-        <i class="ri-lock-line absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[var(--dogo-secondary)] transition-colors"></i>
-        <button type="button" (click)="togglePassword()" class="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[var(--dogo-primary)] transition-colors text-xl">
+      <label class="block text-xs font-bold text-[#030E65] mb-2">Password</label>
+      <div class="relative group mb-2">
+        <input [type]="showPassword() ? 'text' : 'password'" formControlName="password"
+          class="w-full py-3 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 pr-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all placeholder:text-slate-400"
+          placeholder="••••••••" />
+        <i
+          class="ri-lock-line absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#4361EE] transition-colors"></i>
+        <button type="button" (click)="togglePassword()"
+          class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#030E65] transition-colors text-lg">
           <i [class]="showPassword() ? 'ri-eye-line' : 'ri-eye-off-line'"></i>
         </button>
       </div>
-      
+
       <div class="flex justify-end">
-         <a routerLink="/forgot-password" class="text-sm font-black text-[var(--dogo-primary)] hover:underline">Forgot password?</a>
+        <a routerLink="/forgot-password" class="text-xs font-bold text-[#4361EE] hover:underline">Forgot password?</a>
       </div>
 
       @if(loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
-        <span class="text-red-500 text-[10px] font-bold mt-2 block uppercase tracking-widest px-2">Password is required.</span>
+      <span class="text-red-500 text-[10px] font-semibold mt-1.5 block">Password is required.</span>
       }
     </div>
 
-    <button type="submit" [disabled]="isProcessing()" class="w-full h-14 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] hover:shadow-xl hover:shadow-[var(--dogo-primary)]/20 transition-all uppercase tracking-widest text-sm mt-8 disabled:opacity-70 flex items-center justify-center gap-2">
+    <button type="submit" [disabled]="isProcessing()"
+      class="w-full py-3 bg-[#030E65] text-white font-bold rounded-lg hover:bg-[#030E65]/90 hover:shadow-lg transition-all text-xs tracking-wide mt-6 disabled:opacity-70 flex items-center justify-center gap-2 cursor-pointer">
       @if(isProcessing()) {
-        <i class="ri-loader-4-line animate-spin text-lg"></i> Authenticating...
+      <i class="ri-loader-4-line animate-spin text-sm"></i> Authenticating...
       } @else {
-        Sign In
+      Sign In
       }
     </button>
   </form>
 
-  <p class="text-center font-medium text-[var(--dogo-muted)] mt-10">
-    Don't have an account? 
-    <a routerLink="/register" class="text-[var(--dogo-primary)] font-black hover:underline">Sign up</a>
+  <p class="text-center text-xs font-medium text-slate-400 mt-8">
+    Don't have an account?
+    <a routerLink="/register" class="text-[#4361EE] font-bold hover:underline">Sign up</a>
   </p>
 
 </app-auth-layout>
-
