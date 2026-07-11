@@ -32,7 +32,7 @@ export class AboutComponent implements AfterViewInit {
     {
       icon: 'ri-scales-3-fill',
       title: 'Governance & Shariah Integrity',
-      desc: 'We operate within regulatory frameworks and under independent Shariah oversight — every product certified before release.'
+      desc: 'We operate within regulatory frameworks and under independent Shariah oversight, every product certified before release.'
     },
     {
       icon: 'ri-lightbulb-flash-fill',
@@ -47,7 +47,7 @@ export class AboutComponent implements AfterViewInit {
     {
       icon: 'ri-heart-3-fill',
       title: 'Long-Term Partnership',
-      desc: 'Our goal is to support clients through every stage of their financial journey — not just a single transaction.'
+      desc: 'Our goal is to support clients through every stage of their financial journey, not just a single transaction.'
     }
   ];
 
@@ -88,7 +88,7 @@ export class AboutComponent implements AfterViewInit {
     {
       icon: 'ri-scales-3-fill',
       label: 'Independent Shariah Advisory Board',
-      desc: 'Reviews all products, monitors compliance, and conducts regular audits — no product goes live without board sign-off.'
+      desc: 'Reviews all products, monitors compliance, and conducts regular audits. No product goes live without board sign-off.'
     },
     {
       icon: 'ri-shield-check-fill',
@@ -98,7 +98,7 @@ export class AboutComponent implements AfterViewInit {
     {
       icon: 'ri-fingerprint-fill',
       label: 'BVN + NIN Identity Verification',
-      desc: 'Nigerian KYC standards fully implemented — BVN via NIBSS and NIN via NIMC, with liveness checks and NDPR compliance.'
+      desc: 'Nigerian KYC standards fully implemented. BVN via NIBSS and NIN via NIMC, with liveness checks and NDPR compliance.'
     }
   ];
 
