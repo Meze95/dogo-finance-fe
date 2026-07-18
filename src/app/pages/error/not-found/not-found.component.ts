@@ -17,7 +17,7 @@ import { UserRole } from '../../../shared/models/user-role.enum';
         <div class="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full blur-[150px] opacity-10" style="background: radial-gradient(circle, var(--dogo-secondary), transparent)"></div>
 
         <div class="relative z-10 flex items-center space-x-3">
-          <div class="w-10 h-10 bg-[var(--dogo-secondary)] mask-dogo"></div>
+          <img src="/brand/D LOGO W.png" alt="Dogo Finance" class="h-8 object-contain">
           <span class="text-2xl font-black tracking-tight text-white">DOGO Finance</span>
         </div>
 
@@ -52,7 +52,7 @@ import { UserRole } from '../../../shared/models/user-role.enum';
       <div class="flex flex-col justify-center px-6 py-12 lg:px-24 xl:px-32 relative">
         <!-- Mobile Header -->
         <div class="lg:hidden flex items-center space-x-3 mb-12 justify-center">
-          <div class="w-8 h-8 bg-[var(--dogo-primary)] mask-dogo"></div>
+          <img src="/brand/D LOGO W.png" alt="Dogo Finance" class="h-8 object-contain">
           <span class="text-2xl font-black tracking-tight text-[var(--dogo-primary)]">DOGO Finance</span>
         </div>
 

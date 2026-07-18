@@ -41,90 +41,100 @@
     <!-- Main Content Column -->
     <div class="space-y-8">
 
-      <!-- Wallet Card -->
-      <div class="relative group mesh-gradient-premium rounded-[32px] sm:rounded-[42px] p-5 sm:p-7 md:p-8 text-white shadow-2xl shadow-[var(--dogo-primary)]/40 overflow-hidden border border-white/5 mb-6 sm:mb-10 transition-all duration-700">
-
-        <!-- Depth Elements -->
-        <div class="absolute -top-1/4 -left-1/4 w-[500px] h-[500px] bg-[var(--dogo-secondary)]/5 blur-[120px] rounded-full anim-float pointer-events-none"></div>
-        <div class="absolute -bottom-1/4 -right-1/4 w-[400px] h-[400px] bg-[var(--dogo-primary)]/20 blur-[100px] rounded-full anim-float delay-300 pointer-events-none"></div>
-        <div class="absolute inset-0 dogo-pattern opacity-[0.03]"></div>
-
-        <div class="relative z-10 flex flex-col xl:flex-row items-stretch xl:items-center gap-6 xl:gap-12 w-full">
-
-          <!-- Top row on mobile: secured badge + eye toggle -->
-          <div class="flex items-center justify-between xl:hidden">
-            <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full premium-frosting border border-white/10">
-              <div class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div>
-              <span class="text-[8px] font-black text-emerald-400 uppercase tracking-widest">Secured</span>
-            </div>
-            <button (click)="hideBalances.set(!hideBalances())"
-              class="p-1.5 rounded-full hover:bg-white/10 transition-all active:scale-90">
-              <i [class]="hideBalances() ? 'ri-eye-off-line' : 'ri-eye-line'" class="text-lg text-white/70 hover:text-white transition-colors"></i>
-            </button>
-          </div>
-
-          <!-- Balances -->
-          <div class="flex flex-col sm:flex-row items-start sm:items-center xl:items-end gap-5 sm:gap-10 w-full xl:w-auto">
-
-            <!-- NGN Balance -->
-            <div class="flex items-center gap-4 min-w-0">
-              <div class="hidden sm:flex w-14 h-14 lg:w-16 lg:h-16 rounded-[20px] lg:rounded-[24px] premium-frosting items-center justify-center text-2xl lg:text-3xl text-white relative overflow-hidden shrink-0">
-                <div class="absolute inset-0 bg-white/5 animate-pulse-gold opacity-20"></div>
-                <i class="ri-wallet-3-line relative z-10"></i>
-              </div>
-
-              <div class="space-y-1 min-w-0">
-                <!-- Badge + eye (desktop only) -->
-                <div class="hidden xl:flex items-center gap-2 mb-1">
-                  <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full premium-frosting border border-white/10 shrink-0">
-                    <div class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div>
-                    <span class="text-[8px] font-black text-emerald-400 uppercase tracking-widest">Secured</span>
-                  </div>
-                  <button (click)="hideBalances.set(!hideBalances())" class="p-1.5 rounded-full hover:bg-white/10 transition-all active:scale-90 shrink-0">
-                    <i [class]="hideBalances() ? 'ri-eye-off-line' : 'ri-eye-line'" class="text-lg text-white/70 hover:text-white transition-colors"></i>
-                  </button>
-                </div>
-
-                <div class="flex items-baseline gap-1.5 max-w-full overflow-hidden">
-                  <span class="text-base sm:text-xl font-bold text-white/40 shrink-0">₦</span>
-                  <h2 class="text-3xl sm:text-4xl font-black tracking-tight leading-none text-white truncate" [title]="availableNaira()">
-                    {{ hideBalances() ? '••••••' : (availableNaira() | number:'1.0-0') }}
-                  </h2>
-                  <span class="text-[10px] font-bold text-white/20 shrink-0">NGN</span>
-                </div>
+      <!-- Modern Wallet Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 sm:mb-10 animate-fade-in">
+        
+        <!-- NGN Balance Card -->
+        <div class="relative group bg-gradient-to-br from-[#030E65] to-[#051A9A] rounded-[28px] sm:rounded-[36px] p-6 text-white shadow-xl shadow-[var(--dogo-primary)]/10 overflow-hidden border border-white/10 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl">
+          <!-- Ambient Glow decoration -->
+          <div class="absolute -top-24 -left-24 w-48 h-48 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
+          
+          <div class="relative z-10 flex flex-col justify-between h-full min-h-[140px]">
+            <!-- Header -->
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-black uppercase tracking-widest text-white">Naira Wallet</span>
+              <div class="flex items-center gap-2">
+                <span class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[8px] font-black uppercase tracking-widest text-emerald-400">
+                  <span class="w-1 h-1 rounded-full bg-emerald-400 animate-pulse"></span>
+                  Secured
+                </span>
+                <button (click)="hideBalances.set(!hideBalances())" class="p-1.5 rounded-full hover:bg-white/10 transition-all active:scale-90">
+                  <i [class]="hideBalances() ? 'ri-eye-off-line' : 'ri-eye-line'" class="text-sm text-white transition-colors"></i>
+                </button>
               </div>
             </div>
-
-            <!-- Divider -->
-            <div class="w-full sm:w-[1px] h-[1px] sm:h-14 bg-gradient-to-r sm:bg-gradient-to-b from-transparent via-white/20 to-transparent shrink-0"></div>
-
-            <!-- USD Balance -->
-            <div class="flex items-center min-w-0">
-              <div class="space-y-1 min-w-0">
-                <div class="flex items-baseline gap-1.5 max-w-full overflow-hidden">
-                  <span class="text-base sm:text-xl font-bold text-white/40 shrink-0">$</span>
-                  <h2 class="text-3xl sm:text-4xl font-black tracking-tight leading-none text-white truncate" [title]="availableDollar()">
-                    {{ hideBalances() ? '••••••' : (availableDollar() | number:'1.0-0') }}
-                  </h2>
-                  <span class="text-[10px] font-bold text-white/20 shrink-0">USD</span>
-                </div>
+            
+            <!-- Balance -->
+            <div class="mt-4">
+              <div class="flex items-baseline gap-1.5 max-w-full overflow-hidden">
+                <span class="text-lg font-bold text-white shrink-0">₦</span>
+                <h2 class="text-3xl sm:text-4xl font-black tracking-tight leading-none text-white truncate" [title]="availableNaira()">
+                  {{ hideBalances() ? '••••••' : (availableNaira() | number:'1.0-0') }}
+                </h2>
+                <span class="text-[10px] font-bold text-white shrink-0 ml-1">NGN</span>
               </div>
+            </div>
+            
+            <!-- Footer decoration line -->
+            <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-[9px] font-bold text-white uppercase tracking-widest">
+              <span>Main Balance</span>
+              <i class="ri-wallet-3-line text-sm text-white"></i>
             </div>
           </div>
+        </div>
 
-          <!-- Actions -->
-          <div class="flex items-center gap-3 w-full xl:w-auto xl:ml-auto mt-1 sm:mt-0">
+        <!-- USD Balance Card -->
+        <div class="relative group bg-gradient-to-br from-[#023E8A] to-[#01052d] rounded-[28px] sm:rounded-[36px] p-6 text-white shadow-xl shadow-black/10 overflow-hidden border border-white/10 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl">
+          <!-- Ambient Glow decoration -->
+          <div class="absolute -top-24 -left-24 w-48 h-48 bg-blue-500/10 rounded-full blur-2xl pointer-events-none"></div>
+          
+          <div class="relative z-10 flex flex-col justify-between h-full min-h-[140px]">
+            <!-- Header -->
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-black uppercase tracking-widest text-white">Dollar Wallet</span>
+              <div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-[8px] font-black uppercase tracking-widest text-white">
+                Secondary
+              </div>
+            </div>
+            
+            <!-- Balance -->
+            <div class="mt-4">
+              <div class="flex items-baseline gap-1.5 max-w-full overflow-hidden">
+                <span class="text-lg font-bold text-white shrink-0">$</span>
+                <h2 class="text-3xl sm:text-4xl font-black tracking-tight leading-none text-white truncate" [title]="availableDollar()">
+                  {{ hideBalances() ? '••••••' : (availableDollar() | number:'1.0-0') }}
+                </h2>
+                <span class="text-[10px] font-bold text-white shrink-0 ml-1">USD</span>
+              </div>
+            </div>
+            
+            <!-- Footer decoration line -->
+            <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-[9px] font-bold text-white uppercase tracking-widest">
+              <span>FX Balance</span>
+              <i class="ri-global-line text-sm text-white"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Card -->
+        <div class="relative bg-white rounded-[28px] sm:rounded-[36px] p-6 border border-[#E8ECF5] shadow-sm flex flex-col justify-between min-h-[164px]">
+          <div class="space-y-1.5">
+            <h4 class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Quick Operations</h4>
+            <p class="text-[9.5px] font-medium text-slate-400">Perform transactions on your wallets.</p>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-3 mt-4">
             <button (click)="openTransactionModal('fund')"
-              class="flex-1 xl:flex-none h-12 sm:h-14 md:h-16 px-5 sm:px-8 md:px-10 rounded-[18px] sm:rounded-[20px] bg-gradient-to-br from-[var(--dogo-secondary)] to-[var(--dogo-secondary-soft)] text-white text-[10px] sm:text-[11px] font-black uppercase tracking-widest transition-all shadow-xl shadow-[var(--dogo-secondary)]/20 shimmer-effect relative overflow-hidden hover:scale-105 active:scale-95 flex items-center justify-center whitespace-nowrap">
-              <i class="ri-add-circle-fill text-base sm:text-lg mr-2"></i> Fund
+              class="h-12 rounded-xl sm:rounded-2xl bg-[#030E65] text-white hover:bg-[#030E65]/90 transition-all font-bold text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-[#030E65]/10 hover:scale-[1.03] active:scale-95">
+              <i class="ri-add-line text-sm"></i> Fund
             </button>
             <button (click)="openTransactionModal('withdraw')"
-              class="flex-1 xl:flex-none h-12 sm:h-14 md:h-16 px-5 sm:px-8 md:px-10 rounded-[18px] sm:rounded-[20px] premium-frosting text-white text-[10px] sm:text-[11px] font-black uppercase tracking-widest hover:bg-white/10 transition-all hover:scale-105 active:scale-95 flex items-center justify-center border border-white/10 whitespace-nowrap">
-              <i class="ri-arrow-up-circle-fill text-base sm:text-lg mr-2 text-[var(--dogo-secondary-soft)]"></i> Withdraw
+              class="h-12 rounded-xl sm:rounded-2xl bg-white border border-slate-200 text-[#030E65] hover:bg-slate-50 transition-all font-bold text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer hover:scale-[1.03] active:scale-95">
+              <i class="ri-arrow-up-line text-sm"></i> Withdraw
             </button>
           </div>
-
         </div>
+
       </div>
     </div>
 

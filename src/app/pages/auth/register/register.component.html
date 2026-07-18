@@ -63,7 +63,7 @@
         <label class="block text-xs font-bold text-[#030E65] mb-1.5">First Name</label>
         <div class="relative">
           <input type="text" formControlName="firstName"
-            class="w-full py-3 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all placeholder:text-slate-400"
+            class="w-full py-2 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all placeholder:text-slate-400"
             placeholder="Ado" />
           <i class="ri-user-line absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
         </div>
@@ -77,7 +77,7 @@
         <label class="block text-xs font-bold text-[#030E65] mb-1.5">Last Name</label>
         <div class="relative">
           <input type="text" formControlName="lastName"
-            class="w-full py-3 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all placeholder:text-slate-400"
+            class="w-full py-2 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all placeholder:text-slate-400"
             placeholder="Bayero" />
           <i class="ri-user-line absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
         </div>
@@ -93,7 +93,7 @@
         <label class="block text-xs font-bold text-[#030E65] mb-1.5">Date of Birth</label>
         <div class="relative group">
           <input type="date" formControlName="dob"
-            class="w-full py-3 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all text-slate-400 focus:text-[#030E65]" />
+            class="w-full py-2 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all text-slate-400 focus:text-[#030E65]" />
           <i
             class="ri-calendar-event-line absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#4361EE] transition-colors"></i>
         </div>
@@ -107,7 +107,7 @@
         <label class="block text-xs font-bold text-[#030E65] mb-1.5">Gender</label>
         <div class="relative group">
           <div (click)="isGenderDropdownOpen.set(!isGenderDropdownOpen())"
-            class="w-full py-3 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 flex items-center cursor-pointer transition-all hover:border-[#4361EE]"
+            class="w-full py-2 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 flex items-center cursor-pointer transition-all hover:border-[#4361EE]"
             [class.border-[#4361EE]]="isGenderDropdownOpen()" [class.ring-4]="isGenderDropdownOpen()"
             [class.ring-[#4361EE]/10]="isGenderDropdownOpen()">
             <span class="text-sm font-medium" [class.text-slate-400]='!registerForm.get("genderId")?.value'
@@ -146,7 +146,7 @@
       <label class="block text-xs font-bold text-[#030E65] mb-1.5">Email Address</label>
       <div class="relative group">
         <input type="email" formControlName="email"
-          class="w-full py-3 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all placeholder:text-slate-400"
+          class="w-full py-2 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all placeholder:text-slate-400"
           placeholder="ado.bayero@example.com" />
         <i
           class="ri-mail-line absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#4361EE] transition-colors"></i>
@@ -161,7 +161,7 @@
       <label class="block text-xs font-bold text-[#030E65] mb-1.5">Phone Number</label>
       <div class="relative group">
         <input type="tel" formControlName="phone"
-          class="w-full py-3 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all placeholder:text-slate-400"
+          class="w-full py-2 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all placeholder:text-slate-400"
           placeholder="0801 234 5678" />
         <i
           class="ri-phone-line absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#4361EE] transition-colors"></i>
@@ -178,7 +178,7 @@
         <label class="block text-xs font-bold text-[#030E65] mb-1.5">Password</label>
         <div class="relative group">
           <input [type]="showPassword() ? 'text' : 'password'" formControlName="password"
-            class="w-full py-3 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 pr-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all placeholder:text-slate-400"
+            class="w-full py-2 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 pr-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all placeholder:text-slate-400"
             placeholder="••••••••" />
           <i
             class="ri-lock-line absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#4361EE] transition-colors"></i>
@@ -197,7 +197,7 @@
         <label class="block text-xs font-bold text-[#030E65] mb-1.5">Confirm Password</label>
         <div class="relative group">
           <input [type]="showPassword() ? 'text' : 'password'" formControlName="confirmPassword"
-            class="w-full py-3 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all placeholder:text-slate-400"
+            class="w-full py-2 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all placeholder:text-slate-400"
             placeholder="••••••••" />
           <i
             class="ri-lock-check-line absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#4361EE] transition-colors"></i>
@@ -227,7 +227,7 @@
     </div>
 
     <button type="submit" [disabled]="isProcessing()"
-      class="w-full py-3 bg-[#030E65] text-white font-bold rounded-lg hover:bg-[#030E65]/90 hover:shadow-lg transition-all text-xs tracking-wide mt-4 disabled:opacity-70 flex items-center justify-center gap-2 cursor-pointer">
+      class="w-full py-2 bg-[#030E65] text-white font-semibold rounded-lg hover:bg-[#030E65]/90 hover:shadow-lg transition-all text-xs tracking-wide mt-4 disabled:opacity-70 flex items-center justify-center gap-2 cursor-pointer">
       @if(isProcessing()) {
       <i class="ri-loader-4-line animate-spin text-sm"></i> Creating Account...
       } @else {
