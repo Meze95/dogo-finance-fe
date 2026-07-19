@@ -21,7 +21,7 @@ export class ClientPortfolioComponent implements OnInit, OnDestroy {
   data = signal<ClientPortfolioReport | null>(null);
   isLoading = signal(false);
 
-  @ViewChild(DataTableDirective, {static: false})
+  @ViewChild(DataTableDirective, { static: false })
   dtElement!: DataTableDirective;
 
   dtOptions: any = {};
@@ -44,11 +44,11 @@ export class ClientPortfolioComponent implements OnInit, OnDestroy {
           customize: (win: any) => {
             const currentData = this.data();
             const cProfile = currentData?.companyProfile;
-            const cName = cProfile?.companyName || 'DOGO FINANCE LIMITED';
+            const cName = cProfile?.companyName || 'DOGO';
             const cAddr = cProfile?.address || '128 Okpanam Road,\nOkpanam,\nDelta State.';
 
             $(win.document.body)
-                .prepend(`
+              .prepend(`
                   <div style="text-align: center; margin-bottom: 20px;">
                     <div style="font-size: 16px; font-weight: bold;">${cName}</div>
                     <div style="font-size: 10px; white-space: pre-wrap; margin-bottom: 15px;">${cAddr}</div>
@@ -57,8 +57,8 @@ export class ClientPortfolioComponent implements OnInit, OnDestroy {
                 `);
 
             $(win.document.body).find('table')
-                .addClass('compact')
-                .css('font-size', 'inherit');
+              .addClass('compact')
+              .css('font-size', 'inherit');
           }
         }
       ]

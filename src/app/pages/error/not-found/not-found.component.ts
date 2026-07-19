@@ -16,9 +16,8 @@ import { UserRole } from '../../../shared/models/user-role.enum';
         <div class="absolute inset-0 dogo-pattern opacity-[0.05] pointer-events-none"></div>
         <div class="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full blur-[150px] opacity-10" style="background: radial-gradient(circle, var(--dogo-secondary), transparent)"></div>
 
-        <div class="relative z-10 flex items-center space-x-3">
-          <img src="/brand/D LOGO W.png" alt="Dogo Finance" class="h-8 object-contain">
-          <span class="text-2xl font-black tracking-tight text-white">DOGO Finance</span>
+        <div class="relative z-10 flex items-center">
+          <img src="/brand/D LOGO FW.png" alt="Dogo" class="h-8 object-contain">
         </div>
 
         <div class="relative z-10 w-full max-w-lg mb-20 animate-fade-in">
@@ -44,16 +43,15 @@ import { UserRole } from '../../../shared/models/user-role.enum';
         </div>
 
         <div class="relative z-10 text-xs font-bold uppercase tracking-widest text-[var(--dogo-secondary)]/50">
-          &copy; 2026 DOGO Finance Ltd.
+          &copy; 2026 DOGO Ltd.
         </div>
       </div>
 
       <!-- Right Column: 404 Message -->
       <div class="flex flex-col justify-center px-6 py-12 lg:px-24 xl:px-32 relative">
         <!-- Mobile Header -->
-        <div class="lg:hidden flex items-center space-x-3 mb-12 justify-center">
-          <img src="/brand/D LOGO W.png" alt="Dogo Finance" class="h-8 object-contain">
-          <span class="text-2xl font-black tracking-tight text-[var(--dogo-primary)]">DOGO Finance</span>
+        <div class="lg:hidden flex items-center justify-center mb-12">
+          <img src="/brand/logo.png" alt="DOGO" class="h-8 object-contain">
         </div>
 
         <div class="w-full max-w-lg mx-auto text-center lg:text-left animate-in fade-in duration-700">
@@ -128,9 +126,9 @@ export class NotFoundComponent {
     }
 
     const userRole = user?.role || user?.Role || user?.userRole || user?.UserRole || '';
-    
-    if (String(userRole).toLowerCase() === UserRole.SuperAdmin.toLowerCase() || 
-        String(userRole).toLowerCase() === UserRole.Admin.toLowerCase()) {
+
+    if (String(userRole).toLowerCase() === UserRole.SuperAdmin.toLowerCase() ||
+      String(userRole).toLowerCase() === UserRole.Admin.toLowerCase()) {
       this.router.navigate(['/admin/dashboard']);
     } else {
       this.router.navigate(['/client/dashboard']);

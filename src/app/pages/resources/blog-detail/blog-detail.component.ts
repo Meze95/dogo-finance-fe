@@ -15,7 +15,7 @@ export class BlogDetailComponent implements OnInit, AfterViewInit {
   allPosts = [
     {
       id: 'what-is-riba',
-      title: 'What is Riba? And Why DOGO Finance Was Built to Eliminate It',
+      title: 'What is Riba? And Why DOGO Was Built to Eliminate It',
       category: 'Halal Finance 101',
       date: 'March 20, 2026',
       readTime: '5 min read',
@@ -30,11 +30,11 @@ export class BlogDetailComponent implements OnInit, AfterViewInit {
            In Islamic finance, money is seen purely as a medium of exchange, not a commodity that can be bought or sold for profit on its own. Wealth must be generated from legitimate trade, asset-backed investments, or joint ventures where risk is shared.
         </p>
         <blockquote class="border-l-4 border-[var(--dogo-primary)] pl-6 my-10 italic text-2xl text-[var(--dogo-primary)] font-medium leading-tight">
-           "Our mission at DOGO Finance is not just to offer an alternative, but to build a robust, transparent, and profitable Halal ecosystem for every Nigerian."
+           "Our mission at DOGO is not just to offer an alternative, but to build a robust, transparent, and profitable Halal ecosystem for every Nigerian."
         </blockquote>
-        <h3 class="text-2xl font-black text-[var(--dogo-dark)] mb-4">How Dogo Finance Operates Riba-Free</h3>
+        <h3 class="text-2xl font-black text-[var(--dogo-dark)] mb-4">How DOGO Operates Riba-Free</h3>
         <p class="mb-6 text-[var(--dogo-muted)] leading-relaxed text-lg">
-           Instead of interest-bearing accounts, DOGO Finance uses established Shariah structures like <strong>Mudarabah</strong> (profit-sharing) and <strong>Wakala</strong> (agency contracts). When you deposit funds with us, you are not lending us money; you are capital providers (Rabb-ul-Mal) entering a partnership where profits are shared.
+           Instead of interest-bearing accounts, DOGO uses established Shariah structures like <strong>Mudarabah</strong> (profit-sharing) and <strong>Wakala</strong> (agency contracts). When you deposit funds with us, you are not lending us money; you are capital providers (Rabb-ul-Mal) entering a partnership where profits are shared.
         </p>
       `
     },
@@ -48,10 +48,10 @@ export class BlogDetailComponent implements OnInit, AfterViewInit {
       image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=80',
       content: `
         <p class="mb-6 text-[var(--dogo-muted)] leading-relaxed text-lg">
-           Nigerian Muslims have historically had limited access to fully compliant investment vehicles. That is changing. Here are the 5 essential products available on the DOGO Finance platform today:
+           Nigerian Muslims have historically had limited access to fully compliant investment vehicles. That is changing. Here are the 5 essential products available on the DOGO platform today:
         </p>
         <h3 class="text-2xl font-black text-[var(--dogo-dark)] mb-4">1. Mudarabah (Profit-Sharing)</h3>
-        <p class="mb-6 text-[var(--dogo-muted)] leading-relaxed text-lg">The cornerstone of Halal investing. You provide the capital, DOGO Finance manages it. Profits are shared 70/30.</p>
+        <p class="mb-6 text-[var(--dogo-muted)] leading-relaxed text-lg">The cornerstone of Halal investing. You provide the capital, DOGO manages it. Profits are shared 70/30.</p>
         
         <h3 class="text-2xl font-black text-[var(--dogo-dark)] mb-4">2. Sukuk (Islamic Bonds)</h3>
         <p class="mb-6 text-[var(--dogo-muted)] leading-relaxed text-lg">Unlike conventional bonds which are debt instruments, Sukuk represent ownership in a tangible asset.</p>
@@ -70,7 +70,7 @@ export class BlogDetailComponent implements OnInit, AfterViewInit {
       image: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&q=80',
       content: `
         <p class="mb-6 text-[var(--dogo-muted)] leading-relaxed text-lg">
-           Security is uncompromising at Dogo Finance. By deeply integrating with Nigeria's NIBSS (for BVN) and NIMC (for NIN), we ensure every account on our platform belongs to a verified individual.
+           Security is uncompromising at DOGO. By deeply integrating with Nigeria's NIBSS (for BVN) and NIMC (for NIN), we ensure every account on our platform belongs to a verified individual.
         </p>
         <p class="mb-6 text-[var(--dogo-muted)] leading-relaxed text-lg">
            This strict adherence to NDPR and CBN KYC regulations ensures that our entire ecosystem remains safe, fraud-free, and transparent.

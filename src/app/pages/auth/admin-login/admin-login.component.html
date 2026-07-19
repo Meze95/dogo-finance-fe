@@ -1,48 +1,45 @@
-<app-auth-layout
-  sidebarTitle="DOGO"
-  sidebarHighlight="STAFF"
-  sidebarSubtext="Internal access terminal for authorized Dogo Finance personnel only. All activities are monitored and audited."
-  sidebarNoticeTitle="Restricted Access"
-  sidebarNoticeBody="Confidential System"
-  sidebarNoticeIcon="ri-shield-user-fill"
-  pageTitle="Staff Login"
-  pageSubtext="Initialize your secure administrative session."
-  backLink="/login"
+<app-auth-layout sidebarTitle="DOGO" sidebarHighlight="STAFF"
+  sidebarSubtext="Internal access terminal for authorized Dogo personnel only. All activities are monitored and audited."
+  sidebarNoticeTitle="Restricted Access" sidebarNoticeBody="Confidential System" sidebarNoticeIcon="ri-shield-user-fill"
+  pageTitle="Staff Login" pageSubtext="Initialize your secure administrative session." backLink="/login"
   backText="Back to Customer Terminal">
 
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
-    
+
     @if(errorMessage()) {
-      <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-2xl flex items-center gap-3 animate-shake">
-        <i class="ri-error-warning-fill text-red-500 text-lg"></i>
-        <p class="text-red-700 text-xs font-black uppercase tracking-wider">{{ errorMessage() }}</p>
-      </div>
+    <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-2xl flex items-center gap-3 animate-shake">
+      <i class="ri-error-warning-fill text-red-500 text-lg"></i>
+      <p class="text-red-700 text-xs font-black uppercase tracking-wider">{{ errorMessage() }}</p>
+    </div>
     }
 
     <!-- Email Input -->
     <div class="space-y-2">
-      <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2 ml-1">Staff ID / Email</label>
+      <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2 ml-1">Staff ID /
+        Email</label>
       <div class="relative group">
         <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
           <i class="ri-mail-fill text-gray-400 group-focus-within:text-[var(--dogo-secondary)] transition-colors"></i>
         </div>
-        <input type="email" formControlName="email" 
-               class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl pl-12 pr-5 font-medium text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:ring-4 focus:ring-[var(--dogo-secondary)]/10 transition-all placeholder:text-gray-400"
-               placeholder="admin@dogofinance.com" />
+        <input type="email" formControlName="email"
+          class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl pl-12 pr-5 font-medium text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:ring-4 focus:ring-[var(--dogo-secondary)]/10 transition-all placeholder:text-gray-400"
+          placeholder="admin@dogofinance.com" />
       </div>
     </div>
 
     <!-- Password Input -->
     <div class="space-y-2">
-      <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2 ml-1">Security Key / Password</label>
+      <label class="block text-xs font-black uppercase tracking-widest text-[var(--dogo-dark)]/60 mb-2 ml-1">Security
+        Key / Password</label>
       <div class="relative group">
         <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
           <i class="ri-lock-2-fill text-gray-400 group-focus-within:text-[var(--dogo-secondary)] transition-colors"></i>
         </div>
         <input [type]="showPassword() ? 'text' : 'password'" formControlName="password"
-               class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl pl-12 pr-12 font-medium text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:ring-4 focus:ring-[var(--dogo-secondary)]/10 transition-all placeholder:text-gray-400"
-               placeholder="••••••••" />
-        <button type="button" (click)="togglePassword()" class="absolute inset-y-0 right-0 pr-5 flex items-center text-gray-400 hover:text-[var(--dogo-primary)] transition-colors">
+          class="w-full h-14 bg-white border border-[var(--dogo-primary)]/10 rounded-2xl pl-12 pr-12 font-medium text-[var(--dogo-dark)] focus:outline-none focus:border-[var(--dogo-secondary)] focus:ring-4 focus:ring-[var(--dogo-secondary)]/10 transition-all placeholder:text-gray-400"
+          placeholder="••••••••" />
+        <button type="button" (click)="togglePassword()"
+          class="absolute inset-y-0 right-0 pr-5 flex items-center text-gray-400 hover:text-[var(--dogo-primary)] transition-colors">
           <i [class]="showPassword() ? 'ri-eye-off-line' : 'ri-eye-line'"></i>
         </button>
       </div>
@@ -50,18 +47,18 @@
 
     <!-- Authentication Trigger -->
     <button type="submit" [disabled]="loginForm.invalid || isProcessing()"
-            class="w-full h-14 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] hover:shadow-xl hover:shadow-[var(--dogo-primary)]/20 transition-all uppercase tracking-widest text-sm mt-8 disabled:opacity-70 flex items-center justify-center gap-2">
+      class="w-full h-14 bg-[var(--dogo-primary)] text-white font-black rounded-2xl hover:bg-[var(--dogo-primary-soft)] hover:shadow-xl hover:shadow-[var(--dogo-primary)]/20 transition-all uppercase tracking-widest text-sm mt-8 disabled:opacity-70 flex items-center justify-center gap-2">
       @if(isProcessing()) {
-        <i class="ri-loader-4-line animate-spin text-lg"></i> Verifying...
+      <i class="ri-loader-4-line animate-spin text-lg"></i> Verifying...
       } @else {
-        Initialize Session
+      Initialize Session
       }
     </button>
   </form>
 
   <div class="mt-12 text-center">
-    <p class="text-[10px] text-[var(--dogo-muted)] font-bold uppercase tracking-[0.4em]">Confidential Property of Dogo Finance</p>
+    <p class="text-[10px] text-[var(--dogo-muted)] font-bold uppercase tracking-[0.4em]">Confidential Property of Dogo
+      Finance</p>
   </div>
 
 </app-auth-layout>
-

@@ -15,12 +15,12 @@ interface FAQCategory {
 
 const FAQ_DATA: FAQCategory[] = [
   {
-    title: "About DOGO Finance",
+    title: "About DOGO",
     isOpen: true,
     questions: [
       {
-        q: "What is DOGO Finance?",
-        a: "DOGO Finance is a premium, Shariah-compliant digital investment banking platform. We provide Nigerian investors with 100% Halal wealth management products, entirely free of Riba (interest).",
+        q: "What is DOGO?",
+        a: "DOGO is a premium, Shariah-compliant digital investment banking platform. We provide Nigerian investors with 100% Halal wealth management products, entirely free of Riba (interest).",
         isOpen: false
       },
       {
@@ -41,7 +41,7 @@ const FAQ_DATA: FAQCategory[] = [
       },
       {
         q: "What happens if there's a loss?",
-        a: "In Islamic finance, risk and reward are shared. If an investment incurs a genuine loss through market conditions, it is shared proportionately. However, DOGO Finance strictly vets all assets to minimize risk and protect capital.",
+        a: "In Islamic finance, risk and reward are shared. If an investment incurs a genuine loss through market conditions, it is shared proportionately. However, DOGO strictly vets all assets to minimize risk and protect capital.",
         isOpen: false
       }
     ]
@@ -57,7 +57,7 @@ const FAQ_DATA: FAQCategory[] = [
       },
       {
         q: "What is the minimum investment?",
-        a: "You can open a Halal investment position starting from ₦10,000 for Mudarabah accounts, easily funded via your secure Dogo Finance wallet.",
+        a: "You can open a Halal investment position starting from ₦10,000 for Mudarabah accounts, easily funded via your secure DOGO wallet.",
         isOpen: false
       }
     ]
@@ -85,7 +85,7 @@ const FAQ_DATA: FAQCategory[] = [
 export class FAQComponent implements AfterViewInit {
   // Original state from CMS
   private _categories = signal<FAQCategory[]>(FAQ_DATA);
-  
+
   // Search query signal
   searchQuery = signal<string>('');
 
@@ -96,8 +96,8 @@ export class FAQComponent implements AfterViewInit {
 
     return this._categories().map(cat => {
       // Filter questions in this category that match the query
-      const matchingQuestions = cat.questions.filter(q => 
-        q.q.toLowerCase().includes(query) || 
+      const matchingQuestions = cat.questions.filter(q =>
+        q.q.toLowerCase().includes(query) ||
         q.a.toLowerCase().includes(query)
       );
 
@@ -120,7 +120,7 @@ export class FAQComponent implements AfterViewInit {
 
   toggleCategory(title: string) {
     this._categories.update(cats => {
-      return cats.map(cat => 
+      return cats.map(cat =>
         cat.title === title ? { ...cat, isOpen: !cat.isOpen } : cat
       );
     });
@@ -132,7 +132,7 @@ export class FAQComponent implements AfterViewInit {
         if (cat.title === catTitle) {
           return {
             ...cat,
-            questions: cat.questions.map(q => 
+            questions: cat.questions.map(q =>
               q.q === questionText ? { ...q, isOpen: !q.isOpen } : q
             )
           };

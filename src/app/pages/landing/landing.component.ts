@@ -79,7 +79,7 @@ export class LandingComponent implements OnInit, AfterViewInit {
     {
       id: 'wakala',
       name: 'Wakala',
-      desc: 'Appoint DOGO Finance as your trusted agent. We invest on your behalf with full transparency.',
+      desc: 'Appoint DOGO as your trusted agent. We invest on your behalf with full transparency.',
       return: '13% p.a.',
       icon: 'ri-shield-star-fill',
       color: '#818cf8', // Indigo
@@ -91,7 +91,7 @@ export class LandingComponent implements OnInit, AfterViewInit {
     {
       name: 'Abdullahi M.',
       location: 'Kano State',
-      text: 'I have tried every savings app out there. None gave me the peace of mind that DOGO Finance does. I know my money is growing and my faith is protected.',
+      text: 'I have tried every savings app out there. None gave me the peace of mind that DOGO does. I know my money is growing and my faith is protected.',
       avatar: '/images/testimonial/avatar-2.png',
       product: 'Mudarabah Account'
     },
@@ -105,7 +105,7 @@ export class LandingComponent implements OnInit, AfterViewInit {
     {
       name: 'Ibrahim K.',
       location: 'Abuja, FCT',
-      text: 'As a business owner, I needed a Shariah-compliant investment platform. DOGO Finance\'s Sukuk marketplace has given me returns I never thought were possible while staying Halal.',
+      text: 'As a business owner, I needed a Shariah-compliant investment platform. DOGO\'s Sukuk marketplace has given me returns I never thought were possible while staying Halal.',
       avatar: '/images/testimonial/avatar-3.png',
       product: 'Sukuk Marketplace'
     }

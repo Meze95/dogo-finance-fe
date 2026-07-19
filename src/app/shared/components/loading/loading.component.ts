@@ -26,7 +26,7 @@ import { LoadingService } from '../../services/loading.service';
         
         <div class="mt-8 flex flex-col items-center">
           <p class="text-[13px] font-black uppercase tracking-[0.2em] text-[var(--dogo-primary)] opacity-80 animate-pulse">
-            Dogo Finance
+            DOGO
           </p>
           <div class="mt-2 flex gap-1">
              <div class="w-1.5 h-1.5 rounded-full bg-[var(--dogo-secondary)] animate-bounce-1"></div>

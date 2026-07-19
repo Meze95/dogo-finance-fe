@@ -29,7 +29,7 @@ export const PRODUCTS_DATA: Record<string, ProductData> = {
     name: 'Mudarabah',
     tagline: 'Profit-Sharing Investment Account',
     headline: 'Your Capital. Our Expertise. Shared Profits.',
-    subheadline: 'The classic Islamic investment contract — you provide the capital, DOGO Finance manages it with full Shariah compliance. Profits are shared at an agreed ratio. No Riba, ever.',
+    subheadline: 'The classic Islamic investment contract — you provide the capital, DOGO manages it with full Shariah compliance. Profits are shared at an agreed ratio. No Riba, ever.',
     returnRate: 'Up to 18% p.a.',
     minInvestment: '₦10,000',
     tenor: '3, 6, or 12 months',
@@ -37,19 +37,19 @@ export const PRODUCTS_DATA: Record<string, ProductData> = {
     accentColor: 'var(--dogo-secondary)',
     accentLight: 'var(--dogo-cream)',
     features: [
-      { icon: 'ri-percent-line', title: '70/30 Profit Split', desc: '70% of profits go to you (Rabb-ul-Mal). 30% goes to DOGO Finance (Mudarib) for management. No interest, no fees.' },
+      { icon: 'ri-percent-line', title: '70/30 Profit Split', desc: '70% of profits go to you (Rabb-ul-Mal). 30% goes to DOGO (Mudarib) for management. No interest, no fees.' },
       { icon: 'ri-shield-check-line', title: 'SSB Certified Contract', desc: 'Every Mudarabah contract is reviewed by our Shariah Supervisory Board before activation. Full AAOIFI compliance.' },
       { icon: 'ri-calendar-check-line', title: 'Flexible Tenors', desc: 'Choose 3, 6, or 12-month investment periods. Renew automatically or withdraw at maturity.' },
-      { icon: 'ri-bar-chart-2-line', title: 'Quarterly Profit Declaration', desc: 'Returns are declared quarterly and credited directly to your Dogo Finance wallet in Naira.' }
+      { icon: 'ri-bar-chart-2-line', title: 'Quarterly Profit Declaration', desc: 'Returns are declared quarterly and credited directly to your DOGO wallet in Naira.' }
     ],
     howItWorks: [
-      { step: '01', title: 'Open Account & Verify KYC', desc: 'Create your Dogo Finance account. Verify your BVN and NIN. Takes under 5 minutes.' },
+      { step: '01', title: 'Open Account & Verify KYC', desc: 'Create your DOGO account. Verify your BVN and NIN. Takes under 5 minutes.' },
       { step: '02', title: 'Fund Your Wallet', desc: 'Top up via Paystack, bank transfer, or NIBSS NIP instant transfer. Minimum ₦10,000.' },
       { step: '03', title: 'Open Mudarabah Position', desc: 'Navigate to Invest → Mudarabah. Select your tenor and confirm your SSB-approved contract.' },
-      { step: '04', title: 'Earn Profit Share', desc: 'DOGO Finance invests your capital in vetted Halal opportunities. Profit is declared quarterly and credited to your wallet.' }
+      { step: '04', title: 'Earn Profit Share', desc: 'DOGO invests your capital in vetted Halal opportunities. Profit is declared quarterly and credited to your wallet.' }
     ],
     faqs: [
-      { q: 'Is my capital guaranteed?', a: 'In Mudarabah, capital risk lies with the investor (Rabb-ul-Mal). DOGO Finance absorbs managerial loss. However, we invest only in vetted, low-risk Halal assets to protect your capital.' },
+      { q: 'Is my capital guaranteed?', a: 'In Mudarabah, capital risk lies with the investor (Rabb-ul-Mal). DOGO absorbs managerial loss. However, we invest only in vetted, low-risk Halal assets to protect your capital.' },
       { q: 'How is profit calculated?', a: 'Profit is calculated on a 70/30 split of the actual investment returns. This is declared quarterly based on the performance of our Halal investment pool.' },
       { q: 'Can I withdraw early?', a: 'Early withdrawal may affect your profit entitlement depending on the tenor. Please review the Mudarabah contract terms before investing.' }
     ]
@@ -69,7 +69,7 @@ export const PRODUCTS_DATA: Record<string, ProductData> = {
     features: [
       { icon: 'ri-building-4-line', title: 'Asset-Backed', desc: 'Every Sukuk on our platform is backed by real, tangible assets — real estate, infrastructure, commodities. No speculative instruments.' },
       { icon: 'ri-exchange-line', title: 'Primary & Secondary Market', desc: 'Subscribe to newly issued Sukuk or trade existing certificates in our secondary marketplace.' },
-      { icon: 'ri-verified-badge-line', title: 'SSB & SEC Approved', desc: 'Every Sukuk listed on Dogo Finance is pre-screened by our SSB and registered with SEC Nigeria.' },
+      { icon: 'ri-verified-badge-line', title: 'SSB & SEC Approved', desc: 'Every Sukuk listed on DOGO is pre-screened by our SSB and registered with SEC Nigeria.' },
       { icon: 'ri-currency-line', title: 'Naira-Denominated', desc: 'All Sukuk are priced and returned in Nigerian Naira (₦). No FX risk.' }
     ],
     howItWorks: [
@@ -117,7 +117,7 @@ export const PRODUCTS_DATA: Record<string, ProductData> = {
     name: 'Wakala',
     tagline: 'Agency-Based Investment Deposit',
     headline: 'Appoint Us. We Invest For You.',
-    subheadline: 'In Wakala, you appoint DOGO Finance as your authorised agent (Wakeel) to invest your funds on your behalf. A fixed management fee is paid — any profit above the target goes entirely to you.',
+    subheadline: 'In Wakala, you appoint DOGO as your authorised agent (Wakeel) to invest your funds on your behalf. A fixed management fee is paid — any profit above the target goes entirely to you.',
     returnRate: '13% p.a. target',
     minInvestment: '₦25,000',
     tenor: '6 or 12 months',
@@ -125,19 +125,19 @@ export const PRODUCTS_DATA: Record<string, ProductData> = {
     accentColor: 'var(--dogo-secondary)',
     accentLight: 'var(--dogo-cream)',
     features: [
-      { icon: 'ri-handshake-line', title: 'Fixed Agency Fee', desc: 'DOGO Finance earns a fixed Wakalah fee regardless of profit — aligning our interests with yours.' },
-      { icon: 'ri-arrow-up-circle-line', title: 'Above-Target Profits', desc: 'Any returns above the agreed target profit rate are credited directly to you — not retained by DOGO Finance.' },
+      { icon: 'ri-handshake-line', title: 'Fixed Agency Fee', desc: 'DOGO earns a fixed Wakalah fee regardless of profit — aligning our interests with yours.' },
+      { icon: 'ri-arrow-up-circle-line', title: 'Above-Target Profits', desc: 'Any returns above the agreed target profit rate are credited directly to you — not retained by DOGO.' },
       { icon: 'ri-contract-line', title: 'Shariah-Approved Contract', desc: 'The Wakalah agreement is reviewed, approved, and monitored by our SSB quarterly.' },
-      { icon: 'ri-lock-2-line', title: 'Capital Protection Cushion', desc: 'Dogo Finance maintains a profit equalisation reserve (PER) to smooth returns across periods.' }
+      { icon: 'ri-lock-2-line', title: 'Capital Protection Cushion', desc: 'DOGO maintains a profit equalisation reserve (PER) to smooth returns across periods.' }
     ],
     howItWorks: [
       { step: '01', title: 'Open Wakala Account', desc: 'Navigate to Invest → Wakala. Review and sign the digital Wakala agreement.' },
-      { step: '02', title: 'Fund Your Position', desc: 'Minimum ₦25,000. Funds are received by DOGO Finance as Wakeel (agent).' },
+      { step: '02', title: 'Fund Your Position', desc: 'Minimum ₦25,000. Funds are received by DOGO as Wakeel (agent).' },
       { step: '03', title: 'DOGO Invests On Your Behalf', desc: 'We invest in a diversified portfolio of Halal instruments within SSB-approved parameters.' },
       { step: '04', title: 'Receive Your Returns', desc: 'Returns are credited at 6 or 12-month maturity. Renew or withdraw to your wallet.' }
     ],
     faqs: [
-      { q: 'How is Wakala different from Mudarabah?', a: 'In Mudarabah, DOGO Finance shares in the profits. In Wakala, DOGO Finance earns a fixed fee regardless of profit — making it more predictable for the investor.' }
+      { q: 'How is Wakala different from Mudarabah?', a: 'In Mudarabah, DOGO shares in the profits. In Wakala, DOGO earns a fixed fee regardless of profit — making it more predictable for the investor.' }
     ]
   },
   'musharakah': {
@@ -145,7 +145,7 @@ export const PRODUCTS_DATA: Record<string, ProductData> = {
     name: 'Musharakah',
     tagline: 'Joint Venture Investment Fund',
     headline: 'Co-Invest. Co-Own. Share the Growth.',
-    subheadline: 'Musharakah means partnership. You and DOGO Finance (and other investors) co-invest in a Halal business venture. Profits and losses are shared proportionately to capital contribution.',
+    subheadline: 'Musharakah means partnership. You and DOGO (and other investors) co-invest in a Halal business venture. Profits and losses are shared proportionately to capital contribution.',
     returnRate: '15–20% p.a.',
     minInvestment: '₦100,000',
     tenor: '12 to 36 months',
@@ -165,7 +165,7 @@ export const PRODUCTS_DATA: Record<string, ProductData> = {
       { step: '04', title: 'Receive Profit Distribution', desc: 'Profits are distributed based on your ownership percentage at each reporting period.' }
     ],
     faqs: [
-      { q: 'What if the business makes a loss?', a: 'In Musharakah, losses are shared proportionately to capital contribution. DOGO Finance only lists ventures with strong financial track records and Shariah compliance to minimise loss risk.' }
+      { q: 'What if the business makes a loss?', a: 'In Musharakah, losses are shared proportionately to capital contribution. DOGO only lists ventures with strong financial track records and Shariah compliance to minimise loss risk.' }
     ]
   },
   'ijarah': {
@@ -189,11 +189,11 @@ export const PRODUCTS_DATA: Record<string, ProductData> = {
     howItWorks: [
       { step: '01', title: 'Browse Ijarah Listings', desc: 'View available leasing instruments with full asset descriptions, SSB certificate, and lease terms.' },
       { step: '02', title: 'Invest & Become Co-Owner', desc: 'Your investment gives you a proportionate ownership interest in the underlying asset.' },
-      { step: '03', title: 'Tenant Pays Lease', desc: 'The lessee (tenant) pays lease rental to DOGO Finance, which is distributed to investors.' },
+      { step: '03', title: 'Tenant Pays Lease', desc: 'The lessee (tenant) pays lease rental to DOGO, which is distributed to investors.' },
       { step: '04', title: 'Asset Sale at Maturity', desc: 'At lease end, the asset may be sold. Proceeds are distributed proportionately to investors.' }
     ],
     faqs: [
-      { q: 'What happens if the asset is damaged?', a: 'As the lessor (owner), maintenance and insurance costs sit with the ownership pool. DOGO Finance manages this on behalf of all investors and ensures full asset insurance.' }
+      { q: 'What happens if the asset is damaged?', a: 'As the lessor (owner), maintenance and insurance costs sit with the ownership pool. DOGO manages this on behalf of all investors and ensures full asset insurance.' }
     ]
   }
 };

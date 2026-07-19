@@ -10,11 +10,11 @@ import { RouterModule } from '@angular/router';
   styleUrl: './blog.component.css'
 })
 export class BlogComponent implements AfterViewInit {
-  
+
   posts = signal([
     {
       id: 'what-is-riba',
-      title: 'What is Riba? And Why DOGO Finance Was Built to Eliminate It',
+      title: 'What is Riba? And Why DOGO Was Built to Eliminate It',
       excerpt: 'Conventional banking relies on interest, which is strictly prohibited in Islam. Here is a breakdown of why Riba is harmful and how Halal finance offers a better path.',
       category: 'Halal Finance 101',
       date: 'March 20, 2026',
@@ -35,7 +35,7 @@ export class BlogComponent implements AfterViewInit {
     {
       id: 'how-bvn-nin-protects',
       title: 'How Our BVN/NIN KYC Protects Your Identity & Wealth',
-      excerpt: 'Learn how Dogo Finance integrates securely with NIBSS and NIMC to ensure your assets and data are protected by world-class security.',
+      excerpt: 'Learn how DOGO integrates securely with NIBSS and NIMC to ensure your assets and data are protected by world-class security.',
       category: 'Security',
       date: 'March 12, 2026',
       readTime: '4 min read',

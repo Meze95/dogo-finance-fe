@@ -43,14 +43,14 @@ export class ClientDashboardComponent implements OnInit {
   constructor() {
     // Reactively load data when user is available
     effect(() => {
-        if (this.user()) {
-            this.loadTodoList();
-            this.loadDashboardData();
-            this.loadBanks();
-        }
+      if (this.user()) {
+        this.loadTodoList();
+        this.loadDashboardData();
+        this.loadBanks();
+      }
     });
   }
-  
+
   // Signals for state management
   user = this.authService.currentUser;
   portfolios = this.productService.portfolios;
@@ -68,7 +68,7 @@ export class ClientDashboardComponent implements OnInit {
   otpCountdown = signal(60);
   canResendOtp = signal(false);
   private countdownInterval: any;
-  
+
   userName = computed(() => {
     const u = this.user();
     return u?.firstName ? `${u.firstName} ${u.lastName}` : 'Dogo User';
@@ -97,13 +97,13 @@ export class ClientDashboardComponent implements OnInit {
     this.productService.getPortfolios();
     this.loadRelationshipTypes();
     this.loadAddressDocTypes();
-    
+
     this.route.queryParams.subscribe(params => {
       const fundAmount = params['fundAmount'];
       if (fundAmount) {
         this.transactionAmount.set(fundAmount);
         this.openTransactionModal('fund');
-        
+
         // Clean URL parameters
         this.router.navigate([], {
           queryParams: { fundAmount: null },
@@ -115,7 +115,7 @@ export class ClientDashboardComponent implements OnInit {
     // Auto-refresh balance every 5 minutes for performance optimization
     const intervalId = setInterval(() => {
       this.loadDashboardData();
-    }, 300000); 
+    }, 300000);
   }
 
   loadDashboardData() {
@@ -124,102 +124,102 @@ export class ClientDashboardComponent implements OnInit {
 
     // These endpoints rely on the Auth Token (User Identity)
     this.transactionService.getHistory().subscribe({
-        next: (res: any) => {
-            console.log('RAW TRANSACTION HISTORY:', res); // Debug: Check the exact payload
-            let data = res?.data || res?.Data || res;
-            
-            // If data is an object, try to find an array inside it (fallback for different API structures)
-            if (data && typeof data === 'object' && !Array.isArray(data)) {
-                const arrayProp = Object.values(data).find(v => Array.isArray(v));
-                if (arrayProp) data = arrayProp;
-            }
+      next: (res: any) => {
+        console.log('RAW TRANSACTION HISTORY:', res); // Debug: Check the exact payload
+        let data = res?.data || res?.Data || res;
 
-            const isArray = Array.isArray(data);
-            if (isArray) {
-                const mapped = data.map((tx: any) => {
-                    const rawType = tx.type || tx.Type || tx.transactionType || tx.TransactionType;
-                    const rawStatus = tx.status || tx.Status;
-                    
-                    let mappedType: 'deposit' | 'withdrawal' | 'profit' | 'investment' = 'deposit';
-                    if (rawType === 'withdrawal' || rawType === 2) mappedType = 'withdrawal';
-                    else if (rawType === 'investment' || rawType === 4 || rawType === 'BUY') mappedType = 'investment';
-                    else if (rawType === 'profit' || rawType === 3) mappedType = 'profit';
+        // If data is an object, try to find an array inside it (fallback for different API structures)
+        if (data && typeof data === 'object' && !Array.isArray(data)) {
+          const arrayProp = Object.values(data).find(v => Array.isArray(v));
+          if (arrayProp) data = arrayProp;
+        }
 
-                    let mappedStatus: 'completed' | 'pending' | 'failed' = 'pending';
-                    const statusStr = String(rawStatus || '').toLowerCase();
-                    if (rawStatus === 1 || statusStr === 'success' || statusStr === 'completed') mappedStatus = 'completed';
-                    else if (statusStr === 'failed' || statusStr === 'rejected' || rawStatus === 2) mappedStatus = 'failed';
+        const isArray = Array.isArray(data);
+        if (isArray) {
+          const mapped = data.map((tx: any) => {
+            const rawType = tx.type || tx.Type || tx.transactionType || tx.TransactionType;
+            const rawStatus = tx.status || tx.Status;
 
-                    return {
-                        id: (tx.transactionId || tx.TransactionId || tx.id || tx.Id || Math.random())?.toString(),
-                        type: mappedType,
-                        amount: tx.amount || tx.Amount || tx.value || tx.Value || 0,
-                        status: mappedStatus,
-                        date: this.formatDate(tx.createdAt || tx.CreatedAt || tx.date || tx.Date || tx.transactionDate || tx.TransactionDate),
-                        description: tx.narration || tx.Narration || tx.description || tx.Description || (mappedType === 'deposit' ? 'Deposit' : 'Withdrawal')
-                    };
-                });
-                this.recentTransactions.set(mapped);
-            }
-        },
-        error: (err) => console.error('Dashboard Activity Error:', err)
+            let mappedType: 'deposit' | 'withdrawal' | 'profit' | 'investment' = 'deposit';
+            if (rawType === 'withdrawal' || rawType === 2) mappedType = 'withdrawal';
+            else if (rawType === 'investment' || rawType === 4 || rawType === 'BUY') mappedType = 'investment';
+            else if (rawType === 'profit' || rawType === 3) mappedType = 'profit';
+
+            let mappedStatus: 'completed' | 'pending' | 'failed' = 'pending';
+            const statusStr = String(rawStatus || '').toLowerCase();
+            if (rawStatus === 1 || statusStr === 'success' || statusStr === 'completed') mappedStatus = 'completed';
+            else if (statusStr === 'failed' || statusStr === 'rejected' || rawStatus === 2) mappedStatus = 'failed';
+
+            return {
+              id: (tx.transactionId || tx.TransactionId || tx.id || tx.Id || Math.random())?.toString(),
+              type: mappedType,
+              amount: tx.amount || tx.Amount || tx.value || tx.Value || 0,
+              status: mappedStatus,
+              date: this.formatDate(tx.createdAt || tx.CreatedAt || tx.date || tx.Date || tx.transactionDate || tx.TransactionDate),
+              description: tx.narration || tx.Narration || tx.description || tx.Description || (mappedType === 'deposit' ? 'Deposit' : 'Withdrawal')
+            };
+          });
+          this.recentTransactions.set(mapped);
+        }
+      },
+      error: (err) => console.error('Dashboard Activity Error:', err)
     });
 
     this.transactionService.getPortfolioSummary().subscribe({
-        next: (res: any) => {
-            const isSuccess = res?.success === true || res?.Success === true || res?.status === 200;
-            const data = res?.data || res?.Data;
-            
-            if (isSuccess && data) {
-                this.actualInvestedValue.set(data.currentValue || data.CurrentValue || 0);
-                this.portfolioGrowth.set(data.returnPercentage || data.ReturnPercentage || 0);
-                this.totalProfit.set(data.profit || data.Profit || 0);
-            }
+      next: (res: any) => {
+        const isSuccess = res?.success === true || res?.Success === true || res?.status === 200;
+        const data = res?.data || res?.Data;
+
+        if (isSuccess && data) {
+          this.actualInvestedValue.set(data.currentValue || data.CurrentValue || 0);
+          this.portfolioGrowth.set(data.returnPercentage || data.ReturnPercentage || 0);
+          this.totalProfit.set(data.profit || data.Profit || 0);
         }
+      }
     });
 
     // This endpoint specifically needs the CustomerId
     if (customerId) {
-        this.transactionService.getWallet(customerId).subscribe({
-          next: (res: any) => {
-            const isSuccess = res?.success === true || res?.Success === true || res?.boolean === true;
-            const data = res?.data || res?.Data;
-            
-            if (isSuccess && data) {
-              this.availableNaira.set(data.balance || data.Balance || 0);
-              this.availableDollar.set(data.usdBalance || data.UsdBalance || data.dollarBalance || data.DollarBalance || 0);
-            }
-          }
-        });
+      this.transactionService.getWallet(customerId).subscribe({
+        next: (res: any) => {
+          const isSuccess = res?.success === true || res?.Success === true || res?.boolean === true;
+          const data = res?.data || res?.Data;
 
-        this.transactionService.getActiveInvestments(customerId).subscribe({
-            next: (res: any) => {
-                const data = res?.data || res?.Data || [];
-                if (Array.isArray(data)) {
-                    const mapped = data.map((inv: any) => ({
-                        label: inv.portfolioName || 'Investment',
-                        value: inv.currentValue || 0,
-                        growth: inv.growth || 0,
-                        icon: 'ri-pie-chart-2-fill',
-                        color: inv.riskLevel === 'High' ? 'bg-red-600' : inv.riskLevel === 'Medium' ? 'bg-orange-500' : 'bg-[var(--dogo-primary)]'
-                    }));
-                    this.activeInvestments.set(mapped);
-                }
-            }
-        });
-        
-        this.customerService.getCompanyBankDetails().subscribe({
-            next: (res: any) => {
-                const data = res?.data || res?.Data;
-                if (data) {
-                    this.companyBankDetails.set({
-                        bankName: data.bankName || data.BankName || data.BankId?.toString() || 'Company Bank',
-                        accountName: data.companyName || data.CompanyName || 'Dogo Finance',
-                        accountNumber: data.accountNumber || data.AccountNumber || '0000000000'
-                    });
-                }
-            }
-        });
+          if (isSuccess && data) {
+            this.availableNaira.set(data.balance || data.Balance || 0);
+            this.availableDollar.set(data.usdBalance || data.UsdBalance || data.dollarBalance || data.DollarBalance || 0);
+          }
+        }
+      });
+
+      this.transactionService.getActiveInvestments(customerId).subscribe({
+        next: (res: any) => {
+          const data = res?.data || res?.Data || [];
+          if (Array.isArray(data)) {
+            const mapped = data.map((inv: any) => ({
+              label: inv.portfolioName || 'Investment',
+              value: inv.currentValue || 0,
+              growth: inv.growth || 0,
+              icon: 'ri-pie-chart-2-fill',
+              color: inv.riskLevel === 'High' ? 'bg-red-600' : inv.riskLevel === 'Medium' ? 'bg-orange-500' : 'bg-[var(--dogo-primary)]'
+            }));
+            this.activeInvestments.set(mapped);
+          }
+        }
+      });
+
+      this.customerService.getCompanyBankDetails().subscribe({
+        next: (res: any) => {
+          const data = res?.data || res?.Data;
+          if (data) {
+            this.companyBankDetails.set({
+              bankName: data.bankName || data.BankName || data.BankId?.toString() || 'Company Bank',
+              accountName: data.companyName || data.CompanyName || 'Dogo',
+              accountNumber: data.accountNumber || data.AccountNumber || '0000000000'
+            });
+          }
+        }
+      });
     }
   }
 
@@ -315,7 +315,7 @@ export class ClientDashboardComponent implements OnInit {
     this.otpCountdown.set(60);
     this.canResendOtp.set(false);
     if (this.countdownInterval) clearInterval(this.countdownInterval);
-    
+
     this.countdownInterval = setInterval(() => {
       if (this.otpCountdown() > 0) {
         this.otpCountdown.update(v => v - 1);
@@ -328,41 +328,41 @@ export class ClientDashboardComponent implements OnInit {
 
   resendInvestOtp() {
     if (!this.canResendOtp()) return;
-    
+
     const pId = this.selectedPortfolio()?.portfolioId;
     if (!pId) return;
 
     const amountNum = Number(this.investAmount().replace(/,/g, ''));
     this.isInvesting.set(true);
     this.transactionService.tempInvest(pId, amountNum, this.investPin()).subscribe({
-        next: (res) => {
-            this.isInvesting.set(false);
-            this.startOtpCountdown();
-            Swal.fire({
-                icon: 'success',
-                title: 'New OTP Sent',
-                text: 'A fresh authorization code has been sent to your email.',
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000
-            });
-        },
-        error: (err) => {
-            this.isInvesting.set(false);
-            Swal.fire({
-                icon: 'error',
-                title: 'Failed to resend',
-                text: err.error?.message || 'Please try again later.',
-                confirmButtonColor: 'var(--dogo-primary)'
-            });
-        }
+      next: (res) => {
+        this.isInvesting.set(false);
+        this.startOtpCountdown();
+        Swal.fire({
+          icon: 'success',
+          title: 'New OTP Sent',
+          text: 'A fresh authorization code has been sent to your email.',
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000
+        });
+      },
+      error: (err) => {
+        this.isInvesting.set(false);
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed to resend',
+          text: err.error?.message || 'Please try again later.',
+          confirmButtonColor: 'var(--dogo-primary)'
+        });
+      }
     });
   }
 
   resendWithdrawalOtp() {
     if (!this.canResendOtp()) return;
-    
+
     const currentUser = this.user();
     const customerId = currentUser?.CustomerId || currentUser?.customerId || currentUser?.id || currentUser?.Id;
     const amount = Number(this.transactionAmount().replace(/,/g, ''));
@@ -372,50 +372,50 @@ export class ClientDashboardComponent implements OnInit {
 
     this.isProcessing.set(true);
     this.transactionService.sendWithdrawalOtp(Number(customerId), amount).subscribe({
-        next: (res) => {
-            this.isProcessing.set(false);
-            this.startOtpCountdown();
-            Swal.fire({
-                icon: 'success',
-                title: 'New OTP Sent',
-                text: 'A fresh authorization code has been sent to your email.',
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000
-            });
-        },
-        error: (err) => {
-            this.isProcessing.set(false);
-            this.errorMessage.set(err.error?.message || 'Failed to resend OTP');
-            Swal.fire({
-                icon: 'error',
-                title: 'Failed to resend',
-                text: err.error?.message || 'Please try again later.',
-                confirmButtonColor: 'var(--dogo-primary)'
-            });
-        }
+      next: (res) => {
+        this.isProcessing.set(false);
+        this.startOtpCountdown();
+        Swal.fire({
+          icon: 'success',
+          title: 'New OTP Sent',
+          text: 'A fresh authorization code has been sent to your email.',
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000
+        });
+      },
+      error: (err) => {
+        this.isProcessing.set(false);
+        this.errorMessage.set(err.error?.message || 'Failed to resend OTP');
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed to resend',
+          text: err.error?.message || 'Please try again later.',
+          confirmButtonColor: 'var(--dogo-primary)'
+        });
+      }
     });
   }
 
   confirmInvestment() {
     if (!this.selectedPortfolio() || !this.investAmount()) return;
-    
+
     // Check BVN verification status first
     const u = this.user();
     // Assuming backend returns Bvnverified or similar in user profile or we can check via AuthService
     // For this context, we'll assume the backend will return 403 if not verified
-    
+
     this.isInvesting.set(true);
     const amount = Number(this.investAmount().replace(/,/g, ''));
-    
+
     this.transactionService.tempInvest(this.selectedPortfolio()!.portfolioId, amount, this.investPin(), this.investOtp()).subscribe({
       next: (res: any) => {
         this.isInvesting.set(false);
         if (res.success || res.boolean) {
           this.showInvestModal.set(false);
           this.showDetailModal.set(false);
-          
+
           Swal.fire({
             icon: 'success',
             title: 'Investment Successful',
@@ -424,7 +424,7 @@ export class ClientDashboardComponent implements OnInit {
             background: 'var(--dogo-cream)',
             customClass: { popup: 'rounded-[30px]' }
           });
-          
+
           // Refresh data
           this.loadDashboardData();
         } else {
@@ -482,55 +482,55 @@ export class ClientDashboardComponent implements OnInit {
 
   loadRelationshipTypes() {
     this.customerService.getRelationshipTypes().subscribe({
-        next: (res) => {
-            if (res.data) this.relationshipTypes.set(res.data);
-        }
+      next: (res) => {
+        if (res.data) this.relationshipTypes.set(res.data);
+      }
     });
   }
 
   loadAddressDocTypes() {
     this.settingsService.getAddressDocTypes().subscribe({
-        next: (res) => {
-            if (res.data) {
-                const options = res.data.map((type: any) => ({
-                    value: type.id.toString(),
-                    label: type.name
-                }));
-                this.addressDocOptions.set(options);
-            }
+      next: (res) => {
+        if (res.data) {
+          const options = res.data.map((type: any) => ({
+            value: type.id.toString(),
+            label: type.name
+          }));
+          this.addressDocOptions.set(options);
         }
+      }
     });
   }
 
   loadTodoList() {
     const customerId = this.user()?.CustomerId || this.user()?.customerId;
     if (customerId) {
-        this.customerService.getTodoList(customerId).subscribe({
-          next: (res) => {
-             if (res.data) {
-                const mapped = res.data.map((item: any) => ({
-                    title: item.title || item.Title,
-                    desc: item.subtitle || item.Subtitle,
-                    icon: this.mapTodoIcon(item.icon || item.Icon),
-                    action: item.actionText || item.ActionText
-                }));
+      this.customerService.getTodoList(customerId).subscribe({
+        next: (res) => {
+          if (res.data) {
+            const mapped = res.data.map((item: any) => ({
+              title: item.title || item.Title,
+              desc: item.subtitle || item.Subtitle,
+              icon: this.mapTodoIcon(item.icon || item.Icon),
+              action: item.actionText || item.ActionText
+            }));
 
-                this.nextSteps.set(mapped);
-             }
+            this.nextSteps.set(mapped);
           }
-        });
+        }
+      });
     }
   }
 
   mapTodoIcon(icon: string) {
     switch (icon?.toLowerCase()) {
-        case 'fingerprint': return 'ri-fingerprint-line';
-        case 'security': return 'ri-shield-user-line';
-        case 'lock': return 'ri-lock-password-line';
-        case 'people': return 'ri-parent-line';
-        case 'address': return 'ri-map-pin-user-line';
-        case 'location': return 'ri-map-pin-user-line';
-        default: return 'ri-checkbox-circle-line';
+      case 'fingerprint': return 'ri-fingerprint-line';
+      case 'security': return 'ri-shield-user-line';
+      case 'lock': return 'ri-lock-password-line';
+      case 'people': return 'ri-parent-line';
+      case 'address': return 'ri-map-pin-user-line';
+      case 'location': return 'ri-map-pin-user-line';
+      default: return 'ri-checkbox-circle-line';
     }
   }
 
@@ -558,7 +558,7 @@ export class ClientDashboardComponent implements OnInit {
 
   // Transaction Modal State
   showTransactionModal = signal(false);
-  transactionType = signal<'fund'|'withdraw'>('fund');
+  transactionType = signal<'fund' | 'withdraw'>('fund');
   transactionAmount = signal<string>('');
   withdrawAccountId = signal<string>('');
   withdrawPin = signal<string>('');
@@ -578,13 +578,13 @@ export class ClientDashboardComponent implements OnInit {
   currentChargeId = signal('');
   errorMessage = signal('');
 
-  companyBankDetails = signal<{bankName: string, accountName: string, accountNumber: string} | null>(null);
+  companyBankDetails = signal<{ bankName: string, accountName: string, accountNumber: string } | null>(null);
   manualReference = signal('');
   manualReceiptPath = signal('');
   manualReceiptFile = signal<File | null>(null);
   manualReceiptFilePreview = signal<string | null>(null);
 
-  virtualAccounts = signal<{bankName: string, accountName: string, accountNumber: string}[]>([]);
+  virtualAccounts = signal<{ bankName: string, accountName: string, accountNumber: string }[]>([]);
 
   cardType = signal<string>('');
 
@@ -637,21 +637,21 @@ export class ClientDashboardComponent implements OnInit {
     if (type === 'amex') minLen = 15;
 
     if (card.length < minLen || !this.luhnCheck(card)) return false;
-    
+
     // Expiry validation
     if (!/^\d{2}\/\d{2}$/.test(expiry)) return false;
     const [m, y] = expiry.split('/').map(Number);
     if (m < 1 || m > 12) return false;
-    
+
     const now = new Date();
     const currentYear = now.getFullYear() % 100;
     const currentMonth = now.getMonth() + 1;
-    
+
     // Check expiration: current year > expiry year OR (same year AND current month > expiry month)
     if (y < currentYear || (y === currentYear && m < currentMonth)) return false;
 
     if (cvv.length !== 3) return false;
-    
+
     // Relaxed PIN check: Valid if empty (optional) OR exactly 4 digits
     if (pin.length > 0 && pin.length !== 4) return false;
 
@@ -660,7 +660,7 @@ export class ClientDashboardComponent implements OnInit {
 
   validationError = computed(() => {
     if (this.fundingStep() !== 'card') return '';
-    
+
     const card = this.cardNumber().replace(/\s/g, '');
     const expiry = this.expiryDate();
     const cvv = this.cvv();
@@ -672,7 +672,7 @@ export class ClientDashboardComponent implements OnInit {
 
     if (card && card.length < minLen) return 'Enter a valid card number';
     if (card && card.length >= minLen && !this.luhnCheck(card)) return 'Invalid card number (fails check)';
-    
+
     if (expiry.length === 5) {
       const [m, y] = expiry.split('/').map(Number);
       const now = new Date();
@@ -695,7 +695,7 @@ export class ClientDashboardComponent implements OnInit {
     }));
   });
 
-  relationshipTypeOptions = computed(() => 
+  relationshipTypeOptions = computed(() =>
     this.relationshipTypes().map(type => ({
       value: type.id || type.Id,
       label: type.name || type.Name
@@ -749,7 +749,7 @@ export class ClientDashboardComponent implements OnInit {
     const isPinFlow = this.activeVerification()?.title === 'Create Transaction PIN';
     const isNokFlow = this.activeVerification()?.title === 'Add Next of Kin';
     const isAddressFlow = this.activeVerification()?.title === 'Address Verification';
-    
+
     if (isPinFlow) {
       if (this.pinInput().length !== 6 || this.pinInput() !== this.confirmPinInput()) return;
     } else if (isNokFlow) {
@@ -759,13 +759,13 @@ export class ClientDashboardComponent implements OnInit {
     } else {
       if (this.verificationInput().length !== 11) return;
     }
-    
-    
+
+
     this.isProcessing.set(true);
-    
+
     if (isAddressFlow) {
       if (!this.addressDocType() || !this.addressFile()) return;
-      
+
       const formData = new FormData();
       formData.append('DocTypeId', this.addressDocType());
       formData.append('File', this.addressFile()!);
@@ -797,7 +797,7 @@ export class ClientDashboardComponent implements OnInit {
         phoneNumber: this.nokPhone(),
         address: 'N/A' // Added default for API
       };
-      
+
       this.customerService.addNextOfKin(customerId, nokData).subscribe({
         next: (res) => {
           this.handleSuccessAction();
@@ -808,9 +808,9 @@ export class ClientDashboardComponent implements OnInit {
         }
       });
     } else if (isPinFlow) {
-      this.authService.setupPin({ 
-        pin: this.pinInput(), 
-        confirmPin: this.confirmPinInput() 
+      this.authService.setupPin({
+        pin: this.pinInput(),
+        confirmPin: this.confirmPinInput()
       }).subscribe({
         next: (res) => {
           if (res.boolean || res.success) {
@@ -830,8 +830,8 @@ export class ClientDashboardComponent implements OnInit {
       const customerId = this.user()?.CustomerId || this.user()?.customerId;
       const idNumber = this.verificationInput();
       const isBvnFlow = this.activeVerification()?.actionType === 'BVN_VERIFY' || this.activeVerification()?.title === 'Verify BVN';
-      
-      const verification$ = isBvnFlow 
+
+      const verification$ = isBvnFlow
         ? this.customerService.verifyBvn(customerId, idNumber)
         : this.customerService.verifyNin(customerId, idNumber);
 
@@ -856,7 +856,7 @@ export class ClientDashboardComponent implements OnInit {
   private handleSuccessAction() {
     this.isProcessing.set(false);
     this.isSuccess.set(true);
-    
+
     // Remove from list after success
     setTimeout(() => {
       const verifiedTitle = this.activeVerification()?.title;
@@ -865,20 +865,20 @@ export class ClientDashboardComponent implements OnInit {
     }, 2000);
   }
 
-  openTransactionModal(type: 'fund'|'withdraw') {
+  openTransactionModal(type: 'fund' | 'withdraw') {
     this.transactionType.set(type);
     this.transactionAmount.set('');
-    
+
     // Pre-select Primary Account for Withdrawals
     if (type === 'withdraw') {
-        const primary = this.registeredBanks().find(b => b.isDefault);
-        const first = this.registeredBanks()[0];
-        const selectedId = (primary?.customerBankId || primary?.bankId || first?.customerBankId || first?.bankId || '')?.toString();
-        this.withdrawAccountId.set(selectedId);
+      const primary = this.registeredBanks().find(b => b.isDefault);
+      const first = this.registeredBanks()[0];
+      const selectedId = (primary?.customerBankId || primary?.bankId || first?.customerBankId || first?.bankId || '')?.toString();
+      this.withdrawAccountId.set(selectedId);
     } else {
-        this.withdrawAccountId.set('');
+      this.withdrawAccountId.set('');
     }
-    
+
     this.withdrawPin.set('');
     this.fundingStep.set('amount');
     this.selectedSource.set(null);
@@ -910,7 +910,7 @@ export class ClientDashboardComponent implements OnInit {
       next: (res: any) => {
         try {
           console.log('Virtual Account Response Received:', res);
-          
+
           // More robust success check
           const isSuccess = res?.success === true || res?.Success === true || res?.status === 200 || res?.Status === 200 || res?.boolean === true;
           const dataPayload = res?.data || res?.Data;
@@ -918,7 +918,7 @@ export class ClientDashboardComponent implements OnInit {
 
           if (isSuccess && dataPayload) {
             const accountsData = Array.isArray(dataPayload) ? dataPayload : [dataPayload];
-             
+
             if (accountsData.length === 0) {
               this.errorMessage.set('No virtual accounts found for your profile.');
               this.isProcessing.set(false);
@@ -936,7 +936,7 @@ export class ClientDashboardComponent implements OnInit {
 
             console.log('Processed virtual accounts:', formattedAccounts);
             this.virtualAccounts.set(formattedAccounts);
-            
+
             // Transition to virtual account view
             this.fundingStep.set('virtual');
           } else {
@@ -967,7 +967,7 @@ export class ClientDashboardComponent implements OnInit {
     if (this.verificationInput().length !== 11) return;
     this.isProcessing.set(true);
     const customerId = this.user()?.CustomerId || this.user()?.customerId;
-    
+
     this.customerService.verifyBvn(customerId, this.verificationInput()).subscribe({
       next: (res) => {
         if (res.success || res.boolean) {
@@ -988,18 +988,18 @@ export class ClientDashboardComponent implements OnInit {
   }
 
   processTransaction() {
-    if(!this.transactionAmount()) {
-        this.errorMessage.set('Please enter an amount to proceed');
-        return;
+    if (!this.transactionAmount()) {
+      this.errorMessage.set('Please enter an amount to proceed');
+      return;
     }
-    
+
     // Reset error state
     this.errorMessage.set('');
-    
+
     const amount = Number(this.transactionAmount().toString().replace(/[^0-9]/g, ''));
     const customerId = this.user()?.CustomerId || this.user()?.customerId || this.user()?.id || this.user()?.Id || this.user()?.userId || this.user()?.UserId;
-    
-    
+
+
     if (this.transactionType() === 'fund') {
       if (this.fundingStep() === 'amount') {
         this.fundingStep.set('source');
@@ -1009,23 +1009,23 @@ export class ClientDashboardComponent implements OnInit {
 
       if (this.fundingStep() === 'source') {
         if (this.selectedSource() === 'card') {
-           this.fundingStep.set('card');
-           this.isProcessing.set(false);
+          this.fundingStep.set('card');
+          this.isProcessing.set(false);
         } else if (this.selectedSource() === 'virtual') {
-            // Check for BVN verification from todo list
-            const needsBvn = this.nextSteps().some(s => s.action === 'VERIFY NOW' && s.title.includes('BVN'));
-            
-            if (needsBvn) {
-                this.fundingStep.set('bvn');
-                this.isProcessing.set(false);
-            } else {
-                this.fetchVirtualAccount();
-            }
-        } else if (this.selectedSource() === 'manual') {
-            this.fundingStep.set('manual');
+          // Check for BVN verification from todo list
+          const needsBvn = this.nextSteps().some(s => s.action === 'VERIFY NOW' && s.title.includes('BVN'));
+
+          if (needsBvn) {
+            this.fundingStep.set('bvn');
             this.isProcessing.set(false);
+          } else {
+            this.fetchVirtualAccount();
+          }
+        } else if (this.selectedSource() === 'manual') {
+          this.fundingStep.set('manual');
+          this.isProcessing.set(false);
         } else {
-           this.isProcessing.set(false);
+          this.isProcessing.set(false);
         }
         return;
       }
@@ -1035,45 +1035,45 @@ export class ClientDashboardComponent implements OnInit {
         // Step 1: Initiate Deposit
         this.transactionService.initiateDeposit(customerId, amount).subscribe({
           next: (res) => {
-             const ref = res.data.transref;
-             this.currentReference.set(ref);
+            const ref = res.data.transref;
+            this.currentReference.set(ref);
 
-             // Step 2: Extract Expiry
-             const [month, year] = this.expiryDate().split('/');
+            // Step 2: Extract Expiry
+            const [month, year] = this.expiryDate().split('/');
 
-             // Step 3: Charge Card
-             this.transactionService.chargeCard({
-               reference: ref,
-               cardNumber: this.cardNumber().replace(/\s/g, ''),
-               expiryMonth: month,
-               expiryYear: '20' + year,
-               cvv: this.cvv(),
-               pin: this.cardPin()
-             }).subscribe({
-                 next: (chargeRes) => {
-                    const data = chargeRes.data;
-                    const body = data?.responseBody || data?.ResponseBody;
-                    const status = body?.status || body?.Status || data?.status;
-                    const rCode = data?.responseCode || data?.ResponseCode;
+            // Step 3: Charge Card
+            this.transactionService.chargeCard({
+              reference: ref,
+              cardNumber: this.cardNumber().replace(/\s/g, ''),
+              expiryMonth: month,
+              expiryYear: '20' + year,
+              cvv: this.cvv(),
+              pin: this.cardPin()
+            }).subscribe({
+              next: (chargeRes) => {
+                const data = chargeRes.data;
+                const body = data?.responseBody || data?.ResponseBody;
+                const status = body?.status || body?.Status || data?.status;
+                const rCode = data?.responseCode || data?.ResponseCode;
 
-                    if (status === 'OTP_AUTH_REQUIRED' || status === 'OTP_AUTHORIZATION_REQUIRED' || status?.includes('OTP')) {
-                       const otpMsg = body?.otpData?.message || body?.message || 'Please enter the OTP sent to your phone/email';
-                       this.otpMessage.set(otpMsg);
-                       this.currentChargeId.set(body?.otpData?.id || '');
-                       this.fundingStep.set('otp');
-                       this.isProcessing.set(false);
-                    } else if (status === 'SUCCESS' || rCode === '0' || rCode === '00') {
-                       this.finalizeDeposit();
-                    } else {
-                       this.errorMessage.set(body?.message || body?.Message || data?.message || data?.responseMessage || 'Charge failed');
-                       this.isProcessing.set(false);
-                    }
-                 },
-                error: (err) => {
-                   this.errorMessage.set('Card processing error');
-                   this.isProcessing.set(false);
+                if (status === 'OTP_AUTH_REQUIRED' || status === 'OTP_AUTHORIZATION_REQUIRED' || status?.includes('OTP')) {
+                  const otpMsg = body?.otpData?.message || body?.message || 'Please enter the OTP sent to your phone/email';
+                  this.otpMessage.set(otpMsg);
+                  this.currentChargeId.set(body?.otpData?.id || '');
+                  this.fundingStep.set('otp');
+                  this.isProcessing.set(false);
+                } else if (status === 'SUCCESS' || rCode === '0' || rCode === '00') {
+                  this.finalizeDeposit();
+                } else {
+                  this.errorMessage.set(body?.message || body?.Message || data?.message || data?.responseMessage || 'Charge failed');
+                  this.isProcessing.set(false);
                 }
-             });
+              },
+              error: (err) => {
+                this.errorMessage.set('Card processing error');
+                this.isProcessing.set(false);
+              }
+            });
           },
           error: () => this.isProcessing.set(false)
         });
@@ -1088,11 +1088,11 @@ export class ClientDashboardComponent implements OnInit {
           otp: this.otpInput()
         }).subscribe({
           next: () => {
-             this.finalizeDeposit();
+            this.finalizeDeposit();
           },
           error: () => {
-             this.errorMessage.set('Authorization failed');
-             this.isProcessing.set(false);
+            this.errorMessage.set('Authorization failed');
+            this.isProcessing.set(false);
           }
         });
         return;
@@ -1138,9 +1138,9 @@ export class ClientDashboardComponent implements OnInit {
                   this.startOtpCountdown();
                 } else {
                   this.errorMessage.set(res.message || 'Failed to send OTP');
-                }        
-              },  
-              error: (err) => { 
+                }
+              },
+              error: (err) => {
                 this.isProcessing.set(false);
                 this.errorMessage.set(err.error?.message || 'Error sending OTP');
               }
@@ -1149,7 +1149,7 @@ export class ClientDashboardComponent implements OnInit {
             this.fundingStep.set('pin');
             this.isProcessing.set(false);
           }
-          return;   
+          return;
         }
 
         if (this.fundingStep() === 'otp') {
@@ -1196,7 +1196,7 @@ export class ClientDashboardComponent implements OnInit {
   submitManualTransfer() {
     this.isProcessing.set(true);
     const amount = Number(this.transactionAmount().replace(/,/g, ''));
-    
+
     this.transactionService.submitManualFunding({
       amount: amount,
       reference: 'N/A',
@@ -1229,18 +1229,18 @@ export class ClientDashboardComponent implements OnInit {
       const amount = Number(rawAmount);
       const currentUser = this.user();
       const customerId = currentUser?.CustomerId || currentUser?.customerId || currentUser?.id || currentUser?.Id;
-      
+
       const selectedBank = this.registeredBanks().find(b => {
-          const bId = (b.customerBankId || b.bankId || 0).toString();
-          return bId === this.withdrawAccountId();
+        const bId = (b.customerBankId || b.bankId || 0).toString();
+        return bId === this.withdrawAccountId();
       });
 
       if (!selectedBank) {
-          window.alert('ERROR: Bank not selected');
-          console.error('DEBUG: Bank not found for ID', this.withdrawAccountId());
-          this.errorMessage.set('Receiving bank account not found.');
-          this.isProcessing.set(false);
-          return;
+        window.alert('ERROR: Bank not selected');
+        console.error('DEBUG: Bank not found for ID', this.withdrawAccountId());
+        this.errorMessage.set('Receiving bank account not found.');
+        this.isProcessing.set(false);
+        return;
       }
 
       const withdrawalData = {
@@ -1251,18 +1251,18 @@ export class ClientDashboardComponent implements OnInit {
         pin: this.withdrawPin(),
         narration: `Withdrawal to ${selectedBank.bankName}`,
         otp: this.otpInput()
-      }; 
-   
+      };
+
       console.log('DEBUG: finalizeWithdrawal calling Service...', withdrawalData);
 
       this.transactionService.initiateWithdrawal(withdrawalData).pipe(
-        timeout(60000), 
+        timeout(60000),
         catchError(err => {
-            console.error('Withdrawal Transaction Failed/Timed-out', err);
-            this.isProcessing.set(false);
-            const msg = err.name === 'TimeoutError' ? 'Request timed out. Please try again.' : (err.error?.message || 'Server connection failed');
-            this.errorMessage.set(msg);
-            return throwError(() => err);
+          console.error('Withdrawal Transaction Failed/Timed-out', err);
+          this.isProcessing.set(false);
+          const msg = err.name === 'TimeoutError' ? 'Request timed out. Please try again.' : (err.error?.message || 'Server connection failed');
+          this.errorMessage.set(msg);
+          return throwError(() => err);
         })
       ).subscribe({
         next: (res) => {
@@ -1342,20 +1342,20 @@ export class ClientDashboardComponent implements OnInit {
   onAmountInput(event: Event, type: 'fund' | 'invest' = 'fund') {
     const input = event.target as HTMLInputElement;
     let value = input.value.replace(/\D/g, ''); // Digits only
-    
+
     // Remove leading zeros
     if (value.length > 1 && value.startsWith('0')) {
       value = value.replace(/^0+/, '');
     }
-    
+
     const formatted = this.formatWithCommas(value);
-    
+
     if (type === 'invest') {
       this.investAmount.set(value);
     } else {
       this.transactionAmount.set(value);
     }
-    
+
     input.value = formatted;
   }
 
@@ -1367,26 +1367,26 @@ export class ClientDashboardComponent implements OnInit {
   onCardNumberInput(event: Event) {
     const input = event.target as HTMLInputElement;
     let value = input.value.replace(/\D/g, ''); // Remove non-digits
-    
+
     const determinedType = this.detectCardType(value);
     this.cardType.set(determinedType);
-    
+
     let maxDigits = 19;
     if (determinedType === 'amex') maxDigits = 15;
     if (determinedType === 'mastercard') maxDigits = 16;
-    
+
     if (value.length > maxDigits) value = value.slice(0, maxDigits);
-    
+
     let formatted = value;
     if (determinedType === 'amex') {
-       const p1 = value.slice(0, 4);
-       const p2 = value.slice(4, 10);
-       const p3 = value.slice(10, 15);
-       formatted = p1 + (p2 ? ' ' + p2 : '') + (p3 ? ' ' + p3 : '');
+      const p1 = value.slice(0, 4);
+      const p2 = value.slice(4, 10);
+      const p3 = value.slice(10, 15);
+      formatted = p1 + (p2 ? ' ' + p2 : '') + (p3 ? ' ' + p3 : '');
     } else {
-       formatted = value.match(/.{1,4}/g)?.join(' ') || value;
+      formatted = value.match(/.{1,4}/g)?.join(' ') || value;
     }
-    
+
     this.cardNumber.set(formatted);
     input.value = formatted;
   }
@@ -1395,11 +1395,11 @@ export class ClientDashboardComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     let value = input.value.replace(/\D/g, '');
     if (value.length > 4) value = value.slice(0, 4);
-    
+
     if (value.length >= 2) {
       value = value.slice(0, 2) + '/' + value.slice(2);
     }
-    
+
     this.expiryDate.set(value);
     input.value = value;
   }

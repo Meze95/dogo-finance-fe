@@ -18,7 +18,7 @@ const REPORTS_DATA: ReportYear[] = [
   {
     year: '2025',
     title: 'Annual Shariah Compliance Report',
-    summary: 'The comprehensive audit signed off by our SSB confirming zero Riba exposure across all Dogo Finance assets.',
+    summary: 'The comprehensive audit signed off by our SSB confirming zero Riba exposure across all DOGO assets.',
     image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800'
   },
   {

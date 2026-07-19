@@ -23,12 +23,12 @@ export class ClientActivityComponent implements OnInit, OnDestroy {
   data = signal<ClientActivityReport | null>(null);
   isLoading = signal(false);
 
-  @ViewChild(DataTableDirective, {static: false})
+  @ViewChild(DataTableDirective, { static: false })
   dtElement!: DataTableDirective;
 
   startDate = '';
   endDate = '';
-  
+
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
   today = new Date();
@@ -49,11 +49,11 @@ export class ClientActivityComponent implements OnInit, OnDestroy {
           customize: (win: any) => {
             const currentData = this.data();
             const cProfile = currentData?.companyProfile;
-            const cName = cProfile?.companyName || 'DOGO FINANCE LIMITED';
+            const cName = cProfile?.companyName || 'DOGO LIMITED';
             const cAddr = cProfile?.address || '128 Okpanam Road,\nOkpanam,\nDelta State.';
 
             $(win.document.body)
-                .prepend(`
+              .prepend(`
                   <div style="text-align: center; margin-bottom: 20px;">
                     <div style="font-size: 16px; font-weight: bold;">${cName}</div>
                     <div style="font-size: 10px; white-space: pre-wrap; margin-bottom: 15px;">${cAddr}</div>
@@ -62,8 +62,8 @@ export class ClientActivityComponent implements OnInit, OnDestroy {
                 `);
 
             $(win.document.body).find('table')
-                .addClass('compact')
-                .css('font-size', 'inherit');
+              .addClass('compact')
+              .css('font-size', 'inherit');
           }
         }
       ]
@@ -73,7 +73,7 @@ export class ClientActivityComponent implements OnInit, OnDestroy {
     const end = new Date();
     const start = new Date();
     start.setDate(end.getDate() - 30);
-    
+
     this.startDate = this.formatDate(start);
     this.endDate = this.formatDate(end);
   }
