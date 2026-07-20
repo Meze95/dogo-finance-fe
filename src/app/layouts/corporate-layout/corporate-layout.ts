@@ -72,7 +72,7 @@ export class CorporateLayout {
     return [
       { label: 'Dashboard', icon: 'ri-dashboard-3-fill', link: '/corporate/dashboard' },
       { label: 'Investments', icon: 'ri-funds-box-fill', link: '/corporate/products' },
-      { label: 'My Portfolio', icon: 'ri-pie-chart-2-fill', link: '/corporate/investments' },
+      { label: 'Portfolio', icon: 'ri-pie-chart-2-fill', link: '/corporate/investments' },
       { label: 'Transactions', icon: 'ri-exchange-box-fill', link: '/corporate/transactions' },
     ];
   });
