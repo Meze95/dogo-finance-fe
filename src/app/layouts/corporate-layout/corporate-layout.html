@@ -24,11 +24,11 @@
     [style.minWidth]="isSidebarOpen() ? '18rem' : '5rem'"
     [class.translate-x-0]="isMobileMenuOpen()"
     [class.-translate-x-full]="!isMobileMenuOpen()"
-    class="shrink-0 fixed lg:static inset-y-0 left-0 bg-[var(--dogo-dark)] text-white z-[70] flex flex-col border-r border-[var(--dogo-primary)]/20 shadow-2xl overflow-hidden lg:translate-x-0"
+    class="shrink-0 fixed lg:static inset-y-0 left-0 bg-gradient-to-b from-[#020C47] to-[#010626] text-white z-[70] flex flex-col border-r border-[var(--dogo-primary)]/20 shadow-2xl overflow-hidden lg:translate-x-0"
     style="transition: width 0.4s cubic-bezier(0.19, 1, 0.22, 1), transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);">
 
     <!-- Brand Header -->
-    <div class="h-20 flex items-center px-6 shrink-0 border-b border-white/5 bg-[var(--dogo-primary)]/20">
+    <div class="h-20 flex items-center px-6 shrink-0 border-b border-white/15 bg-white/5">
       <div class="relative flex flex-col justify-center w-full h-full">
         <div class="absolute left-0 top-1/2 -translate-y-1/2 flex items-center transition-opacity duration-300"
              [class.opacity-0]="isSidebarOpen() || isMobileMenuOpen()"
@@ -97,8 +97,8 @@
 
     <!-- HEADER — dark on mobile, white on desktop -->
     <header class="h-16 sm:h-20 shrink-0 flex items-center justify-between px-4 md:px-10 z-[40]
-                   bg-[var(--dogo-dark)] lg:bg-white/80 lg:backdrop-blur-md
-                   border-b border-white/5 lg:border-[var(--dogo-primary)]/10">
+                   bg-[#020C47] lg:bg-white/80 lg:backdrop-blur-md
+                   border-b border-white/15 lg:border-[var(--dogo-primary)]/10">
 
       <!-- Left: hamburger + logo (mobile only) -->
       <div class="flex items-center gap-3 lg:hidden">
