@@ -42,14 +42,17 @@
     <div class="space-y-8">
 
       <!-- Modern Wallet Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 sm:mb-10 animate-fade-in">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 sm:mb-10 animate-fade-in">
         
         <!-- NGN Balance Card -->
         <div class="relative group bg-gradient-to-br from-[#030E65] to-[#051A9A] rounded-[28px] sm:rounded-[36px] p-6 text-white shadow-xl shadow-[var(--dogo-primary)]/10 overflow-hidden border border-white/10 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl">
           <!-- Ambient Glow decoration -->
           <div class="absolute -top-24 -left-24 w-48 h-48 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
           
-          <div class="relative z-10 flex flex-col justify-between h-full min-h-[140px]">
+          <!-- Currency Pattern Background -->
+          <div class="absolute inset-y-0 right-0 w-[55%] z-0 bg-naira-pattern pointer-events-none select-none"></div>
+          
+          <div class="relative z-10 flex flex-col justify-between h-full min-h-[160px]">
             <!-- Header -->
             <div class="flex items-center justify-between">
               <span class="text-[10px] font-black uppercase tracking-widest text-white">Naira Wallet</span>
@@ -75,10 +78,19 @@
               </div>
             </div>
             
-            <!-- Footer decoration line -->
-            <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-[9px] font-bold text-white uppercase tracking-widest">
-              <span>Main Balance</span>
-              <i class="ri-wallet-3-line text-sm text-white"></i>
+            <!-- Actions & Footer -->
+            <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between gap-4">
+              <div class="flex items-center gap-2.5">
+                <button (click)="openTransactionModal('fund')"
+                  class="h-9 px-4 rounded-xl border border-white/20 bg-transparent hover:bg-emerald-600 hover:border-transparent hover:shadow-lg hover:shadow-emerald-500/25 text-white text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-1.5 cursor-pointer hover:scale-[1.03] active:scale-95">
+                  <i class="ri-bank-line text-sm"></i> Fund
+                </button>
+                <button (click)="openTransactionModal('withdraw')"
+                  class="h-9 px-4 rounded-xl border border-white/20 bg-transparent hover:bg-red-500 hover:border-transparent hover:shadow-lg hover:shadow-red-500/25 text-white text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-1.5 cursor-pointer hover:scale-[1.03] active:scale-95">
+                  <i class="ri-upload-2-fill text-sm"></i> Withdraw
+                </button>
+              </div>
+              <i class="ri-wallet-3-line text-lg text-white/50"></i>
             </div>
           </div>
         </div>
@@ -88,7 +100,10 @@
           <!-- Ambient Glow decoration -->
           <div class="absolute -top-24 -left-24 w-48 h-48 bg-blue-500/10 rounded-full blur-2xl pointer-events-none"></div>
           
-          <div class="relative z-10 flex flex-col justify-between h-full min-h-[140px]">
+          <!-- Currency Pattern Background -->
+          <div class="absolute inset-y-0 right-0 w-[55%] z-0 bg-dollar-pattern pointer-events-none select-none"></div>
+          
+          <div class="relative z-10 flex flex-col justify-between h-full min-h-[160px]">
             <!-- Header -->
             <div class="flex items-center justify-between">
               <span class="text-[10px] font-black uppercase tracking-widest text-white">Dollar Wallet</span>
@@ -108,30 +123,20 @@
               </div>
             </div>
             
-            <!-- Footer decoration line -->
-            <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-[9px] font-bold text-white uppercase tracking-widest">
-              <span>FX Balance</span>
-              <i class="ri-global-line text-sm text-white"></i>
+            <!-- Actions & Footer -->
+            <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between gap-4">
+              <div class="flex items-center gap-2.5">
+                <button (click)="showDollarComingSoon()"
+                  class="h-9 px-4 rounded-xl border border-white/20 bg-transparent hover:bg-emerald-600 hover:border-transparent hover:shadow-lg hover:shadow-emerald-500/25 text-white text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-1.5 cursor-pointer hover:scale-[1.03] active:scale-95">
+                  <i class="ri-bank-line text-sm"></i> Fund
+                </button>
+                <button (click)="showDollarComingSoon()"
+                  class="h-9 px-4 rounded-xl border border-white/20 bg-transparent hover:bg-red-500 hover:border-transparent hover:shadow-lg hover:shadow-red-500/25 text-white text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-1.5 cursor-pointer hover:scale-[1.03] active:scale-95">
+                  <i class="ri-upload-2-fill text-sm"></i> Withdraw
+                </button>
+              </div>
+              <i class="ri-global-line text-lg text-white/50"></i>
             </div>
-          </div>
-        </div>
-
-        <!-- Action Card -->
-        <div class="relative bg-white rounded-[28px] sm:rounded-[36px] p-6 border border-[#E8ECF5] shadow-sm flex flex-col justify-between min-h-[164px]">
-          <div class="space-y-1.5">
-            <h4 class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-muted)]">Quick Operations</h4>
-            <p class="text-[9.5px] font-medium text-slate-400">Perform transactions on your wallets.</p>
-          </div>
-          
-          <div class="grid grid-cols-2 gap-3 mt-4">
-            <button (click)="openTransactionModal('fund')"
-              class="h-12 rounded-xl sm:rounded-2xl bg-[#030E65] text-white hover:bg-[#030E65]/90 transition-all font-bold text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-[#030E65]/10 hover:scale-[1.03] active:scale-95">
-              <i class="ri-add-line text-sm"></i> Fund
-            </button>
-            <button (click)="openTransactionModal('withdraw')"
-              class="h-12 rounded-xl sm:rounded-2xl bg-white border border-slate-200 text-[#030E65] hover:bg-slate-50 transition-all font-bold text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer hover:scale-[1.03] active:scale-95">
-              <i class="ri-arrow-up-line text-sm"></i> Withdraw
-            </button>
           </div>
         </div>
 
@@ -1325,6 +1330,37 @@
                 class="w-full bg-[var(--dogo-primary)] hover:bg-[var(--dogo-primary-soft)] text-white py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-2xl transition-all flex items-center justify-center gap-3">
           <i class="ri-shield-check-fill text-[var(--dogo-secondary)] text-lg"></i>
            Investment Now
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Dollar Coming Soon Modal -->
+@if (showDollarComingSoonModal()) {
+  <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-300">
+    <div class="absolute inset-0 bg-[var(--dogo-dark)]/80 backdrop-blur-md" (click)="showDollarComingSoonModal.set(false)"></div>
+    
+    <div class="relative w-full max-w-sm bg-white rounded-[40px] shadow-2xl overflow-hidden transform animate-in slide-in-from-bottom-8 duration-500 flex flex-col p-8 z-10">
+      <div class="flex justify-end shrink-0 mb-2">
+        <button (click)="showDollarComingSoonModal.set(false)" class="w-8 h-8 rounded-full bg-[var(--dogo-cream)] flex items-center justify-center text-[var(--dogo-primary)] hover:bg-[var(--dogo-primary)] hover:text-white transition-all">
+          <i class="ri-close-line text-lg"></i>
+        </button>
+      </div>
+
+      <div class="text-center pb-4">
+        <div class="w-16 h-16 bg-blue-50 border-2 border-blue-100 rounded-3xl flex items-center justify-center text-3xl text-[var(--dogo-primary)] mx-auto mb-6">
+          <i class="ri-global-line"></i>
+        </div>
+        
+        <h3 class="text-xl font-black text-[var(--dogo-dark)] italic tracking-tighter uppercase mb-3">Coming Soon</h3>
+        <p class="text-xs font-bold text-[var(--dogo-muted)] uppercase tracking-wider leading-relaxed">
+          Dollar funding and withdrawals are not operational yet. We are working hard to bring this feature to you soon!
+        </p>
+
+        <button (click)="showDollarComingSoonModal.set(false)"
+          class="mt-8 w-full py-3 bg-[var(--dogo-primary)] text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-[var(--dogo-primary-soft)] transition-all">
+          Got It
         </button>
       </div>
     </div>

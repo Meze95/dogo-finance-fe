@@ -64,6 +64,7 @@ export class CorporateDashboardComponent implements OnInit {
   investPin = signal<string>('');
   investOtp = signal<string>('');
   isInvesting = signal(false);
+  showDollarComingSoonModal = signal(false);
   investBvn = signal<string>('');
   otpCountdown = signal(60);
   canResendOtp = signal(false);
@@ -951,6 +952,10 @@ export class CorporateDashboardComponent implements OnInit {
 
   closeTransactionModal() {
     this.showTransactionModal.set(false);
+  }
+
+  showDollarComingSoon() {
+    this.showDollarComingSoonModal.set(true);
   }
 
   fetchVirtualAccount() {
