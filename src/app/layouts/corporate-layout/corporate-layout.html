@@ -24,11 +24,11 @@
     [style.minWidth]="isSidebarOpen() ? '18rem' : '5rem'"
     [class.translate-x-0]="isMobileMenuOpen()"
     [class.-translate-x-full]="!isMobileMenuOpen()"
-    class="shrink-0 fixed lg:static inset-y-0 left-0 bg-[var(--dogo-dark)] text-white z-[70] flex flex-col border-r border-[var(--dogo-primary)]/20 shadow-2xl overflow-hidden lg:translate-x-0"
+    class="shrink-0 fixed lg:static inset-y-0 left-0 bg-gradient-to-b from-[#020C47] to-[#010626] text-white z-[70] flex flex-col border-r border-[var(--dogo-primary)]/20 shadow-2xl overflow-hidden lg:translate-x-0"
     style="transition: width 0.4s cubic-bezier(0.19, 1, 0.22, 1), transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);">
 
     <!-- Brand Header -->
-    <div class="h-20 flex items-center px-6 shrink-0 border-b border-white/5 bg-[var(--dogo-primary)]/20">
+    <div class="h-20 flex items-center px-6 shrink-0 border-b border-white/15 bg-white/5">
       <div class="relative flex flex-col justify-center w-full h-full">
         <div class="absolute left-0 top-1/2 -translate-y-1/2 flex items-center transition-opacity duration-300"
              [class.opacity-0]="isSidebarOpen() || isMobileMenuOpen()"
@@ -45,8 +45,6 @@
 
     <!-- Navigation -->
     <div class="flex-grow flex flex-col py-8 overflow-y-auto custom-scrollbar px-3 space-y-2">
-      <p class="px-5 text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-4 transition-opacity shrink-0 whitespace-nowrap"
-        [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">Corporate System</p>
 
       @for(item of menuItems(); track item.label) {
         <a [routerLink]="item.link" routerLinkActive="bg-white/10 text-white shadow-lg border-l-4 border-[var(--dogo-secondary)]"
@@ -62,48 +60,35 @@
         </a>
       }
 
-      <div class="mt-2 space-y-2">
-        <p class="px-5 text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-4 transition-opacity shrink-0 whitespace-nowrap"
-          [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">Management</p>
-
-        @for(item of managementItems(); track item.label) {
-          <a [routerLink]="item.link" routerLinkActive="bg-white/10 text-[var(--dogo-secondary)]"
-            (click)="isMobileMenuOpen() ? toggleMobileMenu() : null"
-            class="flex items-center space-x-4 h-12 rounded-2xl transition-all group px-4 hover:bg-white/5 text-white/60 hover:text-white">
-            <div class="w-6 flex justify-center shrink-0">
-              <i [class]="item.icon" class="text-xl"></i>
-            </div>
-            <span class="font-bold text-sm tracking-wide whitespace-nowrap transition-opacity duration-300"
-              [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">
-              {{ item.label }}
-            </span>
-          </a>
-        }
-
-        <button (click)="handleLogout()" [disabled]="isLoggingOut()"
-          class="flex items-center space-x-4 h-12 w-full rounded-2xl transition-all group px-4 hover:bg-red-500/10 text-white/60 hover:text-red-400">
+      @for(item of managementItems(); track item.label) {
+        <a [routerLink]="item.link" routerLinkActive="bg-white/10 text-[var(--dogo-secondary)]"
+          (click)="isMobileMenuOpen() ? toggleMobileMenu() : null"
+          class="flex items-center space-x-4 h-12 rounded-2xl transition-all group px-4 hover:bg-white/5 text-white/60 hover:text-white">
           <div class="w-6 flex justify-center shrink-0">
-            <i class="ri-logout-circle-r-line text-xl"></i>
+            <i [class]="item.icon" class="text-xl"></i>
           </div>
-          <span class="font-bold text-sm tracking-wide whitespace-nowrap transition-opacity duration-300 flex items-center gap-2"
+          <span class="font-bold text-sm tracking-wide whitespace-nowrap transition-opacity duration-300"
             [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">
-            @if(isLoggingOut()) {
-              <i class="ri-loader-4-line animate-spin text-sm"></i> Logging out...
-            } @else {
-              Logout
-            }
+            {{ item.label }}
           </span>
-        </button>
+        </a>
+      }
 
-        <button (click)="toggleSidebar()"
-          class="hidden lg:flex items-center space-x-4 h-12 w-full rounded-2xl hover:bg-white/5 px-4 text-white/30 transition-all mt-4">
-          <div class="w-6 flex justify-center shrink-0">
-            <i [class]="isSidebarOpen() ? 'ri-arrow-left-s-line' : 'ri-arrow-right-s-line'" class="text-xl"></i>
-          </div>
-          <span class="font-bold text-[10px] uppercase tracking-widest transition-opacity duration-300"
-            [class.opacity-0]="!isSidebarOpen()">Minimize Panel</span>
-        </button>
-      </div>
+      <button (click)="handleLogout()" [disabled]="isLoggingOut()"
+        class="flex items-center space-x-4 h-12 w-full rounded-2xl transition-all group px-4 hover:bg-red-500/10 text-white/60 hover:text-red-400">
+        <div class="w-6 flex justify-center shrink-0">
+          <i class="ri-logout-circle-r-line text-xl"></i>
+        </div>
+        <span class="font-bold text-sm tracking-wide whitespace-nowrap transition-opacity duration-300 flex items-center gap-2"
+          [class.opacity-0]="!isSidebarOpen()" [class.hidden]="!isSidebarOpen() && !isMobileMenuOpen()">
+          @if(isLoggingOut()) {
+            <i class="ri-loader-4-line animate-spin text-sm"></i> Logging out...
+          } @else {
+            Logout
+          }
+        </span>
+      </button>
+
     </div>
   </aside>
 
@@ -112,8 +97,8 @@
 
     <!-- HEADER — dark on mobile, white on desktop -->
     <header class="h-16 sm:h-20 shrink-0 flex items-center justify-between px-4 md:px-10 z-[40]
-                   bg-[var(--dogo-dark)] lg:bg-white/80 lg:backdrop-blur-md
-                   border-b border-white/5 lg:border-[var(--dogo-primary)]/10">
+                   bg-[#020C47] lg:bg-white/80 lg:backdrop-blur-md
+                   border-b border-white/15 lg:border-[var(--dogo-primary)]/10">
 
       <!-- Left: hamburger + logo (mobile only) -->
       <div class="flex items-center gap-3 lg:hidden">

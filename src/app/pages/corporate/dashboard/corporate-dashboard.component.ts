@@ -68,6 +68,27 @@ export class CorporateDashboardComponent implements OnInit {
   investBvn = signal<string>('');
   otpCountdown = signal(60);
   canResendOtp = signal(false);
+
+  // USD Funding Signals
+  showDollarFundModal = signal(false);
+  dollarFundStep = signal<'source' | 'naira-amount' | 'wire-details' | 'upload-receipt' | 'success'>('source');
+  dollarAmountInput = signal<string>('');
+  dollarExchangeRate = 1453;
+  
+  dollarReceiptFile = signal<File | null>(null);
+  dollarReceiptFileName = signal<string>('');
+  dollarReceiptFilePreview = signal<string | null>(null);
+  dollarSelectedFundingType = signal<'naira' | 'wire' | null>(null);
+  dollarFundSuccessMsg = signal<string>('');
+
+  convertedNairaCost = computed(() => {
+    const usd = parseFloat(this.dollarAmountInput().replace(/,/g, '')) || 0;
+    return usd * this.dollarExchangeRate;
+  });
+
+  hasSufficientNairaForUsd = computed(() => {
+    return this.availableNaira() >= this.convertedNairaCost();
+  });
   private countdownInterval: any;
 
   userName = computed(() => {
@@ -962,6 +983,77 @@ export class CorporateDashboardComponent implements OnInit {
 
   showDollarComingSoon() {
     this.showDollarComingSoonModal.set(true);
+  }
+
+  openDollarFunding() {
+    this.dollarAmountInput.set('');
+    this.dollarFundStep.set('source');
+    this.dollarReceiptFile.set(null);
+    this.dollarReceiptFileName.set('');
+    this.dollarReceiptFilePreview.set(null);
+    this.dollarSelectedFundingType.set(null);
+    this.dollarFundSuccessMsg.set('');
+    this.showDollarFundModal.set(true);
+  }
+
+  closeDollarFundModal() {
+    this.showDollarFundModal.set(false);
+  }
+
+  selectDollarFundingSource(type: 'naira' | 'wire') {
+    this.dollarSelectedFundingType.set(type);
+    if (type === 'naira') {
+      this.dollarFundStep.set('naira-amount');
+    } else {
+      this.dollarFundStep.set('wire-details');
+    }
+  }
+
+  setQuickDollarAmount(amount: number) {
+    this.dollarAmountInput.set(amount.toString());
+  }
+
+  handleDollarReceiptUpload(event: any) {
+    const file = event.target.files?.[0];
+    if (file) {
+      this.dollarReceiptFile.set(file);
+      this.dollarReceiptFileName.set(file.name);
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.dollarReceiptFilePreview.set(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  submitNairaToDollarConversion() {
+    if (!this.hasSufficientNairaForUsd()) {
+      return;
+    }
+    const usdVal = parseFloat(this.dollarAmountInput().replace(/,/g, '')) || 0;
+    const nngCost = this.convertedNairaCost();
+    
+    this.isProcessing.set(true);
+    setTimeout(() => {
+      this.availableNaira.update(val => val - nngCost);
+      this.availableDollar.update(val => val + usdVal);
+      this.isProcessing.set(false);
+      this.dollarFundSuccessMsg.set(`Successfully funded your USD wallet with $${usdVal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} by converting ₦${nngCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}.`);
+      this.dollarFundStep.set('success');
+    }, 1500);
+  }
+
+  submitWireReceipt() {
+    const usdVal = parseFloat(this.dollarAmountInput().replace(/,/g, '')) || 0;
+    if (!this.dollarReceiptFile()) {
+      return;
+    }
+    this.isProcessing.set(true);
+    setTimeout(() => {
+      this.isProcessing.set(false);
+      this.dollarFundSuccessMsg.set(`Your wire transfer deposit request of $${usdVal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} has been submitted along with your receipt "${this.dollarReceiptFileName()}". It is now pending compliance approval.`);
+      this.dollarFundStep.set('success');
+    }, 1500);
   }
 
   fetchVirtualAccount() {
