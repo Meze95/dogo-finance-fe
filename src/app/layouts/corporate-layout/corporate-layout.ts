@@ -29,14 +29,14 @@ export class CorporateLayout {
   userName = computed(() => {
     const u = this.user();
     if (!u) return 'Malik Sherifdeen';
-    
+
     if (u.CompanyName || u.companyName) {
       return u.CompanyName || u.companyName;
     }
-    
+
     const first = u.FirstName || u.firstName || 'Malik';
     const last = u.LastName || u.lastName || 'Sherifdeen';
-    
+
     if (first === last) return first;
     return `${first} ${last}`;
   });
@@ -44,17 +44,17 @@ export class CorporateLayout {
   userInitials = computed(() => {
     const u = this.user();
     if (!u) return 'MS';
-    
+
     const first = u.FirstName || u.firstName;
     const last = u.LastName || u.lastName;
     const nameToUse = u.CompanyName || u.companyName || (first && first === last ? first : null);
-    
+
     if (nameToUse) {
-       const parts = nameToUse.trim().split(' ');
-       if (parts.length > 1) return (parts[0][0] + parts[1][0]).toUpperCase();
-       return nameToUse.substring(0, 2).toUpperCase();
+      const parts = nameToUse.trim().split(' ');
+      if (parts.length > 1) return (parts[0][0] + parts[1][0]).toUpperCase();
+      return nameToUse.substring(0, 2).toUpperCase();
     }
-    
+
     return ((first ? first[0] : 'M') + (last ? last[0] : 'S')).toUpperCase();
   });
 
@@ -72,7 +72,7 @@ export class CorporateLayout {
     return [
       { label: 'Dashboard', icon: 'ri-dashboard-3-fill', link: '/corporate/dashboard' },
       { label: 'Investments', icon: 'ri-funds-box-fill', link: '/corporate/products' },
-      { label: 'My Portfolio', icon: 'ri-pie-chart-2-fill', link: '/corporate/investments' },
+      { label: 'Portfolio', icon: 'ri-pie-chart-2-fill', link: '/corporate/investments' },
       { label: 'Transactions', icon: 'ri-exchange-box-fill', link: '/corporate/transactions' },
     ];
   });
