@@ -104,4 +104,17 @@ export class TransactionService {
   processApproval(transactionId: number, isApproved: boolean, pin: string): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(`${this.apiUrl}/process-approval`, { transactionId, isApproved, pin });
   }
+
+  // --- Dollar Wallet API Methods ---
+  getFxRateQuote(ngnAmount: number): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.apiUrl}/dollar/fx-quote?ngnAmount=${ngnAmount}`);
+  }
+
+  fundDollarWalletFromNaira(nairaAmount: number): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`${this.apiUrl}/dollar/fund-from-naira`, { nairaAmount });
+  }
+
+  initiateDollarWireFunding(data: { usdAmount: number, proofDocumentUrl: string, bankReference: string, remarks?: string }): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`${this.apiUrl}/dollar/wire-funding`, data);
+  }
 }

@@ -933,6 +933,10 @@ export class ClientDashboardComponent implements OnInit {
     this.showDollarComingSoonModal.set(true);
   }
 
+  dollarPin = signal<string>('');
+  wireBankRef = signal<string>('');
+  wireRemarks = signal<string>('');
+
   openDollarFunding() {
     this.dollarAmountInput.set('');
     this.dollarFundStep.set('source');
@@ -941,7 +945,23 @@ export class ClientDashboardComponent implements OnInit {
     this.dollarReceiptFilePreview.set(null);
     this.dollarSelectedFundingType.set(null);
     this.dollarFundSuccessMsg.set('');
+    this.dollarPin.set('');
+    this.wireBankRef.set('');
+    this.wireRemarks.set('');
     this.showDollarFundModal.set(true);
+    this.fetchFxRateQuote();
+  }
+
+  fetchFxRateQuote() {
+    // Fetch live rate quote from API (defaults to 1000 NGN query just to get current effective rate)
+    this.transactionService.getFxRateQuote(1000).subscribe({
+      next: (res) => {
+        if (res?.success && res?.data?.effectiveRateWithMargin) {
+          this.dollarExchangeRate = res.data.effectiveRateWithMargin;
+        }
+      },
+      error: (err) => console.error('Failed to fetch live FX rate:', err)
+    });
   }
 
   closeDollarFundModal() {
@@ -978,30 +998,67 @@ export class ClientDashboardComponent implements OnInit {
     if (!this.hasSufficientNairaForUsd()) {
       return;
     }
-    const usdVal = parseFloat(this.dollarAmountInput().replace(/,/g, '')) || 0;
-    const nngCost = this.convertedNairaCost();
-    
+    const nairaAmount = this.convertedNairaCost();
+
     this.isProcessing.set(true);
-    setTimeout(() => {
-      this.availableNaira.update(val => val - nngCost);
-      this.availableDollar.update(val => val + usdVal);
-      this.isProcessing.set(false);
-      this.dollarFundSuccessMsg.set(`Successfully funded your USD wallet with $${usdVal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} by converting ₦${nngCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}.`);
-      this.dollarFundStep.set('success');
-    }, 1500);
+    this.transactionService.fundDollarWalletFromNaira(nairaAmount).subscribe({
+      next: (res) => {
+        this.isProcessing.set(false);
+        if (res?.success) {
+          const usdVal = res.data?.usdCredited || (parseFloat(this.dollarAmountInput().replace(/,/g, '')) || 0);
+          this.loadDashboardData(); // Refresh wallets & history
+          this.dollarFundSuccessMsg.set(res.message || `Successfully funded your USD wallet with $${usdVal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}.`);
+          this.dollarFundStep.set('success');
+        } else {
+          if (typeof Swal !== 'undefined') {
+            Swal.fire('Transaction Failed', res?.message || 'Failed to convert NGN to USD', 'error');
+          }
+        }
+      },
+      error: (err) => {
+        this.isProcessing.set(false);
+        if (typeof Swal !== 'undefined') {
+          Swal.fire('Error', err?.error?.message || 'An error occurred during dollar wallet funding.', 'error');
+        }
+      }
+    });
   }
 
   submitWireReceipt() {
     const usdVal = parseFloat(this.dollarAmountInput().replace(/,/g, '')) || 0;
-    if (!this.dollarReceiptFile()) {
+    if (!this.dollarReceiptFile() || usdVal <= 0) {
       return;
     }
+
     this.isProcessing.set(true);
-    setTimeout(() => {
-      this.isProcessing.set(false);
-      this.dollarFundSuccessMsg.set(`Your wire transfer deposit request of $${usdVal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} has been submitted along with your receipt "${this.dollarReceiptFileName()}". It is now pending compliance approval.`);
-      this.dollarFundStep.set('success');
-    }, 1500);
+    const proofUrl = this.dollarReceiptFilePreview() || this.dollarReceiptFileName();
+    const bankRef = this.wireBankRef() || `WIRE_${Date.now()}`;
+    const remarks = this.wireRemarks() || 'USD Wire Funding Request';
+
+    this.transactionService.initiateDollarWireFunding({
+      usdAmount: usdVal,
+      proofDocumentUrl: proofUrl,
+      bankReference: bankRef,
+      remarks: remarks
+    }).subscribe({
+      next: (res) => {
+        this.isProcessing.set(false);
+        if (res?.success) {
+          this.dollarFundSuccessMsg.set(res.message || `Your wire transfer deposit request of $${usdVal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} has been submitted.`);
+          this.dollarFundStep.set('success');
+        } else {
+          if (typeof Swal !== 'undefined') {
+            Swal.fire('Submission Failed', res?.message || 'Failed to submit wire transfer request', 'error');
+          }
+        }
+      },
+      error: (err) => {
+        this.isProcessing.set(false);
+        if (typeof Swal !== 'undefined') {
+          Swal.fire('Error', err?.error?.message || 'An error occurred submitting wire receipt.', 'error');
+        }
+      }
+    });
   }
 
   fetchVirtualAccount() {
