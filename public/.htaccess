@@ -1,0 +1,9 @@
+Options -MultiViews
+RewriteEngine On
+
+# Serve existing files and directories directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Otherwise fallback to index.html (Angular SPA routing)
+RewriteRule ^ /index.html [L]
