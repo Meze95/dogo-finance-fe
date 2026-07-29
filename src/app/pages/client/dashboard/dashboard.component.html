@@ -607,34 +607,28 @@
             <div *ngSwitchCase="'source'" class="space-y-6 animate-in slide-in-from-right-4 duration-300">
               <label class="text-[10px] font-black uppercase tracking-widest text-[var(--dogo-primary)]/40 ml-4">Select a top up source</label>
               <div class="space-y-4">
-                <div (click)="selectedSource.set('virtual')" 
-                     [class.border-[var(--dogo-secondary)]]="selectedSource() === 'virtual'"
-                     class="group relative bg-[var(--dogo-cream)] rounded-3xl p-6 flex items-center space-x-5 cursor-pointer border-2 border-transparent hover:border-[var(--dogo-secondary)] transition-all">
-                  <div class="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-[var(--dogo-primary)] shadow-sm shrink-0 group-hover:scale-105 transition-transform">
+                <div 
+                     class="group relative bg-[var(--dogo-cream)] rounded-3xl p-6 flex items-center space-x-5 border-2 border-transparent opacity-50 cursor-not-allowed select-none transition-all">
+                  <div class="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-[var(--dogo-primary)] shadow-sm shrink-0">
                     <i class="ri-bank-card-line text-2xl"></i>
                   </div>
                   <div class="flex-grow">
                     <h4 class="text-sm font-black text-[var(--dogo-dark)] mb-1">Fund with Virtual Account</h4>
                     <p class="text-[10px] font-medium text-[var(--dogo-muted)] leading-tight">Instant transfer into your virtual account</p>
                   </div>
-                  @if (selectedSource() === 'virtual') {
-                    <div class="text-[var(--dogo-secondary)] animate-in zoom-in"><i class="ri-checkbox-circle-fill text-2xl"></i></div>
-                  }
+                  <span class="text-[9px] font-black uppercase tracking-widest bg-[var(--dogo-primary)]/10 text-[var(--dogo-primary)] px-2 py-1 rounded-full shrink-0">Coming Soon</span>
                 </div>
 
-                <div (click)="selectedSource.set('card')" 
-                     [class.border-[var(--dogo-secondary)]]="selectedSource() === 'card'"
-                     class="group relative bg-[var(--dogo-cream)] rounded-3xl p-6 flex items-center space-x-5 cursor-pointer border-2 border-transparent hover:border-[var(--dogo-secondary)] transition-all">
-                  <div class="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-[var(--dogo-primary)] shadow-sm shrink-0 group-hover:scale-105 transition-transform">
+                <div 
+                     class="group relative bg-[var(--dogo-cream)] rounded-3xl p-6 flex items-center space-x-5 border-2 border-transparent opacity-50 cursor-not-allowed select-none transition-all">
+                  <div class="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-[var(--dogo-primary)] shadow-sm shrink-0">
                     <i class="ri-bank-card-2-line text-2xl"></i>
                   </div>
                   <div class="flex-grow">
                     <h4 class="text-sm font-black text-[var(--dogo-dark)] mb-1">Add Card</h4>
                     <p class="text-[10px] font-medium text-[var(--dogo-muted)] leading-tight">Link a card securely</p>
                   </div>
-                  @if (selectedSource() === 'card') {
-                    <div class="text-[var(--dogo-secondary)] animate-in zoom-in"><i class="ri-checkbox-circle-fill text-2xl"></i></div>
-                  }
+                  <span class="text-[9px] font-black uppercase tracking-widest bg-[var(--dogo-primary)]/10 text-[var(--dogo-primary)] px-2 py-1 rounded-full shrink-0">Coming Soon</span>
                 </div>
 
                 <div (click)="selectedSource.set('manual')" 
