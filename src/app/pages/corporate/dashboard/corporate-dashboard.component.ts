@@ -102,12 +102,6 @@ export class CorporateDashboardComponent implements OnInit {
   portfolioGrowth = signal(0);
   totalProfit = signal(0);
   hideBalances = signal(false); // New Privacy Signal
-  activeWalletIndex = signal(0);
-
-  onWalletScroll(event: Event) {
-    const target = event.target as HTMLElement;
-    this.activeWalletIndex.set(target.scrollLeft > 50 ? 1 : 0);
-  }
 
   totalActiveInvestment = computed(() => {
     return this.actualInvestedValue();
