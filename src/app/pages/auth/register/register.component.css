@@ -11,3 +11,20 @@
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
 }
+
+/* Ensure native date inputs render cleanly on mobile WebKit browsers */
+input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+  margin: 0;
+  min-height: 1.25rem;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}

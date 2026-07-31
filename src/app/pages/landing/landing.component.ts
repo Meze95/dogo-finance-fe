@@ -1,4 +1,4 @@
-import { Component, signal, inject, computed, OnInit, AfterViewInit, PLATFORM_ID } from '@angular/core';
+import { Component, signal, inject, computed, OnInit, AfterViewInit, PLATFORM_ID, HostListener } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -36,6 +36,17 @@ export class LandingComponent implements OnInit, AfterViewInit {
   private platformId = inject(PLATFORM_ID);
 
   isLoggedIn = computed(() => this.authService.currentUser() !== null);
+  isRegisterOpen = signal(false);
+
+  toggleRegisterDropdown(event: Event) {
+    event.stopPropagation();
+    this.isRegisterOpen.update(v => !v);
+  }
+
+  @HostListener('document:click')
+  onDocumentClick() {
+    this.isRegisterOpen.set(false);
+  }
 
   dashboardLink = computed(() => {
     const user = this.authService.currentUser();

@@ -1,4 +1,4 @@
-import { Component, inject, computed, OnInit, signal } from '@angular/core';
+import { Component, inject, computed, OnInit, signal, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet, Router } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
@@ -19,6 +19,17 @@ export class HomeLayout implements OnInit {
   isMobileResourcesOpen = false;
   isMobileRegisterOpen = false;
   isLoggedIn = computed(() => this.authService.currentUser() !== null);
+  isHeaderRegisterOpen = signal(false);
+
+  toggleHeaderRegister(event: Event) {
+    event.stopPropagation();
+    this.isHeaderRegisterOpen.update(v => !v);
+  }
+
+  @HostListener('document:click')
+  onDocumentClick() {
+    this.isHeaderRegisterOpen.set(false);
+  }
 
   dashboardLink = computed(() => {
     const user = this.authService.currentUser();

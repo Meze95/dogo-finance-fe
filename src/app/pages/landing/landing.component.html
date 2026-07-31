@@ -62,16 +62,16 @@
           <div class="flex flex-wrap gap-3.5 mt-6">
             @if (!isLoggedIn()) {
             <div class="group relative">
-              <button
+              <button (click)="toggleRegisterDropdown($event)"
                 class="px-4 py-2 bg-[#030E65] text-white font-normal rounded-lg hover:bg-[#030E65]/90 transition-all text-[12px] flex items-center space-x-1 cursor-pointer">
                 <span>Register</span>
-                <i class="ri-arrow-down-s-line text-sm transition-transform group-hover:rotate-180 duration-200"></i>
+                <i class="ri-arrow-down-s-line text-sm transition-transform group-hover:rotate-180 duration-200" [class.rotate-180]="isRegisterOpen()"></i>
               </button>
-              <div class="absolute top-full left-0 pt-3 hidden group-hover:block z-[100] min-w-[250px]">
+              <div class="absolute top-full left-0 pt-3 hidden group-hover:block z-[100] min-w-[250px]" [class.!block]="isRegisterOpen()">
                 <div
                   class="bg-white shadow-[0_12px_30px_rgba(0,0,0,0.06)] rounded-[16px] p-3 border border-slate-100/80 flex flex-col gap-1.5">
                   @for(type of customerTypes(); track type.id) {
-                  <a [routerLink]="type.name === 'Corporate' ? '/register/corporate' : '/register'"
+                  <a [routerLink]="type.name === 'Corporate' ? '/register/corporate' : '/register'" (click)="isRegisterOpen.set(false)"
                     class="flex items-center space-x-3 p-2 rounded-lg hover:bg-slate-50 transition-all text-left">
                     <div class="w-8.5 h-8.5 rounded-lg flex items-center justify-center shrink-0"
                       [ngClass]="type.name === 'Corporate' ? 'bg-[#F0F0FF]' : 'bg-[#F0F4FF]'">

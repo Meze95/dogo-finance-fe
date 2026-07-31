@@ -93,9 +93,7 @@
         <label class="block text-xs font-bold text-[#030E65] mb-1.5">Date of Birth</label>
         <div class="relative group">
           <input type="date" formControlName="dob"
-            class="w-full py-2 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all text-slate-400 focus:text-[#030E65]" />
-          <i
-            class="ri-calendar-event-line absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#4361EE] transition-colors"></i>
+            class="w-full py-2 bg-[#FAFBFF] border border-slate-200 rounded-lg px-3.5 text-sm font-medium text-[#030E65] focus:outline-none focus:border-[#4361EE] focus:ring-4 focus:ring-[#4361EE]/10 transition-all text-slate-400 focus:text-[#030E65]" />
         </div>
         @if(registerForm.get('dob')?.invalid && registerForm.get('dob')?.touched) {
         <span class="text-red-500 text-[10px] font-semibold mt-1 block">Valid DOB is required.</span>
@@ -106,11 +104,11 @@
       <div>
         <label class="block text-xs font-bold text-[#030E65] mb-1.5">Gender</label>
         <div class="relative group">
-          <div (click)="isGenderDropdownOpen.set(!isGenderDropdownOpen())"
-            class="w-full py-2 bg-[#FAFBFF] border border-slate-200 rounded-lg px-4 pl-10 flex items-center cursor-pointer transition-all hover:border-[#4361EE]"
+          <div (click)="toggleGenderDropdown($event)"
+            class="w-full py-2 bg-[#FAFBFF] border border-slate-200 rounded-lg pl-10 pr-10 flex items-center cursor-pointer transition-all hover:border-[#4361EE]"
             [class.border-[#4361EE]]="isGenderDropdownOpen()" [class.ring-4]="isGenderDropdownOpen()"
             [class.ring-[#4361EE]/10]="isGenderDropdownOpen()">
-            <span class="text-sm font-medium" [class.text-slate-400]='!registerForm.get("genderId")?.value'
+            <span class="text-sm font-medium truncate" [class.text-slate-400]='!registerForm.get("genderId")?.value'
               [class.text-[#030E65]]='registerForm.get("genderId")?.value'>
               {{ getSelectedGenderName() }}
             </span>
@@ -122,11 +120,11 @@
 
           @if (isGenderDropdownOpen()) {
           <div
-            class="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-lg z-50 overflow-hidden animate-in fade-in slide-in-from-top-1 duration-200">
+            class="absolute top-full left-0 right-0 mt-1.5 bg-white border border-slate-100 rounded-xl shadow-[0_10px_25px_rgba(0,0,0,0.08)] z-50 p-1.5 overflow-hidden animate-in fade-in slide-in-from-top-1 duration-200">
             @for(g of genders(); track g.id) {
             <div (click)="selectGender(g.id)"
-              class="px-4 py-2.5 hover:bg-slate-50 cursor-pointer transition-colors flex items-center justify-between group/opt">
-              <span class="text-xs font-semibold text-[#030E65]">{{ g.name }}</span>
+              class="px-4 py-2.5 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors flex items-center justify-between group/opt">
+              <span class="text-sm font-semibold text-[#030E65]">{{ g.name || g.description || g.label }}</span>
               @if (registerForm.get('genderId')?.value == g.id) {
               <i class="ri-check-line text-[#4361EE] font-bold"></i>
               }

@@ -1,4 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -44,11 +44,25 @@ export class RegisterComponent {
   loadGenders() {
     this.authService.getGenders().subscribe({
       next: (res) => {
-        if (res.success || res.boolean) {
-          this.genders.set(res.data);
+        if (res) {
+          const list = res.data || (Array.isArray(res) ? res : res.result || res.items || null);
+          if (list && Array.isArray(list)) {
+            this.genders.set(list);
+          }
         }
-      }
+      },
+      error: (err) => console.error('Error fetching genders from backend:', err)
     });
+  }
+
+  toggleGenderDropdown(event: Event) {
+    event.stopPropagation();
+    this.isGenderDropdownOpen.update(v => !v);
+  }
+
+  @HostListener('document:click')
+  onDocumentClick() {
+    this.isGenderDropdownOpen.set(false);
   }
 
   // Custom validator to check if passwords match
@@ -63,8 +77,9 @@ export class RegisterComponent {
 
   getSelectedGenderName(): string {
     const id = this.registerForm.get('genderId')?.value;
-    const gender = this.genders().find(g => g.id == id);
-    return gender ? gender.name : 'Select Gender';
+    if (id === null || id === undefined || id === '') return 'Select Gender';
+    const gender = this.genders().find(g => g.id == id || String(g.id) === String(id) || g.name?.toLowerCase() === String(id).toLowerCase());
+    return gender ? (gender.name || gender.description || gender.label || 'Select Gender') : 'Select Gender';
   }
 
   selectGender(id: any) {
